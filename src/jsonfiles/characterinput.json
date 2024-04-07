@@ -1,0 +1,283 @@
+{
+	"1": {
+		"Heading": "General",
+		"Values": {
+			"Name": {
+				"Type": "Input",
+				"Label": "Name",
+                "Display": true,
+				"ToolTip": "The name the character is known by. Please default to their Japanese name (first name first, family name second) unless the English name is more commonly used."
+			},
+
+			"Alternate_Names": {
+				"Type": "MultiInput",
+				"Label": "Alternate Names",
+                "Display": true,
+				"ToolTip": "Any type of alias a character may go by such as titles, secret names, 'also known by', and similar names. If you used non-Japanese name in the 'Name' input, please put their Japanese name here if applicable."
+			},
+
+			"Linked_To": {
+				"Type": "Dropdown_Character",
+				"Label": "Linked to This Other Character",
+                "Display":false
+			},
+
+			"Bio": {
+				"Type": "Input",
+				"Label": "Character Bio",
+                "Display": true,
+				"Limit": 297
+			}
+
+		}
+	},
+	"2": {
+		"Heading": "Statistics",
+		"Values": {
+			"Power": {
+				"Type": "Input",
+				"Label": "Power",
+                "Display": true
+			},
+			"Athletics": {
+				"Type": "Input",
+				"Label": "Athletics",
+                "Display": true
+			},
+			"Brains": {
+				"Type": "Input",
+				"Label": "Brains",
+                "Display": true
+			},
+			"Confidence": {
+				"Type": "Input",
+				"Label": "Confidence",
+                "Display": true
+			},
+			"Charisma": {
+				"Type": "Input",
+				"Label": "Charisma",
+                "Display": true
+			},
+			"Affluence": {
+				"Type": "Input",
+				"Label": "Affluence",
+                "Display": true
+			}
+			,
+			"Initiative": {
+				"Label": "Initiative",
+                "Display": true
+			}
+		}
+	},
+	"3": {
+		"Heading": "Standard Skills",
+		"Values": {
+			"Acting": {
+				"Type": "Input",
+				"Label": "Acting",
+                "Display": true
+			},
+			"Authority": {
+				"Type": "Input",
+				"Label": "Authority",
+                "Display": true
+			},
+			"Authority_Type": {
+				"Type": "Input",
+				"Label": "over:",
+                "Display": true,
+				"ToolTip": "This is the organization, group, or type of character this character's Authority applies to. Leave blank if Authority is 0."
+			},
+			"Computer_Use": {
+				"Type": "Input",
+				"Label": "Computer Use",
+                "Display": true
+			},
+			"Hide_Stuff": {
+				"Type": "Input",
+				"Label": "Hide Stuff",
+                "Display": true
+			},
+			"Deception": {
+				"Type": "Input",
+				"Label": "Deception",
+                "Display": true
+			},
+			"Disguise": {
+				"Type": "Input",
+				"Label": "Disguise",
+                "Display": true
+			},
+			"Influence": {
+				"Type": "Input",
+				"Label": "Influence",
+                "Display": true
+			},
+			"Jump": {
+				"Type": "Input",
+				"Label": "Jump",
+                "Display": true
+			},
+			"Magic_Chi": {
+				"Type": "Input",
+				"Label": "Magic/Chi",
+                "Display": true
+			},
+			"Mechanics": {
+				"Type": "Input",
+				"Label": "Mechanics",
+                "Display": true
+			},
+			"Medicine": {
+				"Type": "Input",
+				"Label": "Medicine",
+                "Display": true
+			},
+			"Pilot_Mecha": {
+				"Type": "Input",
+				"Label": "Pilot Mecha",
+                "Display": true
+			},
+			"Pilot_Vehicle": {
+				"Type": "Input",
+				"Label": "Pilot Vehicle",
+                "Display": true
+			},
+			"Vehicle_Type": {
+				"Type": "Input",
+				"Label": "vehicle:",
+                "Display": true,
+				"ToolTip": "These are the type of vehicles the character can drive. (e.g. Cars, Land Vehicles, Airplanes, Horses, Flying Brooms, etc) - Leave blank if pilot vehicle is 0."
+			},
+			"Run": {
+				"Type": "Input",
+				"Label": "Run",
+                "Display": true
+			},
+			"Science": {
+				"Type": "Input",
+				"Label": "Science",
+                "Display": true
+			},
+			"Search": {
+				"Type": "Input",
+				"Label": "Search",
+                "Display": true
+			},
+			"Stealth": {
+				"Type": "Input",
+				"Label": "Stealth",
+                "Display": true
+			},
+			"Yoink": {
+				"Type": "Input",
+				"Label": "Yoink",
+                "Display": true
+			}
+            }}
+            ,
+	"5": {
+		"Heading": "Combat Skills",
+		"Values": {
+			"Archery": {
+				"Type": "Input",
+				"Label": "Archery",
+                "Display": true
+			},
+			"BFG": {
+				"Type": "Input",
+				"Label": "BFG",
+                "Display": true
+			},
+			"Blades": {
+				"Type": "Input",
+				"Label": "Blades",
+                "Display": true
+			},
+			"Blunt": {
+				"Type": "Input",
+				"Label": "Blunt",
+                "Display": true
+			},
+			"Dodge": {
+				"Type": "Input",
+				"Label": "Dodge",
+                "Display": true
+			},
+			"Hand_to_Hand": {
+				"Type": "Input",
+				"Label": "Hand to Hand",
+                "Display": true
+			},
+			"Marksmanship": {
+				"Type": "Input",
+				"Label": "Marksmanship",
+                "Display": true
+			},
+			"Mecha_Waponry": {
+				"Type": "Input",
+				"Label": "Mecha Weaponry",
+                "Display": true
+			},
+			"Special_Weapons": {
+				"Type": "Input",
+				"Label": "Special Weapons",
+                "Display": true,
+				"ToolTip": "Reserved for only truly special weapons that apply under no other category and cannot be swapped out for any other weapon. Address this weapon in the character's powers below."
+			},
+			"Throw": {
+				"Type": "Input",
+				"Label": "Throw",
+                "Display": true
+			}
+		}
+	},
+	"6": {
+		"Heading": "Additional Stats",
+		"Values": {
+			"Body": {
+				"Type": "Input",
+				"Label": "Body",
+                "Display": true
+			},
+			"Energy": {
+				"Type": "Input",
+				"Label": "Energy",
+                "Display": true
+			},
+			"Resilience": {
+				"Type": "Input",
+				"Label": "Resilience",
+                "Display": true
+			},
+			"Special_Skills": {
+				"Type": "SpecialSkillsInput",
+				"Label": "Special Skills",
+                "Display": true
+			},
+			"Sheet_Item": {
+				"Type": "Itemlist",
+				"Label": "Sheet Item",
+                "Display": true
+			},
+			"Starting_Items": {
+				"Type": "ItemPicker",
+				"Label": "Starting Items",
+                "Display": true,
+				"ToolTip": "If a character should start with any specific spells, transformations, weapons, or any other item that should be attached to them, please include that information in the GM notes along with how they would acquire the rest."
+			},
+			"Tags": {
+				"Type": "Tagslist",
+				"Label": "Tags",
+                "Display": true
+			},
+			"readyforapproval": {
+				"Type": "Checkbox",
+				"Label": "Sheet Is Ready for Approval",
+				"Display": true
+			}
+		}
+	}
+}

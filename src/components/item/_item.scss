@@ -1,0 +1,141 @@
+@import "/src/variables";
+@import "/src/mixins";
+
+.seriesItemBox {
+    background-image: url("../../assets/backgroudpattern.png");
+    background-size: contain;
+    border: 2px solid $color-neutral-darkest;
+    display: grid;
+    grid-template-rows: .2in 1.6in 1.42in; 
+    height: 3.4in;
+    position: relative;
+    print-color-adjust: exact; 
+    width: 2.4in;
+    .itemTitleBox {
+        background-color: transparent;
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        width: 100%;
+    }
+    .itemTextBox {
+        background-color: #ffffff;
+        border: 1px solid $color-neutral-darkest;
+        display: grid;
+        grid-row: 3;
+        height: 1.55in;
+        margin: 5px 5px 0 5px;
+        padding: 5px;
+        width: auto;
+    }
+    .seriesItem{
+        box-sizing: border-box;
+        width: 100%;
+        .itemPicBox {
+            background-color: #ffffff;
+            border: 1px solid $color-neutral-darkest;
+            display: grid;
+            margin: 0 5px;
+            width: calc(100% - 12px);
+        }
+    }
+    
+    .seriesItemText {
+        background-color:#ffffff; 
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        font-size: 12px;
+        height: 100%;
+        position: relative;
+        width: 100%;
+        .item-stats {
+            display: flex;
+            gap: 5px;
+            width: 100%;
+        }
+        .item-uses-container {
+            align-content: center;
+            bottom: 0;
+            display: flex;
+            font-size: 24px;
+            justify-content: space-evenly;
+            position: absolute;
+            width: 100%;
+            .item-uses{
+                line-height: .5;
+            }
+            .item-uses:nth-child(5n){
+                background-color: $color-secondary-lightest;
+                border-radius: 50%;
+            }
+        }
+    }
+    .itemINTEGRITY {
+        display: inline;
+        float: left;
+    }
+    .itemRESILIENCE {
+        display: inline;
+        float: right;
+        margin-right: 1rem;
+        text-align: left;
+    }
+}
+    
+
+h3 {
+    &.itemName {
+        background-color: #ffffff;
+        font-size: 10pt;
+        grid-column: 1;
+        margin: 1px 2px 2px 0;
+        padding: 0 5px;
+        white-space: nowrap;
+        width: fit-content;
+    }
+    &.itemType {
+        background-color: #ffffff;
+        font-size: 10pt;
+        grid-column: 2;
+        margin: 1px 0 2px 2px;
+        padding: 0 5px;
+        text-align: right;
+        white-space: nowrap;
+    }
+}
+
+img {
+    &.itemPic {
+        display: grid;
+        margin-left: auto;
+        margin-right: auto;
+        height: 1.4in;
+        width: auto;
+    }
+}
+
+p {
+    &.itemDescription {
+        display: inline-block;
+       
+    }   
+    &.itemStats {
+        display: inline;
+    }
+}
+
+span {
+    &.itemTitle {
+        background-color: #ffffff;
+        display: flex;  
+        grid-row: 1;
+        justify-content: space-between;
+    }
+}
+
+hr {
+    &.divideline {
+        margin-bottom: 1px;
+        margin-top: 1px;
+    }
+}

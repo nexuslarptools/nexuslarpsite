@@ -1,0 +1,13 @@
+@import "/src/variables";
+@import "/src/mixins";
+
+.table-roles{
+	display: grid;
+	gap: 10px;
+	grid-template-columns: repeat(4, 1fr);
+	width: 100%;
+	& > div {
+		@include roundedCorners();
+		border: 1px solid $color-neutral-dark;
+	}
+}

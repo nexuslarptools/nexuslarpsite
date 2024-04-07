@@ -1,0 +1,123 @@
+@import "/src/variables";
+@import "/src/mixins";
+
+// basic submit/edit form
+.entryForm{
+	margin: 10px;
+    padding-bottom: 75px;
+	// actual submitting form
+	form {
+		display: grid;
+		gap: 20px;
+		.MuiFormLabel-asterisk {
+			color: $color-danger;
+		}
+		.mb-3, .permissions-group{
+			display: grid;
+			gap: 20px;
+			grid-template-columns: repeat(3, 1fr);
+			@media (max-width: 768px) {
+				grid-template-columns: repeat(2, 1fr);
+			}
+			@media (max-width: 500px) {
+				grid-template-columns: repeat(1, 1fr);
+			}
+			button {
+				align-self: flex-end;
+				display: inline-flex;
+				justify-content: center;
+			}
+		}
+		.mb-3 {
+			margin-bottom: 20px;
+		}
+		.permissions-group{
+			margin-top: -20px;
+		}
+		// header inside of a form
+		.header {
+			margin-left: 0;
+		}
+	}
+}
+
+// form input + label pair
+.input-pair{
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	&:focus-within{
+		label, FormLabel {
+			color: $color-tertiary;
+		}
+	}
+	// input label
+	label {
+		color: $color-primary-darker;
+		font-family: "OpenSans", sans-serif;
+		margin-bottom: 3px;
+	}
+	// input
+	.MuiInput-root, input {
+		input {
+			@include roundedCorners();
+			font-family: "OpenSans", sans-serif;
+			padding: 4px 5px;
+		}
+		&:disabled, [disabled]{
+			background-color: $color-neutral;
+			cursor: not-allowed;
+			//margin-top: 3px;
+		}
+	}
+	// multi-select with filter
+	.MuiFormControl-root {
+		padding-right: 25px;
+		// container for tags + input
+		.MuiFilledInput-root {
+			padding: 0;
+			// input inside
+			.MuiFilledInput-input {
+				padding: 4px;
+				width: 100%;
+			}
+		}
+		// actual tag
+		.MuiChip-root {
+			background-color: $color-secondary-lightest;
+			padding: 0;
+			span {
+				font-family: 'OpenSans', sans-serif;
+			}
+		}
+		// X buttons
+		.MuiButtonBase-root[aria-label="Clear"] {
+			display: none;
+		}
+	}
+	// select
+	select {
+		margin-top: 3px;
+	}
+	// table under a label inside of a form
+	.nexus-table {
+		margin-top: 3px;
+	}
+}
+
+// dropdowns, both styles, so they have hover effects
+.MuiMenu-root{
+	.MuiMenuItem-root {
+		&:hover{
+		background-color: $color-primary-lightest;
+		}
+	}
+}
+  
+.MuiAutocomplete-popper {
+	li {
+		&:hover{
+		background-color: $color-primary-lightest !important;
+		}
+	}
+}

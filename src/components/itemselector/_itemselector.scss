@@ -1,0 +1,44 @@
+@import "/src/variables";
+@import "/src/mixins";
+
+.splitScreen {
+    align-content: flex-start;
+    box-sizing: border-box;
+    display: flex;
+    width: 100%;
+    .topPane {
+        width: calc(100vw - 500px);
+    }
+    .bottomPane {
+        right: 0;
+        width: 500px;
+        position: fixed;
+        .selectionlist-label {
+            padding-top: 10px;
+            padding-bottom: 10px;
+            text-align: center;
+            background-color: $color-primary-lighter;
+            font-family: "Warmonger BB", "Roboto", serif;
+            font-size: $font-size-large;
+            font-weight: bold;
+        }
+    }
+}
+
+.table-icon-button {
+    color: $color-primary-darker;
+    height: 100%;
+    vertical-align: middle;
+    &:hover {
+        color: $color-tertiary-darker;
+    }
+}
+
+.table-icon-button-small {
+    color: $color-primary-darker;
+    height: 100%;
+    vertical-align: middle;
+    &:hover {
+        color: $color-tertiary-darker;
+    }
+}

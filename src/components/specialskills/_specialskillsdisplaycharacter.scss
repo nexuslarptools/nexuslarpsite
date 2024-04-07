@@ -1,0 +1,48 @@
+@import "/src/variables";
+
+
+div{
+    &.widthwrapper {
+        width: 100%;
+        display: grid;
+        grid-template-rows: 20% 80%;
+        
+    }
+    &.skillName{
+        font-family: "OpenSans";
+        font-size: 12pt;
+        font-weight: bold;
+        text-decoration: underline;
+        margin-right: 1px;
+        overflow: hidden;
+        justify-content: left;
+    }
+
+    &.rank{
+        font-family: "OpenSans";
+        margin-right: 10px;
+        font-size: 12pt;
+        width: max-content;
+    }
+    &.cost{
+        font-family: "OpenSans";
+        font-size: 11pt;
+        width: max-content;
+    }
+    &.skilldesc {
+        font-family: "OpenSans";
+        font-size: 10pt;
+        margin-bottom: 0px;
+        position: relative;
+
+    }
+}
+
+span {
+    &.titlespan {
+        margin-bottom: 0px;
+        display:inline-flex; 
+        width: max-content;
+        margin-top: 0px;
+    }
+}

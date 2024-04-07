@@ -1,0 +1,57 @@
+@import "/src/variables";
+@import "/src/mixins";
+
+.tagslist {
+    line-height: 2.5em;
+    word-wrap: break-word;
+    li {
+        align-items: center;
+        display: inline-flex;
+    }
+}
+
+.xbutton {
+    align-items: flex-end;
+    background: $color-secondary;
+    border: 1px solid $color-secondary-darker;
+    border-radius: 50%;
+    color: $color-secondary-darkest;
+    cursor: pointer;
+    display: flex;
+    height: 17px;
+    justify-content: center;
+    margin-left: 5px;
+    position: relative;
+    top: 1px;
+    width: 18px;
+}
+
+.tag {
+    background: $color-secondary-lighter;
+    border-radius: 6px;
+    color: $color-secondary-darkest;
+    cursor: default;
+    display: flex;
+    line-height: 2.25em; 
+    margin: .1em;
+    padding: 0 5px;
+    width: auto;
+}
+
+.tagtrue {
+    background: $color-primary;
+    border-radius: 6px;
+    color: #000;
+    display: inline;
+    margin: .1em;
+    max-width: 50px;
+    padding-top: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-bottom: 5px;
+    line-height: 2.25em; 
+}
+
+.clicktaglocktrue {
+    background: $color-primary;
+}

@@ -1,0 +1,88 @@
+@import "/src/variables";
+
+:root {font-size: $font-size}
+html {height: 100%;}
+body {margin: 0; height: 80%;}
+code {font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;}
+*:focus, *:focus-visible{border-radius: 3px;outline: 0 !important;}
+a{
+    color: $color-primary-darker;
+    &:focus{color: $color-tertiary !important;}
+    &:hover{color: $color-tertiary;}
+    &:visited{color: $color-primary-darker;}
+}
+
+// main app container
+.app {
+    height: 100vh;
+    overflow: hidden;
+}
+
+// basic body of the app
+.app-body{
+    height: calc(100vh - 130px);
+    overflow: auto;
+    @media (max-width: 768px) {
+        height: calc(100vh - 60px);
+    }
+    &.extend {
+        height: calc(100vh - 188px);
+    }
+}
+
+// holding logo container, while logged out
+.app-in-wait {
+    align-items: center;
+    background-color: #000;
+    color: #fff;
+    display: flex;
+    flex-direction: column;     
+    height: calc(100vh - 100px);
+    justify-content: center;
+    width: 100%;
+    @media (max-width: 768px) {
+        height: calc(100vh - 60px);
+    }
+}
+
+// NEXUS DB Logo, spinning
+.app-logo {
+    height: 60vmin;
+    pointer-events: none;
+}    
+    @media (prefers-reduced-motion: no-preference) {
+        .app-logo {
+            animation: app-logo-spin infinite 20s linear;
+        }
+    }
+    @keyframes app-logo-spin {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+
+// header/title for pages
+.header{
+    border-bottom: 1px solid $color-neutral-dark;
+    box-sizing: border-box;
+    font-size: $font-size-large;
+    margin: 10px 10px 20px 10px;
+    width: calc(100% - 20px);
+}
+
+.empty-message {
+    margin-top: 10px;
+}
+
+// holds loading spinner in center of the app body while loading something
+.loading-container {
+    align-items: center;
+    display: flex;
+    height: calc(100vh - 160px);
+    justify-content: center;
+    width: 100%;
+}

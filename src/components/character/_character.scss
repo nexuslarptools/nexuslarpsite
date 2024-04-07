@@ -1,0 +1,461 @@
+@import "/src/variables";
+@import "/src/mixins";
+
+// floating option buttons
+.sheet-option-buttons {
+    display: flex;
+    flex-direction: column;
+    float: right;
+    margin: 10px;
+    position: sticky;
+    top: 10px;
+    width: 150px;
+    .button-action {
+        margin-bottom: 10px;
+        width: 150px;
+    }
+    .sheet-print-active-states {
+        margin-bottom: 20px;
+        margin-top: 10px;
+        .sheet-print-active-states-label {
+            border-bottom: 1px solid $color-neutral-darkest;
+            font-weight: 600;
+            margin-bottom: 10px;
+            padding-bottom: 3px;
+        }
+    }
+    .sheet-print-info {
+        display: flex;
+        flex-wrap: wrap;
+        font-weight: 600;
+    }
+}
+
+// actual sheet that will be printed
+.character-sheet-printable {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    font-size: 12pt;
+    .sheet {
+        border: dashed 1px black;
+        border-top: 0;
+        display: grid;
+        font-family: "OpenSans";
+        height: 11in;
+        position: relative;
+        width: 8.25in;
+    }
+
+    // tables
+    .sheet-table-heading {
+        @include roundedCorners(3px, 3px, 0, 0);
+        background-color: $color-tertiary-lightest;
+        border: 1px solid $color-neutral-darkest;
+        font-family: 'Walter Turncoat', serif;
+        font-size: 17pt;
+        font-weight: bold;
+        padding: 0 10px;
+        print-color-adjust: exact; 
+        text-align: center;
+        &.blank {
+            min-height: 37px;
+        }
+    }
+    .sheet-table {
+        .sheet-table-attribute, .sheet-table-number {
+            font-family: "OpenSans", serif;
+            font-size: 11pt;
+            font-weight: bold;
+            padding: 2px 10px 2px;
+        }
+        .sheet-table-attribute {
+            &.type {
+                display: flex;
+                padding-left: 20px;
+                white-space: nowrap;
+            }
+        }
+        .sheet-table-number {
+            font-size: 12pt;
+        }
+        &.MuiPaper-root {
+            border-radius: 0;
+            box-shadow: none;
+        }
+        tr {
+            border: 1px solid $color-neutral-darkest;
+            &:first-child td {
+                border-top: 0;
+            }
+            &:last-child {
+                @include roundedCorners(0, 0, 3px, 3px);
+            }
+            td {
+                border-bottom: 0;
+                &:nth-child(2n){
+                    border-left: 1px solid $color-neutral-darkest;
+                    text-align: center;
+                }
+            }
+        }
+    }
+    
+    // SECTIONS OF THE SHEET
+    // header/top of sheet 1
+    .header-info {
+        // name and series, top of sheets
+        .sheet-name-series {
+            border-bottom: 5px solid $color-neutral-darkest;
+            border-top: 5px solid $color-neutral-darkest;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: space-between;
+            font-family: "Walter Turncoat", serif;
+            font-size: 25pt;
+            font-weight: bold;
+            padding: 0 10px;
+            width: 100%;
+        }
+        // statics, bio, headshot
+        .basic-info {
+            display: flex;
+            justify-content: space-between;
+            .table-statistics {
+                margin-top: 10px;
+            }
+            .bio {
+                display: -webkit-box;
+                font-size: $font-size-small;
+                height: 252px;
+                overflow: hidden;
+                padding: 10px 10px 0;
+                white-space: normal;
+            }
+            .imgContainer {
+                .charImg {
+                    border: 1px solid $color-neutral-darkest;
+                }
+            }
+        }
+    }
+    
+    // standard and combat skills
+    .allSkills-and-sheet-item-container {
+        display: flex;
+        page-break-inside: avoid;
+        position: relative;
+        width: 100%;
+        .skills-table {
+            max-width: 207px;
+        }
+        .combat-skills-and-sheet-item-container {
+            margin-left: 10px;
+        }
+        .sheet-item-container {
+            .sheet-table-heading {
+                margin-top: 8px;
+            }
+            .seriesItemBox {
+                @include roundedCorners();
+            }
+        }
+        .sheet-item {
+            margin-top: 10px;
+        }
+        
+    }
+
+    // body, energy, res, starting items
+    .body-energy-res-stats-container {
+        top: 0;
+        position: relative;
+        right: 10px;
+        width: 370px;
+        .body-energy-res-stats {
+            display: flex;
+            flex-direction: column;
+            .statsSpan {
+                display: flex;
+                flex-direction: column;
+                font-weight: 600;
+                justify-content: flex-start;
+                margin-bottom: 10px;
+                position: relative;
+                .symbols-row {
+                    position: relative;
+                    top: 3px;
+                    span {
+                        display: inline-block;
+                        margin-bottom: 3px;
+                        position: relative;
+                        print-color-adjust: exact; 
+                        &.body {
+                            mask: var(--svg) center no-repeat;
+                            -webkit-mask: var(--svg) center no-repeat; // prefix required still in 2024
+                            --svg: url("data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 23'><path d='M2 9.1371C2 14 6.01943 16.5914 8.96173 18.9109C10 19.7294 11 20.5 12 20.5C13 20.5 14 19.7294 15.0383 18.9109C17.9806 16.5914 22 14 22 9.1371C22 4.27416 16.4998 0.825464 12 5.50063C7.50016 0.825464 2 4.27416 2 9.1371Z' /></svg>");
+                            background-color: red;
+                            height: 20px;
+                            width: 23px;
+                            &:nth-child(5n){
+                                background-color: darkred;
+                            }
+                        }
+                        &.energy {
+                            mask: var(--svg) center no-repeat;
+                            -webkit-mask: var(--svg) center no-repeat; // prefix required still in 2024
+                            --svg: url("data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 56 56'><path d='M 54.0844 31.2286 C 55.3764 30.6049 56.0000 29.7139 56.0000 28.8229 C 56.0000 27.9319 55.3764 27.1077 54.0844 26.6622 L 43.5481 23.0313 L 48.0699 13.7871 C 48.3149 13.3193 48.3820 12.8293 48.3820 12.4060 C 48.3820 11.1586 47.4463 10.2453 46.2210 10.2453 C 45.7981 10.2453 45.3077 10.3122 44.8401 10.5572 L 35.2840 15.2350 L 30.2943 4.5651 C 29.7597 3.3846 28.8910 2.7831 28.0000 2.7831 C 27.1312 2.7831 26.2625 3.3846 25.7279 4.5651 L 20.7382 15.2350 L 11.1822 10.5572 C 10.6921 10.3122 10.2243 10.2453 9.8011 10.2453 C 8.5760 10.2453 7.6181 11.1586 7.6181 12.4060 C 7.6181 12.8293 7.7072 13.3193 7.9523 13.7871 L 12.4741 23.0313 L 1.9157 26.6622 C .6683 27.0854 0 27.9542 0 28.8452 C 0 29.7139 .6460 30.6049 1.9157 31.2286 L 12.0286 36.0623 L 6.5712 47.6232 C 6.3039 48.1355 6.1925 48.6256 6.1925 49.0933 C 6.1925 50.2071 6.9499 51.0090 8.0191 51.0090 C 8.4646 51.0090 8.9546 50.8531 9.4670 50.5412 L 22.3866 42.9008 L 25.9284 53.8602 C 26.3516 55.0631 27.1535 55.6868 28.0000 55.6868 C 28.8910 55.6868 29.6706 55.0631 30.0716 53.8602 L 33.6356 42.9008 L 46.5554 50.5412 C 47.0677 50.8531 47.5576 50.9868 48.0033 50.9868 C 49.0279 50.9868 49.8295 50.2294 49.8295 49.1156 C 49.8295 48.6478 49.6958 48.1355 49.4508 47.6232 L 43.9715 36.0623 Z'/></svg>");
+                            background-color: blue;
+                            height: 20px;
+                            width: 23px;
+                            &:nth-child(5n){
+                                background-color: darkblue;
+                            }
+                        }
+                        &.shield {
+                            mask: var(--svg) center no-repeat;
+                            -webkit-mask: var(--svg) center no-repeat; // prefix required still in 2024
+                            --svg: url("data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 23'><path d='M12 22c-1.148 0-3.418-1.362-5.13-3.34C4.44 15.854 3 11.967 3 7a1 1 0 0 1 .629-.929c3.274-1.31 5.88-2.613 7.816-3.903a1 1 0 0 1 1.11 0c1.935 1.29 4.543 2.594 7.816 3.903A1 1 0 0 1 21 7c0 4.968-1.44 8.855-3.87 11.66C15.419 20.637 13.149 22 12 22z'/></svg>");
+                            background-color: darkgreen;
+                            height: 20px;
+                            width: 23px;
+                            &:nth-child(5n){
+                                background-color: green
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .full-body-image {
+            text-align: center;
+            img {
+                max-height: 400px;
+            }
+        }
+    }
+
+    // powers
+    .special-skills {
+        padding: 10px;
+        height: 100vh;
+        .special-skills-header {
+            border-bottom: 1px solid $color-neutral-darkest;
+            font-size: 20pt;
+            font-weight: 600;
+            margin-bottom: 10px;
+            padding-bottom: 3px;
+            width: 100%;
+        }
+    }
+    
+    // starting items
+    .starting-items {
+        box-sizing: border-box;
+        font-size: 10pt;
+        padding: 0 10px 5px 10px;
+        width: 100%;
+        .starting-items-header {
+            font-size: 11pt;
+            font-weight: 600;
+        }
+        .starting-items-amount {
+            font-size: 10pt;
+        }
+    }
+
+    // special skills
+    .special-skills {
+        .skill {
+            .skill-header {
+                align-items: center;
+                display: flex;
+                width: 100%;
+                .name {
+                    font-size: 11pt;
+                    font-weight: 600;
+                    margin-right: 20px;
+                }
+                .rank, .cost {
+                    font-size: 11pt;
+                    font-weight: 600;
+                    margin-right: 20px;
+                    position: relative;
+                    top: 1px;    
+                }
+            }
+            .skill-text {
+                font-weight: 200;
+                font-size: 10pt;
+                p {
+                    margin: 5px 0 10px 0;
+                }
+            }
+        }
+    }
+
+    .gm-notes {
+        padding: 20px;
+        .gm-notes-heading {
+            border-bottom: 1px solid $color-neutral-darkest;
+            font-size: 20pt;
+            font-weight: 600;
+            margin-bottom: 10px;
+            padding-bottom: 3px;
+            width: 100%;
+        }
+        .gm-notes-text {
+            font-family: "Arial";
+            height: 10.2in;
+            line-height: 1.3em;
+            overflow: hidden; 
+            p {
+                padding-top: 0;
+            }
+        }
+    }
+
+    // LARGE PRINT VARIATION
+    &.large-print {
+        font-size: 20pt;
+        position: relative;
+        .header-info .basic-info {
+            .bio {
+                font-size: 12pt;
+            }
+        }
+        .sheet-table {
+            .sheet-table-attribute{
+                font-size: 14pt;
+            }
+            .sheet-table-number {
+                font-size: 14pt;
+            }
+        }
+        .allSkills-and-sheet-item-container {
+            .skills-table {
+                max-width: 300px;
+            }
+            .sheet-item {
+                h3.itemName, h3.itemType {
+                    font-size: 12pt;
+                }
+            }
+        }
+        .body-energy-res-stats-container {
+            position: relative;
+            right: -10px;
+            width: 321px;
+            .body-energy-res-stats {
+                right: 0;
+                position: relative;
+                .statsSpan .symbols-row {
+                    span.body, span.energy, span.shield {
+                        height: 30px;
+                        width: 32px;
+                    }
+                }
+            }
+            .stat-name {
+                font-size: 14pt;
+            }
+            .full-body-image {
+                bottom: 20px;
+                position: absolute;
+                right: 0;
+                img {
+                    max-height: 300px;
+                }
+            }
+        }
+        .starting-items {
+            position: absolute;
+            right: 140px;
+            top: 8.2in;
+            width: 200px;
+            .starting-items-header, .starting-items-amount, .starting-items-list {
+                font-size: 14pt;
+                font-weight: 600;
+            }
+        }
+
+        .special-skills {
+            height: 100vh;
+            .skill {
+                .skill-header {
+                    .name, .rank, .cost {
+                        font-size: 18pt;
+                    }
+                }
+                .skill-text {
+                    font-size: 16pt;
+                    font-weight: 600;
+                    margin-bottom: 20px;
+                }
+            }
+        }
+
+        .gm-notes {
+            .gm-notes-text {
+                font-size: 16pt;
+            }
+        }
+
+        h3.itemName, h3.itemType {
+            font-size: 12pt;
+        }
+        div.itemTitleBox {
+            width: 2.4in;
+        }
+    }
+
+    &.dyslexic-assist {
+        .sheet1 {
+            padding-bottom: 40px;
+        }
+        .sheet, .sheet-table .sheet-table-attribute, .character-sheet-printable .sheet-table .sheet-table-number {
+            font-family: "Arial", sans-serif;
+        }
+        .sheet-table-heading, .header-info .sheet-name-series, .body-energy-res-stats-container .body-energy-res-stats .statsSpan {
+            font-family: "Verdana", sans-serif !important;
+        }
+    }
+
+    &.large-print.dyslexic-assist {
+        .sheet1 {
+            padding-bottom: 40px;
+        }
+        .starting-items {
+            right: 130px;
+        }
+    }
+}
+
+@media print {
+    // getting rid of margins/heights/padding/etc
+    body { margin: 0; }
+    .app { height: 100%; overflow: visible; }
+    .app-body { height: 100%; overflow: visible; }
+
+    // do not print these!
+    .navbar-container, button { display: none; }
+
+    // the actual sheet
+    .character-sheet-printable {
+        height: 100%;
+        left: 0;
+        overflow: visible;
+        top: 0;
+        width: 100%;
+        .sheet {
+            border: 0;
+        }
+    }
+
+    // actual paper edges
+    @page {
+        size: relative;
+        margin: 0;
+        padding: 0mm;
+    }
+}

@@ -1,0 +1,384 @@
+@import "/src/variables";
+@import "/src/mixins";
+
+.nexus-table{
+	overflow-x: unset !important;
+	table {
+		overflow-x: hidden;
+	}
+	// general table
+	tr {
+		border-bottom: 1px solid $color-neutral-dark;
+	}
+	th, td {
+		vertical-align: middle;
+		&.table-cell-center {
+			text-align: center;
+		}
+		&.table-default-cursor{
+			cursor: default;
+		}
+	}
+	th {
+		background-color: $color-neutral-light;
+		border-bottom: 1px solid $color-neutral-darker;
+		padding: 10px 0;
+		&.short-column{
+			width: 10%;
+		}
+	}
+	// table header
+	thead {
+		box-shadow: 0px 2px 0px 0px rgba(0,0,0,0.3);
+		z-index: 1;
+		tr {
+			background-color: $color-neutral;
+			border-bottom: 1px solid $color-neutral-darkest;
+			border-collapse: unset;
+		}
+		.MuiTableCell-head{
+			font-family: "OpenSans", sans-serif;
+			font-size: $font-size-medium;
+			&:first-child{
+				padding-left: 10px;
+			}
+			&:last-child{
+				padding-right: 10px;
+			}
+		}
+	}
+	// table body
+	tbody {
+		tr{
+			border-bottom: 1px solid $color-neutral;
+			&:nth-child(odd){
+				background-color: $color-neutral-lighter;
+			}
+			&:nth-child(even){
+				background-color: $color-neutral-lightest;
+			}
+			&:last-child{
+				border-bottom: 0;
+			}
+			// allows elements in a table row to ignore being 'cells' and wrap as necessary
+			.tableRow-wrap-container {
+				display: grid;
+				gap: 0 10px;
+				grid-template-columns: repeat(3, 1fr);
+			}
+		}
+		// cells
+		.MuiTableCell-root{
+			border-bottom: 0;
+			font-family: "OpenSans", sans-serif;
+			font-weight: 300;
+			letter-spacing: unset;
+			color: $color-neutral-darkest;
+			padding: 5px 5px;
+			&:first-child{
+				padding-left: 10px;
+			}
+			&:last-child{
+				padding-right: 10px;
+			}
+			&.table-inside-table{
+				border-bottom: 0;
+				padding: 5px 0;
+			}
+		}
+		// table inside of a table
+		.MuiTableContainer-root {
+			@include roundedCorners();
+			background-color: $color-neutral-light;
+			border: 1px solid $color-neutral-darker;
+			box-sizing: border-box;
+			margin: 10px 2%;
+			width: 96%;
+			vertical-align: middle;
+			thead {
+				tr {
+					background-color: $color-neutral-light;
+					border-bottom: 1px solid $color-neutral;
+				}
+			}
+			tbody {
+				tr {
+					border-bottom: 1px solid $color-neutral;
+					&:last-child{
+						border-bottom: 0;
+					}
+				}		
+			}
+		}
+	}
+
+	// container and items above a table
+	.table-topper{
+		background-color: $color-neutral-lightest;
+		padding: 10px 5px;
+		box-shadow: 0px 2px 0px 0px rgba(0,0,0,0.75);
+		@media (max-width: 768px) {
+			flex-wrap: wrap;
+			justify-content: center;
+		}
+		// container holding toggles
+		.table-topper-toggles {
+			align-items: center;
+			display: flex;
+			float: left;
+			.MuiFormControlLabel-root {
+				max-width: 200px;
+			}
+			@media (max-width: 768px) {
+				justify-content: center;
+				width: 100%;
+			}
+		}
+		// autocomplete
+		.MuiOutlinedInput-root{
+			padding: 0 0 0 5px !important;
+		}
+		// container holding buttons
+		.table-topper-buttons {
+			align-items: center;
+			display: flex;
+			flex-wrap: wrap;
+			float: left;
+			justify-content: center;
+			position: relative;
+			top: 5px;
+			button {
+				margin: 0 10px 10px 0;
+				width: 125px;
+			}
+			@media (max-width: 768px) {
+				justify-content: center;
+				width: 100%;
+			}
+		}
+		// table pagination
+		.MuiTablePagination-root{
+			float: right;
+			min-width: 339px;
+			width: 34%;
+			@media (max-width: 1000px) {
+				width: 40%;
+			}
+			@media (max-width: 850px) {
+				width: 42%;
+			}
+			@media (max-width: 800px) {
+				width: 100%;
+			}
+			.MuiTablePagination-toolbar {
+				align-content: center;
+				box-sizing: border-box;
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: flex-end;
+				min-height: unset;
+				@media (max-width: 768px) {
+					flex-wrap: wrap;
+					justify-content: center;
+					min-height: unset;
+					padding-left: 0;
+					width: 100%;
+				}
+			}
+			p{
+				margin: 0;
+			}
+			.MuiTablePagination-input {
+				margin-right: 2%;
+			}
+			.MuiTablePagination-actions {
+				margin-left: 0;
+				padding-left: 0;
+			}
+			button{
+				padding: 0;
+			}
+		}
+	}	
+
+	// types of cells
+	.table-icon-button {
+		color: $color-primary-darker;
+		height: 100%;
+		vertical-align: middle;
+		&:hover {
+			color: $color-tertiary-darker;
+		}
+	}
+	.table-cell-clickable {
+		color: $color-primary-darker;
+		cursor: pointer;
+		&:hover {
+			color: $color-tertiary-darker;
+		}
+	}
+
+	// filters for table
+	.table-filter-row {
+		background-color: $color-neutral-light !important;
+		border-bottom: 1px solid $color-neutral-darkest;
+		label {
+			font-size: $font-size-small;
+		}
+		th { padding: 0 0 5px 0; }
+		// text search filters
+		.filter-container{
+			align-items: center;
+			display: flex;	
+			width: 100%;
+			.MuiBox-root {
+				background: none;
+				border: 0;
+				padding: 0;
+			}
+			.input-pair{
+				width: 100%;
+			}
+			input {
+				font-size: $font-size-small;
+			}
+			.MuiTextField-root {
+				padding-right: 0;
+				width: calc(100% - 10px);
+			}
+		}
+		.input-pair{
+			width: 100%;
+			.MuiFormControl-root {
+				padding-right: 0;
+			}
+		}
+
+		// auto-complete filter tags dropdown
+		.MuiAutocomplete-root.MuiAutocomplete-hasPopupIcon {
+			.MuiOutlinedInput-root {
+				background-color: $color-neutral-lighter;
+				padding: 0;
+				input {
+					font-family: "OpenSans", sans-serif;
+					font-size: $font-size-small;
+					padding: 5px;
+				}
+			}
+			.MuiChip-root {
+				height: unset;
+			}
+		}
+	}
+	.tagslist {
+		margin: 0;
+		padding: 0;
+	}
+}
+
+// info table
+.info-list {
+    ul {
+		display: flex;
+		flex-direction: column;
+        margin-top: 5px;
+        padding: 0 0 0 10px;
+        li {
+            display: inline-block;
+            list-style: none;
+			vertical-align: middle;
+            &::before {
+                align-content: center;
+                background-image: url('./../assets/rock.png');
+				background-repeat: no-repeat;
+                background-size: contain;
+                content: '';
+                display: inline-flex;
+                height: 20px;
+                margin-right: 8px;
+                position: relative;
+                top: 8px;
+                width: 20px;
+            }
+			&:nth-child(2n)::before{
+				background-image: url('./../assets/paper.png');
+			}
+			&:nth-child(3n)::before{
+				background-image: url('./../assets/scissors.png');
+			}
+			&:nth-child(4n)::before{
+				background-image: url('./../assets/rock.png');
+			}
+			&:nth-child(5n)::before{
+				background-image: url('./../assets/paper.png');
+			}
+			&:nth-child(6n)::before{
+				background-image: url('./../assets/scissors.png');
+			}
+        }
+    }
+}
+
+// form input + label pair
+.input-pair{
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	&:focus-within{
+		label, FormLabel {
+			color: $color-tertiary;
+		}
+	}
+	// input label
+	label {
+		color: $color-primary-darker;
+		font-family: "OpenSans", sans-serif;
+		margin-bottom: 3px;
+	}
+	// input
+	.MuiInput-root, input {
+		input {
+			@include roundedCorners();
+			font-family: "OpenSans", sans-serif;
+			padding: 4px 5px;
+		}
+		&:disabled, [disabled]{
+			background-color: $color-neutral;
+			cursor: not-allowed;
+			//margin-top: 3px;
+		}
+	}
+	// multi-select with filter
+	.MuiFormControl-root {
+		padding-right: 25px;
+		// container for tags + input
+		.MuiFilledInput-root {
+			padding: 0;
+			// input inside
+			.MuiFilledInput-input {
+				padding: 4px;
+				width: 100%;
+			}
+		}
+		// actual tag
+		.MuiChip-root {
+			background-color: $color-secondary-lightest;
+			padding: 0;
+			span {
+				font-family: 'OpenSans', sans-serif;
+			}
+		}
+		// X buttons
+		.MuiButtonBase-root[aria-label="Clear"] {
+			display: none;
+		}
+	}
+	// select
+	select {
+		margin-top: 3px;
+	}
+	// table under a label inside of a form
+	.nexus-table {
+		margin-top: 3px;
+	}
+}

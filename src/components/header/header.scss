@@ -1,0 +1,142 @@
+@import "/src/variables";
+
+// header container
+.navbar-container {
+    background: $color-primary;
+    border-bottom: 2px solid $color-neutral-dark;
+    box-sizing: border-box;
+    font-family: "OpenSans";
+    height: 100px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+    @media (max-width: 768px) {
+        height: 60px;
+    }
+}
+
+// actual navigation instead of header
+.navbar-navigation {
+    align-items: center;
+    display: flex;
+    height: 100%;
+    justify-content: space-between;
+    padding: 0 1rem;
+
+    // mobile hamburger menu
+    .navbar_hamburger_button {
+        display: none;
+        @media (max-width: 768px) {
+            display: flex;
+        }
+    }
+    
+        // website logo, text
+        .navbar_logo {
+            a {
+                color: $color-neutral-darkest;
+                //font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+                font-family: "Warmonger BB", "Roboto", serif;
+                font-size: $font-size-largest;
+                font-weight: bold;
+                margin-left: 0;
+                text-decoration: none;
+                @media (max-width: 850px) {
+                    font-size: $font-size-large;
+                }
+                @media (max-width: 768px) {
+                    text-align: center;
+                }
+            }
+            .logo-image-container {
+                align-items: center;
+                display: flex;
+                justify-content: space-evenly;
+                width: 100%;
+            }
+            .logo-img {
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: contain;
+                height: 30px;
+                &.rock {
+                    background-image: url('./../../assets/rock.png');
+                    width: 30px;
+                }
+                &.paper {
+                    background-image: url('./../../assets/paper.png');
+                    width: 40px;
+                }
+                &.scissors {
+                    background-image: url('./../../assets/scissors.png');
+                    width: 35px;
+                }
+            }
+        }
+
+    // nav links
+    .navigation-items {
+        display: flex;
+        @media (max-width: 768px) {
+            display: none;
+        }
+       a{
+            border-bottom: 3px solid transparent;
+            color: $color-neutral-darkest;
+            font-size: $font-size-large;
+            font-weight: bold;
+            text-decoration: none;
+            text-transform: capitalize;
+            @media (max-width: 1000px) {
+                font-size: $font-size-medium;
+            }
+            &:hover {
+                color: $color-tertiary-darker;
+                border-bottom: 3px solid $color-tertiary-darker;
+                text-decoration: none;
+            }      
+            &:active {
+                color: $color-tertiary;
+                text-decoration: none;
+            }  
+        } 
+        ul{
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        li {
+            padding: 0 10px;
+        }
+    }
+    // right-most side of the nav
+    .nav-user-info {
+        display: flex;
+        flex-direction: column;
+        height: 90%;
+        justify-content: space-around;
+        @media (max-width: 768px) {
+            align-items: center;
+            flex-direction: row-reverse;
+            height: 100%;
+        }
+        // initials
+        .profile {
+            margin: 0 auto;
+            .profile-picture {
+                display: block;
+                height: 45px;
+                width: 45px;
+            }
+        }
+        // login and logout button
+        .logout {
+            //margin: 10px 0;
+            @media (max-width: 768px) {
+                margin: 0 10px;
+            }
+        }
+    }
+}

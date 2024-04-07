@@ -1,0 +1,31 @@
+@import "/src/variables";
+@import "/src/mixins";
+
+.edit-series {
+	form {
+		.mb-3 {
+			margin-bottom: 0;
+		}
+	}
+	.edit-series-taglist {
+		ul {
+			align-items: center;
+			display: flex;
+			margin: 0;
+			padding: 0;
+		}
+	}
+	.edit-series-more-tags {
+		align-items: flex-end;
+		display: grid;
+		gap: 20px;
+		grid-template-columns: repeat(3, 1fr);
+		position: relative;
+		.input-pair { 
+			min-height: 57px;
+		}
+		button {
+			margin-left: 10px;
+		}
+	}
+}

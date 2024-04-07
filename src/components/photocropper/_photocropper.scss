@@ -1,0 +1,214 @@
+@import "/src/variables";
+@import "/src/mixins";
+
+.crop-container {
+    z-index: 10;
+    .reactEasyCrop_Container {
+        .reactEasyCrop_CropArea {
+            max-height: calc(100vh - 1px);
+        }
+    }
+}
+.crop-container-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    left: 20px;
+    position: relative;
+    width: 100px;
+    z-index: 10;
+    .crop-button {
+        margin-bottom: 10px;
+        z-index: 10;
+    }
+    .exit-button{
+        background: $color-neutral-lightest;
+    }
+}
+.character-sheet-form {
+    padding: 0 10px;
+	width: calc(100% - 20px);
+    header {
+        grid-column: 1/4;
+        margin: 20px 0;
+        width: 100%;
+        @media (max-width: 768px) {
+            grid-column: 1 / 2;
+        }
+    }
+
+    // character images
+    .character-sheet-images {
+        display: grid;
+        gap: 10px;
+        grid-template-columns: repeat(2, 1fr);
+        width: 100%;
+        @media (max-width: 768px) {
+            grid-template-columns: repeat(1, 1fr);
+        }
+        input {
+            margin-top: 10px;
+        }
+        .button-basic{
+            left: 10px;
+            position: relative;
+            top: -13px;
+        }
+        .image-note {
+            margin-top: 10px;
+            b {
+                color: $color-primary-darker;
+            }
+        }
+        .character-sheet-headshot {
+            color: $color-neutral-darker;
+            img {
+                border: 1px solid $color-neutral-darker;
+                max-width: 400px;
+            }
+        }
+        .character-sheet-fullbody {
+            color: $color-neutral-darker;
+            img {
+                border: 1px solid $color-neutral-darker;
+                max-width: 275px;
+            }
+        }
+    }
+    form { width: 100%; }
+    .mb-3 {
+        display: grid;
+	    gap: 10px;
+        grid-template-columns: repeat(3, 1fr);
+        width: 100%;
+        @media (max-width: 768px) {
+            grid-template-columns: repeat(1, 1fr);
+        }
+    }
+    .input-pair {
+        &.full-width{
+            grid-column: 1 / 4;
+            @media (max-width: 768px) {
+                grid-column: 1 / 2;
+            }
+        }
+        .MuiFormControl-root {
+            padding-right: 0;
+        }
+        .mb-3 {
+            display: flex;
+            flex-direction: column;
+            .MuiFormControl-root {
+                padding-right: 0;
+                margin-right: 5px;
+                width: 100%;
+            }
+            span {
+                display: flex;
+                flex-direction: row-reverse;
+                justify-content: flex-end;
+                button {
+                    height: 25px;
+                    width: 25px;
+                }
+            }
+            
+        }
+    }
+    .character-sheet-powers {
+        grid-column: 1 / 4;
+        @media (max-width: 768px) {
+            grid-column: 1 / 2;
+            grid-template-columns: repeat(1, 1fr);
+        }
+        .remove-ability.button-cancel{
+            float: right;
+            margin-bottom: 5px;
+        }
+        .power .MuiFormGroup-root {
+            @include roundedCorners();
+            border: 1px solid $color-primary-dark;
+            box-sizing: border-box;
+            display: grid;
+            gap: 10px;
+            grid-template-columns: repeat(3, 1fr);
+            margin-bottom: 20px;
+            padding: 10px 10px 20px 10px;
+            width: 100%;
+        }
+        .power-description {
+            grid-column: 1 / 3;
+        }
+    }
+    .add-another-ability {
+        float: right;
+    }
+
+    // char items and tags
+    .character-items-tags {
+        display: grid;
+        gap: 10px;
+        grid-template-columns: repeat(3, 1fr);
+        grid-column: 1/4;
+        width: 100%;
+        @media (max-width: 768px) {
+            grid-column: 1 / 2;
+            grid-template-columns: repeat(1, 1fr);
+        }
+        button.button-action {
+            margin-top: 10px;
+        }
+    }
+
+    // autocomplete dropdowns
+    .MuiInputBase-root.MuiOutlinedInput-root{
+        padding: 0 !important;
+        input{
+            font-family: "OpenSans", sans-serif;
+            padding: 5px;
+        }
+    }
+    // textarea
+    textarea {
+        border: 1px solid $color-neutral-dark;
+        font-family: 'OpenSans', sans-serif;
+        padding: 5px 10px;
+    }
+}
+
+// gm notes
+.character-sheet-gm-notes {
+    box-sizing: border-box;
+    display: block;
+    margin-top: 20px;
+    padding: 10px;
+    width: 100%;
+    .input-pair .MuiFormControl-root {
+        @include roundedCorners();
+        border: 1px solid $color-neutral-dark;
+        padding-right: 0;
+        &::before {
+            border-bottom: 0;
+        }
+    }
+}
+
+// tooltip on an element
+.has-tooltip {
+    cursor: help;
+    &::after {
+        background-color: $color-secondary-lightest;
+        border: 1px solid $color-secondary;
+        border-radius: 50%;
+        color: $color-secondary-darkest;
+        content: "?";
+        display: inline-block;
+        font-size: $font-size-small;
+        height: 18px;
+        line-height: 1.3em;
+        margin-left: 5px;
+        position: relative;
+        text-align: center;
+        top: -1px;
+        width: 18px;
+    }
+}

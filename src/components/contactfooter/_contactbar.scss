@@ -1,0 +1,25 @@
+@import "/src/variables";
+@import "/src/mixins";
+
+// footer container
+.footer-container {
+    background: $color-primary;
+    border-top: 2px solid $color-neutral-dark;
+    box-sizing: border-box;
+    font-family: "OpenSans", sans-serif;
+    height: 36px;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    position: absolute;
+    z-index: 2;
+    .footer-items {
+        background: $color-primary;
+        border-top: 2px solid $color-neutral-dark;
+        display: flex;
+        flex-direction: row-reverse;
+        font-family: "OpenSans", sans-serif;
+        padding: 5px 10px;
+        z-index: 2;
+    }
+}
