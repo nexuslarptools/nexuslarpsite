@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import './_specialskillsdisplay.scss';
 
 const SpecialSkillsDisplay = props => {
   return (

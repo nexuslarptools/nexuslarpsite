@@ -36,7 +36,8 @@ export default function ItemCreate(props) {
         const section = {
           Heading: formJSON[key].Heading,
           Types: formJSON[key].Types,
-          Values: sectionData
+          Values: sectionData,
+          IsdoubleSide: formJSON[key].IsdoubleSide
         }
         formData.push(section);
       }

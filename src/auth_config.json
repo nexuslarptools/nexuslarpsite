@@ -2,8 +2,8 @@
   "domain": "dev-3xazewbu.auth0.com",
   "clientId": "Criga3xp4eX7Od9kZeyIcNzlaFznmGmY",
   "audience": "https://dev-3xazewbu.auth0.com/api/v2/",
-  "NAPILocation":"http://192.168.254.7:6002",
-  "NAWAPILocation":"http://localhost",
-  "APILocation": "https://decade.kylebrighton.com:6006",
+  "NAWAPILocation":"http://LARPPi:6004",
+  "APILocation":"http://localhost",
+  "NAPILocation": "https://decade.kylebrighton.com:6006",
   "appOrigin": "https://decade.kylebrighton.com:6006"
 }

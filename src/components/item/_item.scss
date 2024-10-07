@@ -1,6 +1,10 @@
 @import "/src/variables";
 @import "/src/mixins";
 
+.itemdisplay{
+   float:left
+}
+
 .seriesItemBox {
     background-image: url("../../assets/backgroudpattern.png");
     background-size: contain;
@@ -27,6 +31,16 @@
         padding: 5px;
         width: auto;
     }
+    .itemSecondSideTextBox {
+        background-color: #ffffff;
+        border: 1px solid $color-neutral-darkest;
+        display: grid;
+        grid-row: 2;
+        height: 2.9in;
+        margin: 5px 5px 0 5px;
+        padding: 5px;
+        width: auto;
+    }
     .seriesItem{
         box-sizing: border-box;
         width: 100%;
@@ -43,7 +57,7 @@
         background-color:#ffffff; 
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 1px;
         font-size: 12px;
         height: 100%;
         position: relative;
@@ -69,6 +83,11 @@
                 border-radius: 50%;
             }
         }
+        .item-description{
+            font-size: 11px;
+            display: flex;
+            gap: 1px;
+        }
     }
     .itemINTEGRITY {
         display: inline;
@@ -86,10 +105,10 @@
 h3 {
     &.itemName {
         background-color: #ffffff;
-        font-size: 10pt;
+        font-size:10pt; //10
         grid-column: 1;
         margin: 1px 2px 2px 0;
-        padding: 0 5px;
+        padding: 0 5px; //0 5
         white-space: nowrap;
         width: fit-content;
     }
@@ -117,6 +136,7 @@ img {
 p {
     &.itemDescription {
         display: inline-block;
+        
        
     }   
     &.itemStats {

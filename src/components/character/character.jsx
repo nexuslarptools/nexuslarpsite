@@ -82,6 +82,7 @@ const Character = props => {
     fullListOrdered.push([]);
 
 
+    if (props.character.starting_Items !== undefined){
     while (i < props.character.starting_Items.length) {
 
       let itemName = props.character.starting_Items[i].name
@@ -117,6 +118,7 @@ const Character = props => {
       }
       i++;
     }
+  }
 
     setFullItems(fullListOrdered);
     setItemList(fullItemList);
@@ -321,7 +323,7 @@ const Character = props => {
             
           </div>
           <div className="starting-items">
-            <div className='starting-items-header'>Starting Items: <span className='starting-items-amount'>({props.character.starting_Items.length})</span></div>
+            <div className='starting-items-header'>Starting Items: <span className='starting-items-amount'>({props.character.starting_Items !== undefined ? props.character.starting_Items.length : 0})</span></div>
             <div className='starting-items-list'>
               {itemList.map((item, i) => 
                 i + 1 === itemList.length
@@ -442,11 +444,11 @@ const Character = props => {
         }
         
         {
-          props.character.starting_Items.length > 0 && props.character.starting_Items.length <= 9
+          props.character.starting_Items !== undefined && props.character.starting_Items.length > 0 && props.character.starting_Items.length <= 9
           ? <div className='sheet sheet4'>
               <ItemPalette apiMessage={props.character.starting_Items} remove={() => null}></ItemPalette>
             </div>
-          : props.character.starting_Items.length > 9 && props.character.starting_Items.length < 19
+          : props.character.starting_Items !== undefined && props.character.starting_Items.length > 9 && props.character.starting_Items.length < 19
             ? <>
                 <div className='sheet sheet4'>
                   <ItemPalette apiMessage={fullItems[0]} remove={() => null}></ItemPalette>
@@ -455,7 +457,7 @@ const Character = props => {
                   <ItemPalette apiMessage={fullItems[1]} remove={() => null}></ItemPalette>
                 </div>
               </>
-            :  props.character.starting_Items.length > 18
+            :  props.character.starting_Items !== undefined && props.character.starting_Items.length > 18
             ? <>
                 <div className='sheet sheet4'>
                   <ItemPalette apiMessage={fullItems[0]} remove={() => null}></ItemPalette>

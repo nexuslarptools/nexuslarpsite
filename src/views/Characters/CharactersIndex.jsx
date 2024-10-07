@@ -1,5 +1,3 @@
-
-import PropTypes from 'prop-types';
 import AuthRedirect from '../../utils/authRedirect';
 import Loading from '../../components/loading/loading';
 import useGetData from '../../utils/getdata';
@@ -28,7 +26,7 @@ export default function CharactersIndex() {
           viewItemPath: ''
       });
     const [isCreate, setIsCreate] = useState(false);
-    const [isSelect, setIsSelect] = useState(false);
+    //const [isSelect, setIsSelect] = useState(false);
     const [isEdit, setIsEdit] = useState({isEditing: false, guid: null});
 
     const ToggleSwitch = async (e) => {
@@ -70,6 +68,10 @@ export default function CharactersIndex() {
 
     const GoToEditCharacter = async (path, guid) => {
       await setIsEdit({isEditing: true, guid: guid, path: path});
+    }
+
+    const GoToSearch = async () => {
+      
     }
 
     const NewCharacterLink = async () => {
@@ -118,7 +120,7 @@ export default function CharactersIndex() {
   ToggleApprovableSwitch={() => ToggleSwitch('showApprovableOnly')}
   DirectToCharacter={(path, guid) => DirectToCharacter(path, guid)}
   NewCharacterLink={(e) => NewCharacterLink(e)}
-  NavToSelectItems={() => setIsSelect(true)}
+  GoToSearch={() => GoToSearch()}
   Edit={(path, guid) => GoToEditCharacter(path, guid)}
   />
 </>

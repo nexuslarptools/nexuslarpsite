@@ -6,9 +6,10 @@ import UserRolesEditForm from '../../components/forms/userroleseditform'
 import './UserList.scss'
 import AuthLevelInfo from '../../utils/authLevelInfo'
 import Loading from '../../components/loading/loading'
+import PropTypes from 'prop-types'
 
 
-export default function UsersPage() {
+export default function UsersPage(props) {
 
 AuthRedirect(4);
 const authLevel = AuthLevelInfo();
@@ -29,7 +30,9 @@ const GoToEdit = async (e) => {
     ...currUserState,
     viewingEdit: true,
     guid: e
-  })
+  });
+
+  props.toggleSubScreen(true);
 }
 
 const GoBack = async () => {
@@ -38,6 +41,8 @@ const GoBack = async () => {
     viewingEdit: false,
     guid: ''
   })
+
+  props.toggleSubScreen(false);
 }
 
 useEffect(() => {
@@ -74,6 +79,8 @@ useEffect(() => {
       setArrowsState({
         arrowsList: fillin
       })
+
+      props.toggleSubScreen(true);
   }
 
 if (userData.isLoading || currentUserGuid.isLoading) return (<div>
@@ -101,3 +108,8 @@ return (
   </>
 )
 }
+
+UsersPage.propTypes = {
+  toggleSubScreen: PropTypes.func
+}
+

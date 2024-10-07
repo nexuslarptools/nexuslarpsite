@@ -7,7 +7,6 @@ import Loading from '../../components/loading/loading';
 
 const ItemAbilites = props => {
   const [initstate, setInitState] = useState(true)
-  const [updatestate, setUpdatestate] = useState(false)
   const [formState, setFormstate] = useState({
     arraynum: props.abilityState.arraynum,
     name: '',
@@ -51,37 +50,16 @@ const ItemAbilites = props => {
     }
   }, []);
 
-  const updateItemTags = (e) => {
+  const updateItemTags = async (e) => {
     const listguids = [];
     e.forEach(element => {
       listguids.push(element.guid)
     });
-    setFormstate({
-      ...formState,
-      tags: listguids
-    });
-    setUpdatestate(true);
+    props.onFillIn(formState.arraynum, 'Tags' ,listguids);
   }
 
-  useEffect(() => {
-    const controller = new AbortController();
-    if (!initstate && updatestate) {
-      props.onFillIn(formState);
-    }
-    setUpdatestate(false);
-    return () => {
-      // cancel the request before component unmounts
-      controller.abort();
-    }
-  }, [updatestate]);
-
-  const handleChange = (e) => {
-    setFormstate({
-      ...formState,
-      // Computed property names - keys of the objects are computed dynamically
-      [e.target.name]: e.target.value
-    });
-    setUpdatestate(true);
+  const handleChange = async (e) => {
+    props.onFillIn(formState.arraynum, e.target.name, e.target.value);
   }
 
   if (initstate) {
@@ -97,26 +75,26 @@ const ItemAbilites = props => {
                   <FormGroup>
                     <div className='input-pair'>
                       <FormLabel>Ability Name:</FormLabel>
-                      <Input type="text" name={'name'} key={'name ' + formState.arraynum} onChange={(e) => handleChange(e)} value={formState.name} />
+                      <Input type="text" name={'Name'} key={'Name ' +  props.abilityState.arraynum} onChange={(e) => handleChange(e)} value={props.abilityState.Name} />
                     </div>
                     <div className='input-pair'>
                       <FormLabel className="has-tooltip" title="Similar to the skills above, the number on a 0-7 scale that indicates their proficiency in this power.  Use the name of a Statistic or Skill to link it's value to that Satistic of Skill.">Skill Level:</FormLabel>
-                      <Input type="text" name={'rank'} key={'rank ' + formState.arraynum} onChange={(e) => handleChange(e)} value={formState.rank} />
+                      <Input type="text" name={'Rank'} key={'Rank ' + props.abilityState.arraynum} onChange={(e) => handleChange(e)} value={props.abilityState.Rank} />
                     </div>
                     <div className='input-pair'>
                       <FormLabel>Energy Cost:</FormLabel>
-                      <Input type="text" name={'energyCost'} key={'energyCost ' + formState.arraynum} onChange={(e) => handleChange(e)} value={formState.energyCost} />
+                      <Input type="text" name={'Cost'} key={'Cost ' + props.abilityState.arraynum} onChange={(e) => handleChange(e)} value={props.abilityState.Cost} />
                     </div>
                     <div className='input-pair power-description'>
                       <FormLabel>Description:</FormLabel>
-                      <TextField multiline rows={5} type="text" name={'desc'} key={'desc ' + formState.arraynum} onChange={(e) => handleChange(e)} value={formState.desc} />
+                      <TextField multiline rows={5} type="text" name={'Description'} key={'Description ' + props.abilityState.arraynum} onChange={(e) => handleChange(e)} value={props.abilityState.Description} />
                     </div>
                     <div className='input-pair'>
                       <FormLabel>Tags:</FormLabel>
                       <Autocomplete
                         multiple
-                        id={'multiple-limit-tags' + formState.arraynum}
-                        defaultValue={formState.initialTags}
+                        id={'multiple-limit-tags' + props.abilityState.arraynum}
+                        defaultValue={props.abilityState.initialTags}
                         options={props.itemTags}
                         getOptionLabel={(option) => option.name}
                         onChange={(event, val) => updateItemTags(val)}

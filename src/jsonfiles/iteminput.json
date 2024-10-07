@@ -1,324 +1,372 @@
 {
-    "1": {
-        "Types": ["All"],
-        "Heading": "General Item Info",
-        "Values": {
-            "TYPE": {
-                "Type": "Dropdown",
-                "Label": "Item Type",
-                "Display": true,
-                "enums": [
-                    "Generic",
-                    "Tech",
-                    "Weapon",
-                    "Armor",
-                    "Clothing",
-                    "Food",
-                    "Spell",
-                    "Mecha",
-                    "Vehicle",
-                    "Companion",
-                    "Pokemon",
-                    "Instrument",
-                    "Medical",
-                    "Artifact",
-                    "Unique",
-                    "Document",
-                    "Material",
-                    "Valuable",
-                    "Ammo",
-                    "Power"
-                ],
-                "Types": ["All"]
-            },
-            "Name": {
-                "Type": "Input",
-                "Label": "Name",
-                "Display": true,
-                "Types": ["All"]
-            },
-            "Description": {
-                "Type": "Input",
-                "Label": "Description",
-                "Display": true,
-                "Types": ["All"]
-            }
-        }
-    },
-    "2": {
-        "Types": [
-            "Mecha",
-            "Companion",
-            "Pokemon"
-        ],
-        "Heading": "Mecha/Companion Stats",
-        "Values": {
-            "Power": {
-                "Type": "Input",
-                "Label": "Power",
-                "Display": true,
-                "Types": [
-                    "Mecha",
-                    "Companion",
-                    "Pokemon"
-                ]
-            },
-            "Athletics": {
-                "Type": "Input",
-                "Label": "Athletics",
-                "Display": true,
-                "Types": [
-                    "Mecha",
-                    "Companion",
-                    "Pokemon"
-                ]
-            },
-            "Brains": {
-                "Type": "Input",
-                "Label": "Brains",
-                "Display": true,
-                "Types": [
-                    "Companion",
-                    "Pokemon"
-                ]
-            },
-            "Confidence": {
-                "Type": "Input",
-                "Label": "Confidence",
-                "Display": true,
-                "Types": [
-                    "Companion",
-                    "Pokemon"
-                ]
-            },
-            "H2H": {
-                "Type": "Input",
-                "Label": "Hand to Hand",
-                "Display": true,
-                "Types": [
-                    "Companion",
-                    "Pokemon"
-                ]
-            },
-            "Dodge": {
-                "Type": "Input",
-                "Label": "Dodge",
-                "Display": true,
-                "Types": [
-                    "Companion",
-                    "Pokemon"
-                ]
-            },
-            "Run": {
-                "Type": "Input",
-                "Label": "Run",
-                "Display": true,
-                "Types": [
-                    "Mecha",
-                    "Companion",
-                    "Pokemon"
-                ]
-            },
-            "Jump": {
-                "Type": "Input",
-                "Label": "Jump",
-                "Display": true,
-                "Types": [
-                    "Mecha",
-                    "Companion",
-                    "Pokemon"
-                ]
-            },
-            "Fly": {
-                "Type": "Input",
-                "Label": "Fly",
-                "Display": true,
-                "Types": [
-                    "Mecha",
-                    "Companion",
-                    "Pokemon"
-                ]
-            },
-            "Grade": {
-                "Type": "Input",
-                "Label": "Grade",
-                "Display": true,
-                "Types": [
-                    "Mecha",
-                    "Companion",
-                    "Pokemon"
-                ]
-            },
-            "RESILIENCE": {
-                "Type": "Input",
-                "Label": "Resilience",
-                "Display": true,
-                "Types": [
-                    "Mecha",
-                    "Companion",
-                    "Pokemon"
-                ]
-            },
-            "Body": {
-                "Type": "Input",
-                "Label": "Body",
-                "Display": true,
-                "Types": [
-                    "Mecha",
-                    "Companion",
-                    "Pokemon"
-                ]
-            },
-            "INTEGRITY": {
-                "Type": "Input",
-                "Label": "Integrity",
-                "Display": true,
-                "Types": [
-                    "Mecha"
-                ]
-            },
-            "Energy": {
-                "Type": "Input",
-                "Label": "Energy",
-                "Display": true,
-                "Types": [
-                    "Mecha"
-                ]
-            }
-        }
-    },
-    "3": {
-        "Types": [
-            "Mecha",
-            "Vehicle",
-            "Companion",
-            "Pokemon"
-        ],
-        "Heading": "Item Abilites",
-        "Values": {
-            "Special_Skills": {
-                "Type": "SpecialSkillsInput",
-                "Label": "Special Skills",
-                "Display": true,
-                "Types": [
-                    "Mecha",
-                    "Vehicle",
-                    "Companion",
-                    "Pokemon"
-                ]
-            }
-        }
-    },
-    "4": {
-        "Types": ["All"],
-        "Heading": "Generic Stats",
-        "Values": {
-            "EnergyCost": {
-                "Type": "Input",
-                "Label": "EnergyCost",
-                "Display": true,
-                "Types": [
-                    "Spell",
-                    "Power"
-                ]
-            },
-            "INTEGRITY": {
-                "Type": "Input",
-                "Label": "Integrity",
-                "Display": true,
-                "Types": [
-                    "Generic",
-                    "Tech",
-                    "Weapon",
-                    "Armor",
-                    "Clothing",
-                    "Food",
-                    "Mecha",
-                    "Vehicle",
-                    "Instrument",
-                    "Medical",
-                    "Artifact",
-                    "Unique",
-                    "Document",
-                    "Material",
-                    "Valuable",
-                    "Ammo"
-                ]
-            },
-            "Health": {
-                "Type": "Input",
-                "Label": "Health",
-                "Display": true,
-                "Types": [
-                    "Companion",
-                    "Pokemon"
-                ]
-            },
-            "HS": {
-                "Type": "Input",
-                "Label": "Hide Stuff Modifier",
-                "Display": true,
-                "Types": [
-                    "Generic",
-                    "Tech",
-                    "Weapon",
-                    "Armor",
-                    "Clothing",
-                    "Food",
-                    "Instrument",
-                    "Medical",
-                    "Artifact",
-                    "Unique",
-                    "Document",
-                    "Material",
-                    "Valuable",
-                    "Ammo"
-                ]
-            },
-            "Value": {
-                "Type": "Dropdown",
-                "Label": "Item Cost",
-                "Display": true,
-                "enums": [
-                    "Valueless",
-                    "1",
-                    "2",
-                    "3",
-                    "4",
-                    "5",
-                    "6",
-                    "7",
-                    "8",
-                    "9",
-                    "10",
-                    "Priceless"
-                ],
-                "Types": ["All"]
-            },
-            "Uses": {
-                "Type": "Input",
-                "Label": "# of Uses",
-                "Display": true,
-                "Types": [
-                    "All"
-                ]
-            },
+	"1": {
+		"IsdoubleSide": null,
+		"Types": ["All"],
+		"Heading": "General Item Info",
+		"Values": {
+			"TYPE": {
+				"Type": "Dropdown",
+				"Label": "Item Type",
+				"Display": true,
+				"enums": [
+					"Generic",
+					"Tech",
+					"Weapon",
+					"Armor",
+					"Clothing",
+					"Food",
+					"Spell",
+					"Mecha",
+					"Vehicle",
+					"Companion",
+					"Pokemon",
+					"Instrument",
+					"Medical",
+					"Artifact",
+					"Unique",
+					"Document",
+					"Material",
+					"Valuable",
+					"Ammo",
+					"Power"
+				],
+				"Types": ["All"]
+			},
+			"Name": {
+				"Type": "Input",
+				"Label": "Name",
+				"Display": true,
+				"Types": ["All"]
+			},
+			"Description": {
+				"Type": "TextField",
+				"Label": "Description",
+				"Display": true,
+				"Types": ["All"]
+			}
+		}
+	},
+	"2": {
+		"IsdoubleSide": null,
+		"Types": [
+			"Mecha",
+			"Companion",
+			"Pokemon"
+		],
+		"Heading": "Mecha/Companion Stats",
+		"Values": {
+			"Power": {
+				"Type": "Input",
+				"Label": "Power",
+				"Display": true,
+				"Types": [
+					"Mecha",
+					"Companion",
+					"Pokemon"
+				]
+			},
+			"Athletics": {
+				"Type": "Input",
+				"Label": "Athletics",
+				"Display": true,
+				"Types": [
+					"Mecha",
+					"Companion",
+					"Pokemon"
+				]
+			},
+			"Brains": {
+				"Type": "Input",
+				"Label": "Brains",
+				"Display": true,
+				"Types": [
+					"Companion",
+					"Pokemon"
+				]
+			},
+			"Confidence": {
+				"Type": "Input",
+				"Label": "Confidence",
+				"Display": true,
+				"Types": [
+					"Companion",
+					"Pokemon"
+				]
+			},
+			"H2H": {
+				"Type": "Input",
+				"Label": "Hand to Hand",
+				"Display": true,
+				"Types": [
+					"Companion",
+					"Pokemon"
+				]
+			},
+			"Dodge": {
+				"Type": "Input",
+				"Label": "Dodge",
+				"Display": true,
+				"Types": [
+					"Companion",
+					"Pokemon"
+				]
+			},
+			"Run": {
+				"Type": "Input",
+				"Label": "Run",
+				"Display": true,
+				"Types": [
+					"Mecha",
+					"Companion",
+					"Pokemon"
+				]
+			},
+			"Jump": {
+				"Type": "Input",
+				"Label": "Jump",
+				"Display": true,
+				"Types": [
+					"Mecha",
+					"Companion",
+					"Pokemon"
+				]
+			},
+			"Fly": {
+				"Type": "Input",
+				"Label": "Fly",
+				"Display": true,
+				"Types": [
+					"Mecha",
+					"Companion",
+					"Pokemon"
+				]
+			},
+			"Grade": {
+				"Type": "Input",
+				"Label": "Grade",
+				"Display": true,
+				"Types": [
+					"Mecha",
+					"Companion",
+					"Pokemon"
+				]
+			},
+			"RESILIENCE": {
+				"Type": "Input",
+				"Label": "Resilience",
+				"Display": true,
+				"Types": [
+					"Mecha",
+					"Companion",
+					"Pokemon"
+				]
+			},
+			"Body": {
+				"Type": "Input",
+				"Label": "Body",
+				"Display": true,
+				"Types": [
+					"Mecha",
+					"Companion",
+					"Pokemon"
+				]
+			},
+			"INTEGRITY": {
+				"Type": "Input",
+				"Label": "Integrity",
+				"Display": true,
+				"Types": [
+					"Mecha"
+				]
+			},
+			"Energy": {
+				"Type": "Input",
+				"Label": "Energy",
+				"Display": true,
+				"Types": [
+					"Mecha",
+					"Companion",
+					"Pokemon"
+				]
+			}
+		}
+	},
+	"3": {
+		"IsdoubleSide": null,
+		"Types": [
+			"Mecha",
+			"Vehicle",
+			"Companion",
+			"Pokemon"
+		],
+		"Heading": "Item Abilites",
+		"Values": {
+			"Special_Skills": {
+				"Type": "SpecialSkillsInput",
+				"Label": "Special Skills",
+				"Display": true,
+				"Types": [
+					"Mecha",
+					"Vehicle",
+					"Companion",
+					"Pokemon"
+				]
+			}
+		}
+	},
+	"4": {
+		"IsdoubleSide": null,
+		"Types": ["All"],
+		"Heading": "Generic Stats",
+		"Values": {
+			"EnergyCost": {
+				"Type": "Input",
+				"Label": "EnergyCost",
+				"Display": true,
+				"Types": [
+					"Spell",
+					"Power"
+				]
+			},
+			"INTEGRITY": {
+				"Type": "Input",
+				"Label": "Integrity",
+				"Display": true,
+				"Types": [
+					"Generic",
+					"Tech",
+					"Weapon",
+					"Armor",
+					"Clothing",
+					"Food",
+					"Mecha",
+					"Vehicle",
+					"Instrument",
+					"Medical",
+					"Artifact",
+					"Unique",
+					"Document",
+					"Material",
+					"Valuable",
+					"Ammo"
+				]
+			},
+			"Health": {
+				"Type": "Input",
+				"Label": "Health",
+				"Display": true,
+				"Types": [
+					"Companion",
+					"Pokemon"
+				]
+			},
+			"HS": {
+				"Type": "Input",
+				"Label": "Hide Stuff Modifier",
+				"Display": true,
+				"Types": [
+					"Generic",
+					"Tech",
+					"Weapon",
+					"Armor",
+					"Clothing",
+					"Food",
+					"Instrument",
+					"Medical",
+					"Artifact",
+					"Unique",
+					"Document",
+					"Material",
+					"Valuable",
+					"Ammo"
+				]
+			},
+			"Value": {
+				"Type": "Dropdown",
+				"Label": "Item Cost",
+				"Display": true,
+				"enums": [
+					"Valueless",
+					"1",
+					"2",
+					"3",
+					"4",
+					"5",
+					"6",
+					"7",
+					"8",
+					"9",
+					"10",
+					"Priceless"
+				],
+				"Types": ["All"]
+			},
+			"Uses": {
+				"Type": "Input",
+				"Label": "# of Uses",
+				"Display": true,
+				"Types": [
+					"Generic",
+					"Tech",
+					"Weapon",
+					"Armor",
+					"Clothing",
+					"Food",
+					"Spell",
+					"Instrument",
+					"Medical",
+					"Artifact",
+					"Unique",
+					"Material",
+					"Valuable",
+					"Ammo",
+					"Power"
+				]
+			},
 			"readyforapproval": {
 				"Type": "Checkbox",
 				"Label": "Item Is Ready for Approval",
 				"Display": true,
-                "Types": [
-                    "All"
-                ]
-			},
-            "doubleside": {
-				"Type": "Checkbox",
-				"Label": "Item Should Be Double-sided",
-				"Display": true,
-                "Types": [
-                    "All"
-                ]
+				"Types": [
+					"All"
+				]
 			}
-        }
-    }
+		}
+	},
+	"5": {
+		"IsdoubleSide": true,
+		"Types": ["All"],
+		"Heading": "Generic Stats Second Side",
+		"Values": {
+			"Description2ndSide": {
+				"Type": "TextField",
+				"Label": "Description of second side",
+				"Display": true,
+				"Types": ["All"]
+			}
+		}
+	},
+	"6": {
+		"IsdoubleSide": true,
+		"Types": [
+			"Mecha",
+			"Vehicle",
+			"Companion",
+			"Pokemon"
+		],
+		"Heading": "Item Abilites Second Side",
+		"Values": {
+			"Special_Skills2ndSide": {
+				"Type": "SpecialSkillsInput",
+				"Label": "Special Skills on second side",
+				"Display": true,
+				"Types": [
+					"Mecha",
+					"Vehicle",
+					"Companion",
+					"Pokemon"
+				]
+			}
+		}
+	}
 }
