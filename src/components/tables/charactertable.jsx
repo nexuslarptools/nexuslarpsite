@@ -349,6 +349,7 @@ const CharacterTable = props => {
                     <button className='button-action' onClick={(e) => props.NewCharacterLink(e)}>Add New Character</button>
                     </TableCell>
                     <TableCell className='table-topper'>
+                    <button className='button-action' onClick={() => props.GoToSearch()}>Character Search</button>
                      </TableCell>
                     <TableCell className='table-topper'>
                      { props.authLevel > 1
@@ -418,7 +419,7 @@ const CharacterTable = props => {
                               onClick={() => UpdateLarpAutoComp('')}><Clear /></IconButton>}} 
                         />
                         )}
-                        getOptionSelected={(opt, val) => opt === val}
+                        getoptionselected={(opt, val) => opt === val}
                         onChange={(event, val) => selectLarpTag(val)}
                     />
                   </div>
@@ -476,7 +477,8 @@ const CharacterTable = props => {
                 </TableCell>
                 <TableCell colSpan={props.selectedApproved  && props.authLevel > 5 ? 3 :
                   props.selectedApproved  && props.authLevel <= 3 ? 2 :
-                  !props.selectedApproved && props.authLevel > 2 ? 2  : 1  }>
+                  props.selectedApproved  && props.authLevel > 3 ? 3 :
+                  !props.selectedApproved && props.authLevel > 2 ? 2 : 1  }>
                   <div className='input-pair'>
                     <Autocomplete
                       multiple
@@ -492,7 +494,7 @@ const CharacterTable = props => {
                     />
                   </div>
                 </TableCell>
-                {props.authLevel > 1 && !props.selectedApproved  ? 
+                {props.authLevel > 5 && !props.selectedApproved  ? 
                 <>
                 <TableCell ></TableCell> 
                 </> :<></>
@@ -643,6 +645,7 @@ const CharacterTable = props => {
       tagslist: PropTypes.array,
       larpTags: PropTypes.array,
       NewCharacterLink: PropTypes.func,
+      GoToSearch: PropTypes.func,
       approvedState: PropTypes.array,
       userGuid: PropTypes.string,
       approvableOnly: PropTypes.bool,

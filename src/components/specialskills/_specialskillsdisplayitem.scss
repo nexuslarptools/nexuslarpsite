@@ -1,0 +1,49 @@
+@import "/src/variables";
+
+
+span {
+    &.titlespan {
+        width: 100%;
+        display: inline-flex;
+        grid-template-rows: 20% 80%;
+        margin-bottom: 0pt;
+        margin-top: 0pt;
+        div { 
+
+            &.name {
+                font-family: "OpenSans";
+                font-size: 8pt;
+                font-weight: bold;
+                text-decoration: underline;
+                margin-right: 8px;
+                justify-content: left;
+            }
+
+            &.rank{
+                font-family: "OpenSans";
+                margin-right: 3px;
+                font-size: 7pt;
+                width: max-content;
+            }
+            &.cost{
+                font-family: "OpenSans";
+                font-size: 7pt;
+                width: max-content;
+            }
+        }   
+    }
+}
+
+div {
+    &.skill-text {
+        font-family: "OpenSans";
+        font-size: 7pt;
+        margin-bottom: 0px;
+        margin-top: 0px;
+        overflow: wrap;
+        p {
+margin: 1px;
+        }
+
+    }
+}

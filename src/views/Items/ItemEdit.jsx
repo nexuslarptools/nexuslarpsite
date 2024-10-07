@@ -28,7 +28,8 @@ export default function ItemEdit(props) {
         const section = {
           Heading: formJSON[key].Heading,
           Types: formJSON[key].Types,
-          Values: sectionData
+          Values: sectionData,
+          IsdoubleSide: formJSON[key].IsdoubleSide
         }
         formData.push(section);
       }

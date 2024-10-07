@@ -18,21 +18,25 @@ import CharactersIndex from './views/Characters/CharactersIndex';
 
 class App extends Component {
 
+  state = {
+    open: false,
+    currentURL: window.location.href 
+  }
+
+  togglePreview = (e) => {
+    this.setState({open: e});
+    return {open: e};
+  };
+
   render() {
     return (
       <BrowserRouter>
       <div className="app">
-      <Header />
+      <Header drawerOpenCLick={(e) => this.togglePreview(e)} />
       <div className={"app-body"}>
           <Routes>
           <Route exact path="/" element={<HomePage />}>
           </Route>
-         {/*   <Route exact path="/profile" element={<CurrentUserPage />}>
-          </Route>
-          <Route exact path="/users" element={<UsersPage />}>
-          </Route>
-          <Route exact path="/items" element={<ItemsIndex />}>
-          </Route> */}
             <Route
             path="/profile"
             element={<AuthenticationGuard component={CurrentUserPage} />}
@@ -65,8 +69,6 @@ class App extends Component {
             path="/contactus"
             element={<AuthenticationGuard component={ContactUs} />}
            />
-{/*           <Route exact path="/series" element={<SeriesIndex />}>
-          </Route> */}
           <Route path="*" element={<HomePage />}
                 />
           </Routes>

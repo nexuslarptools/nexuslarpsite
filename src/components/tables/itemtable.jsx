@@ -404,6 +404,7 @@ return (
                     label="Sheet Status"
                     onChange={e => UpdateApprovalFilter(e)}  
                     >
+                    <MenuItem value={undefined}>All Approval States</MenuItem>
                     <MenuItem value={''}>All Approval States</MenuItem>
                     <MenuItem value={'U'}>Unapproved</MenuItem>
                     <MenuItem value={'1'}>First Approval Done</MenuItem>
@@ -437,7 +438,7 @@ return (
                               onClick={() => UpdateLarpAutoComp('')}><Clear /></IconButton>}} 
                         />
                         )}
-                        getOptionSelected={(opt, val) => opt === val}
+                        getoptionselected={(opt, val) => opt === val}
                         onChange={(event, val) => selectLarpTag(val)}
                     />
                   </div>

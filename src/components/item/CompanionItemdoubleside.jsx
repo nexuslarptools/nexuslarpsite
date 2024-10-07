@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Loading from '../loading/loading';
 import './_companionitem.scss';
 
-const CompanionItem = props => {
+const CompanionItemdoubleside = props => {
   if (!props || !props.item) {
     return (<div className='loading-container'><Loading /></div>)
   } else {
@@ -34,16 +34,12 @@ const CompanionItem = props => {
                   <div className="column1">
                     <div className="columnentry">H2H</div>
                     <div className="columnentry">Dodge</div>
-                    <div className="columnentry">{props.item.fields.Fly !== null && props.item.fields.Fly !== undefined 
-                   && props.item.fields.Fly !== '' ?
-                     "Fly" : "Run"}</div>
+                    <div className="columnentry">Move</div>
                   </div>
                   <div className="column2">
                     <div className="columnentry">{props.item.fields.H2H}</div>
                     <div className="columnentry">{props.item.fields.Dodge}</div>
-                    <div className="columnentry">{props.item.fields.Fly !== null && props.item.fields.Fly !== undefined
-                    && props.item.fields.Fly !== ''  ?  
-                    props.item.fields.Fly : props.item.fields.Run}</div>
+                    <div className="columnentry">{props.item.fields.Move}</div>
                   </div>
                 </div>
               </div>
@@ -57,7 +53,7 @@ const CompanionItem = props => {
                         <span className="busterCards2" key={i}>○</span>
                       ))}
                     </div>
-                    : <></>
+                    : <div> </div>
                 }
                 {
                   props.item.fields.Energy != null && props.item.fields.Energy > 0
@@ -66,59 +62,58 @@ const CompanionItem = props => {
                         <span className="busterCards2" key={i}>○</span>
                       ))}
                     </div>
-                    : <></>
+                    : <div></div>
                 }
               </div>
               { props.item.fields.RESILIENCE != null || props.item.fields.GRADE != null
                 ? <span className = "itemStats">
                   {
-                    props.item.fields.RESILIENCE != null && props.item.fields.RESILIENCE != ''
+                    props.item.fields.RESILIENCE != null
                       ? <div className='resilience' >
                         Resilience: {props.item.fields.RESILIENCE}
                       </div>
-                      : <></>
-                      //'\u00a0\u00a0'
+                      : '\u00a0\u00a0'
                   }
                   {
-                    props.item.fields.GRADE != null && props.item.fields.GRADE != ''
+                    props.item.fields.GRADE != null
                       ? <div className='grade'>
                         Grade: {props.item.fields.GRADE}
                       </div>
-                      : <></>
-                      //'\u00a0\u00a0'
+                      : '\u00a0\u00a0'
                   }
                 </span>
                 : <div></div>
               }
-
-                {props.item.fields.Description.split('\n').map((i,key) => {
-            return <div className="companionitemDescription" key={key}><p>{i}</p></div>;
-        })
-            }
-
+              <div className="companionitemDescription">{props.item.fields.Description}</div>
               {
                 props.item.fields.Special_Skills != null && props.item.fields.Special_Skills[0] != null
                   ? <div>
                     <hr className='divideline'></hr>
-                    {props.item.fields.Special_Skills.map((skill) => 
-                    skill.visible === true ?
-                    <SpecialSkillsDisplayItem skill={skill} key={skill.Name + Math.random}/>
-                    : <></>
-                    )}
+                    {props.item.fields.Special_Skills.map((skill) => <SpecialSkillsDisplayItem skill={skill} key={skill.Name + Math.random}/>)}
                   </div>
                   : <div> </div>
               }
             </div>
           </div>
         </div>
+        <div className = "companionItemBox">
+        {
+                props.item.fields.Special_Skills2ndSide != null && props.item.fields.Special_Skills2ndSide[0] != null
+                  ? <div>
+                    <hr className='divideline'></hr>
+                    {props.item.fields.Special_Skills2ndSide.map((skill) => <SpecialSkillsDisplayItem skill={skill} key={skill.Name + Math.random}/>)}
+                  </div>
+                  : <div> </div>
+              }
+        </div>
       </>
     )
   }
 }
 
-export default CompanionItem;
+export default CompanionItemdoubleside;
 
-CompanionItem.propTypes = {
+CompanionItemdoubleside.propTypes = {
   props: PropTypes.object,
   item: PropTypes.object
 }

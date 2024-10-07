@@ -10,9 +10,11 @@ const CharacterSheetHeading = props => {
       <>
         <div className='basic-info'>
           <div className='table-statistics'>
-            <CharacterSheetTable list={props.attributes} tableClasses={'statistics sheet-table'} tableName={'Statistics'} />
+            <CharacterSheetTable list={props.attributes} 
+             tableClasses={'statistics sheet-table'} tableName={'Statistics'} />
           </div>
-          <div className="bio">{props.other.Values.Bio.Value}</div>
+          {props.other.Values.Bio !== undefined ?
+          <div className="bio">{props.other.Values.Bio.Value}</div> : <></>}
           <div className='imgContainer'>
             <img src={props.img} className='charImg' alt="character headshot"></img>
           </div>
