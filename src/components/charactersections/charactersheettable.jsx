@@ -49,7 +49,16 @@ const CharacterSheetTable = (props) => {
                   {
                     item.Name === 'over:' || item.Name === 'vehicle:'
                       ? <>
+                         {
+                         (JSONData.formData.findIndex((entry) => entry.Name === 'Pilot Vehicle' && entry.Value !== '0' && entry.Value !== null && entry.Value !== undefined) !== -1 
+                         && item.Name === 'vehicle:') ||
+                         (JSONData.formData.findIndex((entry) => entry.Name === 'Authority' && entry.Value !== '0' && entry.Value !== null && entry.Value !== undefined) !== -1 
+                         && item.Name === 'over:')
+                          ?
                           <TableCell className='sheet-table-attribute type' align="left">{item.Name} {item.Value}</TableCell>
+                          :
+                          <></>
+                         }
                         </>
                       : <>
                           <TableCell className='sheet-table-attribute' align="left">{item.Name}</TableCell>
