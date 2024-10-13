@@ -119,11 +119,13 @@ const specialskillsallowed = [
               </div>
               {
                   props.item.fields.Uses != null && props.item.fields.Uses > 0
-                  ? <div className='item-uses-container'>
+                  ? <div className='item-uses-container'>  
+                      <div className ='item-uses-text'> Uses:
                       { Array.apply(null, { length: props.item.fields.Uses }).map((e, i) => (
-                          <span className="item-uses" key={i}>○</span>
+                         <span className="item-uses" key={i}>○</span>
                         ))
                       }
+                      </div>
                     </div>
                   : <></>
                 }

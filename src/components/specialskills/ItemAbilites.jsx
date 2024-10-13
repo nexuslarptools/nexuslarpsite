@@ -23,6 +23,7 @@ const ItemAbilites = props => {
     if (initstate) {
       if (props.abilityState.Special != null) {
         const initalTagSetup = [];
+        if (props.abilityState.Special.Tags !== null) {
         props.abilityState.Special.Tags.forEach(tag => {
           props.itemTags.forEach(itemtag => {
             if (itemtag.guid === tag) {
@@ -30,6 +31,7 @@ const ItemAbilites = props => {
             }
           })
         })
+      }
 
         setFormstate({
           ...formState,
