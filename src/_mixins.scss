@@ -1,45 +1,45 @@
   @font-face {
 	font-family: "OpenSans";
 	src: local("OpenSans"),
-	  URL('/src/fonts/OpenSans-Regular.ttf');
+	  URL('#{$font-folder}/OpenSans-Regular.ttf'), format('ttf');
 
   }
 
 @font-face {
 	font-family: "Berkshire Swash";
 	src: local("Berkshire Swash"),
-		URL('/src/fonts/BerkshireSwash-Regular.ttf');
+		URL('#{$font-folder}/BerkshireSwash-Regular.ttf'), format('ttf');
 }
 
 @font-face {
 	font-family: "Walter Turncoat";
 	src: local("Walter Turncoat"),
-		URL('/src/fonts/WalterTurncoat-Regular.ttf') ;
+		URL('#{$font-folder}/WalterTurncoat-Regular.ttf'), format('ttf');
 }
 
 
 @font-face {
 	font-family: "Kavoon";
 	src: local("Kavoon"),
-		URL('/src/fonts/Kavoon-Regular.ttf');
+		URL('#{$font-folder}/Kavoon-Regular.ttf'), format('ttf');
 }
 
 @font-face {
 	font-family: "Rancho";
 	src: local("Rancho"),
-		URL('/src/fonts/Rancho-Regular.ttf');
+		URL('#{$font-folder}/Rancho-Regular.ttf'), format('ttf');
 }
 
 @font-face {
 	font-family: "OpenDyslexic";
 	src: local("OpenDyslexic"),
-		URL('/src/fonts/OpenDyslexic-Regular.otf');
+		URL('#{$font-folder}/OpenDyslexic-Regular.otf'), format('ttf');
 }
 
 @font-face {
 	font-family: "Lexend";
 	src: local("Lexend"),
-		URL('/src/fonts/Lexend.ttf');
+		URL('#{$font-folder}/Lexend.ttf'), format('ttf');
 }
 
   @mixin roundedCorners ($upper-left-corner: 3px, $upper-right-corner: 3px, $lower-right-corner: 3px, $lower-left-corner: 3px){
