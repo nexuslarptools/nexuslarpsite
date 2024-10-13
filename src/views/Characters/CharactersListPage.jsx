@@ -18,6 +18,7 @@ export default function CharactersListPage(props) {
       authLevel={props.authLevel}
       DirectToCharacter={(path, guid) => props.DirectToCharacter(path, guid)}
       NewCharacterLink={(e)=> props.NewCharacterLink(e)}
+      GoToSearch={() => props.GoToSearch()}
       NavToSelectItems={() => props.NavToSelectItems()}
       ToggleSwitch={() => props.ToggleSwitch()}
       ToggleCommentSwitch={() => props.ToggleCommentSwitch()}
@@ -35,6 +36,7 @@ CharactersListPage.propTypes = {
     ToggleSwitch: PropTypes.func,
     ToggleCommentSwitch: PropTypes.func,
     ToggleApprovableSwitch: PropTypes.func,
+    GoToSearch: PropTypes.func,
     showApprovableOnly: PropTypes.bool,
     selectedApproved: PropTypes.bool,
     commentFilterOn: PropTypes.bool,

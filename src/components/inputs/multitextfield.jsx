@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FormGroup } from 'reactstrap';
 import SingleTextField from './singletextfield';
 
-const MultiTextField = forwardRef((props) => {
+const MultiTextField = forwardRef((props, ref) => {
   const [initState, setInitState] = useState(true);
   const [multiField, setMultiField] = useState({
     fieldname: '',

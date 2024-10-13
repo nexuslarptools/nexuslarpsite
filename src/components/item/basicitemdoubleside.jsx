@@ -1,16 +1,14 @@
 import SpecialSkillsDisplay from '../specialskills/specialskillsdisplay';
 import PropTypes from 'prop-types';
 import Loading from '../../components/loading/loading';
-import './_item.scss'
 
-const BasicItem = props => {
-const specialskillsallowed = [
-  "Mecha",
-  "Vehicle",
-  "Companion",
-  "Pokemon"
-];
-
+const BasicItemDoubleside = props => {
+  const specialskillsallowed = [
+    "Mecha",
+    "Vehicle",
+    "Companion",
+    "Pokemon"
+  ];
   if (!props || !props.item) {
     return (<div className='loading-container'><Loading /></div>)
   } else {
@@ -29,67 +27,67 @@ const specialskillsallowed = [
             <div className="seriesItemText">
               <div className="item-stats">
                 {
-                  props.item.fields.Power != null && props.item.fields.Power != ''
+                  props.item.fields.Power != null
                     ? <div>Power: {props.item.fields.Power}</div>
                     : <></>
                 }
                 {
-                  props.item.fields.Athletics != null && props.item.fields.Athletics != ''
+                  props.item.fields.Athletics != null
                     ? <div>Athletics: {props.item.fields.Athletics}</div>
                     : <></>
                 }
                 {
-                  props.item.fields.Confidence != null && props.item.fields.Confidence != ''
+                  props.item.fields.Confidence != null
                     ? <div>Confidence: {props.item.fields.Confidence}</div>
                     : <></>
                 }
                 {
-                  props.item.fields.Brains != null && props.item.fields.Brains != ''
+                  props.item.fields.Brains != null
                     ? <div>Brains: {props.item.fields.Brains}</div>
                     : <></>
                 }
                 {
-                  props.item.fields.H2H != null && props.item.fields.H2H != ''
+                  props.item.fields.H2H != null
                   ? <div>H2H: {props.item.fields.H2H}</div>
                   : <></>
                 }
                 {
-                  props.item.fields.Dodge != null && props.item.fields.Dodge != ''
+                  props.item.fields.Dodge != null
                     ? <div>Dodge: {props.item.fields.Dodge}</div>
                     : <></>
                 }
                 {
-                  props.item.fields.Move != null && props.item.fields.Move != ''
+                  props.item.fields.Move != null
                     ? <div>Move: {props.item.fields.Move}</div>
                     : <></>
                 }
                 {
-                  props.item.fields.HS != null && props.item.fields.HS != ''
+                  props.item.fields.HS != null
                     ? <div>HS: {props.item.fields.HS}</div>
                     : <></>
                 }
                 {
-                  props.item.fields.Cost != null && props.item.fields.Cost !== ''
+                  props.item.fields.Cost != null 
                     ? <div>Value: {props.item.fields.Cost}</div>
                     : <></>
                 }
                                 {
-                  props.item.fields.Value != null && props.item.fields.Value != ''
+                  props.item.fields.Value != null 
                     ? <div>Value: {props.item.fields.Value}</div>
                     : <></>
                 }
                 {
-                  props.item.fields.RUN != null && props.item.fields.RUN != ''
+                  props.item.fields.RUN != null
                     ? <div>Run: {props.item.fields.RUN}</div>
                     : <></>
                 }
                 {
-                  props.item.fields.GRADE != null && props.item.fields.GRADE != ''
+                  props.item.fields.GRADE != null
                     ? <div>Grade: {props.item.fields.GRADE}</div>
                     : <></>
                 }
                 {
-                  props.item.fields.EnergyCost != null && props.item.fields.EnergyCost != ''
+                  props.item.fields.EnergyCost != null
                     ? <div>Energy Cost: {props.item.fields.EnergyCost}</div>
                     : <></>
                 }
@@ -109,10 +107,7 @@ const specialskillsallowed = [
                   props.item.fields.Special_Skills != null && specialskillsallowed.some(val => val === props.item.fields.TYPE)
                     ? <div>
                         <hr className='divideline'></hr>
-                        {props.item.fields.Special_Skills.map((skill) => 
-                        skill.visible === true ?
-                        <SpecialSkillsDisplay skill={skill} key={Math.random} /> 
-                      :<></>)}
+                        {props.item.fields.Special_Skills.map((skill) => <SpecialSkillsDisplay skill={skill} key={Math.random} />)}
                       </div>
                     : <></>
                 }
@@ -131,14 +126,30 @@ const specialskillsallowed = [
           </div>
         </div>
       </div>
+      <div className="seriesItemBox">
+      <div className='itemTitleBox'>
+            <h3 className="itemName">{props.item.name}</h3>
+            <h3 className="itemType">{props.item.fields.TYPE}</h3>
+          </div>
+        <div className='itemSecondSideTextBox'>
+          <div className="seriesItemText">
+          {props.item.fields.Description2ndSide !== undefined && props.item.fields.Description2ndSide !== null ?
+          props.item.fields.Description2ndSide.split("\n").map((i,key) => {
+            return <div className="item-description" key={key}>{i}</div>;
+        }) :
+        <div> </div>
+              }
+          </div>
+        </div>
+      </div>
     </>
     )
   }
 }
 
-export default BasicItem;
+export default BasicItemDoubleside;
 
-BasicItem.propTypes = {
+BasicItemDoubleside.propTypes = {
   props: PropTypes.object,
   item: PropTypes.object
 }

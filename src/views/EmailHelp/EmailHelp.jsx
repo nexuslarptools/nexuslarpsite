@@ -23,7 +23,7 @@ export default function ContactUs() {
     e. user_name = currUserQuery.data.preferredname;
     e. user_email = currUserQuery.data.email;
 
-    emailjs.send('service_qnmni0v', 'template_nxxyh9e', e, 'EvXbufAdk_v_rGnnp')
+    emailjs.send('service_eckjenu', 'template_nxxyh9e', e, 'EvXbufAdk_v_rGnnp')
       .then(function(response) {
         console.log(response.text);
           window.location.reload() 

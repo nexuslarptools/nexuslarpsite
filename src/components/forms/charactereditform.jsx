@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import PropTypes from 'prop-types';
+import formJSON from '../../jsonfiles/characterinput.json';
 import { Form, FormGroup } from 'reactstrap';
 import ItemAbilites from '../specialskills/ItemAbilites';
 import MultiTextField from '../inputs/multitextfield';
@@ -8,7 +9,7 @@ import { v4 } from 'uuid';
 import {
   Autocomplete, TextField,
   FormControlLabel, FormLabel, Input, Dialog, DialogTitle, 
-  IconButton, DialogContent, Typography, DialogActions, Button, Box, Checkbox
+  IconButton, DialogContent, Typography, DialogActions, Button, Box, Checkbox, Drawer
 } from '@mui/material';
 import Loading from '../../components/loading/loading';
 import { green } from '@mui/material/colors';
@@ -16,9 +17,11 @@ import ReviewNotesDisplay from '../reviewnotes/reviewnotesdisplay';
 import ReviewNotesForm from '../reviewnotes/reviewnotesform';
 import PhotoCropper from '../photocropper/photocropper';
 import ItemSelector from '../itemselector/itemselector';
+import Character from '../character/character';
+import { characterDataProcess } from '../../utils/characterdataprocess';
 
 const CharacterEditForm = (props) => {
-  const { register, handleSubmit, setValue } = useForm({
+  const { register, handleSubmit, getValues, setValue } = useForm({
     mode: 'onSubmit',
     reValidateMode: 'onBlur'
   });
@@ -140,9 +143,9 @@ const CharacterEditForm = (props) => {
     let skillData = [];
 
     for (let j = 0; j < abilitesFormsState.abilitiesFormList.length; j++) {
-      if (abilitesFormsState.abilitiesFormList[j].Special != null) {
+      if (abilitesFormsState.abilitiesFormList[j] != null) {
         if (abilitesFormsState.abilitiesFormList[j].visible) {
-          skillData.push(abilitesFormsState.abilitiesFormList[j].Special);
+          skillData.push(abilitesFormsState.abilitiesFormList[j]);
         }
       }
     }
@@ -191,11 +194,17 @@ const CharacterEditForm = (props) => {
   }
 
 
-  const [imageSrc] = React.useState(null);
-  const [imageSrc2] = React.useState(null);
+  const [imageSrc] = useState(null);
+  const [imageSrc2] = useState(null);
   const [finalImage, setFinalImage] = useState(null);
   const [finalImage2, setFinalImage2] = useState(null);
   const [formdata, setFormdata] = useState(null);
+  const [open, setOpen] = useState(false);
+
+
+  const togglePreview = (e) => {
+    setOpen(e);
+  };
 
 
   const upDateSeries = (e) => {
@@ -269,17 +278,22 @@ const CharacterEditForm = (props) => {
             props.initForm.apiMessage.fields.Special_Skills[i].Description
           let oldTags = props.initForm.apiMessage.fields.Special_Skills[i].Tags
 
+          
+          const initial =[];
+          oldTags.forEach(oldguid => {
+            initial.push(props.tagslist.abilityTags.find((tagf) => tagf.guid === oldguid))
+          });
+
           let newData = JSON.parse(
             JSON.stringify({
               arraynum: i,
               visible: true,
-              Special: {
                 Name: oldName,
                 Cost: oldCost,
                 Rank: oldRank,
                 Description: oldDescription,
-                Tags: oldTags
-              }
+                Tags: oldTags,
+                initialTags: initial
             })
           );
 
@@ -305,13 +319,13 @@ const CharacterEditForm = (props) => {
             JSON.stringify({
               arraynum: i,
               visible: true,
-              Special: {
                 Name: oldName,
                 Cost: oldCost,
                 Rank: oldRank,
                 Description: oldDescription,
-                Tags: oldTags
-              }
+                Tags: oldTags,
+                initialTags: initial
+
             })
           )
           loopDataWithNulls.push(newData);
@@ -637,6 +651,11 @@ isNew: true
       });
   }
 
+  const extractValues = () => {
+    let output = getValues();
+    return output;
+  }
+
   if (JSONData.length === 0 || !itemsTableState.isMounted) {
     return (<div className='loading-container'><Loading /></div>)
   } else {
@@ -890,6 +909,7 @@ isNew: true
           <div className="edit-bottom">
             <button className="button-cancel" onClick={() => props.GoBack()}>Cancel</button>
             <button className="button-save" onClick={handleSubmit(handleFormSubmit)}>Save Sheet</button>
+            <button className="button-action" onClick={() => togglePreview(true)}>Preview</button>
             {props.initForm.showResult && props.initForm.apiMessage.secondapprovalbyUserGuid === null
             && props.authLevel > 2 && props.currenUserGuid !== props.initForm.apiMessage.firstapprovalbyuserGuid &&
             props.currenUserGuid !== props.initForm.apiMessage.editbyUserGuid 
@@ -897,6 +917,15 @@ isNew: true
             <button className="button-action" onClick={() => props.Approve()}>Approve Sheet</button>
             :<></>}
           </div>
+
+          <Drawer PaperProps={{
+            sx: { width: "90%" }}} open={open} onClose={() => togglePreview(false)}>
+             <Box sx={{ width: "95%" }} role="presentation" onClick={() => togglePreview(false)}>
+               <Character id="character" formJSON={formJSON} 
+               character={characterDataProcess(abilitesFormsState, finalImage,  finalImage2, 
+                extractValues(), tagState, itemsTableState, props.initForm, selectedSeries, gmNotes)} />
+             </Box>
+          </Drawer>
 
           
         {deleteDialogOpen.row !== null
@@ -930,6 +959,8 @@ isNew: true
             </Dialog>
           : <div></div>
         }
+
+
 
 
         </>

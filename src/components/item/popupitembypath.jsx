@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import BasicItem from './basicitem';
+import Item from './item';
 import Loading from '../../components/loading/loading';
 import useGetData from '../../utils/getdata';
 
@@ -21,12 +21,8 @@ const PopupItemByPath = props => {
         { itemQuery.data === undefined || itemQuery.data  === null ?
         <div className='loading-container'><Loading /></div> :
         <>
-          { itemQuery.data .fields.TYPE !== "Mecha" &&
-            itemQuery.data .fields.TYPE !=="Vehicle" &&
-            itemQuery.data .fields.TYPE !== "Companion" &&
-            itemQuery.data .fields.TYPE !=="Pokemon" ?
-            <BasicItem item={itemQuery.data }/> :
-            <div className='loading-container'><Loading /></div>
+          { 
+            <Item item={itemQuery.data }/> 
           } </>
         }
         </>
