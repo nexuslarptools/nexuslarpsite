@@ -45,3 +45,54 @@
           transform: rotate(360deg);
       }
   }
+
+  @font-face {
+	font-family: "OpenSans";
+	src: local("OpenSans"),
+	  URL('/src/fonts/OpenSans-Regular.ttf') 
+	  format("truetype");
+
+  }
+
+@font-face {
+	font-family: "Berkshire Swash";
+	src: local("Berkshire Swash"),
+		URL('/src/fonts/BerkshireSwash-Regular.ttf') 
+		format("truetype");
+}
+
+@font-face {
+	font-family: "Walter Turncoat";
+	src: local("Walter Turncoat"),
+		URL('/src/fonts/WalterTurncoat-Regular.ttf') 
+		format("truetype");
+}
+
+
+@font-face {
+	font-family: "Kavoon";
+	src: local("Kavoon"),
+		URL('/src/fonts/Kavoon-Regular.ttf') 
+		format("truetype");
+}
+
+@font-face {
+	font-family: "Rancho";
+	src: local("Rancho"),
+		URL('/src/fonts/Rancho-Regular.ttf') 
+		format("truetype");
+}
+
+@font-face {
+	font-family: "OpenDyslexic";
+	src: local("OpenDyslexic"),
+		URL('/src/fonts/OpenDyslexic-Regular.otf') 
+		format("truetype");
+}
+
+@font-face {
+	font-family: "Lexend";
+	src: local("Lexend"),
+		URL('/src/fonts/Lexend.ttf') 
+		format("truetype");
+}
