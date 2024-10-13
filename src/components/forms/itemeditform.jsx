@@ -207,7 +207,10 @@ const ItemEditForm = (props) => {
           }
 
 
-          if (props.initForm.apiMessage.back.fields.Special_Skills) {
+          if (props.initForm.apiMessage.back !== undefined && props.initForm.apiMessage.back !== null &&
+            props.initForm.apiMessage.back.feilds !== undefined && props.initForm.apiMessage.back !== null && 
+            props.initForm.apiMessage.back.fields.Special_Skills !== undefined &&
+            props.initForm.apiMessage.back.fields.Special_Skills !== null) {
             for (
               let i = 0;
               i < props.initForm.apiMessage.back.fields.Special_Skills.length;
