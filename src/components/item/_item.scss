@@ -75,12 +75,18 @@
             justify-content: space-evenly;
             position: absolute;
             width: 100%;
-            .item-uses{
+            .item-uses-text{
                 line-height: .5;
-            }
-            .item-uses:nth-child(5n){
-                background-color: $color-secondary-lightest;
-                border-radius: 50%;
+                font-size: 18px;
+                .item-uses{
+                    line-height: .5;
+                    font-size: 24px;
+                }
+                .item-uses:nth-child(5n){
+                    background-color: $color-secondary-lightest;
+                    border-radius: 50%;
+                }
+                
             }
         }
         .item-description{

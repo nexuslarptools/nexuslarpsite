@@ -535,52 +535,33 @@ isNew: true
     });
   }
 
-  const updateAbilityForms = (e) => {
-    let namehere = null;
-    if (e.name != null) {
-      namehere = e.name;
+  const updateAbilityForms = (rank, fieldname, value) => {
+
+    let ability = {
+      arraynum: rank,
+      visible: true,
+        Name: '',
+        Cost: null,
+        Rank: null,
+        Description: '',
+        Tags: []
     }
 
-    let engeryCosthere = null;
-    if (e.energyCost != null) {
-      engeryCosthere = e.energyCost;
+    let found = false;
+    for (let j = 0; j < abilitesFormsState.abilitiesFormList.length; j++) {
+      if (j === rank) {
+        found = true;
+        ability = abilitesFormsState.abilitiesFormList[j];
+      } 
     }
 
-    let rankhere = null;
-    if (e.rank != null) {
-      rankhere = e.rank;
-    }
-
-    let deschere = null;
-    if (e.desc != null) {
-      deschere = e.desc;
-    }
-
-    let tagshere = null;
-    if (e.tags != null) {
-      tagshere = e.tags;
-    }
-
-    const newData = JSON.parse(
-      JSON.stringify({
-        arraynum: e.arraynum,
-        visible: true,
-        Special: {
-          Name: namehere,
-          Cost: engeryCosthere,
-          Rank: rankhere,
-          Description: deschere,
-          Tags: tagshere
-        }
-      })
-    )
+    ability[fieldname] = value;
 
     const loopData = [];
-    let found = false;
 
     for (let j = 0; j < abilitesFormsState.abilitiesFormList.length; j++) {
-      if (j === e.arraynum) {
-        loopData.push(newData);
+      if (j === rank) {
+        loopData.push(ability);
         found = true;
       } else {
         loopData.push(abilitesFormsState.abilitiesFormList[j]);
@@ -588,7 +569,7 @@ isNew: true
     }
 
     if (!found) {
-      loopData.push(newData);
+      loopData.push(ability);
     }
 
     setAbilitesForms({
@@ -830,7 +811,7 @@ isNew: true
                         key={ability.arraynum}
                         abilityState={ability}
                         hideAbility={hideAbilityForm}
-                        onFillIn={updateAbilityForms}
+                        onFillIn={(rank, fieldname, value) => updateAbilityForms(rank, fieldname, value)}
                         SetAbilityValue={updateValue}
                       />
                       

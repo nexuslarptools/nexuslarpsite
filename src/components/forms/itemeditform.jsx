@@ -11,6 +11,7 @@ import {
 import { green } from '@mui/material/colors';
 import PhotoCropper from '../photocropper/photocropper';
 import Item from '../item/item';
+import './_itemeditform.scss';
 
 const ItemEditForm = (props) => {
     const formRef = React.useRef();
@@ -224,7 +225,7 @@ const ItemEditForm = (props) => {
               oldTags.forEach(oldguid => {
                 initial.push(props.tagslist.abilityTags.find((tagf) => tagf.guid === oldguid))
               });
-              
+
               let newData = JSON.parse(
                 JSON.stringify({
                   arraynum: i,
@@ -374,7 +375,7 @@ const ItemEditForm = (props) => {
           outputbody.Fields.Special_Skills = itemData.fields.Special_Skills;
         }
 
-        if (itemData.back !== undefined && itemData.back.fields.Special_Skills !== undefined 
+        if (itemData.back !== undefined && itemData.back.fields !== null && itemData.back.fields.Special_Skills !== undefined 
           && itemData.back.fields.Special_Skills !== null) {
 
             itemData.back.fields.Special_Skills.forEach(skill => { 
@@ -823,7 +824,8 @@ const ItemEditForm = (props) => {
 
     return (
         <>
-        <div className="entryForm">
+                  <div className="character-sheet-form">
+                  <div className='character-sheet-images'>
             <Form ref={formRef}>
               <FormGroup>
                 <div className="input-pair">
@@ -1166,6 +1168,7 @@ const ItemEditForm = (props) => {
                         props.currenUserGuid !== props.initForm.apiMessage.editbyUserGuid  ?
                       <button className="button-action" onClick={() => props.Approve()}>Approve Item</button>
             :<></>}
+        </div>
         </div>
         </>
     )
