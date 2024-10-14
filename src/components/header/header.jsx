@@ -4,10 +4,8 @@ import { useAuth0 } from '@auth0/auth0-react'
 import { Link } from 'react-router-dom'
 import './header.scss'
 import AuthLevelInfo from '../../utils/authLevelInfo.js'
-import MenuIcon from '@mui/icons-material/Menu';
-import PropTypes from 'prop-types';
 
-const Header = (props) => {
+const Header = () => {
 
   const { user, isAuthenticated, isAuthLoading } = useAuth0()
   const authLevel = AuthLevelInfo();
@@ -70,8 +68,3 @@ const Header = (props) => {
 }
 
 export default Header
-
-Header.propTypes = {
-  drawerOpenCLick: PropTypes.func,
-  showHambutton: PropTypes.bool
-}
