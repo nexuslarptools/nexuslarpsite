@@ -1,14 +1,13 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Loading from '../../components/loading/loading';
-import CharacterSheetHeading from '../charactersections/charactersheetheading';
-import CharacterSheetTable from '../charactersections/charactersheettable';
-import Item from '../item/item';
-import SpecialSkillsDisplayCharacter from '../specialskills/specialskillsdisplaycharacter';
-import ItemPalette from '../itempalette/itempalette';
-
+import CharacterDisplay from './characterdisplay';
+import { useReactToPrint } from 'react-to-print';
 
 const Character = props => {
+
+  const charComponent = React.useRef(null);
+
   const [JSONData, setJSONData] = useState({
     formData: [],
     show: false
@@ -216,6 +215,11 @@ const Character = props => {
     }
   }
 
+  const printFn = useReactToPrint({
+    contentRef: charComponent,
+    documentTitle: "AwesomeFileName"
+});
+
   const handlePrint = (tagid) => {
     var hashid = "."+ tagid;
     var element = document.querySelector(hashid);
@@ -239,7 +243,7 @@ const Character = props => {
     return (
     <>
       <div className='sheet-option-buttons'>
-        <button className="button-action print-sheet-button" onClick={() => handlePrint('character-sheet-printable')}>Print This Sheet</button>
+        <button className="button-action print-sheet-button" onClick={printFn}>Print This Sheet</button>
         { fontSize.fontSize === 'normal'
           ? <button className='change-font-size-large-button button-action' onClick={changeFontSize}>Large Font Size</button>
           : <button className='change-font-size-normal-button button-action' onClick={changeFontSize}>Normal Font Size</button>
@@ -267,214 +271,11 @@ const Character = props => {
         </div>
         <div className='sheet-print-info'>Note: On print, certain things may appear out of place if viewing it in the new browser window. They should move into correct place inside of the print view.</div>
       </div>
-
-      <div  className='character-sheet-printable' >
-        <div className='sheet sheet1'>
-          <div className='header-info'>
-            <div className='sheet-name-series'>
-              <div className='sheetName'>{props.character.name}</div>
-              <div className='seriesName'>{props.character.seriesTitle}</div>
-            </div>
-            <CharacterSheetHeading img={imageData.image1}  other={JSONData.formData[0]} attributes={JSONData.formData[1]} />
-          </div>
-          <div className='allSkills-and-sheet-item-container'>
-            <div className='standard-skills'>
-              <div className='skills-table'><CharacterSheetTable list={JSONData.formData[2]} tableClasses={'skills1 sheet-table'} tableName={'Standard Skills'}  /></div>
-            </div>
-            <div className='combat-skills-and-sheet-item-container'>
-              <div className='skills-table'><CharacterSheetTable list={JSONData.formData[3]} tableClasses={'combat sheet-table'} tableName={'Combat Skills'}  /></div>
-              <div className='sheet-item-container'>
-                <div className='sheet-item'><Item item={props.character.sheet_Item}></Item></div>
-              </div>
-            </div>
-
-            <div className='body-energy-res-stats-container'>
-              <div className='body-energy-res-stats'>
-                <span className='statsSpan'>
-                  <div className='stat-name'>Body:</div>
-                  <div className='symbols-row'>
-                    { Array.apply(null, { length: props.character.fields.Body }).map((e, i) => (
-                      <span className="body" key={i} alt="body"></span>
-                    ))}
-                  </div>
-                </span>
-                <span className='statsSpan'>
-                  <div className='stat-name'>Energy:</div>
-                  <div className='symbols-row'>
-                    { Array.apply(null, { length: props.character.fields.Energy }).map((e, i) => (
-                      <span className="energy" key={i} alt="energy"></span>
-                    ))}
-                  </div>
-                </span>
-                <span className='statsSpan'>
-                  <div className='stat-name'>Resilience:</div>
-                  <div className='symbols-row'>
-                    { Array.apply(null, { length: props.character.fields.Resilience }).map((e, i) => (
-                        <span className="shield" key={i} alt="shield"></span>
-                    ))}
-                  </div>
-                </span>
-              </div>
-
-              { imageData.image2 !== undefined && imageData.image2 !== null && imageData.image2 !== '' && imageData.image2 !== 'data:image/png;base64,null' ?
-                <div className='imgContainer full-body-image'>
-                  <img src={imageData.image2} className='charFullBodyImg' alt="character full body shot"></img>
-                </div> 
-                : <></> 
-              }
-            </div>
-            
-          </div>
-          <div className="starting-items">
-            <div className='starting-items-header'>Starting Items: <span className='starting-items-amount'>({props.character.starting_Items !== undefined ? props.character.starting_Items.length : 0})</span></div>
-            <div className='starting-items-list'>
-              {itemList.map((item, i) => 
-                i + 1 === itemList.length
-                  ? item.itemName
-                  :  item.total > 1
-                  ?  item.itemName + ' (' + item.total + '),  '
-                    : item.itemName + ',  '
-              )}
-            </div>
-          </div>
-        </div>
-        { 
-          !specialSkillSpace.isactive ?
-            <div className='sheet sheet2'>
-              <div className='header-info'>
-                <div className='sheet-name-series'>
-                  <div className='sheetName'>{props.character.name}</div>
-                  <div className='seriesName'>{props.character.seriesTitle}</div>
-                </div>
-              </div>
-              <div className='special-skills'>
-                <div className='special-skills-header'>Special Skills</div>
-                {
-                  props.character.fields.Special_Skills != null && props.character.fields.Special_Skills[0] != null
-                    ? <>
-                      {props.character.fields.Special_Skills.map((skill, index) => (
-                        <div key={index + Math.random} className="skill">
-                          <SpecialSkillsDisplayCharacter skill={skill} />
-                        </div>
-                      ))}
-                    </>
-                    : <div>
-                    </div>
-                }
-              </div>
-            </div>
-          : <>
-              <div className='sheet sheet2'>
-              <div className='header-info'>
-                <div className='sheet-name-series'>
-                  <div className='sheetName'>{props.character.name}</div>
-                  <div className='seriesName'>{props.character.seriesTitle}</div>
-                </div>
-              </div>
-              <div className='special-skills'>
-                <div className='special-skills-header'>Special Skills Page 1</div>
-                {
-                  specialSkillSpace.page1 != null && specialSkillSpace.page1.length > 0 && specialSkillSpace.page1 != null
-                    ? <>
-                      {specialSkillSpace.page1.map((skill, index) => (
-                        <div key={index + Math.random} className="skill">
-                          <SpecialSkillsDisplayCharacter skill={skill} />
-                        </div>
-                      ))}
-                    </>
-                    : <div>
-                    </div>
-                }
-              </div>
-              </div>
-              <div className='sheet sheet2'>
-                 <div className='header-info'>
-                   <div className='sheet-name-series'>
-                     <div className='sheetName'>{props.character.name}</div>
-                     <div className='seriesName'>{props.character.seriesTitle}</div>
-                   </div>
-                 </div>
-                 <div className='special-skills'>
-                   <div className='special-skills-header'>Special Skills Page 2</div>
-                   {
-                     specialSkillSpace.page2 != null && specialSkillSpace.page2.length > 0 && specialSkillSpace.page2[0] != null
-                       ? <>
-                         {specialSkillSpace.page2.map((skill, index) => (
-                           <div key={index + Math.random} className="skill">
-                             <SpecialSkillsDisplayCharacter skill={skill} />
-                           </div>
-                         ))}
-                       </>
-                       : <div>
-                       </div>
-                   }
-                 </div>
-              </div>
-            </>
-        }
-
-        {
-          props.character.gmnotes.length > 0
-            ?  
-              !extraGmSpaceOn.isactive ?
-                <div className='sheet sheet3'>
-                  <div className='gm-notes'>
-                    <div className='gm-notes-heading'>GM Notes for {props.character.name}</div>
-                    <div className='gm-notes-text'>
-                      {props.character.gmnotes.split('\n').map(str => <p key={Math.Random()}> {str}</p>)}
-                      </div>
-                  </div>
-                </div>
-              : <>
-                  <div className='sheet sheet3'>
-                    <div className='gm-notes'>
-                      <div className='gm-notes-heading'>GM Notes for {props.character.name} [1]</div>
-                      <div className='gm-notes-text'>
-                        {extraGmSpaceOn.page1.split('\n').map(str => <p key={Math.Random()}>{str}</p>)}
-                        </div>
-                    </div>
-                  </div>
-                  <div className='sheet sheet3' >
-                  <div className='gm-notes'>
-                    <div className='gm-notes-heading'>GM Notes for {props.character.name} [2]</div>
-                    <div className='gm-notes-text'>
-                      {extraGmSpaceOn.page2.split('\n').map(str => <p key={Math.Random()}>{str}</p>)}
-                      </div>
-                  </div>
-                  </div> 
-                </>
-              : null
-        }
-        
-        {
-          props.character.starting_Items !== undefined && props.character.starting_Items.length > 0 && props.character.starting_Items.length <= 9
-          ? <div className='sheet sheet4'>
-              <ItemPalette apiMessage={props.character.starting_Items} remove={() => null}></ItemPalette>
-            </div>
-          : props.character.starting_Items !== undefined && props.character.starting_Items.length > 9 && props.character.starting_Items.length < 19
-            ? <>
-                <div className='sheet sheet4'>
-                  <ItemPalette apiMessage={fullItems[0]} remove={() => null}></ItemPalette>
-                </div>
-                <div className='sheet sheet5'>
-                  <ItemPalette apiMessage={fullItems[1]} remove={() => null}></ItemPalette>
-                </div>
-              </>
-            :  props.character.starting_Items !== undefined && props.character.starting_Items.length > 18
-            ? <>
-                <div className='sheet sheet4'>
-                  <ItemPalette apiMessage={fullItems[0]} remove={() => null}></ItemPalette>
-                </div>
-                <div className='sheet sheet5'>
-                  <ItemPalette apiMessage={fullItems[1]} remove={() => null}></ItemPalette>
-                </div>
-                <div className='sheet sheet6'>
-                  <ItemPalette apiMessage={fullItems[2]} remove={() => null}></ItemPalette>
-                </div>
-              </>
-            : null
-        }
-      </div>
+      <div ref={charComponent}>
+      <CharacterDisplay character={props.character} imageData={imageData} JSONData={JSONData}
+       itemList={itemList} specialSkillSpace={specialSkillSpace} extraGmSpaceOn={extraGmSpaceOn} 
+       fullItems={fullItems}/>
+       </div>
     </>
     )
   }

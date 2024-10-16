@@ -1,0 +1,25 @@
+@media all {
+    tr.tableRow {
+outline-style: solid;
+outline-width: 1px;
+padding: 3px;
+height: 9px;
+  }
+}
+
+@media all {
+th.sheet-table-attribute {
+outline: solid;
+outline-width: 1px;
+padding: 3px;
+height: 9px;
+}
+}
+
+@media all {
+th.sheet-table-number {
+    outline: solid;
+    outline-width: 1px;
+    padding: 5px;
+    }
+}

@@ -18,7 +18,9 @@ const CharacterDisplayPage = props => {
 
   return (
     <>
+    {
       <Character id="character" formJSON={formJSON} character={characterQuery.data} />
+    }
       <div className="edit-bottom">
             <button className="button-cancel" onClick={() => props.GoBackToList()}>Go Back!</button>
       </div>
