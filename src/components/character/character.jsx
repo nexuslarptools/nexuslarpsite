@@ -34,10 +34,13 @@ const Character = props => {
     isactive: false,
     page1: [],
     page2: []
-  })
+  });
 
   useEffect(() => {
     initForm(props.formJSON)
+    //var hashid = ".character-sheet-printable";
+    //setElement(document.querySelector(hashid));
+    //setHtmlStyles(document.querySelectorAll("style"));
   }, [])
 
   const initForm = async (formJSON) => {
@@ -236,7 +239,7 @@ const Character = props => {
     return (
     <>
       <div className='sheet-option-buttons'>
-        <button className="button-action print-sheet-button" onClick={(e) => handlePrint('character-sheet-printable')}>Print This Sheet</button>
+        <button className="button-action print-sheet-button" onClick={() => handlePrint('character-sheet-printable')}>Print This Sheet</button>
         { fontSize.fontSize === 'normal'
           ? <button className='change-font-size-large-button button-action' onClick={changeFontSize}>Large Font Size</button>
           : <button className='change-font-size-normal-button button-action' onClick={changeFontSize}>Normal Font Size</button>
@@ -264,8 +267,8 @@ const Character = props => {
         </div>
         <div className='sheet-print-info'>Note: On print, certain things may appear out of place if viewing it in the new browser window. They should move into correct place inside of the print view.</div>
       </div>
-      
-      <div className='character-sheet-printable'>
+
+      <div  className='character-sheet-printable' >
         <div className='sheet sheet1'>
           <div className='header-info'>
             <div className='sheet-name-series'>
@@ -418,7 +421,7 @@ const Character = props => {
                   <div className='gm-notes'>
                     <div className='gm-notes-heading'>GM Notes for {props.character.name}</div>
                     <div className='gm-notes-text'>
-                      {props.character.gmnotes.split('\n').map(str => <p>{str}</p>)}
+                      {props.character.gmnotes.split('\n').map(str => <p key={Math.Random()}> {str}</p>)}
                       </div>
                   </div>
                 </div>
@@ -427,7 +430,7 @@ const Character = props => {
                     <div className='gm-notes'>
                       <div className='gm-notes-heading'>GM Notes for {props.character.name} [1]</div>
                       <div className='gm-notes-text'>
-                        {extraGmSpaceOn.page1.split('\n').map(str => <p>{str}</p>)}
+                        {extraGmSpaceOn.page1.split('\n').map(str => <p key={Math.Random()}>{str}</p>)}
                         </div>
                     </div>
                   </div>
@@ -435,7 +438,7 @@ const Character = props => {
                   <div className='gm-notes'>
                     <div className='gm-notes-heading'>GM Notes for {props.character.name} [2]</div>
                     <div className='gm-notes-text'>
-                      {extraGmSpaceOn.page2.split('\n').map(str => <p>{str}</p>)}
+                      {extraGmSpaceOn.page2.split('\n').map(str => <p key={Math.Random()}>{str}</p>)}
                       </div>
                   </div>
                   </div> 
