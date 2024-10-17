@@ -1,12 +1,13 @@
 @import "/src/variables";
 
 .print-items-box {
-    align-content: flex-start;
-    box-sizing: border-box;
+    width: 100%;
     display: flex;
-    flex-wrap: wrap;
-    height: 11in;
-    padding: 35px 20px 0 40px;
-    position: relative;
-    width: 8in;
+    &.print-items-column {
+        height: 11in;
+        padding: 35px 20px 0 40px;
+        flex: 1;
+        margin-right:1.5em;
+
+    }
 }

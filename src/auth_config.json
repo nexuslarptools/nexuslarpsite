@@ -3,7 +3,7 @@
   "clientId": "Criga3xp4eX7Od9kZeyIcNzlaFznmGmY",
   "audience": "https://dev-3xazewbu.auth0.com/api/v2/",
   "NAPILocation":"http://LARPPi:6004",
-  "APILocation":"http://localhost",
-  "NAWAPILocation": "https://decade.kylebrighton.com:6006",
+  "NAWAPILocation":"http://localhost",
+  "APILocation": "https://decade.kylebrighton.com:6006",
   "appOrigin": "https://decade.kylebrighton.com:6006"
 }

@@ -1,8 +1,21 @@
 import Item from '../item/item';
 import PropTypes from 'prop-types';
 import Loading from '../../components/loading/loading';
+import './_itempalette.scss'
 
 const ItemPalette = props => {
+
+  const groupedItems = props.apiMessage.reduce(
+    (acc, item) => {
+      if (acc[acc.length - 1].length >= 3) {
+        return [...acc, [item]];
+      }
+      acc[acc.length - 1].push(item);
+      return acc;
+    },
+    [[]]
+  );
+
   if (!props || props.apiMessage == undefined) {
     return (<div className='loading-container'><Loading /></div>)
   } else if (props.apiMessage.length < 1) {
@@ -11,17 +24,23 @@ const ItemPalette = props => {
     return (
       <>
         <div className="print-items-box">
-          {[...Array(props.apiMessage.length)].map((x, i) =>
+        {[...Array(groupedItems.length)].map((y, j) =>
+        <>
+        <div className="print-items-column">
+          {[...Array(groupedItems[j].length)].map((x, i) =>
               <>
                 {
-                  props.apiMessage.length > 0
-                    ? <div onClick={() => props.remove(i)}>
-                        <Item item={props.apiMessage[i]}/>
+                  groupedItems[j].length > 0
+                    ? <div>
+                        <Item item={groupedItems[j][i]}/>
                       </div>
                     : <></>
                 }
               </>
           )}
+          </div>
+          </>
+        )}
         </div>
       </>
     )
