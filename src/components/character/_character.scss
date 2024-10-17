@@ -104,6 +104,7 @@
     // SECTIONS OF THE SHEET
     // header/top of sheet 1
     .header-info {
+        width: 792px;
         // name and series, top of sheets
         .sheet-name-series {
             border-bottom: 5px solid $color-neutral-darkest;
@@ -116,6 +117,7 @@
             font-weight: bold;
             padding: 0 10px;
             width: 100%;
+            width: 792px;
         }
         // statics, bio, headshot
         .basic-info {
@@ -142,10 +144,10 @@
     
     // standard and combat skills
     .allSkills-and-sheet-item-container {
+        width: 792px;
         display: flex;
         page-break-inside: avoid;
         position: relative;
-        width: 100%;
         .skills-table {
             max-width: 207px;
         }

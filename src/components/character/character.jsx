@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Loading from '../../components/loading/loading';
 import CharacterSheetHeading from '../charactersections/charactersheetheading';
@@ -6,9 +6,11 @@ import CharacterSheetTable from '../charactersections/charactersheettable';
 import Item from '../item/item';
 import SpecialSkillsDisplayCharacter from '../specialskills/specialskillsdisplaycharacter';
 import ItemPalette from '../itempalette/itempalette';
-
+import { useReactToPrint } from 'react-to-print';
 
 const Character = props => {
+
+  const charComponent = React.useRef(null);
   const [JSONData, setJSONData] = useState({
     formData: [],
     show: false
@@ -216,6 +218,11 @@ const Character = props => {
     }
   }
 
+  const printFn = useReactToPrint({
+    contentRef: charComponent,
+    documentTitle: props.character.name+' / '+props.character.seriesTitle
+});
+
   const handlePrint = (tagid) => {
     var hashid = "."+ tagid;
     var element = document.querySelector(hashid);
@@ -239,7 +246,7 @@ const Character = props => {
     return (
     <>
       <div className='sheet-option-buttons'>
-        <button className="button-action print-sheet-button" onClick={() => handlePrint('character-sheet-printable')}>Print This Sheet</button>
+        <button className="button-action print-sheet-button" onClick={printFn}>Print This Sheet</button>
         { fontSize.fontSize === 'normal'
           ? <button className='change-font-size-large-button button-action' onClick={changeFontSize}>Large Font Size</button>
           : <button className='change-font-size-normal-button button-action' onClick={changeFontSize}>Normal Font Size</button>
@@ -268,7 +275,7 @@ const Character = props => {
         <div className='sheet-print-info'>Note: On print, certain things may appear out of place if viewing it in the new browser window. They should move into correct place inside of the print view.</div>
       </div>
 
-      <div  className='character-sheet-printable' >
+      <div ref={charComponent} className='character-sheet-printable' >
         <div className='sheet sheet1'>
           <div className='header-info'>
             <div className='sheet-name-series'>
