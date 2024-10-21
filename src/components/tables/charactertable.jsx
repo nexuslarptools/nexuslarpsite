@@ -71,9 +71,9 @@ const CharacterTable = props => {
 
         let filteredRows = props.appdata;
 
-        filteredRows = filteredRows.filter(item => item.name.toLocaleLowerCase().includes(filterState.CharacterFilter));
+        filteredRows = filteredRows.filter(item => item.name.toLocaleLowerCase().includes(filterState.CharacterFilter.toLocaleLowerCase()));
         filteredRows = filteredRows.filter(item => (item.series === null && filterState.SeriesFilter === '') 
-          || (item.title !== null && item.title.toLocaleLowerCase().includes(filterState.SeriesFilter)));
+          || (item.title !== null && item.title.toLocaleLowerCase().includes(filterState.SeriesFilter.toLocaleLowerCase())));
         if (props.showApprovableOnly) {
           filteredRows = filteredRows.filter(item => (item.editbyUserGuid !== props.userGuid && item.firstapprovalbyuserGuid !== props.userGuid));
         }

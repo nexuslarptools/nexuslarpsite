@@ -69,8 +69,8 @@ const ItemTable = props => {
 
     let filteredRows = props.appdata?.iteList;
 
-    filteredRows = filteredRows.filter(item => item.name.toLocaleLowerCase().includes(filterState.ItemsFilter));
-    filteredRows = filteredRows.filter(item => (item.series === null && filterState.SeriesFilter === '') || (item.series !== null && item.series.toLocaleLowerCase().includes(filterState.SeriesFilter)));
+    filteredRows = filteredRows.filter(item => item.name.toLocaleLowerCase().includes(filterState.ItemsFilter.toLocaleLowerCase()));
+    filteredRows = filteredRows.filter(item => (item.series === null && filterState.SeriesFilter === '') || (item.series !== null && item.series.toLocaleLowerCase().includes(filterState.SeriesFilter.toLocaleLowerCase())));
     if (props.showApprovableOnly) {
       filteredRows = filteredRows.filter(item => (item.editbyUserGuid !== props.userGuid && item.firstapprovalbyuserGuid !== props.userGuid));
     }
