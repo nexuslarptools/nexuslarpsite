@@ -7,7 +7,7 @@ import AuthLevelInfo from '../../utils/authLevelInfo.js'
 
 const Header = () => {
 
-  const { user, isAuthenticated, isAuthLoading } = useAuth0()
+  //const { user, isAuthenticated, isAuthLoading } = useAuth0()
   const authLevel = AuthLevelInfo();
     
       let navClasses = 'navbar-container';
@@ -42,7 +42,7 @@ const Header = () => {
   </ul>
   </div>
         <div className="nav-user-info">   
-        {isAuthenticated && (
+        {/* {isAuthenticated && (
         <div className="profile">
           <Link 
   to={{ pathname: '/profile' }}> 
@@ -60,7 +60,7 @@ const Header = () => {
               <div className="logout">
                 <LogoutButton/>
               </div>
-                  )} 
+                  )}  */}
                   </div>
                   </nav>
           </header>
