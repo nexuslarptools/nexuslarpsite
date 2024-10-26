@@ -4,11 +4,11 @@ import PropTypes from 'prop-types'
 
 export const AuthenticationGuard = (props) => {
   const Component = withAuthenticationRequired(props.component, {
-    onRedirecting: () => (
-      <div className="page-layout">
-        <Loading />
-      </div>
-    ),
+  //  onRedirecting: () => (
+  //    <div className="page-layout">
+  //      <Loading />
+  //    </div>
+  //  ),
   });
 
   return <Component toggleSubScreen={(e) => props.toggleSubScreen(e)}/>;
