@@ -7,11 +7,10 @@ const {
   } = getConfig()
 
 
-export const apiPost = async (auth, path, bodystring) => {
-  const token = await auth.getAccessTokenSilently();
+export const apiPost = async ( path, bodystring) => {
   const response = await fetch(apiOrigin + path, {
     method: 'post',
-    headers: {Authorization: `Bearer ${token}`, 
+    headers: { 
     Accept: 'application/json, text/plain, */*',
     'Content-Type': 'application/json'},
     body: JSON.stringify(bodystring)

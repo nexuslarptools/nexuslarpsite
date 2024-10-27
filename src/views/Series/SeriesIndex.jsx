@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useGetData } from '../../utils/getdata'
 import Loading from '../../components/loading/loading'
-import authRedirect from '../../utils/authRedirect'
 import SeriesTable from '../../components/tables/seriestable'
 import SeriesCreate from './SeriesCreate'
 import SeriesEdit from './SeriesEdit'
@@ -9,8 +8,6 @@ import AuthLevelInfo from '../../utils/authLevelInfo'
 
 
 export default function SeriesIndex() {
-
-    authRedirect(1)
     const authLevel = AuthLevelInfo()
 
     const [viewingCreateOrEdit, setViewingCreateOrEdit] = useState({

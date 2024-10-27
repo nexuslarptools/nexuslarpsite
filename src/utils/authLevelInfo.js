@@ -1,6 +1,3 @@
-import useGetDataWithStale from './getdata'
-import interpAuthLevel from './authLevel'
-
 export function AuthLevelInfo () {
 
     //const userAuth = useGetDataWithStale('permission', '/api/v1/Users/Permission')

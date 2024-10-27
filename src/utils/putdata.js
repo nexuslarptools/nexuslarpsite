@@ -1,4 +1,3 @@
-import { useAuth0 } from '@auth0/auth0-react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import apiPut from './apiPut'
 
@@ -8,9 +7,8 @@ import apiPut from './apiPut'
 
 export const usePutData = (path, relatedQs) => {
   const queryClient = useQueryClient();
-  const auth = useAuth0();
   return useMutation({
-    mutationFn: (body) => apiPut(auth, path, body),
+    mutationFn: (body) => apiPut(path, body),
     onSuccess: () => 
     relatedQs.forEach(element => {
         queryClient.invalidateQueries({ queryKey: [element], refetchType: 'all'})

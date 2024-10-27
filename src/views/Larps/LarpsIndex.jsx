@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import useGetData from '../../utils/getdata'
 import Loading from '../../components/loading/loading'
-import AuthRedirect from '../../utils/authRedirect'
 import AuthLevelInfo from '../../utils/authLevelInfo'
 import LarpsListPage from './LarpsListPage'
 import LarpsCreate from './LarpsCreate'
@@ -10,8 +9,6 @@ import DeleteDialogFull from '../../components/dialogs/deletedialogcomplete'
 import UserRolesEditForm from '../../components/forms/userroleseditform'
 
 export default function LarpsIndex() {
-
-    AuthRedirect(1)
 
     const [viewingCreateOrEdit, setViewingCreateOrEdit] = useState({
         isViewing: false,

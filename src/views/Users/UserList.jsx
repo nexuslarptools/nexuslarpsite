@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import useGetData from '../../utils/getdata'
 import UserTable from '../../components/tables/userstable'
-import AuthRedirect from '../../utils/authRedirect'
 import UserRolesEditForm from '../../components/forms/userroleseditform'
 import './UserList.scss'
 import AuthLevelInfo from '../../utils/authLevelInfo'
@@ -10,8 +9,6 @@ import PropTypes from 'prop-types'
 
 
 export default function UsersPage(props) {
-
-AuthRedirect(4);
 const authLevel = AuthLevelInfo();
 
 const [arrowsState, setArrowsState] = useState({

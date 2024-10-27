@@ -8,7 +8,6 @@ import CurrentUserPage from "./views/Users/CurrentUserPage"
 import ItemsIndex from "./views/Items/ItemsIndex"
 import UsersPage from "./views/Users/UserList"
 import SeriesIndex from "./views/Series/SeriesIndex"
-import AuthenticationGuard from './components/authenticationguard/authenticationguard'
 import TagsIndex from './views/Tags/TagsIndex'
 import LarpsIndex from './views/Larps/LarpsIndex'
 import ContactFooter from './components/contactfooter/contactbar';

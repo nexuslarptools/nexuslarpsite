@@ -1,4 +1,3 @@
-import AuthRedirect from '../../utils/authRedirect';
 import Loading from '../../components/loading/loading';
 import useGetData from '../../utils/getdata';
 import AuthLevelInfo from '../../utils/authLevelInfo';
@@ -10,7 +9,6 @@ import formJSON from '../../jsonfiles/characterinput.json';
 import CharacterEdit from './CharacterEdit';
 
 export default function CharactersIndex() {
-    AuthRedirect(1)
 
     const approvQuery = useGetData('listApprovedCharacters', '/api/v1/CharacterSheetApproveds');  
     const unapprovQuery = useGetData('listUnapprovedCharacters', '/api/v1/CharacterSheets');

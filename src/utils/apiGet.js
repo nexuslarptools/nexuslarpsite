@@ -7,18 +7,16 @@ const {
   } = getConfig()
 
 
-export const apiGet = async (auth, path) => {
-  const token = await auth.getAccessTokenSilently();
+export const apiGet = async (path) => {
   const response = await fetch(apiOrigin + path, {
-    headers: {Authorization: `Bearer ${token}`}
+    headers: {}
   }).then(response => response.json())
   return response;
 }
 
-export const apiGetWithPage = async (auth, path, page, numberPerPage) => {
-  const token = await auth.getAccessTokenSilently();
+export const apiGetWithPage = async (path, page, numberPerPage) => {
   const response = await fetch(apiOrigin + path + '?pageNumber=' + page + '&_pageSize=' + numberPerPage, {
-    headers: {Authorization: `Bearer ${token}`}
+    headers: {}
   }).then(response => response.json())
   return response;
 }

@@ -3,7 +3,6 @@ import useGetData from '../../utils/getdata';
 import Loading from '../../components/loading/loading';
 import ItemsListPage from './ItemsListPage';
 import ItemDisplay from './ItemDisplay';
-import AuthRedirect from '../../utils/authRedirect';
 import AuthLevelInfo from '../../utils/authLevelInfo';
 import PropTypes from 'prop-types';
 import ItemCreate from './ItemCreate';
@@ -13,7 +12,6 @@ import ItemSelector from '../../components/itemselector/itemselector';
 
 
 export default function ItemsIndex() {
-  AuthRedirect(1)
 
       const approvQuery = useGetData('listApprovedItems', '/api/v1/ItemSheetApproveds/FullListWithTagsNoImages');  
       const unapprovQuery = useGetData('listUnapprovedItems', '/api/v1/ItemSheets/FullListWithTagsNoImages');

@@ -7,11 +7,10 @@ const {
   } = getConfig()
 
 
-export const apiDelete = async (auth, path) => {
-  const token = await auth.getAccessTokenSilently();
+export const apiDelete = async (path) => {
   const response = await fetch(apiOrigin + path, {
     method: 'delete',
-    headers: {Authorization: `Bearer ${token}`, 
+    headers: { 
     Accept: 'application/json, text/plain, */*',
     'Content-Type': 'application/json'}
   }).then(response => response.json())

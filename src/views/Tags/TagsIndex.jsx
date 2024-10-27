@@ -1,16 +1,13 @@
 import { useState } from 'react'
 import useGetData from '../../utils/getdata'
 import Loading from '../../components/loading/loading'
-import AuthRedirect from '../../utils/authRedirect'
 import AuthLevelInfo from '../../utils/authLevelInfo'
 import TagsListPage from './TagsListPage'
 import TagsEdit from './TagsEdit'
 import TagsCreate from './TagsCreate'
-import DeleteDialogFull from '../../components/dialogs/deletedialogcomplete'
 
 export default function TagsIndex() {
 
-    AuthRedirect(1)
     const [dropdownSelect, setDropdownSelect] = useState('Character')
     const [viewingCreateOrEdit, setViewingCreateOrEdit] = useState({
         isViewing: false,

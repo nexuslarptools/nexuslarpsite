@@ -1,6 +1,3 @@
-import LoginButton from '../loginbuttons/loginbutton.jsx'
-import LogoutButton from '../loginbuttons/logoutbutton.jsx'
-import { useAuth0 } from '@auth0/auth0-react'
 import { Link } from 'react-router-dom'
 import './header.scss'
 import AuthLevelInfo from '../../utils/authLevelInfo.js'
@@ -29,7 +26,7 @@ const Header = () => {
   to={{ pathname: '/' }}> Home </Link></li> : <></>} */}
   {authLevel > 3 ? <li><Link 
   to={{ pathname: '/users' }}> Users </Link></li> : <></>}
-  {authLevel > 0 ? <li><Link 
+  {authLevel > 3 ? <li><Link 
   to={{ pathname: '/larps' }}> Larps </Link></li> : <></>}
   {authLevel > 1 ? <li><Link
   to={{ pathname: '/tags' }}> Tags </Link></li> : <></>}
