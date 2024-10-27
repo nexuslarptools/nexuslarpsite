@@ -39,35 +39,35 @@ class App extends Component {
           </Route>
             <Route
             path="/profile"
-            element={<AuthenticationGuard component={CurrentUserPage} />}
+            element={<CurrentUserPage />}
            />
             <Route
             path="/users"
-            element={<AuthenticationGuard component={UsersPage} />}
+            element={<UsersPage />}
            />
             <Route
             path="/items"
-            element={<AuthenticationGuard component={ItemsIndex} />}
+            element={<ItemsIndex />}
            />
             <Route
             path="/characters"
-            element={<AuthenticationGuard component={CharactersIndex} />}
+            element={<CharactersIndex />}
            />
           <Route
             path="/series"
-            element={<AuthenticationGuard component={SeriesIndex} />}
+            element={<SeriesIndex/>}
            />
           <Route
             path="/tags"
-            element={<AuthenticationGuard component={TagsIndex} />}
+            element={<TagsIndex />}
            />
           <Route
             path="/larps"
-            element={<AuthenticationGuard component={LarpsIndex} />}
+            element={<LarpsIndex/>}
            />
           <Route
             path="/contactus"
-            element={<AuthenticationGuard component={ContactUs} />}
+            element={<ContactUs />}
            />
           <Route path="*" element={<HomePage />}
                 />
