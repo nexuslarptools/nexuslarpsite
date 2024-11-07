@@ -1,0 +1,19 @@
+@import "/src/variables";
+@import "/src/mixins";
+
+// gm notes
+.character-sheet-gm-notes {
+    box-sizing: border-box;
+    display: block;
+    margin-top: 20px;
+    padding: 10px;
+    width: 100%;
+    .input-pair .MuiFormControl-root {
+        @include roundedCorners();
+        border: 1px solid $color-neutral-dark;
+        padding-right: 0;
+        &::before {
+            border-bottom: 0;
+        }
+    }
+}

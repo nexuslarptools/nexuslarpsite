@@ -2,6 +2,7 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Box, Button, FormLabel, TextField } from '@mui/material';
 import { green } from '@mui/material/colors';
+import './_reviewnotesform.scss';
 
 const ReviewNotesForm = props => {
 
@@ -11,7 +12,7 @@ const ReviewNotesForm = props => {
         <div className="character-sheet-gm-notes">
         <div className='input-pair'>
           <FormLabel>
-            Comments on reviewing this {props.type}:
+            Comments on Reviewing This {props.type}:
           </FormLabel>
           <Box sx={{ color: green, display: 'inline', fontSize: 14 }}> {4898 - reviewMessage.length} Characters Remaining</Box>
           <TextField 
