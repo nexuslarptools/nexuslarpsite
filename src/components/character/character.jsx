@@ -279,8 +279,14 @@ const Character = props => {
         <div className='sheet sheet1'>
           <div className='header-info'>
             <div className='sheet-name-series'>
-              <div className='sheetName'>{props.character.name}</div>
-              <div className='seriesName'>{props.character.seriesTitle}</div>
+            { props.character.name.length < 31 ?
+              <div className='sheetName'>{props.character.name}</div> :
+              <div className='sheetNameSM'>{props.character.name}</div> 
+            }
+              { props.character.seriesTitle.length < 31 ?
+              <div className='seriesName'>{props.character.seriesTitle}</div> :
+              <div className='seriesNameSM'>{props.character.seriesTitle}</div>
+              }
             </div>
             <CharacterSheetHeading img={imageData.image1}  other={JSONData.formData[0]} attributes={JSONData.formData[1]} />
           </div>
@@ -350,8 +356,14 @@ const Character = props => {
             <div className='sheet sheet2'>
               <div className='header-info'>
                 <div className='sheet-name-series'>
-                  <div className='sheetName'>{props.character.name}</div>
-                  <div className='seriesName'>{props.character.seriesTitle}</div>
+                { props.character.name.length < 31 ?
+                  <div className='sheetName'>{props.character.name}</div> :
+                  <div className='sheetNameSM'>{props.character.name}</div> 
+                  }
+                  { props.character.seriesTitle.length < 30 ?
+                  <div className='seriesName'>{props.character.seriesTitle}</div> :
+                  <div className='seriesNameSM'>{props.character.seriesTitle}</div>
+              }
                 </div>
               </div>
               <div className='special-skills'>
