@@ -70,6 +70,7 @@ export default function SeriesEditForm(props) {
                         id="select-tags" 
                         multiple required
                         placeholder="select tags"
+                        defaultValue={props.data !== null ? props.data.tags: null}
                         options={props.tagsList.tagsList}
                         getOptionLabel={(option) => option.name}
                         onChange={(event, val) => upDateTags(val)}

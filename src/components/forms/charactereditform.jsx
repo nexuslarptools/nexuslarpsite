@@ -876,15 +876,20 @@ isNew: true
                 />
               </div>
             </div>
-            <div>
+          <div>
               
               {reviewsState.length > 0 ?
               reviewsState.map(message => 
                 <ReviewNotesDisplay key={message} message={message} RemoveReview={(id) => RemoveReview(id)} />)
                 : <ReviewNotesForm  AddReview={(e) => AddReview(e)} type={'Character'} />
               }
-              
+              <div>
+            {'&nbsp'}
             </div>
+            <div>
+            {'&nbsp'}
+            </div>
+          </div>
 
           
           <div className="edit-bottom">
