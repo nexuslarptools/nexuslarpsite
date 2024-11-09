@@ -291,7 +291,7 @@ const Character = props => {
             <div className='combat-skills-and-sheet-item-container'>
               <div className='skills-table'><CharacterSheetTable list={JSONData.formData[3]} tableClasses={'combat sheet-table'} tableName={'Combat Skills'}  /></div>
               <div className='sheet-item-container'>
-                <div className='sheet-item'><Item item={props.character.sheet_Item}></Item></div>
+                <div className='sheet-item'><Item item={props.character.sheet_Item} type={"sheet"}></Item></div>
               </div>
             </div>
 
