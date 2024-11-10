@@ -335,9 +335,12 @@ const CharacterEditForm = (props) => {
       const startItemList = [];
       const startItemGuidList = [];
       props.initForm.apiMessage.starting_Items.forEach((item) => {
+        if (item.issheetitem !== true)
+        {
         sheetItemList.push();
         startItemList.push(item.name);
         startItemGuidList.push(item.guid);
+        }
       })
       await setSelectedSeries({ 
         ...selectedSeries,
