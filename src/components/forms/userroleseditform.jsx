@@ -282,7 +282,7 @@ return (
       </Form>
     </div>
     <div className="edit-bottom">
-      <button className="button-cancel" onClick={() => GoBack()}>Cancel</button>
+    {!props.isSelfEdit ? <button className="button-cancel" onClick={() => GoBack()}>Cancel</button> :<></>}
       <button className="button-save" onClick={handleSubmit(handleFormSubmit)}>Submit Changes</button>
     </div>
     {  removingRolesDialogState

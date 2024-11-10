@@ -44,11 +44,10 @@ const Header = () => {
         <div className="nav-user-info">   
         {isAuthenticated && (
         <div className="profile">
-          <Link 
+           <Link 
   to={{ pathname: '/profile' }}> 
-          <img src={user.picture} alt={user.name} className="profile-picture" />
-           </Link>
           {user.email}
+          </Link>
         </div>
           )}
           {!isAuthenticated && !isAuthLoading && (

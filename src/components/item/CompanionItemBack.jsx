@@ -10,6 +10,10 @@ const CompanionItemBack = props => {
     return (
       <>
         <div className = "companionItemBox">
+        <span className="companionitemTitle">
+              <p className="companionitemName">{props.item.name}</p>
+              <p className="companionitemType">{props.item.fields.TYPE}</p>
+        </span>
         <div className='itemSecondSideTextBox'>
           <div className="seriesItemText">
           {props.item.back.fields.Description !== undefined && props.item.back.fields.Description !== null ?

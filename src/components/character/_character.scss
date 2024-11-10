@@ -118,6 +118,38 @@
             padding: 0 10px;
             width: 100%;
             width: 792px;
+            .sheetName {
+                font-family: "Walter Turncoat", serif;
+                font-size: 25pt;
+                font-weight: bold;
+                text-align: left;
+                display: inline-block;
+                margin-top: auto;
+            }
+            .sheetNameSM {
+                font-family: "Walter Turncoat", serif;
+                font-size: 15pt;
+                vertical-align:text-bottom;
+                text-align: left;
+                display: inline-block;
+                margin-top: auto;
+            }
+            .seriesName {
+                font-family: "Walter Turncoat", serif;
+                font-size: 25pt;
+                font-weight: bold;
+                text-align: right;
+                display: inline-block
+            }
+            .seriesNameSM {
+                font-family: "Walter Turncoat", serif;
+                font-size: 15pt;
+                font-weight: bold;
+                vertical-align:text-bottom;
+                text-align: right;
+                display: inline-block;
+                margin-top: auto;
+            }
         }
         // statics, bio, headshot
         .basic-info {

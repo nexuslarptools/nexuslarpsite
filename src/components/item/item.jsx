@@ -5,6 +5,7 @@ import Loading from '../../components/loading/loading';
 import CompanionItem from './CompanionItem';
 import CompanionItemBack from './CompanionItemBack';
 import './_item.scss';
+import CompanionPlaceHolderItem from './companionplaceholderitem';
 
 const Item = props => {
     return (
@@ -12,7 +13,14 @@ const Item = props => {
         { props.item === undefined || props.item === null ?
         <div className='loading-container'><Loading /></div> :
         <>
-          { props.item.fields.TYPE !== "Mecha" &&
+          { props.item.islarge === true && props.type === "sheet" ?
+          <>            
+          <div className='itemdisplay'>
+          <CompanionPlaceHolderItem item={props.item}/> 
+          </div>
+          </>
+          :
+          props.item.fields.TYPE !== "Mecha" &&
             props.item.fields.TYPE !=="Vehicle" &&
             props.item.fields.TYPE !== "Companion" &&
             props.item.fields.TYPE !=="Pokemon" ?
@@ -48,5 +56,6 @@ export default Item;
 
 Item.propTypes = {
   props: PropTypes.object,
-  item: PropTypes.object
+  item: PropTypes.object,
+  type: PropTypes.string
 }
