@@ -7,34 +7,45 @@ import { getConfig } from './config.jsx'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
-import { registerInstrumentations } from '@opentelemetry/instrumentation';
-import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
-import { getWebAutoInstrumentations } from '@opentelemetry/auto-instrumentations-web';
-import { SimpleSpanProcessor, TracerConfig, WebTracerProvider } from '@opentelemetry/sdk-trace-web';
-import { ZoneContextManager } from '@opentelemetry/context-zone';
-import { ATTR_SERVICE_NAME } from "@opentelemetry/semantic-conventions";
-import { Resource } from '@opentelemetry/resources';
-
-registerInstrumentations({
-    instrumentations: [
-        // getWebAutoInstrumentations initializes all the package.
-        // it's possible to configure each instrumentation if needed.
-        getWebAutoInstrumentations({
-            '@opentelemetry/instrumentation-fetch': {
-                // config can be added here for example
-                // we can initialize the instrumentation only for prod
-                // enabled: import.meta.env.PROD,
-            },
-        }),
-    ],
-});
-
 
 const onRedirectCallback = (appState) => {
   history.push(
     appState && appState.returnTo ? appState.returnTo : window.location.pathname
   )
 }
+
+import { createRoutesFromChildren, matchRoutes, Routes, useLocation, useNavigationType } from 'react-router-dom';
+import { createReactRouterV6Options, getWebInstrumentations, initializeFaro, ReactIntegration, ReactRouterVersion } from '@grafana/faro-react';
+import { TracingInstrumentation } from '@grafana/faro-web-tracing';
+
+initializeFaro({
+    url: 'https://faro-collector-prod-us-east-0.grafana.net/collect/a191de8879d808dea3cbcdc718cb9c2c',
+    app: {
+        name: 'nexusfrontend',
+        version: '1.0.0',
+        environment: 'production'
+    },
+
+    instrumentations: [
+        // Mandatory, omits default instrumentations otherwise.
+        ...getWebInstrumentations(),
+
+        // Tracing package to get end-to-end visibility for HTTP requests.
+        new TracingInstrumentation(),
+
+        // React integration for React applications.
+        new ReactIntegration({
+            router: createReactRouterV6Options({
+                createRoutesFromChildren,
+                matchRoutes,
+                Routes,
+                useLocation,
+                useNavigationType,
+            }),
+        }),
+    ],
+});
+
 
 const queryClient = new QueryClient()
 
@@ -49,24 +60,8 @@ const providerConfig = {
   },
   onRedirectCallback,
   useRefreshTokens: true,
-  cacheLocation: 'localstorage',
-  resource: new Resource({
-      [ATTR_SERVICE_NAME]: 'nexus-frontend',
-  })
-
+  cacheLocation: 'localstorage'
 }
-
-const provider = new WebTracerProvider(providerConfig);
-const exporter = new OTLPTraceExporter({
-    url: 'http://prometheus-agent-agent-1:4318', // Replace with your collector endpoint
-});
-
-// we will use ConsoleSpanExporter to check the generated spans in dev console
-provider.addSpanProcessor(new SimpleSpanProcessor(exporter));
-
-provider.register({
-    contextManager: new ZoneContextManager(),
-});
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Auth0Provider {...providerConfig}>
