@@ -58,7 +58,7 @@ const providerConfig = {
 
 const provider = new WebTracerProvider(providerConfig);
 const exporter = new OTLPTraceExporter({
-    url: 'http://http://prometheus-agent-agent-1:4318', // Replace with your collector endpoint
+    url: 'http://prometheus-agent-agent-1:4318', // Replace with your collector endpoint
 });
 
 // we will use ConsoleSpanExporter to check the generated spans in dev console
