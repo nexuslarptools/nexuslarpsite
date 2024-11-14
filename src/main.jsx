@@ -10,7 +10,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { registerInstrumentations } from '@opentelemetry/instrumentation';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { getWebAutoInstrumentations } from '@opentelemetry/auto-instrumentations-web';
-import { ConsoleSpanExporter, SimpleSpanProcessor, TracerConfig, WebTracerProvider } from '@opentelemetry/sdk-trace-web';
+import { SimpleSpanProcessor, TracerConfig, WebTracerProvider } from '@opentelemetry/sdk-trace-web';
 import { ZoneContextManager } from '@opentelemetry/context-zone';
 import { ATTR_SERVICE_NAME } from "@opentelemetry/semantic-conventions";
 import { Resource } from '@opentelemetry/resources';
@@ -57,18 +57,16 @@ const providerConfig = {
 }
 
 const provider = new WebTracerProvider(providerConfig);
-
-// we will use ConsoleSpanExporter to check the generated spans in dev console
-provider.addSpanProcessor(new SimpleSpanProcessor(new ConsoleSpanExporter()));
-
-provider.register({
-    contextManager: new ZoneContextManager(),
-});
-
 const exporter = new OTLPTraceExporter({
     url: 'http://http://prometheus-agent-agent-1:4318', // Replace with your collector endpoint
 });
 
+// we will use ConsoleSpanExporter to check the generated spans in dev console
+provider.addSpanProcessor(new SimpleSpanProcessor(exporter));
+
+provider.register({
+    contextManager: new ZoneContextManager(),
+});
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Auth0Provider {...providerConfig}>
