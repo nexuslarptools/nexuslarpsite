@@ -24,9 +24,11 @@ const SpecialSkillsDisplayItem = props => {
       {
         props.skill.Description !== undefined && props.skill.Description !== null
           ? <div className='skill-text' key={"name"+props.skill.Name + Math.random}>
-            {props.skill.Description.split('\n').map((i,key) => {
-            return <div className="item-description" key={key}><p>{i}</p></div>;
-        })
+             {props.skill.Description.split('\n').map((i,key) => {
+            return <div className="item-description" key={key}><p>{
+              i.split('--').map((s, j) => j % 2 !== 0 ? <><u> {s} </u></> : (' ' + s ))
+              }</p></div>;
+             })
             }
           </div>
           : null

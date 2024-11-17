@@ -7,6 +7,7 @@ import Item from '../item/item';
 import SpecialSkillsDisplayCharacter from '../specialskills/specialskillsdisplaycharacter';
 import ItemPalette from '../itempalette/itempalette';
 import { useReactToPrint } from 'react-to-print';
+import PopupItem from '../item/popupitem';
 
 const Character = props => {
 
@@ -297,7 +298,14 @@ const Character = props => {
             <div className='combat-skills-and-sheet-item-container'>
               <div className='skills-table'><CharacterSheetTable list={JSONData.formData[3]} tableClasses={'combat sheet-table'} tableName={'Combat Skills'}  /></div>
               <div className='sheet-item-container'>
-                <div className='sheet-item'><Item item={props.character.sheet_Item} type={"sheet"}></Item></div>
+                <div className='sheet-item'>
+                {props.character.sheet_Item !== undefined && props.character.sheet_Item !== null ?
+                  <Item item={props.character.sheet_Item} type={"sheet"}></Item> :
+                  (props.character.sheet_ItemGuid !== undefined && props.character.sheet_ItemGuid !== null ?
+                  <PopupItem guid={props.character.sheet_ItemGuid} type={"sheet"}></PopupItem> :
+                   <></>)
+                  }
+                </div>
               </div>
             </div>
 
@@ -340,14 +348,14 @@ const Character = props => {
           </div>
           <div className="starting-items">
             <div className='starting-items-header'>Starting Items: <span className='starting-items-amount'>({props.character.starting_Items !== undefined ? props.character.starting_Items.length : 0})</span></div>
-            <div className='starting-items-list'>
-              {itemList.map((item, i) => 
+            <div className='starting-items-list'> 
+              {itemList.length > 0 ? itemList.map((item, i) => 
                 i + 1 === itemList.length
                   ? item.itemName
                   :  item.total > 1
                   ?  item.itemName + ' (' + item.total + '),  '
                     : item.itemName + ',  '
-              )}
+              ) : 'No Starting Items'}
             </div>
           </div>
         </div>

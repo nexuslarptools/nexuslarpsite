@@ -6,6 +6,8 @@ import CompanionItem from './CompanionItem';
 import CompanionItemBack from './CompanionItemBack';
 import './_item.scss';
 import CompanionPlaceHolderItem from './companionplaceholderitem';
+import VehicleItem from './vehicleitem';
+import MechaItem from './mechaitem';
 
 const Item = props => {
     return (
@@ -20,7 +22,7 @@ const Item = props => {
           </div>
           </>
           :
-          props.item.fields.TYPE !== "Mecha" &&
+            props.item.fields.TYPE !== "Mecha" &&
             props.item.fields.TYPE !=="Vehicle" &&
             props.item.fields.TYPE !== "Companion" &&
             props.item.fields.TYPE !=="Pokemon" ?
@@ -34,9 +36,11 @@ const Item = props => {
             </div>
             </>
             :
+            <div className='itemdisplay'>
             <BasicItem item={props.item}/> 
+            </div>
             :
-            props.item.isdoubleside === true ?
+            props.item.isdoubleside === true && props.item.fields.TYPE !=="Vehicle" && props.item.fields.TYPE !=="Mecha"  ?
             <>
             <div className='itemdisplay'>
             <CompanionItem item={props.item}/>
@@ -44,8 +48,31 @@ const Item = props => {
             <div className='itemdisplay'>
             <CompanionItemBack item={props.item}/>
             </div>
-            </> :
-            <CompanionItem item={props.item}/>
+            </> : props.item.fields.TYPE !=="Vehicle" && props.item.fields.TYPE !=="Mecha"  ?
+            <CompanionItem item={props.item}/> 
+            : props.item.fields.TYPE !=="Mecha" ?
+            props.item.isdoubleside === true ?
+            <>
+            <div className='itemdisplay'>
+            <VehicleItem item={props.item}/>
+            </div>
+            <div className='itemdisplay'>
+            <CompanionItemBack item={props.item}/>
+            </div>
+            </>
+            :
+            <VehicleItem item={props.item}/> 
+            :
+            props.item.isdoubleside === true ?
+            <>
+            <div className='itemdisplay'>
+            <MechaItem item={props.item}/>
+            </div>
+            <div className='itemdisplay'>
+            <CompanionItemBack item={props.item}/>
+            </div>
+            </>
+           : <MechaItem item={props.item}/> 
           } </>
         }
         </>

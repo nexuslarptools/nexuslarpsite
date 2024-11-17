@@ -19,6 +19,7 @@ import PhotoCropper from '../photocropper/photocropper';
 import ItemSelector from '../itemselector/itemselector';
 import Character from '../character/character';
 import { characterDataProcess } from '../../utils/characterdataprocess';
+import useGetData from '../../utils/getdata';
 
 const CharacterEditForm = (props) => {
   const { register, handleSubmit, getValues, setValue } = useForm({
@@ -104,6 +105,7 @@ const CharacterEditForm = (props) => {
   }
 
   const UpdateItemList = async (e) => {
+
     if (itemsTableState.label === 'Sheet Item') {
         if (e.length > 0) {
             setItemsTableState({
@@ -116,13 +118,15 @@ const CharacterEditForm = (props) => {
             setItemsTableState({
                 ...itemsTableState,
                 sheetItemGuid: null,
-                sheetItem: null
+                sheetItem: null,
+                sheetItemFullItem: [null]
               });
         }
     } 
     else {
         const startingItemList = [];
         const startingGuidList = [];
+
         e.forEach(item => {
             for (let i = 0; i < item.count; i++) {
                 startingItemList.push(item.name);
@@ -635,11 +639,6 @@ isNew: true
       });
   }
 
-  const extractValues = () => {
-    let output = getValues();
-    return output;
-  }
-
   if (JSONData.length === 0 || !itemsTableState.isMounted) {
     return (<div className='loading-container'><Loading /></div>)
   } else {
@@ -912,7 +911,9 @@ isNew: true
              <Box sx={{ width: "95%" }} role="presentation" onClick={() => togglePreview(false)}>
                <Character id="character" formJSON={formJSON} 
                character={characterDataProcess(abilitesFormsState, finalImage,  finalImage2, 
-                extractValues(), tagState, itemsTableState, props.initForm, selectedSeries, gmNotes)} />
+                formdata, tagState, itemsTableState, 
+                props.initForm.apiMessage !== undefined ? props.initForm.apiMessage : null
+                , selectedSeries, gmNotes)} />
              </Box>
           </Drawer>
 

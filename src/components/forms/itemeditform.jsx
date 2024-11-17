@@ -208,7 +208,7 @@ const ItemEditForm = (props) => {
 
 
           if (props.initForm.apiMessage.back !== undefined && props.initForm.apiMessage.back !== null &&
-            props.initForm.apiMessage.back.feilds !== undefined && props.initForm.apiMessage.back !== null && 
+            props.initForm.apiMessage.back.fields !== undefined && props.initForm.apiMessage.back !== null && 
             props.initForm.apiMessage.back.fields.Special_Skills !== undefined &&
             props.initForm.apiMessage.back.fields.Special_Skills !== null) {
             for (
@@ -914,7 +914,8 @@ const ItemEditForm = (props) => {
                           props.initForm.apiMessage.name
                           :  props.initForm !== null && 
                           props.initForm.showResult === true &&
-                          props.initForm.apiMessage !== null && item.Name === 'Description2ndSide'
+                          props.initForm.apiMessage !== null && props.initForm.apiMessage.back.fields !== null &&
+                          props.initForm.apiMessage.back.fields !== undefined  && item.Name === 'Description2ndSide'
                           ? props.initForm.apiMessage.back.fields.Description : ''
                       }
                        onChange={(e) => updateValue(e)}

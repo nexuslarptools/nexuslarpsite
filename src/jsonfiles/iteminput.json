@@ -51,7 +51,8 @@
 		"Types": [
 			"Mecha",
 			"Companion",
-			"Pokemon"
+			"Pokemon",
+			"Vehicle"
 		],
 		"Heading": "Mecha/Companion Stats",
 		"Values": {
@@ -118,7 +119,8 @@
 				"Types": [
 					"Mecha",
 					"Companion",
-					"Pokemon"
+					"Pokemon",
+					"Vehicle"
 				]
 			},
 			"Jump": {
@@ -138,7 +140,8 @@
 				"Types": [
 					"Mecha",
 					"Companion",
-					"Pokemon"
+					"Pokemon",
+					"Vehicle"
 				]
 			},
 			"Grade": {
@@ -148,7 +151,8 @@
 				"Types": [
 					"Mecha",
 					"Companion",
-					"Pokemon"
+					"Pokemon",
+					"Vehicle"
 				]
 			},
 			"RESILIENCE": {
@@ -158,7 +162,8 @@
 				"Types": [
 					"Mecha",
 					"Companion",
-					"Pokemon"
+					"Pokemon",
+					"Vehicle"
 				]
 			},
 			"Body": {
@@ -166,7 +171,6 @@
 				"Label": "Body",
 				"Display": true,
 				"Types": [
-					"Mecha",
 					"Companion",
 					"Pokemon"
 				]
@@ -176,7 +180,8 @@
 				"Label": "Integrity",
 				"Display": true,
 				"Types": [
-					"Mecha"
+					"Mecha",
+					"Vehicle"
 				]
 			},
 			"Energy": {
@@ -186,7 +191,8 @@
 				"Types": [
 					"Mecha",
 					"Companion",
-					"Pokemon"
+					"Pokemon",
+					"Vehicle"
 				]
 			}
 		}
@@ -239,8 +245,6 @@
 					"Armor",
 					"Clothing",
 					"Food",
-					"Mecha",
-					"Vehicle",
 					"Instrument",
 					"Medical",
 					"Artifact",

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Loading from '../loading/loading';
 import './_companionitem.scss';
 
-const CompanionItem = props => {
+const MechaItem = props => {
   if (!props || !props.item) {
     return (<div className='loading-container'><Loading /></div>)
   } else {
@@ -22,40 +22,34 @@ const CompanionItem = props => {
                   <div className="column1">
                     <div className="columnentry">Power</div>
                     <div className="columnentry">Athletics</div>
-                   {props.item.fields.TYPE !== 'Mecha' ? <div className="columnentry">Confidence</div> :<></> }
-                   {props.item.fields.TYPE !== 'Mecha' ? <div className="columnentry">Brains</div> : <></> }
                   </div>
                   <div className="column2">
                     <div className="columnentry">{props.item.fields.Power}</div>
                     <div className="columnentry">{props.item.fields.Athletics}</div>
-                    { props.item.fields.TYPE !== 'Mecha' ? <div className="columnentry">{props.item.fields.Confidence}</div> : <></>}
-                    {props.item.fields.TYPE !== 'Mecha' ? <div className="columnentry">{props.item.fields.Brains}</div>: <></>}
                   </div>
                   <div className="column1">
-                    <div className="columnentry">H2H</div>
-                    <div className="columnentry">Dodge</div>
+                    <div className="columnentry">Run</div>
+                    <div className="columnentry">Jump</div>
                     <div className="columnentry">{props.item.fields.Fly !== null && props.item.fields.Fly !== undefined 
                    && props.item.fields.Fly !== '' ?
-                     "Fly" : "Run"}</div>
+                     "Fly" :<></>}</div>
                   </div>
                   <div className="column2">
-                    <div className="columnentry">{props.item.fields.H2H}</div>
-                    <div className="columnentry">{props.item.fields.Dodge}</div>
+                    <div className="columnentry">{props.item.fields.Run}</div>
+                    <div className="columnentry">{props.item.fields.Jump}</div>
                     <div className="columnentry">{props.item.fields.Fly !== null && props.item.fields.Fly !== undefined
                     && props.item.fields.Fly !== ''  ?  
-                    props.item.fields.Fly : props.item.fields.Run}</div>
+                    props.item.fields.Fly : <></>}</div>
                   </div>
                 </div>
               </div>
             </div>
             <div className="companionItemText" >
-              <div className="bodyandenergywrap" >
+            <div className="bodyandenergywrap" >
                 {
-                  props.item.fields.Body != null && props.item.fields.Body > 0
+                  props.item.fields.INTEGRITY != null && props.item.fields.INTEGRITY > 0
                     ? <div className='bodywrap'>
-                      Body: { Array.apply(null, { length: props.item.fields.Body }).map((e, i) => (
-                        <span className="busterCards2" key={i}>○</span>
-                      ))}
+                      Integrity: {props.item.fields.INTEGRITY}
                     </div>
                     : <></>
                 }
@@ -118,9 +112,9 @@ const CompanionItem = props => {
   }
 }
 
-export default CompanionItem;
+export default MechaItem;
 
-CompanionItem.propTypes = {
+MechaItem.propTypes = {
   props: PropTypes.object,
   item: PropTypes.object
 }
