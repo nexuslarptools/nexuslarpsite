@@ -1,17 +1,18 @@
-import { useEffect, useState } from "react";
-import { S3 } from "aws-sdk";
+import {useEffect, useState} from "react";
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { GetObjectCommand, S3 } from '@aws-sdk/client-s3';
 import configJson from '../auth_config.json';
-import { getConfig } from '../config';
+import {getConfig} from '../config';
 
 
 const {
     s3Info =
-    configJson.s3Info
-  } = getConfig();
+        configJson.s3Info
+} = getConfig();
 
-  const {
+const {
     bucketName = configJson.bucketName
-  }= getConfig();
+} = getConfig();
 
 const usePresignedImgQuery = (key, version) => {
 
@@ -23,30 +24,29 @@ const usePresignedImgQuery = (key, version) => {
 
 
     useEffect(() => {
-   const fetch = async () => {
-   
-    const s3 = new S3(s3Info);
-    var params = {
-      Bucket: bucketName,
-      Key: key,
-      Expires: 60 * 5
-    };
+        const fetch = async () => {
 
-    if (version !== undefined && version !== null)
-    {
-      params.VersionId = version;
-    }
-    await s3.getSignedUrl('getObject', params, function(err, url) {
-        setState(
-            {
-                url: url,
-                isLoading: false,
-                error: err
-            })
-      });
-};
-     fetch();
-    },[key, version]);
+            const s3 = new S3(s3Info);
+            var params = {
+                Bucket: bucketName,
+                Key: key,
+                Expires: 60 * 5
+            };
+
+            if (version !== undefined && version !== null) {
+                params.VersionId = version;
+            }
+            await getSignedUrl(s3, new GetObjectCommand(params)).then(function (err, url) {
+                    setState(
+                        {
+                            url: url,
+                            isLoading: false,
+                            error: err
+                        })
+                });
+        };
+        fetch();
+    }, [key, version]);
 
 
     return state;

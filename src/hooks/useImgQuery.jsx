@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { S3 } from "aws-sdk";
+import { S3 } from '@aws-sdk/client-s3';
 import configJson from '../auth_config.json';
 import { getConfig } from '../config';
 
