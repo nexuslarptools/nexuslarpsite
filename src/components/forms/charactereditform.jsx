@@ -347,6 +347,8 @@ const CharacterEditForm = (props) => {
         startItemGuidList.push(item.guid);
         }
       })
+      if (props.initForm.apiMessage.upgrade_Items !== undefined && props.initForm.apiMessage.upgrade_Items !== null)
+      {
       props.initForm.apiMessage.upgrade_Items.forEach((item) => {
         if (item.issheetitem !== true)
         {
@@ -355,6 +357,7 @@ const CharacterEditForm = (props) => {
         upgradeItemGuidList.push(item.guid);
         }
       })
+    }
       await setSelectedSeries({ 
         ...selectedSeries,
         guid: props.initForm.apiMessage.seriesguid});
@@ -380,6 +383,17 @@ const CharacterEditForm = (props) => {
       i++;
     }
 
+    if (props.initForm.apiMessage.upgrade_Items !== undefined && props.initForm.apiMessage.upgrade_Items !== null) {
+    while (i < props.initForm.apiMessage.upgrade_Items.length) {
+      fullListOrdered[j].push(props.initForm.apiMessage.upgrade_Items[i]);
+      if (fullListOrdered[j].length === 9) {
+        fullListOrdered.push([]);
+        j++;
+      }
+      i++;
+    }
+  }
+
       await setItemsTableState({
         ...itemsTableState,
         sheetItemGuid: sheetItemGuid,
@@ -388,7 +402,7 @@ const CharacterEditForm = (props) => {
         startingItems: startItemList,
         startingItemGuids: startItemGuidList,
         startingItemFullItems: fullListOrdered,
-        upgradeItemsItems: upgradeItemList,
+        upgradeItems: upgradeItemList,
         upgradeItemGuids: upgradeItemGuidList,
         upgradeItemFullItems: fullListOrdered,
         isMounted: true
