@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types'
 import Loading from '../../components/loading/loading'
 import useGetData from '../../utils/getdata';
-import CharacterEditForm from '../../components/forms/charactereditform';
 import usePutData from '../../utils/putdata';
 import { useQueryClient } from '@tanstack/react-query';
+import uploadToS3 from '../../utils/s3';
+import CharacterEditFormWrapper from '../../components/forms/charactereditformWrapper';
 
 export default function CharacterEdit(props) {
     const queryClient = useQueryClient();
@@ -34,23 +35,25 @@ export default function CharacterEdit(props) {
       return formData;
     }
 
-    const SubmitForm = async (data) => {
+    const SubmitForm = async (data, image1, image2) => {
         let bodyData = data
-        const larpguid = []
+/*         const larpguid = []
         larpguid.push(data.larptagGuid)
         if (data.larptagGuid !== undefined && data.larptagGuid !== null && data.larptagGuid !== '') {
         bodyData.larptagGuid=larpguid
-        }
+        } */
+
+        uploadToS3('images/Characters/' + props.guid  + '.jpg', image1);
+        uploadToS3('images/Characters/' + props.guid + '_2.jpg', image2);
         await newCharacterMutation.mutate(bodyData)
         queryClient.invalidateQueries(props.guid)
-
         props.GoBack(true)
       }
 
     const Approve = async () => {
-        await newApprovalMutation.mutate()
-        queryClient.invalidateQueries(props.guid, 'listUnapprovedCharacters', 'listApprovedCharacters')
-        props.GoBack(true)
+        await newApprovalMutation.mutate();
+        queryClient.invalidateQueries(props.guid, 'listUnapprovedCharacters', 'listApprovedCharacters');
+        props.GoBack(true);
       }
 
     const newCharacterMutation = usePutData('/api/v1/CharacterSheets/' + props.guid, [props.guid, 'listUnapprovedCharacters']);
@@ -77,7 +80,7 @@ export default function CharacterEdit(props) {
           }
           if (element.tagType === 'Item') {
             element.tagsList.forEach(tag => {
-              chartagsResult.push(tag)
+              chartagsResult.push(tag)  
             });
           }
           if (element.tagType === 'Ability') {
@@ -89,6 +92,7 @@ export default function CharacterEdit(props) {
             element.tagsList.forEach(tag => {
               larpRuntagsResult.push(tag)
               chartagsResult.push(tag)
+              itemtagsResult.push(tag)
             });
           }
         })
@@ -138,10 +142,10 @@ export default function CharacterEdit(props) {
               Error!
               </div>)
 
-
     return (
         <>
-        <CharacterEditForm 
+        <CharacterEditFormWrapper
+        path={props.path} 
         authLevel={props.authLevel}
         currenUserGuid={userGuidQuery.data}
         formJSON={initForm(props.formJSON)} 
@@ -155,7 +159,7 @@ export default function CharacterEdit(props) {
             appdata={approvQuery.data} 
             undata={unapprovQuery.data} 
             larpRunTags={TagsFilterLARP(props.tagslist)}
-            Submit={(e) => SubmitForm(e)}
+            Submit={(e, f, g) => SubmitForm(e, f, g)}
             GoBack={() => props.GoBack()}
             Approve={() => Approve()}
             /> 

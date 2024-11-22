@@ -1,7 +1,7 @@
-import Item from '../item/item';
 import PropTypes from 'prop-types';
 import Loading from '../../components/loading/loading';
 import './_itempalette.scss'
+import ItemWrapper from '../item/itemWrapper';
 
 const ItemPalette = props => {
 
@@ -32,7 +32,8 @@ const ItemPalette = props => {
                 {
                   groupedItems[j].length > 0
                     ? <div>
-                        <Item item={groupedItems[j][i]}/>
+                        <ItemWrapper  path={groupedItems[j][i].secondapprovalbyuserGuid !== null ? 'Approved' : 'UnApproved'} 
+                          guid={groupedItems[j][i].guid}  item={groupedItems[j][i]}/>
                       </div>
                     : <></>
                 }

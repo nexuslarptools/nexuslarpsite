@@ -19,11 +19,15 @@ const specialskillsallowed = [
       <div className="seriesItemBox">
         <div className="seriesItem">
           <div className='itemTitleBox'>
-            <h3 className="itemName">{props.item.name}</h3>
+            { props.item.name.length < 26 ?
+              <h3 className='itemName'>{props.item.name}</h3> :
+              <h3 className='itemNameSM'>{props.item.name}</h3> 
+            }
+            {/* <h3 className="itemName">{props.item.name}</h3> */}
             <h3 className="itemType">{props.item.fields.TYPE}</h3>
           </div>
           <div className='itemPicBox'>
-                <img className="itemPic" src={'data:image/png;base64,' + props.item.imagedata} alt={''} />
+                <img className="itemPic" src={props.img} alt={''} />
           </div>
           <div className='itemTextBox'>
             <div className="seriesItemText">
@@ -142,5 +146,6 @@ export default BasicItem;
 
 BasicItem.propTypes = {
   props: PropTypes.object,
-  item: PropTypes.object
+  item: PropTypes.object,
+  img: PropTypes.string
 }

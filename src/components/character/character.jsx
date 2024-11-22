@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import Loading from '../../components/loading/loading';
 import CharacterSheetHeading from '../charactersections/charactersheetheading';
 import CharacterSheetTable from '../charactersections/charactersheettable';
-import Item from '../item/item';
 import SpecialSkillsDisplayCharacter from '../specialskills/specialskillsdisplaycharacter';
 import ItemPalette from '../itempalette/itempalette';
 import { useReactToPrint } from 'react-to-print';
+import PopupItem from '../item/popupitem';
+import ItemWrapper from '../item/itemWrapper';
 
 const Character = props => {
 
@@ -76,8 +77,8 @@ const Character = props => {
     })
     setImageData({
       ...imageData,
-      image1: 'data:image/png;base64,' + props.character.imagedata1,
-      image2: 'data:image/png;base64,' + props.character.imagedata2
+      image1: props.img,
+      image2: props.img2
     })
 
     let i = 0;
@@ -222,7 +223,7 @@ const Character = props => {
     contentRef: charComponent,
     documentTitle: props.character.name+' / '+props.character.seriesTitle
 });
-
+/* 
   const handlePrint = (tagid) => {
     var hashid = "."+ tagid;
     var element = document.querySelector(hashid);
@@ -238,7 +239,7 @@ const Character = props => {
     newWin.document.open();
     newWin.document.write(allcontent);
     newWin.document.close();
-  }
+  } */
 
   if (!props || !JSONData.show) {
     return (<div className='loading-container'><Loading /></div>)
@@ -297,7 +298,15 @@ const Character = props => {
             <div className='combat-skills-and-sheet-item-container'>
               <div className='skills-table'><CharacterSheetTable list={JSONData.formData[3]} tableClasses={'combat sheet-table'} tableName={'Combat Skills'}  /></div>
               <div className='sheet-item-container'>
-                <div className='sheet-item'><Item item={props.character.sheet_Item} type={"sheet"}></Item></div>
+                <div className='sheet-item'>
+                {props.character.sheet_Item !== undefined && props.character.sheet_Item !== null ?
+                  <ItemWrapper  path={props.character.sheet_Item.secondapprovalbyuserGuid !== null ? 'Approved' : 'UnApproved'} 
+                  guid={props.character.sheet_Item.guid}  item={props.character.sheet_Item} type={"sheet"}></ItemWrapper> :
+                  (props.character.sheet_ItemGuid !== undefined && props.character.sheet_ItemGuid !== null ?
+                  <PopupItem guid={props.character.sheet_ItemGuid} type={"sheet"}></PopupItem> :
+                   <></>)
+                  }
+                </div>
               </div>
             </div>
 
@@ -340,14 +349,14 @@ const Character = props => {
           </div>
           <div className="starting-items">
             <div className='starting-items-header'>Starting Items: <span className='starting-items-amount'>({props.character.starting_Items !== undefined ? props.character.starting_Items.length : 0})</span></div>
-            <div className='starting-items-list'>
-              {itemList.map((item, i) => 
+            <div className='starting-items-list'> 
+              {itemList.length > 0 ? itemList.map((item, i) => 
                 i + 1 === itemList.length
                   ? item.itemName
                   :  item.total > 1
                   ?  item.itemName + ' (' + item.total + '),  '
                     : item.itemName + ',  '
-              )}
+              ) : 'No Starting Items'}
             </div>
           </div>
         </div>
@@ -504,5 +513,7 @@ export default Character;
 Character.propTypes = {
   props: PropTypes.object,
   character: PropTypes.object,
-  formJSON: PropTypes.object
+  formJSON: PropTypes.object,
+  img: PropTypes.string,
+  img2: PropTypes.string
 }

@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import Loading from '../../components/loading/loading';
 import CharacterSheetTable from './charactersheettable';
+import './_charactersheettable.scss'
 
 const CharacterSheetHeading = props => {
   if (!props) {
@@ -15,7 +16,7 @@ const CharacterSheetHeading = props => {
           </div>
           {props.other.Values.Bio !== undefined ?
           <div className="bio">{props.other.Values.Bio.Value}</div> : <></>}
-          <div className='imgContainer'>
+          <div className='headshotImgContainer'>
             <img src={props.img} className='charImg' alt="character headshot"></img>
           </div>
         </div>

@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types'
 import Loading from '../../components/loading/loading'
 import useGetData from '../../utils/getdata';
-import ItemEditForm from '../../components/forms/itemeditform';
 import { useQueryClient } from '@tanstack/react-query';
 import usePutData from '../../utils/putdata';
+import uploadToS3 from '../../utils/s3';
+import ItemEditFormWrapper from '../../components/forms/itemeditfromwrapper';
 
 
 export default function ItemEdit(props) {
@@ -36,7 +37,7 @@ export default function ItemEdit(props) {
       return formData;
     }
 
-    const SubmitForm = async (data) => {
+    const SubmitForm = async (data, imagelocation) => {
         let bodyData = data
         const larpguid = []
         larpguid.push(data.larptagGuid)
@@ -44,6 +45,8 @@ export default function ItemEdit(props) {
         bodyData.larptagGuid=larpguid
         }
         bodyData.Img1 = bodyData.guid + '.jpg'
+
+        await uploadToS3('images/Items/' + bodyData.Img1, imagelocation)
 
         await currItemMutation.mutate(bodyData)
 
@@ -62,6 +65,7 @@ export default function ItemEdit(props) {
     const tagsQuery = useGetData('listTags', '/api/v1/Tags/groupbytyperead') 
     const seriesQuery = useGetData('listSeriesShort', '/api/v1/Series/ShortList') 
     const userGuidQuery = useGetData('userguid', '/api/v1/Users/CurrentGuid');
+ 
 
     const TagsFilter = (response)  => {
 
@@ -108,17 +112,21 @@ export default function ItemEdit(props) {
         return {larpRuntagsResult}
       }
 
-    if (tagsQuery.isLoading || seriesQuery.isLoading || itemQuery.isLoading || userGuidQuery.isLoading ) return (<div>
+    if (tagsQuery.isLoading || seriesQuery.isLoading || itemQuery.isLoading || userGuidQuery.isLoading) 
+    return (<div>
       <Loading />
       </div>)
-    if (tagsQuery.isError || seriesQuery.isError || itemQuery.isError || userGuidQuery.isError ) return (<div>
+    if (tagsQuery.isError || seriesQuery.isError || itemQuery.isError || userGuidQuery.isError ) 
+    return (<div>
               Error!
               </div>)
 
 
     return (
         <>
-        <ItemEditForm formJSON={initForm(props.formJSON)} 
+        <ItemEditFormWrapper 
+        path={props.path}
+        formJSON={initForm(props.formJSON)} 
             tagslist={TagsFilter(props.tagslist)} 
             seriesList={seriesQuery.data}
             initForm={{
@@ -126,7 +134,7 @@ export default function ItemEdit(props) {
                 apiMessage: itemQuery.data
               }}
             larpRunTags={TagsFilterLARP(props.tagslist)}
-            SubmitForm={(e) => SubmitForm(e)}
+            SubmitForm={(e, f) => SubmitForm(e, f)}
             GoBack={() => props.GoBack()}
             Approve={() => Approve()}
             currenUserGuid={userGuidQuery.data}/>

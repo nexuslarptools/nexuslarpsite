@@ -89,11 +89,11 @@ export default function SeriesEditForm(props) {
                         </ul>
                       </div>
                     </div>
-                    <div className="edit-bottom">
+                  </Form>
+                  <div className="edit-bottom">
                       <button className="button-cancel" onClick={() => props.GoBack(false)}>Cancel</button>
                       <button className="button-save" onClick={handleSubmit(handleFormSubmit)}>Submit Changes</button>
                     </div>
-                  </Form>
                 </div>
               </>
         )

@@ -14,6 +14,7 @@ import Tags from '../tags/tags';
 import FilterIcon from '../icon/filtericon';
 import KickDialog from '../dialogs/kickdialogbox';
 import DeleteSanityDialog from '../dialogs/deletesanitydialog';
+import HoverText from '../hovertext/hovertext';
 
 
 const ItemTable = props => {
@@ -404,7 +405,6 @@ return (
                     label="Sheet Status"
                     onChange={e => UpdateApprovalFilter(e)}  
                     >
-                    <MenuItem value={undefined}>All Approval States</MenuItem>
                     <MenuItem value={''}>All Approval States</MenuItem>
                     <MenuItem value={'U'}>Unapproved</MenuItem>
                     <MenuItem value={'1'}>First Approval Done</MenuItem>
@@ -553,17 +553,23 @@ return (
                         <TableCell className='item-default-cursor table-cell-center'>
                     {
                       item.createdbyuserGuid !== null && item.firstapprovalbyuserGuid !== null && item.secondapprovalbyuserGuid !== null
-                        ? <div className='' title="approved">A</div>
+                        ? <div className='' title="approved">
+                          <HoverText  plainText={'A'} hoverText={"Edit By: " + item.editbyUser + "\n1st App. By: " + item.firstapprovalby + "\n2nd App. By: " + item.secondapprovalby}/>
+                          </div>
                         : null
                     }
                     {
                       item.createdbyuserGuid !== null && item.firstapprovalbyuserGuid == null && item.secondapprovalbyuserGuid == null
-                        ? <div className='' title="unapproved: needs 2 approvals">U</div>
+                        ? <div className='' title="unapproved: needs 2 approvals">
+                           <HoverText  plainText={'U'} hoverText={"Edit By: " + item.editbyUser}/>
+                        </div>
                         : null
                     }
                     {
                       item.createdbyuserGuid !== null && item.firstapprovalbyuserGuid !== null && item.secondapprovalbyuserGuid == null
-                      ? <div className='' title="has 1st approval, needs 2nd approval">1st</div>
+                      ? <div className='' title="has 1st approval, needs 2nd approval">
+                        <HoverText  plainText={'1st'} hoverText={"Edit By: " + item.editbyUser + "\n1st App. By: " + item.firstapprovalby}/>
+                        </div>
                       : null
                     }
                   </TableCell>

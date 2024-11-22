@@ -22,6 +22,25 @@ const ItemSelector = (props) => {
         };
         newItemList.push(newitem);
         } 
+        else if (props.initialItems.label === 'Upgrade Items') {
+          for (let i = 0; i < props.initialItems.upgradeItemGuids.length; i++) {
+              const founditem = props.appdata.iteList.find((item) => item.guid === props.initialItems.upgradeItemGuids[i]);
+              const existitem = newItemList.find((item) => item.guid === props.initialItems.upgradeItemGuids[i]);
+  
+              if (existitem !== undefined && existitem !== null) {
+                  existitem.count++;
+              }
+              else {
+              const newitem = {
+                  name: props.initialItems.upgradeItems[i],
+                  count: 1,
+                  guid: props.initialItems.upgradeItemGuids[i],
+                  path: founditem !== undefined && founditem !== null ? 'ItemSheetApproveds' : 'ItemSheets'
+              };
+              newItemList.push(newitem);
+          }
+          }
+        }
         else {
         for (let i = 0; i < props.initialItems.startingItemGuids.length; i++) {
             const founditem = props.appdata.iteList.find((item) => item.guid === props.initialItems.startingItemGuids[i]);

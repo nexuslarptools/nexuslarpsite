@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import useGetData from '../../utils/getdata';
 import Loading from '../../components/loading/loading';
 import formJSON from '../../jsonfiles/characterinput.json';
-import Character from '../../components/character/character';
+import CharacterWrapper from '../../components/character/characterwrapper';
 
 const CharacterDisplayPage = props => {
 
@@ -18,7 +18,7 @@ const CharacterDisplayPage = props => {
 
   return (
     <>
-      <Character id="character" formJSON={formJSON} character={characterQuery.data} />
+      <CharacterWrapper id="character" formJSON={formJSON} character={characterQuery.data} path={props.path} guid={props.guid}/>
       <div className="edit-bottom">
             <button className="button-cancel" onClick={() => props.GoBackToList()}>Go Back!</button>
       </div>

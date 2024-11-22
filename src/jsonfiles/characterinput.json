@@ -6,6 +6,7 @@
 				"Type": "Input",
 				"Label": "Name",
                 "Display": true,
+				"Required":true,
 				"ToolTip": "The name the character is known by. Please default to their Japanese name (first name first, family name second) unless the English name is more commonly used."
 			},
 
@@ -26,7 +27,7 @@
 				"Type": "Input",
 				"Label": "Character Bio",
                 "Display": true,
-				"Limit": 297
+				"Limit": 500
 			}
 
 		}
@@ -272,11 +273,6 @@
 				"Type": "Tagslist",
 				"Label": "Tags",
                 "Display": true
-			},
-			"readyforapproval": {
-				"Type": "Checkbox",
-				"Label": "Sheet Is Ready for Approval",
-				"Display": true
 			}
 		}
 	}
