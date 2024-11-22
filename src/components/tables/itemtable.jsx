@@ -554,19 +554,21 @@ return (
                     {
                       item.createdbyuserGuid !== null && item.firstapprovalbyuserGuid !== null && item.secondapprovalbyuserGuid !== null
                         ? <div className='' title="approved">
-                          <HoverText  plainText={'A'} hoverText={item.firstapprovalby + "\n" + item.secondapprovalby}/>
+                          <HoverText  plainText={'A'} hoverText={"Edit By: " + item.editbyUser + "\n1st App. By: " + item.firstapprovalby + "\n2nd App. By: " + item.secondapprovalby}/>
                           </div>
                         : null
                     }
                     {
                       item.createdbyuserGuid !== null && item.firstapprovalbyuserGuid == null && item.secondapprovalbyuserGuid == null
-                        ? <div className='' title="unapproved: needs 2 approvals">U</div>
+                        ? <div className='' title="unapproved: needs 2 approvals">
+                           <HoverText  plainText={'U'} hoverText={"Edit By: " + item.editbyUser}/>
+                        </div>
                         : null
                     }
                     {
                       item.createdbyuserGuid !== null && item.firstapprovalbyuserGuid !== null && item.secondapprovalbyuserGuid == null
                       ? <div className='' title="has 1st approval, needs 2nd approval">
-                        <HoverText  plainText={'1st'} hoverText={item.firstapprovalby}/>
+                        <HoverText  plainText={'1st'} hoverText={"Edit By: " + item.editbyUser + "\n1st App. By: " + item.firstapprovalby}/>
                         </div>
                       : null
                     }

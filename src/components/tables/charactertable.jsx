@@ -521,20 +521,20 @@ const CharacterTable = props => {
                         {
                           row.createdbyuserGuid !== null && row.firstapprovalbyuserGuid !== null && row.secondapprovalbyuserGuid !== null
                             ? <div className='' title="approved">
-                            <HoverText  plainText={'A'} hoverText={row.firstApprovalUser + "\n" + row.secondApprovalUser}/>
+                            <HoverText  plainText={'A'} hoverText={"Edit By: " + row.editbyUser + "\n" + "1st App. By: " + row.firstApprovalUser + "\n" + "2nd App. By: " + row.secondApprovalUser}/>
                             </div>
                             : null
                         }
                         {
                           row.createdbyuserGuid !== null && row.firstapprovalbyuserGuid == null && row.secondapprovalbyuserGuid == null
-                            ? <div className='' title="unapproved: needs 2 approvals">U</div>
+                            ? <div className='' title="unapproved: needs 2 approvals"><HoverText  plainText={'U'} hoverText={"Edit By: " + row.editbyUser}/>
+                        </div>
                             : null
                         }
                         {
                           row.createdbyuserGuid !== null && row.firstapprovalbyuserGuid !== null && row.secondapprovalbyuserGuid == null
                           ? <div className='' title="has 1st approval, needs 2nd approval">
-                          <HoverText  plainText={'1st'} hoverText={row.firstApprovalUser}/>
-
+                          <HoverText  plainText={'1st'} hoverText={"Edit By: " + row.editbyUser + "\n" + "1st App. By: " + row.firstApprovalUser}/>
                           </div>
                           : null
                         }
