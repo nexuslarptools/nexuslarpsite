@@ -3,7 +3,6 @@ import App from './App.jsx'
 import './index.scss'
 import history from './utils/history'
 import { Auth0Provider } from '@auth0/auth0-react'
-import { getConfig } from './config.jsx'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
@@ -49,14 +48,12 @@ initializeFaro({
 
 const queryClient = new QueryClient()
 
-const config = getConfig()
-
 const providerConfig = {
-  domain: config.domain,
-  clientId: config.clientId,
+  domain: import.meta.env.REACT_APP_AUTH0_DOMAIN,
+  clientId: import.meta.env.REACT_APP_AUTH0_CLIENT_ID,
   authorizationParams: {
     redirect_uri: window.location.origin,
-    ...(config.audience ? { audience: config.audience } : null)
+    audience: import.meta.env.REACT_APP_AUTH0_AUDIENCE
   },
   onRedirectCallback,
   useRefreshTokens: true,

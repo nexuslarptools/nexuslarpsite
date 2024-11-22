@@ -1,7 +1,4 @@
 {
-  "domain": "dev-3xazewbu.auth0.com",
-  "clientId": "Criga3xp4eX7Od9kZeyIcNzlaFznmGmY",
-  "audience": "https://dev-3xazewbu.auth0.com/api/v2/",
   "NAPILocation":"http://LARPPi:6004",
   "NAWAPILocation":"http://localhost",
   "APILocation": "https://decade.kylebrighton.com:6006",
@@ -11,10 +8,7 @@
   "s3Info": {
     "endpoint": "http://decade.kylebrighton.com:9000",
     "region": "us-east-1",
-    "forcePathStyle": true,
-    "credentials": {    
-      "accessKeyId": "S6epybsl7DRwSNmstqaq",
-      "secretAccessKey": "UCMzYZCJ1pXG5AQ9eAEsDmfAYkeeCPr4vWjba9EM"
-    }
+    "forcePathStyle": true
+
   }
 }
