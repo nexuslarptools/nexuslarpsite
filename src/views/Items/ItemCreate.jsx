@@ -5,6 +5,7 @@ import { v4 } from 'uuid';
 import Loading from '../../components/loading/loading'
 import useGetData from '../../utils/getdata';
 import ItemEditForm from '../../components/forms/itemeditform';
+import uploadToS3 from '../../utils/s3';
 
 
 export default function ItemCreate(props) {
@@ -25,6 +26,7 @@ export default function ItemCreate(props) {
           const jsonItem = {
             Label: formJSON[key].Values[subkey].Label,
             Type: formJSON[key].Values[subkey].Type,
+            Required: formJSON[key].Values[subkey].Required,
             ToolTip: formJSON[key].Values[subkey].ToolTip,
             Name: subkey,
             Limit: formJSON[key].Values[subkey].Limit,
@@ -61,7 +63,7 @@ export default function ItemCreate(props) {
 loadData()
     }, [props.data])
 
-    const SubmitForm = async (data) => {
+    const SubmitForm = async (data, filelocation) => {
         let bodyData = data
         const larpguid = []
         larpguid.push(data.larptagGuid)
@@ -69,7 +71,12 @@ loadData()
         bodyData.larptagGuid=larpguid
         }
         bodyData.guid = v4()
-        bodyData.Img1 = bodyData.guid + '.jpg'
+        bodyData.Img1 = bodyData.guid + '.jpg';
+
+        if (filelocation !== null)
+        {
+          await uploadToS3('images/Items/' + bodyData.Img1, filelocation)
+        }
 
         await newItemMutation.mutate(bodyData)
 
@@ -140,7 +147,7 @@ loadData()
             seriesList={seriesQuery.data}
             initForm={characterInitState}
             larpRunTags={TagsFilterLARP(props.tagslist)}
-            SubmitForm={(e) => SubmitForm(e)}
+            SubmitForm={(e, f) => SubmitForm(e, f)}
             GoBack={() => props.GoBack()}/>
         </>
     )}

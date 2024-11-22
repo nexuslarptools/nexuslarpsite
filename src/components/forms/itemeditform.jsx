@@ -6,7 +6,8 @@ import ItemAbilites from '../specialskills/ItemAbilites';
 import MultiTextField from '../inputs/multitextfield';
 import {
   Autocomplete, TextField,
-  FormControlLabel, FormLabel, Input, Box, Checkbox, Select, MenuItem
+  FormControlLabel, FormLabel, Input, Box, Checkbox, Select, MenuItem,
+  FormHelperText
 } from '@mui/material';
 import { green } from '@mui/material/colors';
 import PhotoCropper from '../photocropper/photocropper';
@@ -19,7 +20,7 @@ const ItemEditForm = (props) => {
       mode: 'onSubmit',
       reValidateMode: 'onBlur'
     });
-    const [finalImage, setFinalImage] = useState(null);
+    const [imageLocation, setImageLocation] = useState(null);
     const [itemData, setItemData] = useState({
       "seriesguid": "",
       "series": "",
@@ -133,12 +134,11 @@ const ItemEditForm = (props) => {
         const backLoopDataWithNulls = [];
     
         if (props.initForm.showResult) {
+
           await setIsdoubleSide(props.initForm.apiMessage.isdoubleside);
           await setItemData(props.initForm.apiMessage);
           await setSelectedOption(props.initForm.apiMessage.fields.TYPE);
-          await setFinalImage({FinalImage:
-            'data:image/png;base64,' + props.initForm.apiMessage.imagedata,
-            Blob: 'data:image/png;base64,' + props.initForm.apiMessage.imagedata })
+          await setImageLocation(props.img);
 
           if (props.initForm.apiMessage.fields.Special_Skills) {
             for (
@@ -208,7 +208,7 @@ const ItemEditForm = (props) => {
 
 
           if (props.initForm.apiMessage.back !== undefined && props.initForm.apiMessage.back !== null &&
-            props.initForm.apiMessage.back.fields !== undefined && props.initForm.apiMessage.back !== null && 
+            props.initForm.apiMessage.back.fields !== undefined && props.initForm.apiMessage.back.fields !== null && 
             props.initForm.apiMessage.back.fields.Special_Skills !== undefined &&
             props.initForm.apiMessage.back.fields.Special_Skills !== null) {
             for (
@@ -275,9 +275,6 @@ const ItemEditForm = (props) => {
               backLoopDataWithNulls.push(newData);
             }
           }
-
-
-
           await setSelectedSeries(props.initForm.apiMessage.seriesguid);
 
         let fullListOrdered = []
@@ -325,7 +322,6 @@ const ItemEditForm = (props) => {
       }
 
     const handleFormSubmit = async (data) => {
-
       if (props.formJSON.some((section) => (
         section.Values.some((item) => (
         item.Type === 'SpecialSkillsInput'  && item.Types.some(type => type === 'All' || type === selectedOption)))))) {
@@ -352,10 +348,6 @@ const ItemEditForm = (props) => {
           });
         });
 
-        if (finalImage.Blob != null) {
-          const arr = finalImage.Blob.split(',');
-          outputbody.imagedata = arr[1];
-      }
         outputbody.Seriesguid =selectedSeries;
         outputbody.Gmnotes =gmNotes;
         outputbody.IsdoubleSide = IsdoubleSide;
@@ -392,7 +384,7 @@ const ItemEditForm = (props) => {
 
           outputbody.Back = itemData.back;
         }
-        props.SubmitForm(outputbody);
+        props.SubmitForm(outputbody, imageLocation);
       }
 
       const updateValue = async (e, i) => {
@@ -401,6 +393,9 @@ const ItemEditForm = (props) => {
         
         if (e.target.name === 'Description2ndSide') {
           let back = itemData.back;
+          if (back.fields === undefined || back.fields === null) {
+            back.fields = {};
+          }
           back.fields.Description = e.target.value;
           await setItemData({
             ...itemData,
@@ -754,7 +749,7 @@ const ItemEditForm = (props) => {
     }
 
 
-    const updateAbilityBackForms = (rank, fieldname, value) =>{
+    const updateAbilityBackForms = async (rank, fieldname, value) =>{
 
       let ability = {
         arraynum: rank,
@@ -806,29 +801,26 @@ const ItemEditForm = (props) => {
       });
 
       let back = itemData.back;
+      if (back.fields === undefined || back.fields == null)
+      {
+        back.fields={};
+      }
       back.fields.Special_Skills=itemformData;
 
-      setItemData({
+      await setItemData({
         ...itemData,
         back: back
       });
     }
 
     const setImageData = async (e) => {
-      setFinalImage(e);
-      if (e.Blob != null) {
-        const arr = e.Blob.split(',');
-        await setItemData({
-          ...itemData,
-          imagedata: arr[1]
-        });
-    }
+      setImageLocation(e.FinalImage);
     }
 
     return (
         <>
-                  <div className="character-sheet-form">
-                  <div className='character-sheet-images'>
+          <div className="character-sheet-form">
+          <div className='character-sheet-images'>
             <Form ref={formRef}>
               <FormGroup>
                 <div className="input-pair">
@@ -838,7 +830,7 @@ const ItemEditForm = (props) => {
                 </div>
               <div>
                 Current Item Preview 
-                <Item item={itemData}/>
+                <Item item={itemData} img={imageLocation}/>
               </div>
                     <div className='input-pair'>
                       <FormLabel>Series</FormLabel>
@@ -882,7 +874,8 @@ const ItemEditForm = (props) => {
                                   className={item.Label !== "Character Bio" ? "input-pair" : "input-pair full-width"}>
                                     <FormLabel  className={item.ToolTip !== undefined 
                                       && item.ToolTip !== null ? "has-tooltip":""} 
-                                      title={item.ToolTip}>{item.Label} </FormLabel>
+                                      title={item.ToolTip}> {item.Required !== true && formdata !== undefined && formdata !== null && formdata[item.name] !== undefined 
+                                        && formdata[item.name] !== null && formdata[item.name] !== '' ?item.Label +" required field":item.Label } </FormLabel>
                                     {item.Limit !== undefined 
                                     && item.Limit !== null 
                                     && formdata !== null 
@@ -901,7 +894,7 @@ const ItemEditForm = (props) => {
                       id={item.Name}
                       name={item.Name}
                       key={item.Label} 
-                      {...register(item.Name)}
+                      {...register(item.Name, {required: (item.Required === true?true:false)})}
                       defaultValue={
                         props.initForm !== null && 
                         props.initForm.showResult === true &&
@@ -933,7 +926,7 @@ const ItemEditForm = (props) => {
                                   className={item.Label !== "Character Bio" ? "input-pair" : "input-pair full-width"}>
                                     <FormLabel  className={item.ToolTip !== undefined 
                                       && item.ToolTip !== null ? "has-tooltip":""} 
-                                      title={item.ToolTip}>{item.Label} </FormLabel>
+                                      title={item.ToolTip}> {item.Label} </FormLabel>
                                     {item.Limit !== undefined 
                                     && item.Limit !== null 
                                     && formdata !== null 
@@ -948,13 +941,14 @@ const ItemEditForm = (props) => {
                                     <Input 
                                     key={item.Label} 
                                     label={item.Label} 
-                                    variant="standard" 
-                                    type="input" id={item.Name} 
+                                    variant="standard"
+                                    type="input" 
+                                    id={item.Name} 
                                     inputProps={
                                     item.Limit !== undefined 
                                     && item.Limit !== null 
                                     ? { maxLength: item.Limit } : {}}
-                                      {...register(item.Name)}
+                                      {...register(item.Name, {required: (item.Required === true?true:false)})}
                                       defaultValue={
                                         props.initForm !== null && 
                                         props.initForm.showResult === true &&
@@ -968,6 +962,9 @@ const ItemEditForm = (props) => {
                                       }
                                       onChange={(e) => updateValue(e)}
                                     />
+                                    <FormHelperText>{item.Required === true && (itemData.fields[item.Name] === undefined || 
+                                    itemData.fields[item.Name] === null || itemData.fields[item.Name] === ""
+                                      ) ? "required field": null}</FormHelperText>
                                   </div>
                                 </>
                               )
@@ -978,7 +975,9 @@ const ItemEditForm = (props) => {
                               ? ( 
                                 <>
                                   <div className={item.Label !== "Character Bio" ? "input-pair" : "input-pair full-width"}>
-                                    <FormLabel  className={item.ToolTip !== undefined && item.ToolTip !== null ? "has-tooltip":""} title={item.ToolTip}>{item.Label} </FormLabel>
+                                    <FormLabel  className={item.ToolTip !== undefined && item.ToolTip !== null ? "has-tooltip":""} title={item.ToolTip}>
+                                      {item.Required !== true && formdata !== undefined && formdata !== null && formdata[item.name] !== undefined 
+                                        && formdata[item.name] !== null && formdata[item.name] !== '' ?item.Label +" required field":item.Label } </FormLabel>
                                     {item.Limit !== undefined 
                                     && item.Limit !== null && formdata !== null && formdata !== undefined
                                     && formdata[item.Name] !== undefined && formdata[item.Name] !== null && formdata[item.Name].length > 0 ? 
@@ -990,7 +989,7 @@ const ItemEditForm = (props) => {
                                        variant="standard" 
                                        type="input" 
                                        id={item.Name} 
-                                        {...register(item.Name)}
+                                        {...register(item.Name, {required: (item.Required === true?true:false)})}
                                         defaultValue={
                                         props.initForm !== null && 
                                         props.initForm.showResult === true &&
@@ -1025,7 +1024,7 @@ const ItemEditForm = (props) => {
                                       fieldValues: []
                                     }}
                                     updateMultiText={(e) => updateMultiValue(e)}
-                                    {...register(item.Name)}
+                                    {...register(item.Name, {required: (item.Required === true?true:false)})}
                                     defaultValue={
                                       props.initForm !== null && 
                                       props.initForm.showResult === true &&
@@ -1045,7 +1044,7 @@ const ItemEditForm = (props) => {
                             ? (
                               <>
                                 <div className="input-pair">
-                                <FormControlLabel control={<Checkbox {...register(item.Name)} 
+                                <FormControlLabel control={<Checkbox {...register(item.Name, {required: (item.Required === true?true:false)})} 
                                 onChange={(e, i) => updateValue(e, i)} 
                                   defaultChecked={
                                     props.initForm !== null && 
@@ -1196,7 +1195,8 @@ ItemEditForm.propTypes = {
   Approve: PropTypes.func,
   seriesList: PropTypes.array,
   data: PropTypes.object,
-  currenUserGuid: PropTypes.string
+  currenUserGuid: PropTypes.string,
+  img: PropTypes.string
 }
 
 

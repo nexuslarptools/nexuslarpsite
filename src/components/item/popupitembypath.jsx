@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
-import Item from './item';
 import Loading from '../../components/loading/loading';
 import useGetData from '../../utils/getdata';
+import ItemWrapper from './itemWrapper';
 
 const PopupItemByPath = props => {
 
-    const itemQuery = useGetData(props.guid, '/api/v1/' + props.path + '/' + props.guid)  
+    const itemQuery = useGetData(props.guid, '/api/v1/' + props.path + '/' + props.guid);
 
     if (itemQuery.isLoading) return (
         <div>
@@ -22,7 +22,7 @@ const PopupItemByPath = props => {
         <div className='loading-container'><Loading /></div> :
         <>
           { 
-            <Item item={itemQuery.data }/> 
+            <ItemWrapper path={props.path} guid={props.guid} item={itemQuery.data}/> 
           } </>
         }
         </>

@@ -17,11 +17,12 @@ const CompanionItemBack = props => {
         <div className='itemSecondSideTextBox'>
           <div className="seriesItemText">
           {props.item.back.fields !== null && props.item.back.fields.Description !== undefined && props.item.back.fields.Description !== null ?
-          props.item.back.fields.Description.split("\n").map((i,key) => {
-            return <div className="item-description" key={key}>{i}</div>;
-        }) :
-        <div> </div>
-              }
+              props.item.back.fields.Description.split('\n').map((i,key) => {
+            return <div className="companionitemDescription" key={key}><p>{
+              i.split('--').map((s, j) => j % 2 !== 0 ? <><u> {s} </u></> : (' ' + s ))
+              }</p></div>;
+        })
+            : <></>}
           </div>
         </div>
         {

@@ -16,7 +16,7 @@ const CompanionItem = props => {
               <p className="companionitemType">{props.item.fields.TYPE}</p>
             </span>
             <div className="img">
-              <img className="companionitemPic" src={'data:image/png;base64,' + props.item.imagedata} alt={props.item.name} />
+              <img className="companionitemPic" src={props.img} alt={props.item.name} />
               <div className="attributesgridwrapper" >
                 <div className="attributesgrid">
                   <div className="column1">
@@ -122,5 +122,6 @@ export default CompanionItem;
 
 CompanionItem.propTypes = {
   props: PropTypes.object,
-  item: PropTypes.object
+  item: PropTypes.object,
+  img: PropTypes.string
 }

@@ -3,7 +3,18 @@
   "clientId": "Criga3xp4eX7Od9kZeyIcNzlaFznmGmY",
   "audience": "https://dev-3xazewbu.auth0.com/api/v2/",
   "NAPILocation":"http://LARPPi:6004",
-  "APILocation":"http://localhost",
-  "NAWAPILocation": "https://decade.kylebrighton.com:6006",
-  "appOrigin": "https://decade.kylebrighton.com:6006"
+  "NAWAPILocation":"http://localhost",
+  "APILocation": "https://decade.kylebrighton.com:6006",
+  "appOrigin": "https://decade.kylebrighton.com:6006",
+  "bucketName":"nexusdevdata",
+  "nobucketName":"nexusdata",
+  "s3Info": {
+    "endpoint": "http://decade.kylebrighton.com:9000",
+    "region": "us-east-1",
+    "s3ForcePathStyle": true,
+    "credentials": {    
+      "accessKeyId": "S6epybsl7DRwSNmstqaq",
+      "secretAccessKey": "UCMzYZCJ1pXG5AQ9eAEsDmfAYkeeCPr4vWjba9EM"
+    }
+  }
 }

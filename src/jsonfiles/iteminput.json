@@ -8,6 +8,7 @@
 				"Type": "Dropdown",
 				"Label": "Item Type",
 				"Display": true,
+				"Required":true,
 				"enums": [
 					"Generic",
 					"Tech",
@@ -36,6 +37,7 @@
 				"Type": "Input",
 				"Label": "Name",
 				"Display": true,
+				"Required":true,
 				"Types": ["All"]
 			},
 			"Description": {

@@ -21,6 +21,7 @@ import Loading from '../../components/loading/loading';
 import { Clear } from '@mui/icons-material';
 import KickDialog from '../dialogs/kickdialogbox';
 import DeleteDialogFull from '../dialogs/deletedialogcomplete';
+import HoverText from '../hovertext/hovertext';
 
 const CharacterTable = props => {
 
@@ -519,7 +520,9 @@ const CharacterTable = props => {
                       <TableCell className='table-default-cursor table-cell-center'>
                         {
                           row.createdbyuserGuid !== null && row.firstapprovalbyuserGuid !== null && row.secondapprovalbyuserGuid !== null
-                            ? <div className='' title="approved">A</div>
+                            ? <div className='' title="approved">
+                            <HoverText  plainText={'A'} hoverText={row.firstApprovalUser + "\n" + row.secondApprovalUser}/>
+                            </div>
                             : null
                         }
                         {
@@ -529,7 +532,10 @@ const CharacterTable = props => {
                         }
                         {
                           row.createdbyuserGuid !== null && row.firstapprovalbyuserGuid !== null && row.secondapprovalbyuserGuid == null
-                          ? <div className='' title="has 1st approval, needs 2nd approval">1st</div>
+                          ? <div className='' title="has 1st approval, needs 2nd approval">
+                          <HoverText  plainText={'1st'} hoverText={row.firstApprovalUser}/>
+
+                          </div>
                           : null
                         }
                       </TableCell>

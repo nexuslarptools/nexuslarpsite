@@ -12,13 +12,14 @@ import MechaItem from './mechaitem';
 const Item = props => {
     return (
         <>
-        { props.item === undefined || props.item === null ?
+        { props.item === undefined || props.item === null 
+          || props.item.fields === null || props.item.fields === undefined ?
         <div className='loading-container'><Loading /></div> :
         <>
           { props.item.islarge === true && props.type === "sheet" ?
           <>            
           <div className='itemdisplay'>
-          <CompanionPlaceHolderItem item={props.item}/> 
+          <CompanionPlaceHolderItem item={props.item} img={props.img}/> 
           </div>
           </>
           :
@@ -29,7 +30,7 @@ const Item = props => {
             props.item.isdoubleside === true ?
             <>
             <div className='itemdisplay'>
-            <BasicItem item={props.item}/> 
+            <BasicItem item={props.item} img={props.img}/> 
             </div>
             <div className='itemdisplay'>
             <BasicItemBack item={props.item}/> 
@@ -37,42 +38,42 @@ const Item = props => {
             </>
             :
             <div className='itemdisplay'>
-            <BasicItem item={props.item}/> 
+            <BasicItem item={props.item} img={props.img}/> 
             </div>
             :
             props.item.isdoubleside === true && props.item.fields.TYPE !=="Vehicle" && props.item.fields.TYPE !=="Mecha"  ?
             <>
             <div className='itemdisplay'>
-            <CompanionItem item={props.item}/>
+            <CompanionItem item={props.item} img={props.img}/>
             </div>
             <div className='itemdisplay'>
             <CompanionItemBack item={props.item}/>
             </div>
             </> : props.item.fields.TYPE !=="Vehicle" && props.item.fields.TYPE !=="Mecha"  ?
-            <CompanionItem item={props.item}/> 
+            <CompanionItem item={props.item} img={props.img}/> 
             : props.item.fields.TYPE !=="Mecha" ?
             props.item.isdoubleside === true ?
             <>
             <div className='itemdisplay'>
-            <VehicleItem item={props.item}/>
+            <VehicleItem item={props.item} img={props.img}/>
             </div>
             <div className='itemdisplay'>
             <CompanionItemBack item={props.item}/>
             </div>
             </>
             :
-            <VehicleItem item={props.item}/> 
+            <VehicleItem item={props.item} img={props.img}/> 
             :
             props.item.isdoubleside === true ?
             <>
             <div className='itemdisplay'>
-            <MechaItem item={props.item}/>
+            <MechaItem item={props.item} img={props.img}/>
             </div>
             <div className='itemdisplay'>
             <CompanionItemBack item={props.item}/>
             </div>
             </>
-           : <MechaItem item={props.item}/> 
+           : <MechaItem item={props.item} img={props.img}/> 
           } </>
         }
         </>
@@ -83,6 +84,7 @@ export default Item;
 
 Item.propTypes = {
   props: PropTypes.object,
+  img: PropTypes.object,
   item: PropTypes.object,
   type: PropTypes.string
 }

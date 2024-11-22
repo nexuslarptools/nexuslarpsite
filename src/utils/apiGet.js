@@ -6,7 +6,6 @@ const {
     configJson.APILocation
   } = getConfig()
 
-
 export const apiGet = async (auth, path) => {
   const token = await auth.getAccessTokenSilently();
   const response = await fetch(apiOrigin + path, {

@@ -9,7 +9,8 @@ import { v4 } from 'uuid';
 import {
   Autocomplete, TextField,
   FormControlLabel, FormLabel, Input, Dialog, DialogTitle, 
-  IconButton, DialogContent, Typography, DialogActions, Button, Box, Checkbox, Drawer
+  IconButton, DialogContent, Typography, DialogActions, Button, Box, Checkbox, Drawer,
+  FormHelperText
 } from '@mui/material';
 import Loading from '../../components/loading/loading';
 import { green } from '@mui/material/colors';
@@ -19,7 +20,6 @@ import PhotoCropper from '../photocropper/photocropper';
 import ItemSelector from '../itemselector/itemselector';
 import Character from '../character/character';
 import { characterDataProcess } from '../../utils/characterdataprocess';
-import useGetData from '../../utils/getdata';
 
 const CharacterEditForm = (props) => {
   const { register, handleSubmit, getValues, setValue } = useForm({
@@ -35,10 +35,6 @@ const CharacterEditForm = (props) => {
   //const handleFormSubmit = (data) => SubmitForm(data);
   const [JSONData, setJSONData] = useState([]);
   const [gmNotes, setGMNotes] = useState('');
-  const [imageState, setImageState] = useState({
-    imagedata1: null,
-    imagedata2: null
-  });
 
   const [tagState, setTagState] = useState({
     showResult: false,
@@ -60,9 +56,9 @@ const CharacterEditForm = (props) => {
   });
 
   const [selectedSeries, setSelectedSeries] = useState({
-    guid:'045a829c-8cff-11ea-99f9-4371def66a6d',
+    guid:'',
     series: {
-        guid: '045a829c-8cff-11ea-99f9-4371def66a6d',
+        guid: '',
         title: '',                        
         titlejpn: ''
       }
@@ -77,7 +73,10 @@ const CharacterEditForm = (props) => {
     sheetItemFullItem: [],
     startingItems: [],
     startingItemGuids: [],
-    startingItemFullItems: []
+    startingItemFullItems: [],
+    upgradeItems: [],
+    upgradeItemGuids: [],
+    upgradeItemFullItems: []
   });
 
   const [itemsState, setItemsState] = useState({
@@ -122,7 +121,23 @@ const CharacterEditForm = (props) => {
                 sheetItemFullItem: [null]
               });
         }
-    } 
+    }
+    else if (itemsTableState.label === 'Upgrade Items') {
+      const upgradeItemList = [];
+      const upgradeGuidList = [];
+
+      e.forEach(item => {
+          for (let i = 0; i < item.count; i++) {
+            upgradeItemList.push(item.name);
+            upgradeGuidList.push(item.guid);
+            } 
+      })
+      setItemsTableState({
+          ...itemsTableState,
+          upgradeItemGuids: upgradeGuidList,
+          upgradeItems: upgradeItemList
+        });
+  } 
     else {
         const startingItemList = [];
         const startingGuidList = [];
@@ -144,6 +159,11 @@ const CharacterEditForm = (props) => {
 
   const SubmitForm = (formdata) => {
 
+    if(selectedSeries.guid === '')
+    {
+      return;
+    }
+
     let skillData = [];
 
     for (let j = 0; j < abilitesFormsState.abilitiesFormList.length; j++) {
@@ -158,43 +178,26 @@ const CharacterEditForm = (props) => {
       skillData = null;
     }
 
-    let bstr = '';
-    if (finalImage != null) {
-      const arr = finalImage.Blob.split(',');
-      bstr = arr[1];
-    }
-
-    let bstr2 = '';
-    if (finalImage2 != null) {
-      const arr2 = finalImage2.Blob.split(',');
-      bstr2 = arr2[1];
-    }
-
     const fields = {
       ...formdata,
       Special_Skills: skillData,
       Tags: tagState.listTags,
       Starting_Items: itemsTableState.startingItemGuids,
+      Upgrade_Items: itemsTableState.upgradeItemGuids,
       Sheet_Item: itemsTableState.sheetItemGuid
     }
  
     let newGuid = v4();
     const allData = {
       guid: props.initForm.apiMessage !== undefined && props.initForm.apiMessage !== null ?
-       props.initForm.apiMessage.guid : newGuid,
+      props.initForm.apiMessage.guid : newGuid,
       Seriesguid: selectedSeries.guid,
       name: formdata.Name,
-      imagedata1: bstr,
-      imagedata2: bstr2,
-      img1: props.initForm.apiMessage !== undefined && props.initForm.apiMessage !== null ?
-      props.initForm.apiMessage.guid + '.jpg' :newGuid + '.jpg' ,
-      img2: props.initForm.apiMessage !== undefined && props.initForm.apiMessage !== null ? 
-      props.initForm.apiMessage.guid + '_2.jpg' :newGuid + '_2.jpg' ,
       fields,
       gmnotes: gmNotes,
       readyforapproval: fields.readyforapproval
     }
-    props.Submit(allData);
+    props.Submit(allData, finalImage, finalImage2);
   }
 
 
@@ -214,9 +217,9 @@ const CharacterEditForm = (props) => {
   const upDateSeries = (e) => {
     if (e === null) {
       setSelectedSeries({
-        guid:'045a829c-8cff-11ea-99f9-4371def66a6d',
+        guid:'',
         series: {
-            guid: '045a829c-8cff-11ea-99f9-4371def66a6d',
+            guid: '',
             title: '',                        
             titlejpn: ''
           }
@@ -241,6 +244,7 @@ const CharacterEditForm = (props) => {
       for (const subkey of Object.keys(formJSON[key].Values)) {
         const jsonItem = {
           Label: formJSON[key].Values[subkey].Label,
+          Required: formJSON[key].Values[subkey].Required,
           Type: formJSON[key].Values[subkey].Type,
           ToolTip: formJSON[key].Values[subkey].ToolTip,
           Name: formJSON[key].Values[subkey].Name,
@@ -260,14 +264,8 @@ const CharacterEditForm = (props) => {
     const loopDataWithNulls = [];
 
     if (props.initForm.showResult) {
-      setFinalImage({
-        Blob:'data:image/png;base64,' + props.initForm.apiMessage.imagedata1
-      }
-      )
-      setFinalImage2({
-        Blob:'data:image/png;base64,' + props.initForm.apiMessage.imagedata2
-      }
-      )
+      setFinalImage(props.img);
+      setFinalImage2(props.img2)
       if (props.initForm.apiMessage.fields.Special_Skills) {
         for (
           let i = 0;
@@ -337,13 +335,24 @@ const CharacterEditForm = (props) => {
       }
       const sheetItemList = [props.initForm.apiMessage.sheet_Item];
       const startItemList = [];
+      const upgradeItemList = [];
       const startItemGuidList = [];
+      const upgradeItemGuidList = [];
+
       props.initForm.apiMessage.starting_Items.forEach((item) => {
         if (item.issheetitem !== true)
         {
         sheetItemList.push();
         startItemList.push(item.name);
         startItemGuidList.push(item.guid);
+        }
+      })
+      props.initForm.apiMessage.upgrade_Items.forEach((item) => {
+        if (item.issheetitem !== true)
+        {
+        upgradeItemList.push();
+        upgradeItemList.push(item.name);
+        upgradeItemGuidList.push(item.guid);
         }
       })
       await setSelectedSeries({ 
@@ -379,6 +388,9 @@ const CharacterEditForm = (props) => {
         startingItems: startItemList,
         startingItemGuids: startItemGuidList,
         startingItemFullItems: fullListOrdered,
+        upgradeItemsItems: upgradeItemList,
+        upgradeItemGuids: upgradeItemGuidList,
+        upgradeItemFullItems: fullListOrdered,
         isMounted: true
       });
       upDateTags(props.initForm.apiMessage.tags);
@@ -610,25 +622,11 @@ isNew: true
   const updateImageData = async (imagename, e) => {
     if (imagename === '1') 
     {
-        setFinalImage(e);
-        if (e.Blob != null) {
-            const arr = e.Blob.split(',');
-            await setImageState({
-              ...imageState,
-              imagedata1: arr[1]
-            });
-        }
+        setFinalImage(e.FinalImage);
     }
     else 
     {
-        setFinalImage2(e);
-        if (e.Blob != null) {
-            const arr = e.Blob.split(',');
-            await setImageState({
-              ...imageState,
-              imagedata2: arr[1]
-            });
-        }
+        setFinalImage2(e.FinalImage);
     }
   }
 
@@ -676,18 +674,18 @@ isNew: true
               </div>
               <div className='input-pair'>
                 <FormLabel>Current Headshot Image</FormLabel>
-                {finalImage?.Blob
+                {finalImage !== null
                   ? (
-                    <div className='character-sheet-headshot'><img src={finalImage.Blob} alt='[empty character headshot]' /></div>
+                    <div className='character-sheet-headshot'><img src={finalImage} alt='[empty character headshot]' /></div>
                   )
                   : ( <div></div> )
                 }
               </div>
               <div className='input-pair'>
                 <FormLabel>Current Full Body Image</FormLabel>
-                {finalImage2?.Blob
+                {finalImage2 !== null
                   ? (
-                    <div className='character-sheet-fullbody'><img src={finalImage2.Blob} alt='[empty character full body]' /></div>
+                    <div className='character-sheet-fullbody'><img src={finalImage2} alt='[empty character full body]' /></div>
                   )
                   : ( <div></div> )
                 }
@@ -715,12 +713,14 @@ isNew: true
                         :  selectedSeries.series !== undefined && selectedSeries.series !== null ?
                            selectedSeries.series
                         : {
-                          guid: '045a829c-8cff-11ea-99f9-4371def66a6d',
+                          guid: '',
                           title: '',                        
                           titlejpn: ''
                         }
                     }
                   />
+            <FormHelperText>{(selectedSeries === undefined ||
+                  selectedSeries === null ||  selectedSeries.guid === '' ) ? "required field": null}</FormHelperText>
                 </div>
                 {JSONData.map((section) => (
                   <>
@@ -742,7 +742,7 @@ isNew: true
                                 : <></>  }
                                 <Input key={item.Label} label={item.Label} variant="standard" type="input" id={item.Name} inputProps={item.Limit !== undefined 
                                 && item.Limit !== null ? { maxLength: item.Limit } : {}}
-                                  {...register(item.Name)}
+                                  {...register(item.Name, {required: (item.Required === true?true:false)})}
                                   defaultValue={
                                     props.initForm.showResult === true &&
                                     props.initForm.apiMessage.fields[item.Name] !==
@@ -752,6 +752,10 @@ isNew: true
                                   }
                                   onChange={(e) => updateValue(e)}
                                 />
+                        <FormHelperText>{item.Required === true && (formdata === undefined ||
+                        formdata === null ||  formdata[item.Name] === undefined || 
+                                    formdata[item.Name] === null || formdata[item.Name] === ""
+                                      ) ? "required field": null}</FormHelperText>
                               </div>
                             </>
                           )
@@ -804,7 +808,6 @@ isNew: true
                     ))}
                   </>
                 ))}
-
                   <div className='character-sheet-powers'>
                     <header className="header">Character Powers</header>
                     {abilitiesState.abilitiesList.map((ability) => (
@@ -828,9 +831,14 @@ isNew: true
                       <button className="button-action addremove-sheet-item" onClick={(e) => ToggleItemPicker('Sheet Item', e)}>Add/Remove Sheet Item</button>
                     </div>
                     <div className='input-pair'>
-                      <FormLabel>Starting Items</FormLabel>
+                      <FormLabel className="has-tooltip" title="These are items linked to the character which will be in their posession at start of game.">Starting Items</FormLabel>
                       <TextField placeholder="no items chosen yet" disabled={true} defaultValue={itemsTableState.startingItems.join(', ')} />
                       <button className="button-action addremove-sheet-item" onClick={(e) => ToggleItemPicker('Starting Items', e)}>Add/Remove Starting Items</button>
+                    </div>
+                    <div className='input-pair'>
+                      <FormLabel className="has-tooltip" title="These are items linked to the character which will not be given out at start of game, but will likely be given out as the game progresses.">Upgrade Items</FormLabel>
+                      <TextField placeholder="no items chosen yet" disabled={true} defaultValue={itemsTableState.upgradeItems.join(', ')} />
+                      <button className="button-action addremove-sheet-item" onClick={(e) => ToggleItemPicker('Upgrade Items', e)}>Add/Remove Upgrade Items</button>
                     </div>
                     <div className='input-pair'>
                       <FormLabel>Character Tags</FormLabel>
@@ -852,6 +860,18 @@ isNew: true
                         )}
                       />
                     </div>
+                    <>
+                            <div className="input-pair">
+                            <FormControlLabel control={<Checkbox {...register('readyforapproval')} onChange={(e, i) => updateValue(e, i)} 
+                              defaultChecked={props.initForm.showResult === true && props.initForm.apiMessage['readyforapproval'] !== undefined
+                                && props.initForm.apiMessage['readyforapproval'] !== null
+                               ? props.initForm.apiMessage['readyforapproval']
+                                : false
+                           } />}
+                              label={'Sheet Is Ready for Approval'}
+                            />
+                            </div>
+                          </>
                     
                   </div>
                 </FormGroup>
@@ -900,6 +920,7 @@ isNew: true
             <button className="button-action" onClick={() => togglePreview(true)}>Preview</button>
             {props.initForm.showResult && props.initForm.apiMessage.secondapprovalbyUserGuid === null
             && props.authLevel > 2 && props.currenUserGuid !== props.initForm.apiMessage.firstapprovalbyuserGuid &&
+            props.currenUserGuid !== props.initForm.apiMessage.firstapprovalbyuserGuid &&
             props.currenUserGuid !== props.initForm.apiMessage.editbyUserGuid 
             ?
             <button className="button-action" onClick={() => props.Approve()}>Approve Sheet</button>
@@ -913,7 +934,7 @@ isNew: true
                character={characterDataProcess(abilitesFormsState, finalImage,  finalImage2, 
                 formdata, tagState, itemsTableState, 
                 props.initForm.apiMessage !== undefined ? props.initForm.apiMessage : null
-                , selectedSeries, gmNotes)} />
+                , selectedSeries, gmNotes)} img={finalImage} img2={finalImage2}/>
              </Box>
           </Drawer>
 
@@ -1001,5 +1022,7 @@ CharacterEditForm.propTypes = {
   ReturnItem: PropTypes.func,
   GoBack: PropTypes.func,
   Approve: PropTypes.func,
-  seriesList: PropTypes.array
+  seriesList: PropTypes.array,
+  img: PropTypes.string,
+  img2: PropTypes.string,
 }

@@ -15,18 +15,6 @@ export function characterDataProcess(abilitesFormsState, finalImage,  finalImage
       skillData = null;
     }
 
-    let bstr = '';
-    if (finalImage != null) {
-      const arr = finalImage.Blob.split(',');
-      bstr = arr[1];
-    }
-
-    let bstr2 = '';
-    if (finalImage2 != null) {
-      const arr2 = finalImage2.Blob.split(',');
-      bstr2 = arr2[1];
-    }
-
     if (initForm !== null ) {
     for (const key in initForm.fields) {
       if (formdata === null  || formdata[key] === undefined) {
@@ -55,8 +43,8 @@ export function characterDataProcess(abilitesFormsState, finalImage,  finalImage
       seriesTitle: selectedSeries !== null && selectedSeries.series !== null && selectedSeries.series.title !== null 
                    && selectedSeries.series.title !== ''  ? selectedSeries.series.title :  
                    initForm !== null && initForm.seriesTitle !== null ? initForm.seriesTitle : '',
-      imagedata1: bstr,
-      imagedata2: bstr2,
+      imagedata1: finalImage,
+      imagedata2: finalImage2,
       fields,
       gmnotes: gmNotes,
       readyforapproval: fields.readyforapproval,
