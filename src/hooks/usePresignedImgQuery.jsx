@@ -29,17 +29,24 @@ const usePresignedImgQuery = (key, version) => {
             const s3 = new S3(s3Info);
             var params = {
                 Bucket: bucketName,
-                Key: key,
-                Expires: 60 * 5
+                Key: key
             };
 
             if (version !== undefined && version !== null) {
                 params.VersionId = version;
             }
-            await getSignedUrl(s3, new GetObjectCommand(params)).then(function (err, url) {
+            await getSignedUrl(s3, new GetObjectCommand(params), {expiresIn: 60 * 5}).then(function (url) {
                     setState(
                         {
                             url: url,
+                            isLoading: false,
+                            error: null
+                        })
+                },
+                function(err) {
+                setState(
+                        {
+                            url: null,
                             isLoading: false,
                             error: err
                         })
