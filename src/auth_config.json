@@ -9,7 +9,7 @@
   "nobucketName":"nexusdevdata",
   "bucketName":"nexusdata",
   "s3Info": {
-    "endpoint": "http://minio:9000",
+    "endpoint": "http://decade.kylebrighton.com:9000",
     "region": "us-east-1",
     "s3ForcePathStyle": true,
     "credentials": {    
