@@ -348,15 +348,27 @@ const Character = props => {
             
           </div>
           <div className="starting-items">
-            <div className='starting-items-header'>Starting Items: <span className='starting-items-amount'>({props.character.starting_Items !== undefined ? props.character.starting_Items.length : 0})</span></div>
+            <div className='starting-items-header'>Starting Items: <span className='starting-items-amount'>
+              {(props.character.starting_Items !== undefined 
+              && props.character.starting_Items.length > 0) ||
+              (props.character.fields.iteminfo === undefined 
+                || props.character.fields.iteminfo === null
+                || props.character.fields.iteminfo === '') ? props.character.starting_Items !== undefined ?
+                "(" + props.character.starting_Items.length + ")" : "(" + 0 + ")" : ""}</span></div>
             <div className='starting-items-list'> 
-              {itemList.length > 0 ? itemList.map((item, i) => 
+{props.character.fields.iteminfo !== undefined 
+              && props.character.fields.iteminfo !== null
+              && props.character.fields.iteminfo !== '' ? props.character.fields.iteminfo + " " : null}
+            {itemList.length > 0 ? itemList.map((item, i) => 
                 i + 1 === itemList.length
                   ? item.itemName
                   :  item.total > 1
                   ?  item.itemName + ' (' + item.total + '),  '
                     : item.itemName + ',  '
-              ) : 'No Starting Items'}
+              ) :
+                 (props.character.fields.iteminfo !== undefined 
+              && props.character.fields.iteminfo !== null
+              && props.character.fields.iteminfo !== '' ? null : 'No Starting Items')}
             </div>
           </div>
         </div>

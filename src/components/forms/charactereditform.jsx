@@ -837,6 +837,23 @@ isNew: true
                     ))}
                     <button className="button-action add-another-ability" onClick={(e) => addAbilityForm(e)}>Add Another Ability</button>
                   </div>
+
+                  <>
+                    <div className= "input-pair">
+                                <FormLabel  className="has-tooltip"title="Directions for items to be chosen by GM: e.g. 'Two Clow Cards'">Extra Item Info</FormLabel>
+                                <Input key="iteminfo" label="Item Info" variant="standard" type="input" id="iteminfo" 
+                                  {...register("iteminfo")}
+                                  defaultValue={
+                                    props.initForm.showResult === true &&
+                                    props.initForm.apiMessage.fields["iteminfo"] !==
+                                      undefined
+                                      ? props.initForm.apiMessage.fields["iteminfo"]
+                                      : ''
+                                  }
+                                  onChange={(e) => updateValue(e)}
+                                />
+                              </div>
+                            </>
                   
                   <div className="character-items-tags">
                     <div className='input-pair'>
