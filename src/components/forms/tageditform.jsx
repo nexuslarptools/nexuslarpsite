@@ -21,7 +21,6 @@ export default function TagEditForm(props) {
 
     
     const { register, handleSubmit, setValue } = useForm({
-        mode: 'onSubmit',
         reValidateMode: 'onChange'
       })
 
@@ -64,9 +63,13 @@ export default function TagEditForm(props) {
 
           <div className="input-pair">
     <FormLabel>Tag Name:</FormLabel>
-    <Input type="text" name="name" {...register('name')}
-    defaultValue={props.data.name} onChange={(e) => updateValue(e)} />
-    </div>
+       <Input 
+         type="text" 
+         name="name" 
+         {...register('name')}
+        defaultValue={props.data.name} 
+        onChange={(e) => updateValue(e)} />
+        </div>
     <div className="input-pair">
             <FormLabel htmlFor="pronouns">Locked to LARP:</FormLabel>
             <select 
@@ -95,7 +98,7 @@ export default function TagEditForm(props) {
         </Form>
         <div className="edit-bottom">
           <button className="button-cancel" onClick={() => props.GoBack(false)}>Cancel</button>
-          <button className="button-save" onClick={handleSubmit(handleFormSubmit)}>Submit Changes</button>
+          <button className="button-save" onClick={() => handleSubmit(handleFormSubmit)}>Submit Changes</button>
         </div>
       </div>
     )

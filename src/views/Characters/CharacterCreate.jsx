@@ -4,6 +4,7 @@ import { v4 } from 'uuid';
 import Loading from '../../components/loading/loading'
 import useGetData from '../../utils/getdata';
 import CharacterEditForm from '../../components/forms/charactereditform';
+import uploadToS3 from '../../utils/s3';
 
 
 export default function CharacterCreate(props) {
@@ -17,6 +18,7 @@ export default function CharacterCreate(props) {
           const jsonItem = {
             Label: formJSON[key].Values[subkey].Label,
             Type: formJSON[key].Values[subkey].Type,
+            Required: formJSON[key].Values[subkey].Required,
             ToolTip: formJSON[key].Values[subkey].ToolTip,
             Name: subkey,
             Limit: formJSON[key].Values[subkey].Limit,
@@ -35,7 +37,7 @@ export default function CharacterCreate(props) {
       return formData;
     }
 
-    const SubmitForm = async (data) => {
+    const SubmitForm = async (data, image1, image2) => {
         let bodyData = data
         const larpguid = []
         larpguid.push(data.larptagGuid)
@@ -43,9 +45,11 @@ export default function CharacterCreate(props) {
         bodyData.larptagGuid=larpguid
         }
         bodyData.guid = v4()
-        bodyData.Img1 = bodyData.guid + '_1.jpg'
-        bodyData.guid = v4()
+        bodyData.Img1 = bodyData.guid + '.jpg'
         bodyData.Img2 = bodyData.guid + '_2.jpg'
+
+        uploadToS3('images/Characters/' + bodyData.Img1, image1);
+        uploadToS3('images/Characters/' + bodyData.Img2, image2);
 
         await newCharacterMutation.mutate(bodyData)
 
@@ -85,6 +89,7 @@ export default function CharacterCreate(props) {
             element.tagsList.forEach(tag => {
               larpRuntagsResult.push(tag)
               chartagsResult.push(tag)
+              itemtagsResult.push(tag)
             });
           }
         })
@@ -147,7 +152,7 @@ export default function CharacterCreate(props) {
             appdata={approvQuery.data} 
             undata={unapprovQuery.data} 
             larpRunTags={TagsFilterLARP(props.tagslist)}
-            Submit={(e) => SubmitForm(e)}
+            Submit={(e, f, g) => SubmitForm(e, f, g)}
             GoBack={() => props.GoBack()}/> 
         </>
     )}

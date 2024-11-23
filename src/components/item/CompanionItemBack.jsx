@@ -16,16 +16,18 @@ const CompanionItemBack = props => {
         </span>
         <div className='itemSecondSideTextBox'>
           <div className="seriesItemText">
-          {props.item.back.fields.Description !== undefined && props.item.back.fields.Description !== null ?
-          props.item.back.fields.Description.split("\n").map((i,key) => {
-            return <div className="item-description" key={key}>{i}</div>;
-        }) :
-        <div> </div>
-              }
+          {props.item.back.fields !== null && props.item.back.fields.Description !== undefined && props.item.back.fields.Description !== null ?
+              props.item.back.fields.Description.split('\n').map((i,key) => {
+            return <div className="companionitemDescription" key={key}><p>{
+              i.split('--').map((s, j) => j % 2 !== 0 ? <><u> {s} </u></> : (' ' + s ))
+              }</p></div>;
+        })
+            : <></>}
           </div>
         </div>
         {
-                props.item.back.fields.Special_Skills != null && props.item.back.fields.Special_Skills[0] != null
+                props.item.back.fields !== null && props.item.back.fields.Special_Skills != null 
+                && props.item.back.fields.Special_Skills[0] != null
                   ? <div>
                     <hr className='divideline'></hr>
                     {props.item.back.fields.Special_Skills.map((skill) => 

@@ -14,6 +14,8 @@ import LarpsIndex from './views/Larps/LarpsIndex'
 import ContactFooter from './components/contactfooter/contactbar';
 import ContactUs from './views/EmailHelp/EmailHelp';
 import CharactersIndex from './views/Characters/CharactersIndex';
+import { FaroRoutes } from '@grafana/faro-react';
+
 
 
 class App extends Component {
@@ -34,7 +36,8 @@ class App extends Component {
       <div className="app">
       <Header drawerOpenCLick={(e) => this.togglePreview(e)} />
       <div className={"app-body"}>
-          <Routes>
+          <FaroRoutes>
+
           <Route exact path="/" element={<HomePage />}>
           </Route>
             <Route
@@ -71,7 +74,7 @@ class App extends Component {
            />
           <Route path="*" element={<HomePage />}
                 />
-          </Routes>
+          </FaroRoutes>
           </div>
           </div>
           <ContactFooter/>

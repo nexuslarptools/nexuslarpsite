@@ -3,9 +3,9 @@ import App from './App.jsx'
 import './index.scss'
 import history from './utils/history'
 import { Auth0Provider } from '@auth0/auth0-react'
-import { getConfig } from './config.jsx'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+
 
 const onRedirectCallback = (appState) => {
   history.push(
@@ -13,16 +13,47 @@ const onRedirectCallback = (appState) => {
   )
 }
 
+import { createRoutesFromChildren, matchRoutes, Routes, useLocation, useNavigationType } from 'react-router-dom';
+import { createReactRouterV6Options, getWebInstrumentations, initializeFaro, ReactIntegration, ReactRouterVersion } from '@grafana/faro-react';
+import { TracingInstrumentation } from '@grafana/faro-web-tracing';
+
+initializeFaro({
+    url: 'https://faro-collector-prod-us-east-0.grafana.net/collect/a191de8879d808dea3cbcdc718cb9c2c',
+    app: {
+        name: 'nexusfrontend',
+        version: '1.0.0',
+        environment: 'production'
+    },
+
+    instrumentations: [
+        // Mandatory, omits default instrumentations otherwise.
+        ...getWebInstrumentations(),
+
+        // Tracing package to get end-to-end visibility for HTTP requests.
+        new TracingInstrumentation(),
+
+        // React integration for React applications.
+        new ReactIntegration({
+            router: createReactRouterV6Options({
+                createRoutesFromChildren,
+                matchRoutes,
+                Routes,
+                useLocation,
+                useNavigationType,
+            }),
+        }),
+    ],
+});
+
+
 const queryClient = new QueryClient()
 
-const config = getConfig()
-
 const providerConfig = {
-  domain: config.domain,
-  clientId: config.clientId,
+  domain: import.meta.env.REACT_APP_AUTH0_DOMAIN,
+  clientId: import.meta.env.REACT_APP_AUTH0_CLIENT_ID,
   authorizationParams: {
     redirect_uri: window.location.origin,
-    ...(config.audience ? { audience: config.audience } : null)
+    audience: import.meta.env.REACT_APP_AUTH0_AUDIENCE
   },
   onRedirectCallback,
   useRefreshTokens: true,

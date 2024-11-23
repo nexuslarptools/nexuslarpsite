@@ -1,15 +1,9 @@
-import SpecialSkillsDisplay from '../specialskills/specialskillsdisplay';
+
 import PropTypes from 'prop-types';
 import Loading from '../../components/loading/loading';
 import './_item.scss'
 
 const CompanionPlaceHolderItem = props => {
-const specialskillsallowed = [
-  "Mecha",
-  "Vehicle",
-  "Companion",
-  "Pokemon"
-];
 
   if (!props || !props.item) {
     return (<div className='loading-container'><Loading /></div>)
@@ -23,7 +17,7 @@ const specialskillsallowed = [
             <h3 className="itemType">{props.item.fields.TYPE}</h3>
           </div>
           <div className='itemPicBox'>
-                <img className="itemPic" src={'data:image/png;base64,' + props.item.imagedata} alt={''} />
+                <img className="itemPic" src={props.img} alt={''} />
           </div>
           <div className='itemTextBox'>
             <div className="seriesItemText">
@@ -43,5 +37,6 @@ export default CompanionPlaceHolderItem;
 
 CompanionPlaceHolderItem.propTypes = {
   props: PropTypes.object,
-  item: PropTypes.object
+  item: PropTypes.object,
+  img: PropTypes.string
 }
