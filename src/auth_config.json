@@ -6,7 +6,7 @@
   "nobucketName":"nexusdevdata",
   "bucketName":"nexusdata",
   "s3Info": {
-    "endpoint": "http://decade.kylebrighton.com:9000",
+    "endpoint": "https://decade.kylebrighton.com:9000",
     "region": "us-east-1",
     "forcePathStyle": true
 

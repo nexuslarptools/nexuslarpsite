@@ -28,12 +28,6 @@ jobs:
 
       - name: Build container image
         uses: docker/build-push-action@v6
-        env:
-          REACT_APP_AUTH0_DOMAIN: ${{ secrets.REACT_APP_AUTH0_DOMAIN }}
-          REACT_APP_AUTH0_CLIENT_ID: ${{ secrets.REACT_APP_AUTH0_CLIENT_ID }}
-          REACT_APP_AUTH0_AUDIENCE: ${{ secrets.REACT_APP_AUTH0_AUDIENCE }}
-          REACT_APP_MINIO_CREDS_ACCESS_KEY: ${{ secrets.REACT_APP_MINIO_CREDS_ACCESS_KEY }}
-          REACT_APP_MINIO_CREDS_SECRET_KEY: ${{ secrets.REACT_APP_MINIO_CREDS_SECRET_KEY }}
         with:
           context: .
           push: true
@@ -42,3 +36,8 @@ jobs:
           platforms: linux/amd64,linux/arm64,linux/arm64/v8
           build-args: |
             TAG=${{ github.ref_name }}
+            REACT_APP_AUTH0_DOMAIN=${{ secrets.REACT_APP_AUTH0_DOMAIN }}
+            REACT_APP_AUTH0_CLIENT_ID=${{ secrets.REACT_APP_AUTH0_CLIENT_ID }}
+            REACT_APP_AUTH0_AUDIENCE=${{ secrets.REACT_APP_AUTH0_AUDIENCE }}
+            REACT_APP_MINIO_CREDS_ACCESS_KEY=${{ secrets.REACT_APP_MINIO_CREDS_ACCESS_KEY }}
+            REACT_APP_MINIO_CREDS_SECRET_KEY=${{ secrets.REACT_APP_MINIO_CREDS_SECRET_KEY }}
