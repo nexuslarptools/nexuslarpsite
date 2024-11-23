@@ -48,18 +48,20 @@ initializeFaro({
 
 const queryClient = new QueryClient()
 
+const config = getConfig()
+
 const providerConfig = {
-  domain: import.meta.env.REACT_APP_AUTH0_DOMAIN,
-  clientId: import.meta.env.REACT_APP_AUTH0_CLIENT_ID,
+  domain: config.domain,
+  clientId: config.clientId,
   authorizationParams: {
     redirect_uri: window.location.origin,
-    audience: import.meta.env.REACT_APP_AUTH0_AUDIENCE
+    ...(config.audience ? { audience: config.audience } : null)
   },
   onRedirectCallback,
   useRefreshTokens: true,
   cacheLocation: 'localstorage'
 }
-console.log(providerConfig);
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Auth0Provider {...providerConfig}>
     <QueryClientProvider client={queryClient}>
