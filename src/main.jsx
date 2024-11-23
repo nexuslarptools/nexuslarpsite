@@ -3,6 +3,7 @@ import App from './App.jsx'
 import './index.scss'
 import history from './utils/history'
 import { Auth0Provider } from '@auth0/auth0-react'
+import { getConfig } from './config.jsx'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
