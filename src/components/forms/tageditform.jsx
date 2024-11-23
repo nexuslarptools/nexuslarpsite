@@ -98,7 +98,7 @@ export default function TagEditForm(props) {
         </Form>
         <div className="edit-bottom">
           <button className="button-cancel" onClick={() => props.GoBack(false)}>Cancel</button>
-          <button className="button-save" onClick={() => handleSubmit(handleFormSubmit)}>Submit Changes</button>
+          <button className="button-save" onClick={handleSubmit(handleFormSubmit)}>Submit Changes</button>
         </div>
       </div>
     )
