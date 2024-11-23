@@ -59,7 +59,7 @@ const providerConfig = {
   useRefreshTokens: true,
   cacheLocation: 'localstorage'
 }
-
+console.log(providerConfig);
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Auth0Provider {...providerConfig}>
     <QueryClientProvider client={queryClient}>
