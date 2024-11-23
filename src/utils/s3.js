@@ -13,11 +13,6 @@ const {
   bucketName = configJson.bucketName
 }= getConfig();
 
-s3Info.credentials = {
-    "accessKeyId": import.meta.env.REACT_APP_MINIO_CREDS_ACCESS_KEY,
-    "secretAccessKey": import.meta.env.REACT_APP_MINIO_CREDS_SECRET_KEY
-}
-
 export const uploadToS3 = async (filename, filelocation) => {
  const s3 = new S3(s3Info);
 
