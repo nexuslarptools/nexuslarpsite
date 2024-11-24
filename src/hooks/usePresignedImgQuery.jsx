@@ -19,8 +19,6 @@ s3Info.credentials = {
     secretAccessKey: import.meta.env.VITE_MINIO_CREDS_SECRET_KEY
 };
 
-console.log(s3Info);
-
 const usePresignedImgQuery = (key, version) => {
 
     const [state, setState] = useState({
