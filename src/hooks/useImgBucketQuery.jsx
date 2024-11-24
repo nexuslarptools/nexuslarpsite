@@ -10,8 +10,8 @@ const {
   } = getConfig();
 
 s3Info.credentials = {
-    accessKeyId: import.meta.env.VITE_AWS_ACCESS_KEY_ID,
-    secretAccessKey: import.meta.env.VITE_AWS_SECRET_ACCESS_KEY
+    accessKeyId: import.meta.env.VITE_MINIO_CREDS_ACCESS_KEY,
+    secretAccessKey: import.meta.env.VITE_MINIO_CREDS_SECRET_KEY
 };
 
 const useImgBucketQuery = (bucketname, key) => {
