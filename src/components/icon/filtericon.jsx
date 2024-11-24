@@ -1,8 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import ClickAwayListener from '@mui/material/ClickAwayListener';
+import { Box, ClickAwayListener, TextField } from '@mui/material';
 
 const FilterIcon = props => {
   const [open, setOpen] = useState(false);

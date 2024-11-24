@@ -1015,7 +1015,7 @@ isNew: true
            appdata={props.appdata} 
            undata={props.undata} 
            larpTags={props.larpRunTags.larpRuntagsResult}
-           tagslist={props.tagslist.itemTags}
+           tagslist={props.tagslist.characterTags}
            authLevel={2}
            initialItems={itemsTableState}
            userGuid={props.userGuid}
@@ -1043,7 +1043,7 @@ CharacterEditForm.propTypes = {
   appdata: PropTypes.object,
   undata: PropTypes.object,
   itemTags: PropTypes.object,
-  larpRunTags: PropTypes.array,
+  larpRunTags: PropTypes.object,
   Submit: PropTypes.func,
   FetchPopoverItem: PropTypes.func,
   userGuid: PropTypes.string,

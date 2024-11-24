@@ -29,12 +29,26 @@ const Item = props => {
             props.item.fields.TYPE !=="Pokemon" ?
             props.item.isdoubleside === true ?
             <>
+            { props.side !== 'front' && props.side !== 'back' ?
+            <>
             <div className='itemdisplay'>
             <BasicItem item={props.item} img={props.img}/> 
             </div>
             <div className='itemdisplay'>
             <BasicItemBack item={props.item}/> 
             </div>
+            </> : props.side === 'front' ?
+            <>
+            <div className='itemdisplay'>
+            <BasicItem item={props.item} img={props.img}/> 
+            </div>
+            </> : props.side === 'back' ?
+            <>
+            <div className='itemdisplay'>
+            <BasicItemBack item={props.item}/> 
+            </div>
+            </> : <></>
+             }   
             </>
             :
             <div className='itemdisplay'>
@@ -43,16 +57,34 @@ const Item = props => {
             :
             props.item.isdoubleside === true && props.item.fields.TYPE !=="Vehicle" && props.item.fields.TYPE !=="Mecha"  ?
             <>
+            { props.side !== 'front' && props.side !== 'back' ?
+            <>
             <div className='itemdisplay'>
             <CompanionItem item={props.item} img={props.img}/>
             </div>
             <div className='itemdisplay'>
             <CompanionItemBack item={props.item}/>
             </div>
+            </> :
+            props.side === 'front' ?
+            <>
+            <div className='itemdisplay'>
+            <CompanionItem item={props.item} img={props.img}/>
+            </div>
+            </> :
+            props.side === 'back' ?
+            <>
+            <div className='itemdisplay'>
+            <CompanionItemBack item={props.item}/>
+            </div>
+            </> :<></>
+            }
             </> : props.item.fields.TYPE !=="Vehicle" && props.item.fields.TYPE !=="Mecha"  ?
             <CompanionItem item={props.item} img={props.img}/> 
             : props.item.fields.TYPE !=="Mecha" ?
             props.item.isdoubleside === true ?
+            <>
+            { props.side !== 'front' && props.side !== 'back' ?
             <>
             <div className='itemdisplay'>
             <VehicleItem item={props.item} img={props.img}/>
@@ -60,11 +92,25 @@ const Item = props => {
             <div className='itemdisplay'>
             <CompanionItemBack item={props.item}/>
             </div>
+            </> : props.side === 'front' ?
+            <>
+            <div className='itemdisplay'>
+            <VehicleItem item={props.item} img={props.img}/>
+            </div>
+            </> : props.side === 'back' ?
+            <>
+            <div className='itemdisplay'>
+            <CompanionItemBack item={props.item}/>
+            </div>
+            </> : <></>
+            }
             </>
             :
             <VehicleItem item={props.item} img={props.img}/> 
             :
             props.item.isdoubleside === true ?
+            <>
+            {  props.side !== 'front' && props.side !== 'back' ?
             <>
             <div className='itemdisplay'>
             <MechaItem item={props.item} img={props.img}/>
@@ -72,6 +118,18 @@ const Item = props => {
             <div className='itemdisplay'>
             <CompanionItemBack item={props.item}/>
             </div>
+            </> : props.side === 'front' ?
+            <>
+            <div className='itemdisplay'>
+            <MechaItem item={props.item} img={props.img}/>
+            </div>
+            </> : props.side === 'back' ?
+            <>
+            <div className='itemdisplay'>
+            <CompanionItemBack item={props.item}/>
+            </div>
+            </> : <></>
+            }
             </>
            : <MechaItem item={props.item} img={props.img}/> 
           } </>
@@ -86,5 +144,6 @@ Item.propTypes = {
   props: PropTypes.object,
   img: PropTypes.object,
   item: PropTypes.object,
-  type: PropTypes.string
+  type: PropTypes.string,
+  side: PropTypes.string
 }

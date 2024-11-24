@@ -2,17 +2,20 @@
 @import "/src/mixins";
 
 .splitScreen {
-    align-content: flex-start;
+    //display: flex;
+    //align-content: flex-start;
     box-sizing: border-box;
-    display: flex;
-    width: 100%;
+    //width: 100%;
+    //overflow: auto;
     .topPane {
         width: calc(100vw - 500px);
+       // display: inline-block;
     }
     .bottomPane {
         right: 0;
         width: 500px;
         position: fixed;
+       // display: inline-block;
         .selectionlist-label {
             padding-top: 10px;
             padding-bottom: 10px;
@@ -21,6 +24,9 @@
             font-family: "Warmonger BB", "Roboto", serif;
             font-size: $font-size-large;
             font-weight: bold;
+        }
+        .selectionlist-list {
+            z-index: -1;
         }
     }
 }

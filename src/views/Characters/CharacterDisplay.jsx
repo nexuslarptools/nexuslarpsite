@@ -3,6 +3,7 @@ import useGetData from '../../utils/getdata';
 import Loading from '../../components/loading/loading';
 import formJSON from '../../jsonfiles/characterinput.json';
 import CharacterWrapper from '../../components/character/characterwrapper';
+import DisplayScreen from '../../components/displayscreen/displayscreen';
 
 const CharacterDisplayPage = props => {
 
@@ -18,7 +19,7 @@ const CharacterDisplayPage = props => {
 
   return (
     <>
-      <CharacterWrapper id="character" formJSON={formJSON} character={characterQuery.data} path={props.path} guid={props.guid}/>
+      <DisplayScreen id="character" formJSON={formJSON} character={characterQuery.data} path={props.path} guid={props.guid}/>
       <div className="edit-bottom">
             <button className="button-cancel" onClick={() => props.GoBackToList()}>Go Back!</button>
       </div>

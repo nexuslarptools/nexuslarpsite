@@ -4,15 +4,15 @@ import PropTypes from 'prop-types';
 import { Form, FormGroup } from 'reactstrap';
 import ItemAbilites from '../specialskills/ItemAbilites';
 import MultiTextField from '../inputs/multitextfield';
+import { green } from '@mui/material/colors';
+import PhotoCropper from '../photocropper/photocropper';
+import Item from '../item/item';
+import './_itemeditform.scss';
 import {
   Autocomplete, TextField,
   FormControlLabel, FormLabel, Input, Box, Checkbox, Select, MenuItem,
   FormHelperText
 } from '@mui/material';
-import { green } from '@mui/material/colors';
-import PhotoCropper from '../photocropper/photocropper';
-import Item from '../item/item';
-import './_itemeditform.scss';
 
 const ItemEditForm = (props) => {
     const formRef = React.useRef();
@@ -382,6 +382,9 @@ const ItemEditForm = (props) => {
               }
             });
 
+          }
+          if (itemData.back !== undefined && itemData.back.fields !== null)
+        {
           outputbody.Back = itemData.back;
         }
         props.SubmitForm(outputbody, imageLocation);
