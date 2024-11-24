@@ -18,6 +18,8 @@ s3Info.credentials = {
     secretAccessKey: import.meta.env.VITE_MINIO_CREDS_SECRET_KEY
 };
 
+console.log(s3Info);
+
 export const uploadToS3 = async (filename, filelocation) => {
  const s3 = new S3(s3Info);
 
