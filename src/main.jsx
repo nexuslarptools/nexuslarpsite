@@ -49,11 +49,11 @@ initializeFaro({
 const queryClient = new QueryClient()
 
 const providerConfig = {
-  domain: import.meta.env.REACT_APP_AUTH0_DOMAIN,
-  clientId: import.meta.env.REACT_APP_AUTH0_CLIENT_ID,
+  domain: import.meta.env.VITE_AUTH0_DOMAIN,
+  clientId: import.meta.env.VITE_AUTH0_CLIENT_ID,
   authorizationParams: {
     redirect_uri: window.location.origin,
-    audience: import.meta.env.REACT_APP_AUTH0_AUDIENCE
+    audience: import.meta.env.VITE_AUTH0_AUDIENCE,
   },
   onRedirectCallback,
   useRefreshTokens: true,

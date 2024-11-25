@@ -10,10 +10,9 @@ const {
   } = getConfig();
 
 s3Info.credentials = {
-    "accessKeyId": import.meta.env.REACT_APP_MINIO_CREDS_ACCESS_KEY,
-    "secretAccessKey": import.meta.env.REACT_APP_MINIO_CREDS_SECRET_KEY
-}
-
+    accessKeyId: import.meta.env.VITE_MINIO_CREDS_ACCESS_KEY,
+    secretAccessKey: import.meta.env.VITE_MINIO_CREDS_SECRET_KEY
+};
 
 const useImgQuery = (bucketname, key) => {
 

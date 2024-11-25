@@ -9,6 +9,5 @@
     "endpoint": "https://decade.kylebrighton.com:9000",
     "region": "us-east-1",
     "forcePathStyle": true
-
   }
 }

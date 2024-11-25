@@ -15,7 +15,9 @@ const BasicItemBack = props => {
           </div>
         <div className='itemSecondSideTextBox'>
           <div className="seriesItemText">
-          {props.item.back.fields.Description !== undefined && props.item.back.fields.Description !== null ?
+          {props.item.back !== undefined && props.item.back !== null && 
+          props.item.back.fields !== undefined && props.item.back.fields !== null &&
+          props.item.back.fields.Description !== undefined && props.item.back.fields.Description !== null ?
           props.item.back.fields.Description.split("\n").map((i,key) => {
             return <div className="item-description" key={key}>{i}</div>;
         }) :
