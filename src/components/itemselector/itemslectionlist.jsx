@@ -4,13 +4,17 @@ import HighlightOffSharpIcon from '@mui/icons-material/HighlightOffSharp';
 import RemoveSharpIcon from '@mui/icons-material/RemoveSharp';
 import AddSharpIcon from '@mui/icons-material/AddSharp';
 import ItemPopover from '../popovers/itempopover';
+import './_itemselectionlist.scss'
 
 const ItemSelectonList = (props) => {
 
     return (
         <>
-        <TableContainer>
-          <Table>
+       <div className="selection-list-list">
+        <TableContainer style={{
+      maxHeight: window.innerHeight - 178 ,
+    }}>
+          <Table stickyHeader>
           <TableHead sx={{ position: 'sticky', top: 0, backgroundColor: 'white' }}>
         <TableRow>
         { props.allowMultiples ?
@@ -66,6 +70,7 @@ const ItemSelectonList = (props) => {
         </TableBody>
           </Table>
         </TableContainer>
+        </div>
         </>
     )
 }

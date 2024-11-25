@@ -18,7 +18,7 @@ const ItemWrapper = props => {
 
     return (
         <>
-          <Item item={props.item} img={imgUrl.url} type={props.type}/> 
+          <Item item={props.item} img={imgUrl.url} type={props.type} side={props.side}/> 
         </>
     )
 }
@@ -30,5 +30,6 @@ ItemWrapper.propTypes = {
   item: PropTypes.object,
   guid: PropTypes.string,
   path: PropTypes.string,
-  type: PropTypes.string
+  type: PropTypes.string,
+  side: PropTypes.string
 }

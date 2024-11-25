@@ -15,6 +15,7 @@ import FilterIcon from '../icon/filtericon';
 import KickDialog from '../dialogs/kickdialogbox';
 import DeleteSanityDialog from '../dialogs/deletesanitydialog';
 import HoverText from '../hovertext/hovertext';
+import './_itemtable.scss'
 
 
 const ItemTable = props => {
@@ -335,7 +336,7 @@ const ItemTable = props => {
 return (
   !displayState.display ? 
   <></>:
-<div>
+<div className='itemTable-display'>
   <TableContainer className='nexus-table'>
     <Table>
     <TableHead sx={{ position: 'sticky', top: 0, backgroundColor: 'white' }}>

@@ -420,7 +420,7 @@ const CharacterTable = props => {
                               onClick={() => UpdateLarpAutoComp('')}><Clear /></IconButton>}} 
                         />
                         )}
-                        getoptionselected={(opt, val) => opt === val}
+                        //getoptionselected={(opt, val) => opt === val}
                         onChange={(event, val) => selectLarpTag(val)}
                     />
                   </div>

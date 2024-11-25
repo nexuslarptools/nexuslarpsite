@@ -1,0 +1,110 @@
+@import "/src/variables";
+
+.print-items-box1 {
+    position: relative;
+    width: 8.5in;
+    height: 11in;
+}
+
+.item11front {
+        position: absolute;
+        top: 0px;
+        left: 5px;
+        padding: 5px;
+}
+.item12front {
+    position: absolute;
+    top: 408px;
+    left: 5px;
+    padding: 5px;
+}
+.item13front {
+    position: absolute;
+    top: 0px;
+    right: 246px;
+    padding: 5px;
+}
+.item14front {
+    position: absolute;
+    top: 0px;
+    right: 5px;
+    padding: 5px;
+}
+.item15front {
+    position: absolute;
+    top: 341px;
+    right: 246px;
+    padding: 5px;
+}
+.item16front {
+    position: absolute;
+    top: 341px;
+    right: 5px;
+    padding: 5px;
+}
+.item17front {
+    position: absolute;
+    top: 682px;
+    right: 246px;
+    padding: 5px;
+}
+.item18front {
+    position: absolute;
+    top: 682px;
+    right: 5px;
+    padding: 5px;
+}
+
+
+
+
+
+
+.item11back {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 5px;
+}
+.item12back {
+position: absolute;
+top: 413px;
+right: 5px;
+padding: 5px;
+}
+.item13back {
+position: absolute;
+top: 5px;
+left: 246px;
+padding: 5px;
+}
+.item14back {
+position: absolute;
+top: 5px;
+left: 5px;
+padding: 5px;
+}
+.item15back {
+position: absolute;
+top: 346px;
+left: 246px;
+padding: 5px;
+}
+.item16back {
+position: absolute;
+top: 346px;
+left: 5px;
+padding: 5px;
+}
+.item17back {
+position: absolute;
+top: 687px;
+left: 246px;
+padding: 5px;
+}
+.item18back {
+position: absolute;
+top: 687px;
+left: 5px;
+padding: 5px;
+}

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import PropTypes from 'prop-types';
 import ItemTable from "../tables/itemtable";
-import { Box } from "@mui/material";
 import ItemSelectonList from "./itemslectionlist";
+import { Box, Grid, Stack } from "@mui/material";
 
 const ItemSelector = (props) => {
 
@@ -147,8 +147,9 @@ const ItemSelector = (props) => {
     return (
     <>
     <div className="splitScreen">
-        <Box>
-        <div className="topPane">
+    <Stack direction='row'>
+      {/* <Box> */}
+      <div className="topPane">
       <ItemTable 
       isSelector={true}
       isCharSheet={props.isCharSheet}
@@ -169,20 +170,23 @@ const ItemSelector = (props) => {
       GoBack={() => props.GoBack()}
       />
       </div>
-      </Box>
+{/*       </Box>*/}
+{/*   <Box > */}
       <div className="bottomPane">
         <div className="selectionlist-label">
           {props.initialItems.label}
         </div>
-      <Box >
+        <div className="selectionlist-list">
         <ItemSelectonList List={itemListState} 
         allowMultiples={props.initialItems.label !== 'Sheet Item'}
         RemoveItem={(guid) => RemItemFromList(guid)}
         IncreaseCount={(guid) => IncreaseCount(guid)} 
         LowerCount={(guid) => LowerCount(guid)}
         />
-      </Box>
+        </div>
    </div>
+   {/* </Box> */}
+   </Stack>
 </div>
     </>
     )
