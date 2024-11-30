@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import Loading from '../../components/loading/loading';
 import usePresignedImgQuery from '../../hooks/usePresignedImgQuery';
-import Character from './character';
 import CharacterNo from './characterno';
 
 const CharacterWrapperNo = props => {

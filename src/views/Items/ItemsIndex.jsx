@@ -128,7 +128,9 @@ return (
   ToggleSwitch={() => ToggleSwitch('selectedApproved')}
   ToggleCommentSwitch={() => ToggleSwitch('commentFilter')}
   ToggleApprovableSwitch={() => ToggleSwitch('showApprovableOnly')}
-  GoBack={() => setIsSelect(false)}/>
+  GoBack={() => setIsSelect(false)}
+  UpdateItemList={() => void 0}
+  />
 </> 
 : 
 <>

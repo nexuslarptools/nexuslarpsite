@@ -25,9 +25,10 @@ export default function CharactersIndex() {
           viewItemGuid: '',
           viewItemPath: ''
       });
+      
     const [isCreate, setIsCreate] = useState(false);
-    //const [isSelect, setIsSelect] = useState(false);
     const [isEdit, setIsEdit] = useState({isEditing: false, guid: null});
+    const [filterInit, setfilterInit] = useState(false);
 
     const ToggleSwitch = async (e) => {
         let toggled=charactersState[e];
@@ -45,7 +46,8 @@ export default function CharactersIndex() {
             [e]: !toggled
         });
       }
-    }   
+    }  
+     
 
     const DirectToCharacter = async (path, guid) => {
         setCharactersState({
@@ -57,13 +59,10 @@ export default function CharactersIndex() {
 
     const GoBackToList = async () => {
       await setCharactersState({
-        selectedApproved: true,
-        commentFilter: false,
-        showApprovableOnly: false,
-        viewingItem: false,
-        viewItemGuid: '',
-        viewItemPath: ''
+        ...charactersState,
+        viewingItem: false
     });
+    await setfilterInit(true);
     }
 
     const GoToEditCharacter = async (path, guid) => {
@@ -74,21 +73,26 @@ export default function CharactersIndex() {
       
     }
 
+    const UnInitFiler = () => {
+      setfilterInit(false);
+    }
+
     const NewCharacterLink = async () => {
       await setIsCreate(true);
     }
 
     const GoBackFromCreateEdit = async () => {
-      await setCharactersState({
+      /* await setCharactersState({
         selectedApproved: true,
         commentFilter: false,
         showApprovableOnly: false,
         viewingItem: false,
         viewItemGuid: '',
         viewItemPath: ''
-    });
+    }); */
       await setIsCreate(false);
       await setIsEdit({isEditing: false, guid: null});
+      await setfilterInit(true);
     }
 
 
@@ -106,7 +110,10 @@ export default function CharactersIndex() {
  !isCreate ?
  !isEdit.isEditing ?
 <>
-<CharactersListPage appdata={approvQuery.data} 
+<CharactersListPage 
+FilterInit={filterInit}
+UnInitFiler={() => UnInitFiler()}
+appdata={approvQuery.data} 
   undata={unapprovQuery.data} 
   larpTags={allTagsQuery.data.find((tags) => tags.tagType === 'LARPRun')?.tagsList}
   tagslist={allTagsQuery.data.find((tags) => tags.tagType === 'Character')?.tagsList}

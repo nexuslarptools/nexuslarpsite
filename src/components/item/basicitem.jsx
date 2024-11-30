@@ -108,7 +108,13 @@ const specialskillsallowed = [
                   : <></>
                 }
               </div>
-              <div className="item-description">{props.item.fields.Description}
+              {props.item.fields !== undefined && props.item.fields  !== null && 
+          props.item.fields.Description!== undefined && props.item.fields.Description !== null ?
+          props.item.fields.Description.split("\n").map((i,key) => {
+            return <div className="item-description" key={key}>{i}</div>;
+        }) :
+        <div> </div>
+              }
                 {
                   props.item.fields.Special_Skills != null && specialskillsallowed.some(val => val === props.item.fields.TYPE)
                     ? <div>
@@ -120,7 +126,6 @@ const specialskillsallowed = [
                       </div>
                     : <></>
                 }
-              </div>
               {
                   props.item.fields.Uses != null && props.item.fields.Uses > 0
                   ? <div className='item-uses-container'>  

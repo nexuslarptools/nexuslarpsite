@@ -72,9 +72,9 @@ const CharacterTable = props => {
 
         let filteredRows = props.appdata;
 
-        filteredRows = filteredRows.filter(item => item.name.toLocaleLowerCase().includes(filterState.CharacterFilter));
+        filteredRows = filteredRows.filter(item => item.name.toLocaleLowerCase().includes(filterState.CharacterFilter.toLocaleLowerCase()));
         filteredRows = filteredRows.filter(item => (item.series === null && filterState.SeriesFilter === '') 
-          || (item.title !== null && item.title.toLocaleLowerCase().includes(filterState.SeriesFilter)));
+          || (item.title !== null && item.title.toLocaleLowerCase().includes(filterState.SeriesFilter.toLocaleLowerCase())));
         if (props.showApprovableOnly) {
           filteredRows = filteredRows.filter(item => (item.editbyUserGuid !== props.userGuid && item.firstapprovalbyuserGuid !== props.userGuid));
         }
@@ -354,7 +354,7 @@ const CharacterTable = props => {
                      </TableCell>
                     <TableCell className='table-topper'>
                      { props.authLevel > 1
-                      ? <FormControlLabel control={ <Switch defaultChecked onChange={() => props.ToggleSwitch()} /> }
+                      ? <FormControlLabel control={ <Switch checked={props.selectedApproved} onChange={() => props.ToggleSwitch()} /> }
                             label={props.selectedApproved ? 'Approved Characters' : 'Unapproved Characters'} />
                       : <div></div>
                     }
@@ -468,7 +468,8 @@ const CharacterTable = props => {
                 {props.commentFilterOn !== undefined ?  <TableCell></TableCell> : <></>}
                 <TableCell>
                   <div className='filter-container'>
-                    <FilterIcon label="series" clearfilter={clearfilterState} filterup={e => updateFilter(e, 'Series')}/>
+                    <FilterIcon label="series" clearfilter={clearfilterState} filterup={e => updateFilter(e, 'Series')}  
+                      initalFilter={filterState.SeriesFilter} FilterInit={props.FilterInit} UnInitFiler={() => props.UnInitFiler()}  />
                   </div>
                 </TableCell>
                 <TableCell>

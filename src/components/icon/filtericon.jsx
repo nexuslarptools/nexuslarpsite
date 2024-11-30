@@ -20,6 +20,13 @@ const FilterIcon = props => {
     setTimeout(() => setAnchorEl(anchorRef?.current), 1);
   }, [anchorRef]);
 
+  useEffect(() => {
+if (props.FilterInit) {
+    setFilerState(props.initalFilter);
+    props.UnInitFiler()
+}
+  }, [props.FilterInit]);
+
   const updateFilter = async (e) => {
     await setFilerState(e);
     props.filterup(e);
@@ -62,6 +69,9 @@ export default FilterIcon;
 
 FilterIcon.propTypes = {
   label: PropTypes.string,
+  initalFilter: PropTypes.string,
   filterup: PropTypes.func,
-  clearfilter: PropTypes.bool
+  UnInitFiler: PropTypes.func,
+  clearfilter: PropTypes.bool,
+  FilterInit: PropTypes.bool
 }

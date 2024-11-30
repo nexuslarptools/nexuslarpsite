@@ -280,13 +280,15 @@ const Character = props => {
         <div className='sheet sheet1'>
           <div className='header-info'>
             <div className='sheet-name-series'>
-            { props.character.name.length < 31 ?
+            { props.character.name.length < 31  ||  props.character.seriesTitle.length > 51?
               <div className='sheetName'>{props.character.name}</div> :
               <div className='sheetNameSM'>{props.character.name}</div> 
             }
-              { props.character.seriesTitle.length < 31 ?
-              <div className='seriesName'>{props.character.seriesTitle}</div> :
-              <div className='seriesNameSM'>{props.character.seriesTitle}</div>
+              { props.character.seriesTitle.length > 71 ?
+              <div className='seriesNameXSM'>{props.character.seriesTitle}</div> :
+              props.character.seriesTitle.length > 30 ?
+              <div className='seriesNameSM'>{props.character.seriesTitle}</div> :
+              <div className='seriesName'>{props.character.seriesTitle}</div>
               }
             </div>
             <CharacterSheetHeading img={imageData.image1}  other={JSONData.formData[0]} attributes={JSONData.formData[1]} />

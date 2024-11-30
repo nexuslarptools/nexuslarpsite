@@ -8,6 +8,8 @@ export default function CharactersListPage(props) {
               <div>
     <CharacterTable 
     isSelector={false}
+    FilterInit={props.FilterInit}
+    UnInitFiler={() => props.UnInitFiler()}
     appdata={props.selectedApproved ? props.appdata : props.undata} 
       selectedApproved={props.selectedApproved} 
       showApprovableOnly={props.showApprovableOnly}

@@ -1,4 +1,4 @@
-import PropTypes, { string } from 'prop-types';
+import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import CharacterWrapperNo from '../character/characterwrapperno';
@@ -41,6 +41,7 @@ const DisplayScreen = props => {
 
       const initForm = async () => {
 
+        if (props.id === 'character') {
         let i = 0;
         let j = 0;
         let fullListOrdered = [];
@@ -84,6 +85,51 @@ const DisplayScreen = props => {
         }
       }
         setFullItems(fullListOrdered);
+       }
+       else if (props.itemList !== undefined && props.itemList !== null) {
+        let i = 0;
+        let j = 0;
+        let fullListOrdered = [];
+        let fullItemList = [];
+        fullListOrdered.push([]);
+    
+    
+        if (props.itemList !== undefined && props.itemList !== null){
+        while (i < props.itemList.length) {
+    
+          let itemName = props.itemList[i].name
+          let k = 0;
+          let listItem = null;
+    
+        while (k < fullItemList.length) {
+          if (fullItemList[k].itemName ===  itemName) {
+            let itemtotal = fullItemList[k].total + 1;
+            listItem = { 
+              itemName: itemName,
+              total: itemtotal
+            }
+            fullItemList[k] = listItem
+            k = fullItemList.length;
+          }
+          k++;
+        }
+    
+          if (listItem === null) {
+           listItem = { 
+            itemName: itemName,
+            total: 1
+          }
+          }
+    
+          if (fullListOrdered[j].length === 9) {
+            fullListOrdered.push([]);
+            j++;
+          }
+          i++;
+        }
+      }
+        setFullItems(fullListOrdered);
+       }
       }
 
       const changePrintSides = () => {
@@ -182,7 +228,7 @@ setIsDoublesidePrint(toggle);
 
     const printFn = useReactToPrint({
         contentRef: charComponent,
-        documentTitle: props.character.name+' / '+props.character.seriesTitle
+        documentTitle: props.id === 'character' ?  props.character.name+' / '+props.character.seriesTitle : "items_" + Date().toLocaleString()
     });
 
 return (
@@ -228,15 +274,19 @@ return (
         <div className='sheet-print-info'>Note: On print, certain things may appear out of place if viewing it in the new browser window. They should move into correct place inside of the print view.</div>
       </div>
       <div ref={charComponent} className='character-sheet-printable' >
+
+      { props.id === 'character' ?
         <div>     
       <CharacterWrapperNo  extraGmSpaceOn={extraGmSpaceOn} 
       specialSkillSpace={specialSkillSpace} 
       fontSize={fontSize} fontType={fontType} 
       id="character" formJSON={props.formJSON} character={props.character} path={props.path} guid={props.guid}/>
-      </div>
+      </div> :
+      <></>
+       }
       <div>    
-      <ItemPaletteWrapper printfrontback={isDoublesidePrint} itemsList={props.character.starting_Items}
-       itemsList2={props.character.upgrade_Items}  fullItems={fullItems} />
+      <ItemPaletteWrapper printfrontback={isDoublesidePrint} itemsList={props.id === 'character' ? props.character.starting_Items : props.itemList}
+       itemsList2={props.id === 'character' ? props.character.upgrade_Items : []}  fullItems={props.id === 'character' ? fullItems : props.itemList} />
       </div>
       </div>
 </>
@@ -249,6 +299,8 @@ DisplayScreen.propTypes = {
     props: PropTypes.object,
     character: PropTypes.object,
     formJSON: PropTypes.object,
-    path: string,
-    guid: string
+    path: PropTypes.string,
+    guid: PropTypes.string,
+    id: PropTypes.string,
+    itemList: PropTypes.array
   }
