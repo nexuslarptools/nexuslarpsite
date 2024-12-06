@@ -71,8 +71,8 @@ const ItemTable = props => {
 
     let filteredRows = props.appdata?.iteList;
 
-    filteredRows = filteredRows.filter(item => item.name.toLocaleLowerCase().includes(filterState.ItemsFilter));
-    filteredRows = filteredRows.filter(item => (item.series === null && filterState.SeriesFilter === '') || (item.series !== null && item.series.toLocaleLowerCase().includes(filterState.SeriesFilter)));
+    filteredRows = filteredRows.filter(item => item.name.toLocaleLowerCase().includes(filterState.ItemsFilter.toLocaleLowerCase()));
+    filteredRows = filteredRows.filter(item => (item.series === null && filterState.SeriesFilter === '') || (item.series !== null && item.series.toLocaleLowerCase().includes(filterState.SeriesFilter.toLocaleLowerCase())));
     if (props.showApprovableOnly) {
       filteredRows = filteredRows.filter(item => (item.editbyUserGuid !== props.userGuid && item.firstapprovalbyuserGuid !== props.userGuid));
     }
@@ -332,7 +332,6 @@ const ItemTable = props => {
     })    
   }
 
-
 return (
   !displayState.display ? 
   <></>:
@@ -351,7 +350,12 @@ return (
   </> :
   <>
   { !props.isCharSheet ?
-   <button className="button-cancel" onClick={() => props.GoBack(false)}> Go Back </button> :
+  <> 
+   <button className="button-action" onClick={() => props.GoToPrint(true)}> View and Print </button>
+   <button className="button-cancel" onClick={() => props.GoBack(false)}> Go Back </button>
+
+   </>
+   :
    <button className="button-action" onClick={() => props.GoBack(false)}> Save and Return </button>
   }
   </>
@@ -707,5 +711,6 @@ KickItem: PropTypes.func,
 Edit: PropTypes.func,
 isSelector: PropTypes.bool,
 isCharSheet: PropTypes.bool,
-GoBack: PropTypes.func
+GoBack: PropTypes.func,
+GoToPrint: PropTypes.func
 }
