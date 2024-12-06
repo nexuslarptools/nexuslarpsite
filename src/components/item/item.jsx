@@ -8,6 +8,7 @@ import './_item.scss';
 import CompanionPlaceHolderItem from './companionplaceholderitem';
 import VehicleItem from './vehicleitem';
 import MechaItem from './mechaitem';
+import PlaceHolderItem from './placeholderitem';
 
 const Item = props => {
     return (
@@ -20,6 +21,13 @@ const Item = props => {
           <>            
           <div className='itemdisplay'>
           <CompanionPlaceHolderItem item={props.item} img={props.img}/> 
+          </div>
+          </>
+          :
+          props.item.isdoubleside === true && props.type === "sheet" ?
+          <>            
+          <div className='itemdisplay'>
+          <PlaceHolderItem item={props.item} img={props.img}/> 
           </div>
           </>
           :
