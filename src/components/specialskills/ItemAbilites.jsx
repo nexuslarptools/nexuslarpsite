@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Loading from '../../components/loading/loading';
+import { ArrowCircleUpRounded, ArrowDownwardSharp, ArrowUpwardSharp } from '@mui/icons-material';
 
 const ItemAbilites = props => {
   const [initstate, setInitState] = useState(true)
@@ -74,6 +75,12 @@ const ItemAbilites = props => {
             ? <>  
                 <div className='power'>
                   <button className='button-cancel remove-ability' onClick={(e) => {e.preventDefault(); props.hideAbility(props.abilityState)}}>Remove Ability</button>
+                  <div className='button-action reorder-ability'  onClick={(e) => {e.preventDefault(); props.DownAbility(props.abilityState.arraynum)}}>
+                  <ArrowDownwardSharp />
+                  </div>
+                  <div className='button-action reorder-ability'  onClick={(e) => {e.preventDefault(); props.UpAbility(props.abilityState.arraynum)}}>
+                  <ArrowUpwardSharp />
+                  </div>
                   <FormGroup>
                     <div className='input-pair'>
                       <FormLabel>Ability Name:</FormLabel>
@@ -121,5 +128,7 @@ ItemAbilites.propTypes = {
   abilityState: PropTypes.object,
   itemTags: PropTypes.array,
   onFillIn: PropTypes.func,
-  hideAbility: PropTypes.func
+  hideAbility: PropTypes.func,
+  DownAbility: PropTypes.func,
+  UpAbility: PropTypes.func
 }

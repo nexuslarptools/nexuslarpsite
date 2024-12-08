@@ -10,10 +10,23 @@ import ItemCreate from './ItemCreate';
 import formJSON from '../../jsonfiles/iteminput.json';
 import ItemEdit from './ItemEdit';
 import ItemSelector from '../../components/itemselector/itemselector';
+import { ClickAwayListener, css, keyframes, styled } from '@mui/material';
+import { useSnackbar } from '@mui/base';
 
 
 export default function ItemsIndex() {
   AuthRedirect(1)
+
+  const handleSnackClose = () => {
+    setSnackOpen({isOpen:false,
+      text: ''});
+  }
+
+  const { getRootProps } = useSnackbar({
+    onClose: handleSnackClose,
+    open,
+    autoHideDuration: 5000,
+  });
 
       const approvQuery = useGetData('listApprovedItems', '/api/v1/ItemSheetApproveds/FullListWithTagsNoImages');  
       const unapprovQuery = useGetData('listUnapprovedItems', '/api/v1/ItemSheets/FullListWithTagsNoImages');
@@ -31,6 +44,14 @@ export default function ItemsIndex() {
       const [isCreate, setIsCreate] = useState(false);
       const [isSelect, setIsSelect] = useState(false);
       const [isEdit, setIsEdit] = useState({isEditing: false, guid: null});
+      const [snackOpen, setSnackOpen] = useState(
+        {isOpen:false,
+        text: ''});
+  
+     const OpenSnack = async (e) => {
+      await setSnackOpen(        {isOpen:true,
+        text: e});
+     }
 
       const ToggleSwitch = async (e) => {
             let toggled=itemsState[e];
@@ -103,9 +124,11 @@ return (
   selectedApproved={itemsState.selectedApproved} 
   commentFilterOn={itemsState.commentFilter}
   showApprovableOnly={itemsState.showApprovableOnly}
+  readyApproved={itemsState.readyApproved}
   ToggleSwitch={() => ToggleSwitch('selectedApproved')}
   ToggleCommentSwitch={() => ToggleSwitch('commentFilter')}
   ToggleApprovableSwitch={() => ToggleSwitch('showApprovableOnly')}
+  ToggleApprovReadySwitch={() => ToggleSwitch('readyApproved')}
   DirectToItem={(path, guid) => DirectToItem(path, guid)}
   NewItemLink={(e) => NewItemLink(e)}
   NavToSelectItems={() => setIsSelect(true)}
@@ -128,6 +151,7 @@ return (
   ToggleSwitch={() => ToggleSwitch('selectedApproved')}
   ToggleCommentSwitch={() => ToggleSwitch('commentFilter')}
   ToggleApprovableSwitch={() => ToggleSwitch('showApprovableOnly')}
+  ToggleApprovReadySwitch={() => ToggleSwitch('readyApproved')}
   GoBack={() => setIsSelect(false)}
   UpdateItemList={() => void 0}
   />
@@ -135,7 +159,7 @@ return (
 : 
 <>
 <ItemEdit formJSON={formJSON} tagslist={allTagsQuery.data} guid={isEdit.guid} path={isEdit.path}
-GoBack ={() => GoBackFromCreateEdit()} />
+OpenSnack ={(e) => OpenSnack(e)} GoBack ={() => GoBackFromCreateEdit()} />
 </>
  :
 <>
@@ -148,9 +172,49 @@ GoBack ={() => GoBackFromCreateEdit()} />
 GoBackToList={() => GoBackToList()} />
 </>
 }
+{snackOpen.isOpen ? (
+        <ClickAwayListener onClickAway={() => handleSnackClose()}>
+          <CustomSnackBar {...getRootProps()}>{snackOpen.text}</CustomSnackBar>
+        </ClickAwayListener>
+      ) : null}
 </>
  )
 }
+
+
+const snackbarInRight = keyframes`
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+`;
+
+const CustomSnackBar = styled('div')(
+  ({ theme }) => css`
+    position: fixed;
+    z-index: 5500;
+    display: flex;
+    right: 16px;
+    bottom: 16px;
+    left: auto;
+    justify-content: space-between;
+    max-width: 560px;
+    min-width: 300px;
+    background-color: ${'#fff'};
+    border-radius: 8px;
+    border: 1px solid ${'#DAE2ED'};
+    box-shadow: ${`0 2px 8px ${'#DAE2ED'}`};
+    padding: 0.75rem;
+    color: ${'#1C2025'};
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 600;
+    animation: ${snackbarInRight} 200ms;
+    transition: transform 0.2s ease-out;
+  `
+);
 
 ItemsIndex.propTypes = {
   NewItemLink: PropTypes.func,

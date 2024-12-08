@@ -35,6 +35,8 @@ const CharacterEditForm = (props) => {
   //const handleFormSubmit = (data) => SubmitForm(data);
   const [JSONData, setJSONData] = useState([]);
   const [gmNotes, setGMNotes] = useState('');
+  const [image1change, set1ImageChange] = useState(false);
+  const [image2change, set2ImageChange] = useState(false);
 
   const [tagState, setTagState] = useState({
     showResult: false,
@@ -197,7 +199,7 @@ const CharacterEditForm = (props) => {
       gmnotes: gmNotes,
       readyforapproval: fields.readyforapproval
     }
-    props.Submit(allData, finalImage, finalImage2);
+    props.Submit(allData, finalImage, finalImage2, image1change, image2change);
   }
 
 
@@ -264,8 +266,12 @@ const CharacterEditForm = (props) => {
     const loopDataWithNulls = [];
 
     if (props.initForm.showResult) {
-      setFinalImage(props.img);
-      setFinalImage2(props.img2)
+      if (!image1change) {
+        setFinalImage(props.img);
+      }
+      if (!image2change) {
+        setFinalImage2(props.img2)
+      }
       if (props.initForm.apiMessage.fields.Special_Skills) {
         for (
           let i = 0;
@@ -499,6 +505,47 @@ isNew: true
     });
   }
 
+  const MoveAbilityDown = (rank) => {
+    if (rank !== abilitesFormsState.abilitiesFormList.length) {
+      let data = [...abilitesFormsState.abilitiesFormList];
+      let temp = data[rank+1];
+      temp.arraynum = rank;
+      data[rank+1] = data[rank];
+      data[rank+1].arraynum = rank + 1
+      data[rank] = temp;
+
+      setAbilitesForms({
+        ...abilitesFormsState,
+        abilitiesFormList: data
+      });
+      setAbilities({
+        ...abilitiesState,
+        abilitiesList: data
+      });
+    }
+  }
+
+  const MoveAbilityUp = (rank) => {
+      if (rank > 0) {
+      let data = [...abilitesFormsState.abilitiesFormList];
+      let temp = data[rank-1];
+      temp.arraynum = rank;
+      data[rank-1] = data[rank];
+      data[rank-1].arraynum = rank -1
+      data[rank] = temp;
+
+      setAbilitesForms({
+        ...abilitesFormsState,
+        abilitiesFormList: data
+      });
+      setAbilities({
+        ...abilitiesState,
+        abilitiesList: data
+      });
+    }
+  }
+
+
   const addAbilityForm = (e) => {
     e.preventDefault();
     const i = abilitiesState.abilitiesList.length;
@@ -526,14 +573,12 @@ isNew: true
 
   const hideAbilityForm = (e) => {
     handleDeleteClose(e);
-    e.visible = false;
     let loopData = [];
 
     for (let j = 0; j < abilitiesState.abilitiesList.length; j++) {
-      if (abilitiesState.abilitiesList[j].arraynum === e.arraynum) {
-        loopData.push(e);
-      } else {
+      if (!abilitiesState.abilitiesList[j].arraynum === e.arraynum) {
         loopData.push(abilitiesState.abilitiesList[j]);
+        loopData[j].arraynum = j;
       }
     }
     setAbilities({
@@ -544,22 +589,9 @@ isNew: true
     loopData = [];
 
     for (let k = 0; k < abilitesFormsState.abilitiesFormList.length; k++) {
-      if (k === e.arraynum) {
-        const newdata = JSON.parse(
-          JSON.stringify({
-            visible: false,
-            arraynum: k,
-            Special: {
-              Name: abilitesFormsState.abilitiesFormList[k].Name,
-              Cost: abilitesFormsState.abilitiesFormList[k].Cost,
-              Rank: abilitesFormsState.abilitiesFormList[k].Rank,
-              Description: abilitesFormsState.abilitiesFormList[k].Description
-            }
-          })
-        );
-        loopData.push(newdata);
-      } else {
+      if (!k === e.arraynum) {
         loopData.push(abilitesFormsState.abilitiesFormList[k]);
+        loopData[k].arraynum = k;
       }
     }
     setAbilitesForms({
@@ -636,10 +668,12 @@ isNew: true
   const updateImageData = async (imagename, e) => {
     if (imagename === '1') 
     {
+        set1ImageChange(true);
         setFinalImage(e.FinalImage);
     }
     else 
     {
+        set2ImageChange(true);
         setFinalImage2(e.FinalImage);
     }
   }
@@ -832,6 +866,8 @@ isNew: true
                         hideAbility={hideAbilityForm}
                         onFillIn={(rank, fieldname, value) => updateAbilityForms(rank, fieldname, value)}
                         SetAbilityValue={updateValue}
+                        DownAbility={(e) => MoveAbilityDown(e)}
+                        UpAbility={(e) => MoveAbilityUp(e)}
                       />
                       
                     ))}
@@ -929,8 +965,7 @@ isNew: true
                 />
               </div>
             </div>
-          <div>
-              
+          <div>  
               {reviewsState.length > 0 ?
               reviewsState.map(message => 
                 <ReviewNotesDisplay key={message} message={message} RemoveReview={(id) => RemoveReview(id)} />)
@@ -946,7 +981,7 @@ isNew: true
 
           
           <div className="edit-bottom">
-            <button className="button-cancel" onClick={() => props.GoBack()}>Cancel</button>
+            <button className="button-cancel" onClick={() => props.GoBack()}>Go Back</button>
             <button className="button-save" onClick={handleSubmit(handleFormSubmit)}>Save Sheet</button>
             <button className="button-action" onClick={() => togglePreview(true)}>Preview</button>
             {props.initForm.showResult && props.initForm.apiMessage.secondapprovalbyUserGuid === null

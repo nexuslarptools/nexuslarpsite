@@ -19,8 +19,10 @@
 					"Companion",
 					"Document",
 					"Food",
+					"Furniture",
 					"Generic",
 					"Instrument",
+					"Location",
 					"Material",
 					"Mecha",
 					"Medical",
@@ -93,6 +95,15 @@
 			"Confidence": {
 				"Type": "Input",
 				"Label": "Confidence",
+				"Display": true,
+				"Types": [
+					"Companion",
+					"Pokemon"
+				]
+			},
+			"Charisma": {
+				"Type": "Input",
+				"Label": "Charisma",
 				"Display": true,
 				"Types": [
 					"Companion",
@@ -180,15 +191,6 @@
 					"Pokemon"
 				]
 			},
-			"INTEGRITY": {
-				"Type": "Input",
-				"Label": "Integrity",
-				"Display": true,
-				"Types": [
-					"Mecha",
-					"Vehicle"
-				]
-			},
 			"Energy": {
 				"Type": "Input",
 				"Label": "Energy",
@@ -232,69 +234,38 @@
 		"Values": {
 			"EnergyCost": {
 				"Type": "Input",
-				"Label": "EnergyCost",
+				"Label": "Energy Cost",
 				"Display": true,
 				"Types": [
 					"Spell",
 					"Power"
 				]
 			},
+			"Magic": {
+				"Type": "Input",
+				"Label": "Magic",
+				"Display": true,
+				"ToolTip": "The difficulty for a magic user to Learn this Spell.",
+				"Types": ["Spell"]
+			},
 			"INTEGRITY": {
 				"Type": "Input",
 				"Label": "Integrity",
 				"Display": true,
-				"Types": [
-					"Generic",
-					"Tech",
-					"Weapon",
-					"Armor",
-					"Clothing",
-					"Food",
-					"Instrument",
-					"Medical",
-					"Artifact",
-					"Unique",
-					"Document",
-					"Material",
-					"Valuable",
-					"Ammo"
-				]
-			},
-			"Health": {
-				"Type": "Input",
-				"Label": "Health",
-				"Display": true,
-				"Types": [
-					"Companion",
-					"Pokemon"
-				]
+				"Types": ["All"]
 			},
 			"HS": {
 				"Type": "Input",
 				"Label": "Hide Stuff Modifier",
 				"Display": true,
-				"Types": [
-					"Generic",
-					"Tech",
-					"Weapon",
-					"Armor",
-					"Clothing",
-					"Food",
-					"Instrument",
-					"Medical",
-					"Artifact",
-					"Unique",
-					"Document",
-					"Material",
-					"Valuable",
-					"Ammo"
-				]
+				"Types": ["All"]
 			},
 			"Value": {
 				"Type": "Dropdown",
 				"Label": "Item Cost",
 				"Display": true,
 				"enums": [
+					"Remove Value",
 					"Valueless",
 					"1",
 					"2",
@@ -329,15 +300,10 @@
 					"Material",
 					"Valuable",
 					"Ammo",
-					"Power"
-				]
-			},
-			"readyforapproval": {
-				"Type": "Checkbox",
-				"Label": "Item Is Ready for Approval",
-				"Display": true,
-				"Types": [
-					"All"
+					"Power",
+					"Supplies",
+					"Furniture",
+					"Location"
 				]
 			}
 		}

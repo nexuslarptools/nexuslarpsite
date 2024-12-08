@@ -463,7 +463,7 @@ const Character = props => {
                   <div className='gm-notes'>
                     <div className='gm-notes-heading'>GM Notes for {props.character.name}</div>
                     <div className='gm-notes-text'>
-                      {props.character.gmnotes.split('\n').map(str => <p key={Math.Random()}> {str}</p>)}
+                      {props.character.gmnotes.split('\n').map(str => <p key={Math.random}> {str}</p>)}
                       </div>
                   </div>
                 </div>
@@ -472,7 +472,7 @@ const Character = props => {
                     <div className='gm-notes'>
                       <div className='gm-notes-heading'>GM Notes for {props.character.name} [1]</div>
                       <div className='gm-notes-text'>
-                        {extraGmSpaceOn.page1.split('\n').map(str => <p key={Math.Random()}>{str}</p>)}
+                        {extraGmSpaceOn.page1.split('\n').map(str => <p key={Math.random}>{str}</p>)}
                         </div>
                     </div>
                   </div>
@@ -480,7 +480,7 @@ const Character = props => {
                   <div className='gm-notes'>
                     <div className='gm-notes-heading'>GM Notes for {props.character.name} [2]</div>
                     <div className='gm-notes-text'>
-                      {extraGmSpaceOn.page2.split('\n').map(str => <p key={Math.Random()}>{str}</p>)}
+                      {extraGmSpaceOn.page2.split('\n').map(str => <p key={Math.random}>{str}</p>)}
                       </div>
                   </div>
                   </div> 

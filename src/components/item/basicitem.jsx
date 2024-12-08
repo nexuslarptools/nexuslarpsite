@@ -108,13 +108,13 @@ const specialskillsallowed = [
                   : <></>
                 }
               </div>
-              {props.item.fields !== undefined && props.item.fields  !== null && 
-          props.item.fields.Description!== undefined && props.item.fields.Description !== null ?
-          props.item.fields.Description.split("\n").map((i,key) => {
-            return <div className="item-description" key={key}>{i}</div>;
-        }) :
-        <div> </div>
-              }
+              {props.item.fields.Description !== undefined && props.item.fields.Description !== null ?
+              props.item.fields.Description.split('\n').map((i,key) => {
+            return <div className="item-Description" key={key}><p>{
+              i.split('--').map((s, j) => j % 2 !== 0 ? <><u> {s} </u></> : (' ' + s ))
+              }</p></div>;
+        })
+            : <></>}
                 {
                   props.item.fields.Special_Skills != null && specialskillsallowed.some(val => val === props.item.fields.TYPE)
                     ? <div>
@@ -124,6 +124,12 @@ const specialskillsallowed = [
                         <SpecialSkillsDisplay skill={skill} key={Math.random} /> 
                       :<></>)}
                       </div>
+                    : <></>
+                }
+                {
+                  props.item.fields.Magic != null && props.item.fields.Magic != ''
+                  && !props.item.isdoubleside
+                    ? <div>Magic: {props.item.fields.Magic}</div>
                     : <></>
                 }
               {
