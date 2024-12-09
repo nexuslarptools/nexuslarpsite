@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Loading from '../../components/loading/loading';
+import { ArrowDownwardSharp, ArrowUpwardSharp } from '@mui/icons-material';
 
 const ItemAbilites = props => {
   const [initstate, setInitState] = useState(true)
@@ -17,6 +18,22 @@ const ItemAbilites = props => {
     tags: [],
     initialTags: []
   })
+
+   useEffect(() => {
+    if (props.reinit === true) {
+
+      setFormstate({
+        ...formState,
+        name: props.abilityState.Name,
+        rank: props.abilityState.arraynum,
+        energyCost: props.abilityState.Cost,
+        desc: props.abilityState.Description,
+        visible: true,
+        tags: props.abilityState.Tags
+      })
+      props.InitComplete(props.abilityState.arraynum);
+   }
+  }, [props.reinit]) 
 
   useEffect(() => {
     const controller = new AbortController();
@@ -74,6 +91,12 @@ const ItemAbilites = props => {
             ? <>  
                 <div className='power'>
                   <button className='button-cancel remove-ability' onClick={(e) => {e.preventDefault(); props.hideAbility(props.abilityState)}}>Remove Ability</button>
+                  <div className='button-action reorder-ability'  onClick={(e) => {e.preventDefault(); props.DownAbility(props.abilityState.arraynum)}}>
+                  <ArrowDownwardSharp />
+                  </div>
+                  <div className='button-action reorder-ability'  onClick={(e) => {e.preventDefault(); props.UpAbility(props.abilityState.arraynum)}}>
+                  <ArrowUpwardSharp />
+                  </div>
                   <FormGroup>
                     <div className='input-pair'>
                       <FormLabel>Ability Name:</FormLabel>
@@ -96,8 +119,10 @@ const ItemAbilites = props => {
                       <Autocomplete
                         multiple
                         id={'multiple-limit-tags' + props.abilityState.arraynum}
-                        defaultValue={props.abilityState.initialTags}
+                        //defaultValue={props.abilityState.initialTags !== undefined &&
+                        //props.abilityState.initialTags !== null ? props.abilityState.initialTags : []}
                         options={props.itemTags}
+                        value={props.abilityState.FullTags}
                         getOptionLabel={(option) => option.name}
                         onChange={(event, val) => updateItemTags(val)}
                         renderInput={(params) => (
@@ -121,5 +146,9 @@ ItemAbilites.propTypes = {
   abilityState: PropTypes.object,
   itemTags: PropTypes.array,
   onFillIn: PropTypes.func,
-  hideAbility: PropTypes.func
+  hideAbility: PropTypes.func,
+  DownAbility: PropTypes.func,
+  UpAbility: PropTypes.func,
+  InitComplete: PropTypes.func,
+  reinit: PropTypes.bool
 }

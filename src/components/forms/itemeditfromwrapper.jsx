@@ -10,7 +10,6 @@ const ItemEditFormWrapper = (props) => {
         || props.initForm.apiMessage === undefined || props.initForm.apiMessage === null || props.initForm.apiMessage.img1 ===undefined
           ? null : props.initForm.apiMessage.img1 ));
     
-          
         if ( imgUrl.isLoading ) return (<div>
             <Loading />
             </div>)
@@ -28,7 +27,7 @@ const ItemEditFormWrapper = (props) => {
             seriesList={props.seriesList}
             initForm={props.initForm}
             larpRunTags={props.larpRunTags}
-            SubmitForm={(e, f) => props.SubmitForm(e, f)}
+            SubmitForm={(e, f, g) => props.SubmitForm(e, f, g)}
             GoBack={() => props.GoBack()}
             Approve={() => props.Approve()}
             currenUserGuid={props.currenUserGuid}

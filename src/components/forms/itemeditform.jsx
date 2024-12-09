@@ -13,6 +13,8 @@ import {
   FormControlLabel, FormLabel, Input, Box, Checkbox, Select, MenuItem,
   FormHelperText
 } from '@mui/material';
+import ReviewNotesDisplay from '../reviewnotes/reviewnotesdisplay';
+import ReviewNotesForm from '../reviewnotes/reviewnotesform';
 
 const ItemEditForm = (props) => {
     const formRef = React.useRef();
@@ -59,6 +61,8 @@ const ItemEditForm = (props) => {
       taglocation: -1
     });
 
+    const [reviewsState, setReviewsState] = useState([]);
+
     const [abilitesFormsState, setAbilitesForms] = useState({
       abilitiesFormList: JSON.parse(
         JSON.stringify([{ arraynum: 0, visible: false }])
@@ -92,6 +96,7 @@ const ItemEditForm = (props) => {
     });
 
     const [formdata, setFormdata] = useState(null);
+    const [imgUpdated, setImgUpdated] = useState(false);
 
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(
       {open:false,
@@ -138,7 +143,10 @@ const ItemEditForm = (props) => {
           await setIsdoubleSide(props.initForm.apiMessage.isdoubleside);
           await setItemData(props.initForm.apiMessage);
           await setSelectedOption(props.initForm.apiMessage.fields.TYPE);
-          await setImageLocation(props.img);
+
+          if (!imgUpdated) {
+            await setImageLocation(props.img);
+          }
 
           if (props.initForm.apiMessage.fields.Special_Skills) {
             for (
@@ -168,7 +176,7 @@ const ItemEditForm = (props) => {
                     Rank: oldRank,
                     Description: oldDescription,
                     Tags: oldTags,
-                    initialTags: initial
+                    FullTags: initial
 
                 })
               );
@@ -199,7 +207,9 @@ const ItemEditForm = (props) => {
                     Cost: oldCost,
                     Rank: oldRank,
                     Description: oldDescription,
-                    Tags: oldTags
+                    Tags: oldTags,
+                    FullTags: initial
+
                 })
               )
               loopDataWithNulls.push(newData);
@@ -238,7 +248,7 @@ const ItemEditForm = (props) => {
                     Rank: oldRank,
                     Description: oldDescription,
                     Tags: oldTags,
-                    initialTags: initial
+                    FullTags: initial
 
                 })
               );
@@ -269,7 +279,8 @@ const ItemEditForm = (props) => {
                     Cost: oldCost,
                     Rank: oldRank,
                     Description: oldDescription,
-                    Tags: oldTags
+                    Tags: oldTags,
+                    FullTags: initial
                 })
               )
               backLoopDataWithNulls.push(newData);
@@ -311,6 +322,30 @@ const ItemEditForm = (props) => {
           });
       }
 
+      const AddReview =(message) => {
+        const newReviewList = [];
+        newReviewList.push({
+          createdate: '2024-01-28T22:18:41.687672',
+          createdby: 'Wizard',
+    createdbyuserGuid: 'c3b9af32-8676-11ed-b512-df76a0797704',
+    id: 1,
+    isActive: true,
+    message: message,
+    isNew: true
+        });
+        setReviewsState(newReviewList);
+      }
+
+      const RemoveReview = (id) => {
+        const newReviewList = [];
+        reviewsState.forEach(element => {
+          if (element.id !== id) {
+            newReviewList.push(element);
+          }
+        });
+        setReviewsState(newReviewList);
+      }
+
       const ToggleDoubleSide = async () => {
         let currdeoubleside = !IsdoubleSide;
         setIsdoubleSide(currdeoubleside);
@@ -318,6 +353,15 @@ const ItemEditForm = (props) => {
         await setItemData({
           ...itemData,
           isdoubleside: currdeoubleside
+        });
+      }
+
+      const ToggleReadyForApprove = async () => {
+        let toggleval = !itemData.readyforapproval
+
+        await setItemData({
+          ...itemData,
+          readyforapproval: toggleval
         });
       }
 
@@ -332,6 +376,7 @@ const ItemEditForm = (props) => {
           data.Special_Skills = fullist;
         }
         let outputbody= {
+          readyforapproval:itemData.readyforapproval,
           Fields: {
             Name:data.Name
           },
@@ -387,12 +432,17 @@ const ItemEditForm = (props) => {
         {
           outputbody.Back = itemData.back;
         }
-        props.SubmitForm(outputbody, imageLocation);
+        props.SubmitForm(outputbody, imageLocation, imgUpdated);
       }
 
       const updateValue = async (e, i) => {
         if (i !== true && i !== false) {
-        await setValue(e.target.name, e.target.value);
+        if (e.target.value.includes("Remove") && !e.target.name.includes("Desc")) {
+          await setValue(e.target.name, null);
+        }
+        else {
+          await setValue(e.target.name, e.target.value);
+        }
         
         if (e.target.name === 'Description2ndSide') {
           let back = itemData.back;
@@ -406,7 +456,14 @@ const ItemEditForm = (props) => {
           });
         } else {
         let itemFields = itemData.fields;
-        itemFields[e.target.name] = e.target.value;
+
+        if (e.target.value.includes("Remove") && !e.target.name.includes("Desc")) {
+          itemFields[e.target.name] = null;
+        }
+        else {
+          itemFields[e.target.name] = e.target.value;
+        }
+
         await setItemData({
           ...itemData,
           fields: itemFields
@@ -587,13 +644,10 @@ const ItemEditForm = (props) => {
       handleDeleteClose(e);
       e.visible = false;
 
-   
       let loopData = [];
-  
+
       for (let j = 0; j < abilitiesState.abilitiesList.length; j++) {
-        if (abilitiesState.abilitiesList[j].arraynum === e.arraynum) {
-          loopData.push(e);
-        } else {
+        if (abilitiesState.abilitiesList[j].arraynum !== e.arraynum) {
           loopData.push(abilitiesState.abilitiesList[j]);
         }
       }
@@ -613,10 +667,10 @@ const ItemEditForm = (props) => {
      loopData = [];
   
       for (let k = 0; k < abilitesFormsState.abilitiesFormList.length; k++) {
-        if (k === e.arraynum) {
+        if (!k === e.arraynum) {
           const newdata = JSON.parse(
             JSON.stringify({
-              visible: false,
+              visible: true,
               arraynum: k,
               Special: {
                 Name: abilitesFormsState.abilitiesFormList[k].Name,
@@ -627,8 +681,6 @@ const ItemEditForm = (props) => {
             })
           );
           loopData.push(newdata);
-        } else {
-          loopData.push(abilitesFormsState.abilitiesFormList[k]);
         }
       }
       setAbilitesForms({
@@ -645,9 +697,7 @@ const ItemEditForm = (props) => {
       let loopData = [];
   
       for (let j = 0; j < abilitiesState.abilitiesListBack.length; j++) {
-        if (abilitiesState.abilitiesListBack[j].arraynum === e.arraynum) {
-          loopData.push(e);
-        } else {
+        if (abilitiesState.abilitiesListBack[j].arraynum !== e.arraynum) {
           loopData.push(abilitiesState.abilitiesListBack[j]);
         }
       }
@@ -690,6 +740,89 @@ const ItemEditForm = (props) => {
       });
     
     }
+    const MoveAbilityDown = (rank) => {
+      if (rank !== abilitesFormsState.abilitiesFormList.length -1) {
+        let data = [...abilitesFormsState.abilitiesFormList];
+        let temp = data[rank+1];
+        temp.arraynum = rank;
+        temp.reinit = true;
+        data[rank+1] = data[rank];
+        data[rank+1].arraynum = rank + 1
+        data[rank+1].reinit = true;
+        data[rank+1].arraynum = rank + 1
+        data[rank] = temp;
+
+        setAbilitesForms({
+          ...abilitesFormsState,
+          abilitiesFormList: data
+        });
+        setAbilities({
+          ...abilitiesState,
+          abilitiesList: data
+        });
+
+        let fields = itemData.fields;
+        fields.Special_Skills=data;
+  
+        setItemData({
+          ...itemData,
+          fields: fields
+        });
+      }
+    }
+
+    const MoveAbilityUp = (rank) => {
+        if (rank > 0) {
+        let data = [...abilitesFormsState.abilitiesFormList];
+        let temp = data[rank-1];
+        temp.arraynum = rank;
+        temp.reinit = true;
+        data[rank-1] = data[rank];
+        data[rank-1].arraynum = rank -1;
+        data[rank-1].reinit = true;
+        data[rank] = temp;
+
+        setAbilitesForms({
+          ...abilitesFormsState,
+          abilitiesFormList: data
+        });
+        setAbilities({
+          ...abilitiesState,
+          abilitiesList: data
+        });
+
+        let fields = itemData.fields;
+        fields.Special_Skills=data;
+  
+        setItemData({
+          ...itemData,
+          fields: fields
+        });
+      }
+    }
+
+    const AbilityInitComplete = async (e) => {
+      let data = [...abilitesFormsState.abilitiesFormList];
+      data[e].reinit=false;
+
+      setAbilitesForms({
+        ...abilitesFormsState,
+        abilitiesFormList: data
+      });
+      setAbilities({
+        ...abilitiesState,
+        abilitiesList: data
+      });
+
+      let fields = itemData.fields;
+      fields.Special_Skills=data;
+
+      setItemData({
+        ...itemData,
+        fields: fields
+      });
+
+    }
   
     const updateAbilityForms = (rank, fieldname, value) => {
 
@@ -700,7 +833,8 @@ const ItemEditForm = (props) => {
           Cost: null,
           Rank: null,
           Description: '',
-          Tags: []
+          Tags: [],
+          FullTags: []
       }
 
       let found = false;
@@ -713,7 +847,14 @@ const ItemEditForm = (props) => {
 
       ability[fieldname] = value;
 
-  
+      if(fieldname === 'Tags'){
+          let FullTagList = [];
+          value.forEach(guid => {
+            FullTagList.push(props.tagslist.abilityTags.find((tagf) => tagf.guid === guid))
+          });
+          ability.FullTags = FullTagList;
+        }
+
       const loopData = [];
       const itemformData = [];
   
@@ -742,13 +883,109 @@ const ItemEditForm = (props) => {
         abilitiesList: loopData
       });
 
-      let feilds = itemData.fields;
-      feilds.Special_Skills=itemformData;
+      let fields = itemData.fields;
+      fields.Special_Skills=itemformData;
 
       setItemData({
         ...itemData,
-        fields: feilds
+        fields: fields
       });
+    }
+
+
+    const MoveAbilityBackDown = async (rank) => {
+      if (rank !== abilitesBackFormsState.abilitiesFormList.length - 1) {
+        let data = [...abilitesBackFormsState.abilitiesFormList];
+        let temp = data[rank+1];
+        temp.arraynum = rank;
+        temp.reinit = true;
+        data[rank+1] = data[rank];
+        data[rank+1].arraynum = rank + 1
+        data[rank+1].reinit = true;
+        data[rank] = temp;
+
+        setAbilitesBackForms({
+          ...abilitesBackFormsState,
+          abilitiesFormList: data
+        });
+        setAbilities({
+          ...abilitiesState,
+          abilitiesListBack: data
+        });
+  
+        let back = itemData.back;
+        if (back.fields === undefined || back.fields == null)
+        {
+          back.fields={};
+        }
+        back.fields.Special_Skills=data;
+  
+        await setItemData({
+          ...itemData,
+          back: back
+        });
+      }
+    }
+
+    const MoveAbilityBackUp = async (rank) => {
+        if (rank > 0) {
+        let data = [...abilitesBackFormsState.abilitiesFormList];
+        let temp = data[rank-1];
+        temp.arraynum = rank;
+        temp.reinit = true;
+        data[rank-1] = data[rank];
+        data[rank-1].arraynum = rank -1
+        data[rank-1].reinit = true;
+        data[rank] = temp;
+
+        setAbilitesBackForms({
+          ...abilitesBackFormsState,
+          abilitiesFormList: data
+        });
+        setAbilities({
+          ...abilitiesState,
+          abilitiesListBack: data
+        });
+  
+        let back = itemData.back;
+        if (back.fields === undefined || back.fields == null)
+        {
+          back.fields={};
+        }
+        back.fields.Special_Skills=data;
+  
+        await setItemData({
+          ...itemData,
+          back: back
+        });
+      }
+    }
+
+    const AbilityInitBackComplete = async (e) => {
+      let data = [...abilitesBackFormsState.abilitiesFormList];
+      data[e].reinit=false;
+
+      setAbilitesBackForms({
+        ...abilitesBackFormsState,
+        abilitiesFormList: data
+      });
+      setAbilities({
+        ...abilitiesState,
+        abilitiesListBack: data
+      });
+
+      let back = itemData.back;
+      if (back.fields === undefined || back.fields == null)
+      {
+        back.fields={};
+      }
+      back.fields.Special_Skills=data;
+
+      await setItemData({
+        ...itemData,
+        back: back
+      });
+
     }
 
 
@@ -761,7 +998,8 @@ const ItemEditForm = (props) => {
           Cost: null,
           Rank: null,
           Description: '',
-          Tags: []
+          Tags: [],
+          FullTags: []
       }
 
       let found = false;
@@ -773,6 +1011,14 @@ const ItemEditForm = (props) => {
       }
 
       ability[fieldname] = value;
+
+      if(fieldname === 'Tags'){
+        let FullTagList = [];
+        value.forEach(guid => {
+          FullTagList.push(props.tagslist.abilityTags.find((tagf) => tagf.guid === guid))
+        });
+        ability.FullTags = FullTagList;
+      }
 
   
       const loopData = [];
@@ -817,7 +1063,8 @@ const ItemEditForm = (props) => {
     }
 
     const setImageData = async (e) => {
-      setImageLocation(e.FinalImage);
+      await setImageLocation(e.FinalImage);
+      await setImgUpdated(true);
     }
 
     return (
@@ -829,7 +1076,8 @@ const ItemEditForm = (props) => {
                 <div className="input-pair">
                 <FormLabel>Item Image</FormLabel>
                   <PhotoCropper description={'Item '} width={4.9} length={3} ReturnImage={(e) => setImageData(e)}  />
-                  <div className='image-note'><b>Note:</b> Please keep images to no more than 400px in width.</div>
+                  <div className='image-note'><b>Note:</b> Please keep images to no more than 400px in width.  
+                  You may need to add white space on all sides. </div>
                 </div>
               <div>
                 Current Item Preview 
@@ -1081,9 +1329,13 @@ const ItemEditForm = (props) => {
                             itemTags={props.tagslist.abilityTags}
                             key={ability.arraynum}
                             abilityState={ability}
+                            reinit={ability.reinit}
                             hideAbility={hideAbilityForm}
                             onFillIn={(rank, fieldname, value) => updateAbilityForms(rank, fieldname, value)}
                             SetAbilityValue={updateValue}
+                            DownAbility={(e) => MoveAbilityDown(e)}
+                            UpAbility={(e) => MoveAbilityUp(e)}
+                            InitComplete={(e) => AbilityInitComplete(e)}
                           />
                         )) :
                         abilitiesState.abilitiesListBack.map((ability) => (
@@ -1095,6 +1347,9 @@ const ItemEditForm = (props) => {
                             hideAbility={hideAbilityBackForm}
                             onFillIn={(rank, fieldname, value) => updateAbilityBackForms(rank, fieldname, value)}
                             SetAbilityValue={updateValue}
+                            DownAbility={(e) => MoveAbilityBackDown(e)}
+                            UpAbility={(e) => MoveAbilityBackUp(e)}
+                            InitComplete={(e) => AbilityInitBackComplete(e)}
                           />
                         ))
                         }
@@ -1143,6 +1398,13 @@ const ItemEditForm = (props) => {
                                     props.initForm.showResult === true ? props.initForm.apiMessage.isdoubleside  : false } />}
                                 label='Is Double Sided'
                                 />
+       <FormControlLabel control={<Checkbox 
+                                onChange={()  => ToggleReadyForApprove()} 
+                                  defaultChecked={ props.initForm !== undefined &&
+                                    props.initForm !== null && 
+                                    props.initForm.showResult === true ? props.initForm.apiMessage.readyforapproval  : false } />}
+                                label='Item Is Ready for Approval'
+                                />
 
         </div>
         <div className="character-sheet-gm-notes">
@@ -1166,8 +1428,19 @@ const ItemEditForm = (props) => {
                   </div>
                 </div>
 
+          <div>  
+              {reviewsState.length > 0 ?
+              reviewsState.map(message => 
+                <ReviewNotesDisplay key={message} message={message} RemoveReview={(id) => RemoveReview(id)} />)
+                : <ReviewNotesForm  AddReview={(e) => AddReview(e)} type={'Item'} />
+              }
+          <div>
+            {'&nbsp'}
+            </div>
+            </div>
+
         <div className="edit-bottom">
-                      <button className="button-cancel" onClick={() => props.GoBack(false)}>Cancel</button>
+                      <button className="button-cancel" onClick={() => props.GoBack(false)}>Go Back</button>
                       <button className="button-save" onClick={handleSubmit(handleFormSubmit)}>Submit Changes</button>
                       {props.initForm.showResult && props.initForm.apiMessage.secondapprovalbyuserGuid === null &&
                       props.currenUserGuid !== props.initForm.apiMessage.firstapprovalbyuserGuid &&
