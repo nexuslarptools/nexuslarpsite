@@ -34,6 +34,7 @@ export default function CharactersIndex() {
           selectedApproved: true,
           commentFilter: false,
           showApprovableOnly: false,
+          readyApproved: false,
           viewingItem: false,
           viewItemGuid: '',
           viewItemPath: ''
@@ -145,9 +146,11 @@ appdata={approvQuery.data}
   selectedApproved={charactersState.selectedApproved} 
   commentFilterOn={charactersState.commentFilter}
   showApprovableOnly={charactersState.showApprovableOnly}
+  readyApproved={charactersState.readyApproved}
   ToggleSwitch={() => ToggleSwitch('selectedApproved')}
   ToggleCommentSwitch={() => ToggleSwitch('commentFilter')}
   ToggleApprovableSwitch={() => ToggleSwitch('showApprovableOnly')}
+  ToggleApprovReadySwitch={() =>  ToggleSwitch('readyApproved')}
   DirectToCharacter={(path, guid) => DirectToCharacter(path, guid)}
   NewCharacterLink={(e) => NewCharacterLink(e)}
   GoToSearch={() => GoToSearch()}

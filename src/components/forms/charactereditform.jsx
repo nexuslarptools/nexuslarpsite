@@ -301,7 +301,7 @@ const CharacterEditForm = (props) => {
                 Rank: oldRank,
                 Description: oldDescription,
                 Tags: oldTags,
-                initialTags: initial
+                FullTags: initial
             })
           );
 
@@ -332,7 +332,7 @@ const CharacterEditForm = (props) => {
                 Rank: oldRank,
                 Description: oldDescription,
                 Tags: oldTags,
-                initialTags: initial
+                FullTags: initial
 
             })
           )
@@ -510,8 +510,10 @@ isNew: true
       let data = [...abilitesFormsState.abilitiesFormList];
       let temp = data[rank+1];
       temp.arraynum = rank;
+      temp.reinit = true;
       data[rank+1] = data[rank];
       data[rank+1].arraynum = rank + 1
+      data[rank+1].reinit = true;
       data[rank] = temp;
 
       setAbilitesForms({
@@ -530,8 +532,10 @@ isNew: true
       let data = [...abilitesFormsState.abilitiesFormList];
       let temp = data[rank-1];
       temp.arraynum = rank;
+      temp.reinit = true;
       data[rank-1] = data[rank];
       data[rank-1].arraynum = rank -1
+      data[rank-1].reinit = true;
       data[rank] = temp;
 
       setAbilitesForms({
@@ -543,6 +547,21 @@ isNew: true
         abilitiesList: data
       });
     }
+  }
+
+
+  const AbilityInitComplete = async (e) => {
+    let data = [...abilitesFormsState.abilitiesFormList];
+    data[e].reinit=false;
+
+    setAbilitesForms({
+      ...abilitesFormsState,
+      abilitiesFormList: data
+    });
+    setAbilities({
+      ...abilitiesState,
+      abilitiesList: data
+    });
   }
 
 
@@ -621,6 +640,15 @@ isNew: true
     }
 
     ability[fieldname] = value;
+
+    if(fieldname === 'Tags')
+    {
+      let FullTagList = [];
+      value.forEach(guid => {
+        FullTagList.push(props.tagslist.abilityTags.find((tagf) => tagf.guid === guid))
+      });
+      ability.FullTags = FullTagList;
+    }
 
     const loopData = [];
 
@@ -863,11 +891,13 @@ isNew: true
                         itemTags={props.tagslist.abilityTags}
                         key={ability.arraynum}
                         abilityState={ability}
+                        reinit={ability.reinit}
                         hideAbility={hideAbilityForm}
                         onFillIn={(rank, fieldname, value) => updateAbilityForms(rank, fieldname, value)}
                         SetAbilityValue={updateValue}
                         DownAbility={(e) => MoveAbilityDown(e)}
                         UpAbility={(e) => MoveAbilityUp(e)}
+                        InitComplete={(e) => AbilityInitComplete(e)}
                       />
                       
                     ))}

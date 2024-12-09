@@ -395,7 +395,7 @@ return (
         <Switch onChange={() => props.ToggleApprovReadySwitch()}
         checked={!props.readyApproved}/>
       }
-      label={props.readyApproved ? 'Items Ready for Approval' : 'All Items'}
+      label={props.readyApproved ? 'Ready for Approval' : 'All Items'}
       /> :
       <></>}
       </TableCell>

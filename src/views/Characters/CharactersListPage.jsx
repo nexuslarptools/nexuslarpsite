@@ -13,6 +13,7 @@ export default function CharactersListPage(props) {
     appdata={props.selectedApproved ? props.appdata : props.undata} 
       selectedApproved={props.selectedApproved} 
       showApprovableOnly={props.showApprovableOnly}
+      readyApproved={props.readyApproved}
       commentFilterOn={props.commentFilterOn}
       larpTags={props.larpTags}
       tagslist={props.tagslist}
@@ -25,6 +26,7 @@ export default function CharactersListPage(props) {
       ToggleSwitch={() => props.ToggleSwitch()}
       ToggleCommentSwitch={() => props.ToggleCommentSwitch()}
       ToggleApprovableSwitch={() => props.ToggleApprovableSwitch()}
+      ToggleApprovReadySwitch={() => props.ToggleApprovReadySwitch()}
       Edit={(path, guid) => props.Edit(path, guid)}
       />
     </div>
@@ -38,9 +40,11 @@ CharactersListPage.propTypes = {
     ToggleSwitch: PropTypes.func,
     ToggleCommentSwitch: PropTypes.func,
     ToggleApprovableSwitch: PropTypes.func,
+    ToggleApprovReadySwitch: PropTypes.func,
     GoToSearch: PropTypes.func,
     showApprovableOnly: PropTypes.bool,
     selectedApproved: PropTypes.bool,
+    readyApproved: PropTypes.bool,
     commentFilterOn: PropTypes.bool,
     appdata: PropTypes.array,
     undata: PropTypes.array,

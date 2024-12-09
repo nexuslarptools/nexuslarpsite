@@ -88,6 +88,11 @@ const CharacterTable = props => {
         {
           filteredRows = filteredRows.filter(character => (character.firstapprovalbyuserGuid !== null ));
         }
+
+        if (props.readyApproved === true)
+        {
+          filteredRows = filteredRows.filter(character => (character.readyforapproval  === true ));
+        }
     
         if (tagState.listTags.length > 0 || props.larpTags.length > 0) {
           const newfilter = [];
@@ -121,7 +126,7 @@ const CharacterTable = props => {
           totalrows: filteredrowstotal,
           display: true
         })
-      }, [props.appdata, props.showallLARPLinked, props.showApprovableOnly, props.commentFilterOn,
+      }, [props.appdata, props.showallLARPLinked, props.showApprovableOnly,  props.readyApproved, props.commentFilterOn,
         filterState, tagState, selectedLarpTag, selectedApprovalState, page, rowsPerPage]);
 
       const handleChangePage = (
@@ -369,7 +374,15 @@ const CharacterTable = props => {
                         label={props.showApprovableOnly ? 'Characters You Can Approve' : 'All Unapproved Characters'} /> )
                     : (<div></div>)}
                      </TableCell>
-                     <TableCell className='table-topper' colSpan={4}>
+                     <TableCell className='table-topper'>
+                     {props.authLevel > 2 && !props.selectedApproved ?
+                      <FormControlLabel
+                       control={<Switch onChange={() => props.ToggleApprovReadySwitch()}
+                            checked={!props.readyApproved}/>}
+                            label={props.readyApproved ? 'Ready for Approval' : 'All Characters'}
+                       /> : <></>}
+                     </TableCell>
+                     <TableCell className='table-topper' colSpan={3}>
                         <></>
                      </TableCell>
                     </TableRow>
@@ -637,6 +650,7 @@ const CharacterTable = props => {
     selectedApproved: PropTypes.bool,
     commentFilterOn: PropTypes.bool,
     showApprovableOnly: PropTypes.bool,
+    readyApproved: PropTypes.bool,
     showallLARPLinked: PropTypes.bool,
     appdata: PropTypes.array,
       apiMessage: PropTypes.array,
@@ -644,6 +658,7 @@ const CharacterTable = props => {
       ToggleSwitch: PropTypes.func,
       ToggleCommentSwitch: PropTypes.func,
       ToggleApprovableSwitch: PropTypes.func,
+      ToggleApprovReadySwitch: PropTypes.func,
       seriesfilterup: PropTypes.func,
       charfilterup: PropTypes.func,
       DeleteCharacter: PropTypes.func,
