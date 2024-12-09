@@ -19,7 +19,7 @@ const ItemAbilites = props => {
     initialTags: []
   })
 
-  useEffect(() => {
+   useEffect(() => {
     if (props.reinit === true) {
 
       setFormstate({
@@ -33,7 +33,7 @@ const ItemAbilites = props => {
       })
       props.InitComplete(props.abilityState.arraynum);
    }
-  }, [props.reinit])
+  }, [props.reinit]) 
 
   useEffect(() => {
     const controller = new AbortController();

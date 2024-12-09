@@ -645,13 +645,11 @@ const ItemEditForm = (props) => {
       e.visible = false;
 
       let loopData = [];
-  
+
       for (let j = 0; j < abilitiesState.abilitiesList.length; j++) {
-        if (!abilitiesState.abilitiesList[j].arraynum === e.arraynum) {
+        if (abilitiesState.abilitiesList[j].arraynum !== e.arraynum) {
           loopData.push(abilitiesState.abilitiesList[j]);
-          loopData[j].arraynum = j;
-          loopData[j].Special.Rank = j;
-        } 
+        }
       }
       setAbilities({
         ...abilitiesState,
@@ -677,7 +675,7 @@ const ItemEditForm = (props) => {
               Special: {
                 Name: abilitesFormsState.abilitiesFormList[k].Name,
                 Cost: abilitesFormsState.abilitiesFormList[k].Cost,
-                Rank: k,
+                Rank: abilitesFormsState.abilitiesFormList[k].Rank,
                 Description: abilitesFormsState.abilitiesFormList[k].Description
               }
             })
@@ -699,9 +697,7 @@ const ItemEditForm = (props) => {
       let loopData = [];
   
       for (let j = 0; j < abilitiesState.abilitiesListBack.length; j++) {
-        if (abilitiesState.abilitiesListBack[j].arraynum === e.arraynum) {
-          loopData.push(e);
-        } else {
+        if (abilitiesState.abilitiesListBack[j].arraynum !== e.arraynum) {
           loopData.push(abilitiesState.abilitiesListBack[j]);
         }
       }
@@ -745,7 +741,7 @@ const ItemEditForm = (props) => {
     
     }
     const MoveAbilityDown = (rank) => {
-      if (rank !== abilitesFormsState.abilitiesFormList.length) {
+      if (rank !== abilitesFormsState.abilitiesFormList.length -1) {
         let data = [...abilitesFormsState.abilitiesFormList];
         let temp = data[rank+1];
         temp.arraynum = rank;
@@ -851,8 +847,7 @@ const ItemEditForm = (props) => {
 
       ability[fieldname] = value;
 
-      if(fieldname === 'Tags')
-        {
+      if(fieldname === 'Tags'){
           let FullTagList = [];
           value.forEach(guid => {
             FullTagList.push(props.tagslist.abilityTags.find((tagf) => tagf.guid === guid))
@@ -899,7 +894,7 @@ const ItemEditForm = (props) => {
 
 
     const MoveAbilityBackDown = async (rank) => {
-      if (rank !== abilitesBackFormsState.abilitiesFormList.length) {
+      if (rank !== abilitesBackFormsState.abilitiesFormList.length - 1) {
         let data = [...abilitesBackFormsState.abilitiesFormList];
         let temp = data[rank+1];
         temp.arraynum = rank;
@@ -1003,7 +998,8 @@ const ItemEditForm = (props) => {
           Cost: null,
           Rank: null,
           Description: '',
-          Tags: []
+          Tags: [],
+          FullTags: []
       }
 
       let found = false;
@@ -1016,14 +1012,13 @@ const ItemEditForm = (props) => {
 
       ability[fieldname] = value;
 
-      if(fieldname === 'Tags')
-        {
-          let FullTagList = [];
-          value.forEach(guid => {
-            FullTagList.push(props.tagslist.abilityTags.find((tagf) => tagf.guid === guid))
-          });
-          ability.FullTags = FullTagList;
-        }
+      if(fieldname === 'Tags'){
+        let FullTagList = [];
+        value.forEach(guid => {
+          FullTagList.push(props.tagslist.abilityTags.find((tagf) => tagf.guid === guid))
+        });
+        ability.FullTags = FullTagList;
+      }
 
   
       const loopData = [];
