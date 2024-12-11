@@ -505,7 +505,7 @@ isNew: true
     });
   }
 
-  const MoveAbilityDown = (rank) => {
+  const MoveAbilityDown = async (rank) => {
     if (rank !== abilitesFormsState.abilitiesFormList.length) {
       let data = [...abilitesFormsState.abilitiesFormList];
       let temp = data[rank+1];
@@ -514,20 +514,20 @@ isNew: true
       data[rank+1] = data[rank];
       data[rank+1].arraynum = rank + 1
       data[rank+1].reinit = true;
-      data[rank] = temp;
+      data[rank] = temp; 
 
-      setAbilitesForms({
+      await setAbilitesForms({
         ...abilitesFormsState,
         abilitiesFormList: data
       });
-      setAbilities({
+      await setAbilities({
         ...abilitiesState,
         abilitiesList: data
       });
     }
   }
 
-  const MoveAbilityUp = (rank) => {
+  const MoveAbilityUp = async (rank) => {
       if (rank > 0) {
       let data = [...abilitesFormsState.abilitiesFormList];
       let temp = data[rank-1];
@@ -538,11 +538,20 @@ isNew: true
       data[rank-1].reinit = true;
       data[rank] = temp;
 
-      setAbilitesForms({
+     /*  
+    let newformdata = formdata;
+    formdata.fields.Special_Skills = data;
+
+    setFormdata({
+      ...formdata,
+      fields: newformdata.fields
+    });
+ */
+      await setAbilitesForms({
         ...abilitesFormsState,
         abilitiesFormList: data
       });
-      setAbilities({
+      await setAbilities({
         ...abilitiesState,
         abilitiesList: data
       });
@@ -568,7 +577,17 @@ isNew: true
   const addAbilityForm = (e) => {
     e.preventDefault();
     const i = abilitiesState.abilitiesList.length;
-    const newform = JSON.parse(JSON.stringify({ arraynum: i, visible: true }));
+    const newform = JSON.parse(
+      JSON.stringify(
+        { arraynum: i, 
+          visible: true,
+          Name: '',
+          Cost: null,
+          Rank: null,
+          Description: '',
+          FullTags: [],
+          Tags: [] }
+        ));
     const newData = [];
 
     for (let j = 0; j < i; j++) {
@@ -590,14 +609,15 @@ isNew: true
     });
   }
 
-  const hideAbilityForm = (e) => {
+  const hideAbilityForm = async (e) => {
     handleDeleteClose(e);
+    e.visible = false;
+
     let loopData = [];
 
     for (let j = 0; j < abilitiesState.abilitiesList.length; j++) {
-      if (!abilitiesState.abilitiesList[j].arraynum === e.arraynum) {
+      if (abilitiesState.abilitiesList[j].arraynum !== e.arraynum) {
         loopData.push(abilitiesState.abilitiesList[j]);
-        loopData[j].arraynum = j;
       }
     }
     setAbilities({
@@ -605,12 +625,33 @@ isNew: true
       abilitiesList: loopData
     });
 
-    loopData = [];
+    let newformdata = formdata;
+    formdata.fields.Special_Skills = loopData;
+
+    setFormdata({
+      ...formdata,
+      fields: newformdata.fields
+    });
+  
+   loopData = [];
 
     for (let k = 0; k < abilitesFormsState.abilitiesFormList.length; k++) {
       if (!k === e.arraynum) {
-        loopData.push(abilitesFormsState.abilitiesFormList[k]);
-        loopData[k].arraynum = k;
+        const newdata = JSON.parse(
+          JSON.stringify({
+            visible: true,
+            arraynum: k,
+            Special: {
+              Name: abilitesFormsState.abilitiesFormList[k].Name,
+              Cost: abilitesFormsState.abilitiesFormList[k].Cost,
+              Rank: abilitesFormsState.abilitiesFormList[k].Rank,
+              Description: abilitesFormsState.abilitiesFormList[k].Description,
+              FullTags: abilitesFormsState.abilitiesFormList[k].FullTags,
+              Tags: abilitesFormsState.abilitiesFormList[k].Tags,
+            }
+          })
+        );
+        loopData.push(newdata);
       }
     }
     setAbilitesForms({
@@ -628,7 +669,8 @@ isNew: true
         Cost: null,
         Rank: null,
         Description: '',
-        Tags: []
+        Tags: [],
+        FullTags: []
     }
 
     let found = false;

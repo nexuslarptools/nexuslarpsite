@@ -12,7 +12,7 @@ const ItemAbilites = props => {
     arraynum: props.abilityState.arraynum,
     name: '',
     rank: '',
-    energyCost: '',
+    cost: '',
     desc: '',
     visible: true,
     tags: [],
@@ -26,7 +26,7 @@ const ItemAbilites = props => {
         ...formState,
         name: props.abilityState.Name,
         rank: props.abilityState.arraynum,
-        energyCost: props.abilityState.Cost,
+        cost: props.abilityState.Cost,
         desc: props.abilityState.Description,
         visible: true,
         tags: props.abilityState.Tags
@@ -54,7 +54,7 @@ const ItemAbilites = props => {
           ...formState,
           name: props.abilityState.Special.Name,
           rank: props.abilityState.Special.Rank,
-          energyCost: props.abilityState.Special.Cost,
+          cost: props.abilityState.Special.Cost,
           desc: props.abilityState.Special.Description,
           visible: true,
           tags: props.abilityState.Special.Tags,
@@ -100,19 +100,19 @@ const ItemAbilites = props => {
                   <FormGroup>
                     <div className='input-pair'>
                       <FormLabel>Ability Name:</FormLabel>
-                      <Input type="text" name={'Name'} key={'Name ' +  props.abilityState.arraynum} onChange={(e) => handleChange(e)} value={props.abilityState.Name} />
+                      <Input type="text" name={'Name'} key={'Name ' +  props.abilityState.arraynum} onChange={(e) => handleChange(e)} value={props.abilityState.Name !== null?props.abilityState.Name:''} />
                     </div>
                     <div className='input-pair'>
                       <FormLabel className="has-tooltip" title="Similar to the skills above, the number on a 0-7 scale that indicates their proficiency in this power.  Use the name of a Statistic or Skill to link it's value to that Satistic of Skill.">Skill Level:</FormLabel>
-                      <Input type="text" name={'Rank'} key={'Rank ' + props.abilityState.arraynum} onChange={(e) => handleChange(e)} value={props.abilityState.Rank} />
+                      <Input type="text" name={'Rank'} key={'Rank ' + props.abilityState.arraynum} onChange={(e) => handleChange(e)} value={props.abilityState.Rank !== null?props.abilityState.Rank:''} />
                     </div>
                     <div className='input-pair'>
                       <FormLabel>Energy Cost:</FormLabel>
-                      <Input type="text" name={'Cost'} key={'Cost ' + props.abilityState.arraynum} onChange={(e) => handleChange(e)} value={props.abilityState.Cost} />
+                      <Input type="text" name={'Cost'} key={'Cost ' + props.abilityState.arraynum} onChange={(e) => handleChange(e)} value={props.abilityState.Cost !== null? props.abilityState.Cost:''} />
                     </div>
                     <div className='input-pair power-description'>
                       <FormLabel>Description:</FormLabel>
-                      <TextField multiline rows={5} type="text" name={'Description'} key={'Description ' + props.abilityState.arraynum} onChange={(e) => handleChange(e)} value={props.abilityState.Description} />
+                      <TextField multiline rows={5} type="text" name={'Description'} key={'Description ' + props.abilityState.arraynum} onChange={(e) => handleChange(e)} value={props.abilityState.Description !== null?props.abilityState.Description:''} />
                     </div>
                     <div className='input-pair'>
                       <FormLabel>Tags:</FormLabel>
@@ -122,7 +122,8 @@ const ItemAbilites = props => {
                         //defaultValue={props.abilityState.initialTags !== undefined &&
                         //props.abilityState.initialTags !== null ? props.abilityState.initialTags : []}
                         options={props.itemTags}
-                        value={props.abilityState.FullTags}
+                        value={props.abilityState.FullTags === null || 
+                          props.abilityState.FullTags.length === 0 ? [] : props.abilityState.FullTags}
                         getOptionLabel={(option) => option.name}
                         onChange={(event, val) => updateItemTags(val)}
                         renderInput={(params) => (

@@ -583,6 +583,8 @@ const ItemEditForm = (props) => {
       const newform = JSON.parse(JSON.stringify({
         arraynum: i,
         visible: true,
+        Tags: [],
+        FullTags: [],
         Special: {
           name: '',
           Cost: null,
@@ -609,6 +611,8 @@ const ItemEditForm = (props) => {
       const newform = JSON.parse(JSON.stringify({
         arraynum: i,
         visible: true,
+        Tags: [],
+        FullTags: [],
         Special: {
           name: '',
           Cost: null,
@@ -672,12 +676,12 @@ const ItemEditForm = (props) => {
             JSON.stringify({
               visible: true,
               arraynum: k,
-              Special: {
-                Name: abilitesFormsState.abilitiesFormList[k].Name,
-                Cost: abilitesFormsState.abilitiesFormList[k].Cost,
-                Rank: abilitesFormsState.abilitiesFormList[k].Rank,
-                Description: abilitesFormsState.abilitiesFormList[k].Description
-              }
+              Tags: abilitesFormsState.abilitiesFormList[k].Tags,
+              FullTags: abilitesFormsState.abilitiesFormList[k].FullTags,
+              Name: abilitesFormsState.abilitiesFormList[k].Name,
+              Cost: abilitesFormsState.abilitiesFormList[k].Cost,
+              Rank: abilitesFormsState.abilitiesFormList[k].Rank,
+              Description: abilitesFormsState.abilitiesFormList[k].Description
             })
           );
           loopData.push(newdata);
