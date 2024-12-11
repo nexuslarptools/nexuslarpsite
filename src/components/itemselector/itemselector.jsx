@@ -2,11 +2,14 @@ import { useEffect, useState } from "react";
 import PropTypes from 'prop-types';
 import ItemTable from "../tables/itemtable";
 import ItemSelectonList from "./itemslectionlist";
-import { Box, Grid, Stack } from "@mui/material";
+import { Stack } from "@mui/material";
+import DisplayScreen from "../displayscreen/displayscreen";
+import DisplayScreenItemsOnly from "../displayscreen/displayscreenitemsonly";
 
 const ItemSelector = (props) => {
 
     const [itemListState, setItemListState] = useState([]);
+    const [printView, setPrintView] = useState(false);
 
     useEffect(() => {
         const newItemList=[]
@@ -144,7 +147,14 @@ const ItemSelector = (props) => {
         props.UpdateItemList(newItemList);
     }
 
+    const TogglePrint = () => {
+      let view = !printView;
+      setPrintView(view);
+    }
+
+
     return (
+      !printView ?
     <>
     <div className="splitScreen">
     <Stack direction='row'>
@@ -168,6 +178,7 @@ const ItemSelector = (props) => {
       ToggleCommentSwitch={() => props.ToggleCommentSwitch()}
       ToggleApprovableSwitch={() => props.ToggleApprovableSwitch()}
       GoBack={() => props.GoBack()}
+      GoToPrint={() => TogglePrint()}
       />
       </div>
 {/*       </Box>*/}
@@ -188,6 +199,14 @@ const ItemSelector = (props) => {
    {/* </Box> */}
    </Stack>
 </div>
+    </> : 
+    <>
+    <div>
+      <DisplayScreenItemsOnly itemList={itemListState}/>
+      <div className="edit-bottom">
+        <button className="button-cancel" onClick={() => TogglePrint()}>Go Back!</button>
+      </div>
+    </div>
     </>
     )
 }

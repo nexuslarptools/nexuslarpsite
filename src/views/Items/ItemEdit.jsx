@@ -5,10 +5,13 @@ import { useQueryClient } from '@tanstack/react-query';
 import usePutData from '../../utils/putdata';
 import uploadToS3 from '../../utils/s3';
 import ItemEditFormWrapper from '../../components/forms/itemeditfromwrapper';
+import { useState } from 'react';
 
 
 export default function ItemEdit(props) {
   const queryClient = useQueryClient();
+  const [isMutating, setIsMutating] = useState(false);
+
     const initForm = (formJSON) => {
       const formData = [];
   
@@ -37,7 +40,7 @@ export default function ItemEdit(props) {
       return formData;
     }
 
-    const SubmitForm = async (data, imagelocation) => {
+    const SubmitForm = async (data, imagelocation, newimage1) => {
         let bodyData = data
         const larpguid = []
         larpguid.push(data.larptagGuid)
@@ -46,11 +49,12 @@ export default function ItemEdit(props) {
         }
         bodyData.Img1 = bodyData.guid + '.jpg'
 
-        await uploadToS3('images/Items/' + bodyData.Img1, imagelocation)
+        if (newimage1) {
+          await uploadToS3('images/Items/' + bodyData.Img1, imagelocation)
+        }
 
         await currItemMutation.mutate(bodyData)
-
-        props.GoBack(true)
+        await setIsMutating(true);
       }
 
       const Approve = async () => {
@@ -112,6 +116,15 @@ export default function ItemEdit(props) {
         return {larpRuntagsResult}
       }
 
+      if (isMutating && currItemMutation.isSuccess) {
+        props.OpenSnack("Update Successful");
+        setIsMutating(false);
+      }
+      if (isMutating && currItemMutation.isError) {
+        props.OpenSnack("Update Failed!");
+        setIsMutating(false);
+      }
+
     if (tagsQuery.isLoading || seriesQuery.isLoading || itemQuery.isLoading || userGuidQuery.isLoading) 
     return (<div>
       <Loading />
@@ -134,7 +147,7 @@ export default function ItemEdit(props) {
                 apiMessage: itemQuery.data
               }}
             larpRunTags={TagsFilterLARP(props.tagslist)}
-            SubmitForm={(e, f) => SubmitForm(e, f)}
+            SubmitForm={(e, f, g) => SubmitForm(e, f, g)}
             GoBack={() => props.GoBack()}
             Approve={() => Approve()}
             currenUserGuid={userGuidQuery.data}/>
@@ -142,6 +155,7 @@ export default function ItemEdit(props) {
     )}
     ItemEdit.propTypes = {
     GoBack: PropTypes.func,
+    OpenSnack: PropTypes.func,
     tagInfo: PropTypes.object,
     guid: PropTypes.string,
     dropDownArray: PropTypes.array,
