@@ -51,6 +51,7 @@ const ItemEditForm = (props) => {
     const [gmNotes, setGMNotes] = useState('');
     const [selectedOption, setSelectedOption] = useState('Generic');
     const [IsdoubleSide, setIsdoubleSide] = useState(false);
+    const [isLoaded, setIsLoaded]=useState(false);
     const [selectedSeries, setSelectedSeries] = useState(
       '045a829c-8cff-11ea-99f9-4371def66a6d'
     );
@@ -320,6 +321,8 @@ const ItemEditForm = (props) => {
             ...itemsTableState,
             isMounted: true
           });
+
+       await setIsLoaded(true);
       }
 
       const AddReview =(message) => {
@@ -1399,7 +1402,7 @@ const ItemEditForm = (props) => {
                                 onChange={()  => ToggleDoubleSide()} 
                                   defaultChecked={  props.initForm !== undefined &&
                                     props.initForm !== null && 
-                                    props.initForm.showResult === true ? props.initForm.apiMessage.isdoubleside  : false } />}
+                                    props.initForm.showResult === true  && isLoaded ? IsdoubleSide : false } />}
                                 label='Is Double Sided'
                                 />
        <FormControlLabel control={<Checkbox 

@@ -10,7 +10,11 @@ const BasicItemBack = props => {
     <>
       <div className="seriesItemBox">
       <div className='itemTitleBox'>
-            <h3 className="itemName">{props.item.fields.Name}</h3>
+            { props.item.name.length < 26 ?
+              <h3 className='itemName'>{props.item.name}</h3> :
+              <h3 className='itemNameSM'>{props.item.name}</h3> 
+            }
+            {/* <h3 className="itemName">{props.item.name}</h3> */}
             <h3 className="itemType">{props.item.fields.TYPE}</h3>
           </div>
         <div className='itemSecondSideTextBox'>
