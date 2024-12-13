@@ -38,7 +38,7 @@ const imgUrl = usePresignedImgQuery('images/Characters/' + props.initForm.apiMes
         appdata={props.appdata} 
         undata={props.undata} 
         larpRunTags={props.larpRunTags}
-        Submit={(e, f, g) => props.Submit(e, f, g)}
+        Submit={(e, f, g, h, i) => props.Submit(e, f, g, h ,i)}
         GoBack={() => props.GoBack()}
         Approve={() => props.Approve()}
         /> 

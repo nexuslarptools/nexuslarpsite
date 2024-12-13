@@ -35,6 +35,8 @@ const CharacterEditForm = (props) => {
   //const handleFormSubmit = (data) => SubmitForm(data);
   const [JSONData, setJSONData] = useState([]);
   const [gmNotes, setGMNotes] = useState('');
+  const [image1change, set1ImageChange] = useState(false);
+  const [image2change, set2ImageChange] = useState(false);
 
   const [tagState, setTagState] = useState({
     showResult: false,
@@ -197,7 +199,7 @@ const CharacterEditForm = (props) => {
       gmnotes: gmNotes,
       readyforapproval: fields.readyforapproval
     }
-    props.Submit(allData, finalImage, finalImage2);
+    props.Submit(allData, finalImage, finalImage2, image1change, image2change);
   }
 
 
@@ -264,8 +266,12 @@ const CharacterEditForm = (props) => {
     const loopDataWithNulls = [];
 
     if (props.initForm.showResult) {
-      setFinalImage(props.img);
-      setFinalImage2(props.img2)
+      if (!image1change) {
+        setFinalImage(props.img);
+      }
+      if (!image2change) {
+        setFinalImage2(props.img2)
+      }
       if (props.initForm.apiMessage.fields.Special_Skills) {
         for (
           let i = 0;
@@ -295,7 +301,7 @@ const CharacterEditForm = (props) => {
                 Rank: oldRank,
                 Description: oldDescription,
                 Tags: oldTags,
-                initialTags: initial
+                FullTags: initial
             })
           );
 
@@ -326,7 +332,7 @@ const CharacterEditForm = (props) => {
                 Rank: oldRank,
                 Description: oldDescription,
                 Tags: oldTags,
-                initialTags: initial
+                FullTags: initial
 
             })
           )
@@ -499,10 +505,89 @@ isNew: true
     });
   }
 
+  const MoveAbilityDown = async (rank) => {
+    if (rank !== abilitesFormsState.abilitiesFormList.length) {
+      let data = [...abilitesFormsState.abilitiesFormList];
+      let temp = data[rank+1];
+      temp.arraynum = rank;
+      temp.reinit = true;
+      data[rank+1] = data[rank];
+      data[rank+1].arraynum = rank + 1
+      data[rank+1].reinit = true;
+      data[rank] = temp; 
+
+      await setAbilitesForms({
+        ...abilitesFormsState,
+        abilitiesFormList: data
+      });
+      await setAbilities({
+        ...abilitiesState,
+        abilitiesList: data
+      });
+    }
+  }
+
+  const MoveAbilityUp = async (rank) => {
+      if (rank > 0) {
+      let data = [...abilitesFormsState.abilitiesFormList];
+      let temp = data[rank-1];
+      temp.arraynum = rank;
+      temp.reinit = true;
+      data[rank-1] = data[rank];
+      data[rank-1].arraynum = rank -1
+      data[rank-1].reinit = true;
+      data[rank] = temp;
+
+     /*  
+    let newformdata = formdata;
+    formdata.fields.Special_Skills = data;
+
+    setFormdata({
+      ...formdata,
+      fields: newformdata.fields
+    });
+ */
+      await setAbilitesForms({
+        ...abilitesFormsState,
+        abilitiesFormList: data
+      });
+      await setAbilities({
+        ...abilitiesState,
+        abilitiesList: data
+      });
+    }
+  }
+
+
+  const AbilityInitComplete = async (e) => {
+    let data = [...abilitesFormsState.abilitiesFormList];
+    data[e].reinit=false;
+
+    setAbilitesForms({
+      ...abilitesFormsState,
+      abilitiesFormList: data
+    });
+    setAbilities({
+      ...abilitiesState,
+      abilitiesList: data
+    });
+  }
+
+
   const addAbilityForm = (e) => {
     e.preventDefault();
     const i = abilitiesState.abilitiesList.length;
-    const newform = JSON.parse(JSON.stringify({ arraynum: i, visible: true }));
+    const newform = JSON.parse(
+      JSON.stringify(
+        { arraynum: i, 
+          visible: true,
+          Name: '',
+          Cost: null,
+          Rank: null,
+          Description: '',
+          FullTags: [],
+          Tags: [] }
+        ));
     const newData = [];
 
     for (let j = 0; j < i; j++) {
@@ -524,15 +609,14 @@ isNew: true
     });
   }
 
-  const hideAbilityForm = (e) => {
+  const hideAbilityForm = async (e) => {
     handleDeleteClose(e);
     e.visible = false;
+
     let loopData = [];
 
     for (let j = 0; j < abilitiesState.abilitiesList.length; j++) {
-      if (abilitiesState.abilitiesList[j].arraynum === e.arraynum) {
-        loopData.push(e);
-      } else {
+      if (abilitiesState.abilitiesList[j].arraynum !== e.arraynum) {
         loopData.push(abilitiesState.abilitiesList[j]);
       }
     }
@@ -541,25 +625,33 @@ isNew: true
       abilitiesList: loopData
     });
 
-    loopData = [];
+    let newformdata = formdata;
+    formdata.fields.Special_Skills = loopData;
+
+    setFormdata({
+      ...formdata,
+      fields: newformdata.fields
+    });
+  
+   loopData = [];
 
     for (let k = 0; k < abilitesFormsState.abilitiesFormList.length; k++) {
-      if (k === e.arraynum) {
+      if (!k === e.arraynum) {
         const newdata = JSON.parse(
           JSON.stringify({
-            visible: false,
+            visible: true,
             arraynum: k,
             Special: {
               Name: abilitesFormsState.abilitiesFormList[k].Name,
               Cost: abilitesFormsState.abilitiesFormList[k].Cost,
               Rank: abilitesFormsState.abilitiesFormList[k].Rank,
-              Description: abilitesFormsState.abilitiesFormList[k].Description
+              Description: abilitesFormsState.abilitiesFormList[k].Description,
+              FullTags: abilitesFormsState.abilitiesFormList[k].FullTags,
+              Tags: abilitesFormsState.abilitiesFormList[k].Tags,
             }
           })
         );
         loopData.push(newdata);
-      } else {
-        loopData.push(abilitesFormsState.abilitiesFormList[k]);
       }
     }
     setAbilitesForms({
@@ -577,7 +669,8 @@ isNew: true
         Cost: null,
         Rank: null,
         Description: '',
-        Tags: []
+        Tags: [],
+        FullTags: []
     }
 
     let found = false;
@@ -589,6 +682,15 @@ isNew: true
     }
 
     ability[fieldname] = value;
+
+    if(fieldname === 'Tags')
+    {
+      let FullTagList = [];
+      value.forEach(guid => {
+        FullTagList.push(props.tagslist.abilityTags.find((tagf) => tagf.guid === guid))
+      });
+      ability.FullTags = FullTagList;
+    }
 
     const loopData = [];
 
@@ -636,10 +738,12 @@ isNew: true
   const updateImageData = async (imagename, e) => {
     if (imagename === '1') 
     {
+        set1ImageChange(true);
         setFinalImage(e.FinalImage);
     }
     else 
     {
+        set2ImageChange(true);
         setFinalImage2(e.FinalImage);
     }
   }
@@ -829,9 +933,13 @@ isNew: true
                         itemTags={props.tagslist.abilityTags}
                         key={ability.arraynum}
                         abilityState={ability}
+                        reinit={ability.reinit}
                         hideAbility={hideAbilityForm}
                         onFillIn={(rank, fieldname, value) => updateAbilityForms(rank, fieldname, value)}
                         SetAbilityValue={updateValue}
+                        DownAbility={(e) => MoveAbilityDown(e)}
+                        UpAbility={(e) => MoveAbilityUp(e)}
+                        InitComplete={(e) => AbilityInitComplete(e)}
                       />
                       
                     ))}
@@ -929,8 +1037,7 @@ isNew: true
                 />
               </div>
             </div>
-          <div>
-              
+          <div>  
               {reviewsState.length > 0 ?
               reviewsState.map(message => 
                 <ReviewNotesDisplay key={message} message={message} RemoveReview={(id) => RemoveReview(id)} />)
@@ -946,7 +1053,7 @@ isNew: true
 
           
           <div className="edit-bottom">
-            <button className="button-cancel" onClick={() => props.GoBack()}>Cancel</button>
+            <button className="button-cancel" onClick={() => props.GoBack()}>Go Back</button>
             <button className="button-save" onClick={handleSubmit(handleFormSubmit)}>Save Sheet</button>
             <button className="button-action" onClick={() => togglePreview(true)}>Preview</button>
             {props.initForm.showResult && props.initForm.apiMessage.secondapprovalbyUserGuid === null

@@ -12,6 +12,7 @@ return (
       selectedItemsApproved={props.selectedApproved} 
       showApprovableOnly={props.showApprovableOnly}
       commentFilterOn={props.commentFilterOn}
+      readyApproved={props.readyApproved}
       larpTags={props.larpTags}
       tagslist={props.tagslist}
       userGuid={props.userGuid}
@@ -22,6 +23,7 @@ return (
       ToggleSwitch={() => props.ToggleSwitch()}
       ToggleCommentSwitch={() => props.ToggleCommentSwitch()}
       ToggleApprovableSwitch={() => props.ToggleApprovableSwitch()}
+      ToggleApprovReadySwitch={() => props.ToggleApprovReadySwitch()}
       Edit={(path, guid) => props.Edit(path, guid)}
       />
     </div>
@@ -34,9 +36,11 @@ ItemsListPage.propTypes = {
   ToggleSwitch: PropTypes.func,
   ToggleCommentSwitch: PropTypes.func,
   ToggleApprovableSwitch: PropTypes.func,
+  ToggleApprovReadySwitch: PropTypes.func,
   showApprovableOnly: PropTypes.bool,
   selectedApproved: PropTypes.bool,
   commentFilterOn: PropTypes.bool,
+  readyApproved: PropTypes.bool,
   appdata: PropTypes.object,
   undata: PropTypes.object,
   authLevel: PropTypes.number,

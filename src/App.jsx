@@ -1,7 +1,7 @@
 import './App.scss'
 import './master.scss';
 import { Component } from "react"
-import { Route, Routes, BrowserRouter } from "react-router-dom"
+import { Route, BrowserRouter } from "react-router-dom"
 import Header from "./components/header/header"
 import HomePage from "./views/HomePage"
 import CurrentUserPage from "./views/Users/CurrentUserPage"

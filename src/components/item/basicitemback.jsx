@@ -10,7 +10,11 @@ const BasicItemBack = props => {
     <>
       <div className="seriesItemBox">
       <div className='itemTitleBox'>
-            <h3 className="itemName">{props.item.fields.Name}</h3>
+            { props.item.name.length < 26 ?
+              <h3 className='itemName'>{props.item.name}</h3> :
+              <h3 className='itemNameSM'>{props.item.name}</h3> 
+            }
+            {/* <h3 className="itemName">{props.item.name}</h3> */}
             <h3 className="itemType">{props.item.fields.TYPE}</h3>
           </div>
         <div className='itemSecondSideTextBox'>
@@ -18,11 +22,17 @@ const BasicItemBack = props => {
           {props.item.back !== undefined && props.item.back !== null && 
           props.item.back.fields !== undefined && props.item.back.fields !== null &&
           props.item.back.fields.Description !== undefined && props.item.back.fields.Description !== null ?
-          props.item.back.fields.Description.split("\n").map((i,key) => {
-            return <div className="item-description" key={key}>{i}</div>;
-        }) :
-        <div> </div>
-              }
+          props.item.back.fields.Description.split('\n').map((i,key) => {
+            return <div className="item-Description" key={key}><p>{
+              i.split('--').map((s, j) => j % 2 !== 0 ? <><u> {s} </u></> : (' ' + s ))
+              }</p></div>;
+        })
+            : <></>}
+                          {
+                  props.item.fields.Magic != null && props.item.fields.Magic != ''
+                    ? <div>Magic: {props.item.fields.Magic}</div>
+                    : <></>
+                }
           </div>
         </div>
       </div>

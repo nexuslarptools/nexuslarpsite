@@ -120,13 +120,15 @@ const CharacterNo = props => {
         <div className='sheet sheet1'>
           <div className='header-info'>
             <div className='sheet-name-series'>
-            { props.character.name.length < 31 ?
-              <div className='sheetName'>{props.character.name}</div> :
-              <div className='sheetNameSM'>{props.character.name}</div> 
+            { props.character.name.length > 30 || props.character.seriesTitle.length > 50 ?
+                <div className='sheetNameSM'>{props.character.name}</div>
+               :<div className='sheetName'>{props.character.name}</div>  
             }
-              { props.character.seriesTitle.length < 31 ?
-              <div className='seriesName'>{props.character.seriesTitle}</div> :
-              <div className='seriesNameSM'>{props.character.seriesTitle}</div>
+              { props.character.seriesTitle.length > 71 ?
+              <div className='seriesNameXSM'>{props.character.seriesTitle}</div> :
+              props.character.seriesTitle.length > 30 ?
+              <div className='seriesNameSM'>{props.character.seriesTitle}</div> :
+              <div className='seriesName'>{props.character.seriesTitle}</div>
               }
             </div>
             <CharacterSheetHeading img={imageData.image1}  other={JSONData.formData[0]} attributes={JSONData.formData[1]} />
@@ -217,13 +219,15 @@ const CharacterNo = props => {
             <div className='sheet sheet2'>
               <div className='header-info'>
                 <div className='sheet-name-series'>
-                { props.character.name.length < 31 ?
-                  <div className='sheetName'>{props.character.name}</div> :
-                  <div className='sheetNameSM'>{props.character.name}</div> 
-                  }
-                  { props.character.seriesTitle.length < 30 ?
-                  <div className='seriesName'>{props.character.seriesTitle}</div> :
-                  <div className='seriesNameSM'>{props.character.seriesTitle}</div>
+                { props.character.name.length > 30 || props.character.seriesTitle.length > 50 ?
+                <div className='sheetNameSM'>{props.character.name}</div>
+               :<div className='sheetName'>{props.character.name}</div>  
+            }
+              { props.character.seriesTitle.length > 71 ?
+              <div className='seriesNameXSM'>{props.character.seriesTitle}</div> :
+              props.character.seriesTitle.length > 30 ?
+              <div className='seriesNameSM'>{props.character.seriesTitle}</div> :
+              <div className='seriesName'>{props.character.seriesTitle}</div>
               }
                 </div>
               </div>
@@ -305,7 +309,7 @@ const CharacterNo = props => {
                   <div className='gm-notes'>
                     <div className='gm-notes-heading'>GM Notes for {props.character.name}</div>
                     <div className='gm-notes-text'>
-                      {props.character.gmnotes.split('\n').map(str => <p key={Math.Random()}> {str}</p>)}
+                      {props.character.gmnotes.split('\n').map(str => <p key={Math.random}> {str}</p>)}
                       </div>
                   </div>
                 </div>
@@ -314,7 +318,7 @@ const CharacterNo = props => {
                     <div className='gm-notes'>
                       <div className='gm-notes-heading'>GM Notes for {props.character.name} [1]</div>
                       <div className='gm-notes-text'>
-                        {props.extraGmSpaceOn.page1.split('\n').map(str => <p key={Math.Random()}>{str}</p>)}
+                        {props.extraGmSpaceOn.page1.split('\n').map(str => <p key={Math.random}>{str}</p>)}
                         </div>
                     </div>
                   </div>
@@ -322,7 +326,7 @@ const CharacterNo = props => {
                   <div className='gm-notes'>
                     <div className='gm-notes-heading'>GM Notes for {props.character.name} [2]</div>
                     <div className='gm-notes-text'>
-                      {props.extraGmSpaceOn.page2.split('\n').map(str => <p key={Math.Random()}>{str}</p>)}
+                      {props.extraGmSpaceOn.page2.split('\n').map(str => <p key={Math.random()}>{str}</p>)}
                       </div>
                   </div>
                   </div> 

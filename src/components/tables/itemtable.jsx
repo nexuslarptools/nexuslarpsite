@@ -71,10 +71,13 @@ const ItemTable = props => {
 
     let filteredRows = props.appdata?.iteList;
 
-    filteredRows = filteredRows.filter(item => item.name.toLocaleLowerCase().includes(filterState.ItemsFilter));
-    filteredRows = filteredRows.filter(item => (item.series === null && filterState.SeriesFilter === '') || (item.series !== null && item.series.toLocaleLowerCase().includes(filterState.SeriesFilter)));
+    filteredRows = filteredRows.filter(item => item.name.toLocaleLowerCase().includes(filterState.ItemsFilter.toLocaleLowerCase()));
+    filteredRows = filteredRows.filter(item => (item.series === null && filterState.SeriesFilter === '') || (item.series !== null && item.series.toLocaleLowerCase().includes(filterState.SeriesFilter.toLocaleLowerCase())));
     if (props.showApprovableOnly) {
       filteredRows = filteredRows.filter(item => (item.editbyUserGuid !== props.userGuid && item.firstapprovalbyuserGuid !== props.userGuid));
+    }
+    if (props.readyApproved) {
+      filteredRows = filteredRows.filter(item => item.readyforapproval === true);
     }
 
     if (selectedApprovalState === 'U')
@@ -119,7 +122,7 @@ const ItemTable = props => {
       totalrows: filteredrowstotal,
       display: true
     })
-  }, [props.appdata, props.showallLARPLinked, props.showApprovableOnly, props.commentFilterOn,
+  }, [props.appdata, props.showallLARPLinked, props.showApprovableOnly, props.readyApproved,  props.commentFilterOn,
     filterState, tagState, selectedLarpTag, selectedApprovalState, page, rowsPerPage]);
 
 
@@ -332,7 +335,6 @@ const ItemTable = props => {
     })    
   }
 
-
 return (
   !displayState.display ? 
   <></>:
@@ -351,7 +353,12 @@ return (
   </> :
   <>
   { !props.isCharSheet ?
-   <button className="button-cancel" onClick={() => props.GoBack(false)}> Go Back </button> :
+  <> 
+   <button className="button-action" onClick={() => props.GoToPrint(true)}> View and Print </button>
+   <button className="button-cancel" onClick={() => props.GoBack(false)}> Go Back </button>
+
+   </>
+   :
    <button className="button-action" onClick={() => props.GoBack(false)}> Save and Return </button>
   }
   </>
@@ -385,6 +392,17 @@ return (
       {props.authLevel > 2 && !props.selectedItemsApproved && !props.isSelector ?
       <FormControlLabel
       control={
+        <Switch onChange={() => props.ToggleApprovReadySwitch()}
+        checked={!props.readyApproved}/>
+      }
+      label={props.readyApproved ? 'Ready for Approval' : 'All Items'}
+      /> :
+      <></>}
+      </TableCell>
+      <TableCell className='table-topper'>
+      {props.authLevel > 2 && !props.selectedItemsApproved && !props.isSelector ?
+      <FormControlLabel
+      control={
         <Switch onChange={() => props.ToggleApprovableSwitch()}
         checked={!props.showApprovableOnly}/>
       }
@@ -392,7 +410,7 @@ return (
       /> :
       <></>}
       </TableCell>
-      <TableCell colSpan={4} className='table-topper'/>
+      <TableCell colSpan={3} className='table-topper'/>
       </TableRow>
         <TableRow>
         <TableCell colSpan={props.authLevel > 2 && !props.selectedItemsApproved ? 3 : 3} className='table-topper'>
@@ -689,6 +707,7 @@ ItemTable.propTypes = {
 selectedItemsApproved: PropTypes.bool,
 commentFilterOn: PropTypes.bool,
 showApprovableOnly: PropTypes.bool,
+readyApproved: PropTypes.bool,
 undata: PropTypes.object,
 DirectToItem: PropTypes.func,
 appdata: PropTypes.object,
@@ -702,10 +721,12 @@ NavToSelectItems: PropTypes.func,
 ToggleSwitch: PropTypes.func,
 ToggleCommentSwitch: PropTypes.func,
 ToggleApprovableSwitch: PropTypes.func,
+ToggleApprovReadySwitch: PropTypes.func,
 DeleteSeries: PropTypes.func,
 KickItem: PropTypes.func,
 Edit: PropTypes.func,
 isSelector: PropTypes.bool,
 isCharSheet: PropTypes.bool,
-GoBack: PropTypes.func
+GoBack: PropTypes.func,
+GoToPrint: PropTypes.func
 }

@@ -5,8 +5,11 @@ import usePutData from '../../utils/putdata';
 import { useQueryClient } from '@tanstack/react-query';
 import uploadToS3 from '../../utils/s3';
 import CharacterEditFormWrapper from '../../components/forms/charactereditformWrapper';
+import { useState } from 'react';
 
 export default function CharacterEdit(props) {
+    const [isMutating, setIsMutating] = useState(false);
+
     const queryClient = useQueryClient();
     const initForm = (formJSON) => {
       const formData = [];
@@ -35,19 +38,22 @@ export default function CharacterEdit(props) {
       return formData;
     }
 
-    const SubmitForm = async (data, image1, image2) => {
+    const SubmitForm = async (data, image1, image2, newimage1, newimage2) => {
         let bodyData = data
 /*         const larpguid = []
         larpguid.push(data.larptagGuid)
         if (data.larptagGuid !== undefined && data.larptagGuid !== null && data.larptagGuid !== '') {
         bodyData.larptagGuid=larpguid
         } */
-
-        uploadToS3('images/Characters/' + props.guid  + '.jpg', image1);
-        uploadToS3('images/Characters/' + props.guid + '_2.jpg', image2);
+        if (newimage1) {
+          uploadToS3('images/Characters/' + props.guid  + '.jpg', image1);
+        }
+        if (newimage2) {
+          uploadToS3('images/Characters/' + props.guid + '_2.jpg', image2);
+        }
         await newCharacterMutation.mutate(bodyData)
-        queryClient.invalidateQueries(props.guid)
-        props.GoBack(true)
+        await queryClient.invalidateQueries(props.guid)
+        await setIsMutating(true);
       }
 
     const Approve = async () => {
@@ -133,6 +139,15 @@ export default function CharacterEdit(props) {
         return {larpRuntagsResult}
       }
 
+      if (isMutating && newCharacterMutation.isSuccess) {
+        props.OpenSnack("Update Successful");
+        setIsMutating(false);
+      }
+      if (isMutating && newCharacterMutation.isError) {
+        props.OpenSnack("Update Failed!");
+        setIsMutating(false);
+      }
+
     if (tagsQuery.isLoading || seriesQuery.isLoading || approvQuery.isLoading 
     || unapprovQuery.isLoading || characterQuery.isLoading || userGuidQuery.isLoading) return (<div>
       <Loading />
@@ -159,7 +174,7 @@ export default function CharacterEdit(props) {
             appdata={approvQuery.data} 
             undata={unapprovQuery.data} 
             larpRunTags={TagsFilterLARP(props.tagslist)}
-            Submit={(e, f, g) => SubmitForm(e, f, g)}
+            Submit={(e, f, g, h, i) => SubmitForm(e, f, g, h, i)}
             GoBack={() => props.GoBack()}
             Approve={() => Approve()}
             /> 
@@ -176,5 +191,6 @@ export default function CharacterEdit(props) {
     tagslist: PropTypes.array,
     userGuid: PropTypes.string,
     guid: PropTypes.string,
-    path: PropTypes.string
+    path: PropTypes.string,
+    OpenSnack: PropTypes.func
   }
