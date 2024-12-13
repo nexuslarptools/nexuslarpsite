@@ -586,6 +586,10 @@ const ItemEditForm = (props) => {
       const newform = JSON.parse(JSON.stringify({
         arraynum: i,
         visible: true,
+        name: '',
+        Cost: null,
+        Rank: null,
+        Description: '',
         Tags: [],
         FullTags: [],
         Special: {
@@ -607,13 +611,21 @@ const ItemEditForm = (props) => {
       setAbilities({
         ...abilitiesState,
         abilitiesList: newData
-      })
+      });
+      setAbilitesForms({
+        ...abilitesFormsState,
+        abilitiesFormList: newData
+      });
     }     
     else {
       const i = abilitiesState.abilitiesListBack.length;
       const newform = JSON.parse(JSON.stringify({
         arraynum: i,
         visible: true,
+        name: '',
+        Cost: null,
+        Rank: null,
+        Description: '',
         Tags: [],
         FullTags: [],
         Special: {
@@ -635,7 +647,11 @@ const ItemEditForm = (props) => {
       setAbilities({
         ...abilitiesState,
         abilitiesListBack: newData
-      })
+      });
+      setAbilitesBackForms({
+        ...abilitesBackFormsState,
+        abilitiesFormList: newData
+      });
     }
       
     }
@@ -655,7 +671,13 @@ const ItemEditForm = (props) => {
 
       for (let j = 0; j < abilitiesState.abilitiesList.length; j++) {
         if (abilitiesState.abilitiesList[j].arraynum !== e.arraynum) {
-          loopData.push(abilitiesState.abilitiesList[j]);
+          let tempd = abilitiesState.abilitiesList[j];
+          tempd.arraynum = j;
+          if (j > e.arraynum)
+          {
+            tempd.arraynum = j-1;
+          }
+          loopData.push(tempd);
         }
       }
       setAbilities({
@@ -674,22 +696,16 @@ const ItemEditForm = (props) => {
      loopData = [];
   
       for (let k = 0; k < abilitesFormsState.abilitiesFormList.length; k++) {
-        if (!k === e.arraynum) {
-          const newdata = JSON.parse(
-            JSON.stringify({
-              visible: true,
-              arraynum: k,
-              Tags: abilitesFormsState.abilitiesFormList[k].Tags,
-              FullTags: abilitesFormsState.abilitiesFormList[k].FullTags,
-              Name: abilitesFormsState.abilitiesFormList[k].Name,
-              Cost: abilitesFormsState.abilitiesFormList[k].Cost,
-              Rank: abilitesFormsState.abilitiesFormList[k].Rank,
-              Description: abilitesFormsState.abilitiesFormList[k].Description
-            })
-          );
-          loopData.push(newdata);
+        if (k !== e.arraynum) {
+            let tempd = abilitesFormsState.abilitiesListBack[k];
+            tempd.arraynum = k;
+            if (k > e.arraynum)
+              {
+                tempd.arraynum = k-1;
+              }
+            loopData.push(abilitesFormsState.abilitiesListBack[k]);
+          }
         }
-      }
       setAbilitesForms({
         ...abilitesFormsState,
         abilitiesFormList: loopData
@@ -705,6 +721,12 @@ const ItemEditForm = (props) => {
   
       for (let j = 0; j < abilitiesState.abilitiesListBack.length; j++) {
         if (abilitiesState.abilitiesListBack[j].arraynum !== e.arraynum) {
+          let tempd = abilitiesState.abilitiesListBack[j];
+          tempd.arraynum = j;
+          if (j > e.arraynum)
+            {
+              tempd.arraynum = j-1;
+            }
           loopData.push(abilitiesState.abilitiesListBack[j]);
         }
       }
@@ -723,21 +745,13 @@ const ItemEditForm = (props) => {
     
      loopData = [];
       for (let k = 0; k < abilitesFormsState.abilitiesListBack.length; k++) {
-        if (k === e.arraynum) {
-          const newdata = JSON.parse(
-            JSON.stringify({
-              visible: false,
-              arraynum: k,
-              Special: {
-                Name: abilitesFormsState.abilitiesListBack[k].Name,
-                Cost: abilitesFormsState.abilitiesListBack[k].Cost,
-                Rank: abilitesFormsState.abilitiesListBack[k].Rank,
-                Description: abilitesFormsState.abilitiesListBack[k].Description
-              }
-            })
-          );
-          loopData.push(newdata);
-        } else {
+        if (k !== e.arraynum) {
+          let tempd = abilitesFormsState.abilitiesListBack[k];
+          tempd.arraynum = k;
+          if (k > e.arraynum)
+            {
+              tempd.arraynum = k-1;
+            }
           loopData.push(abilitesFormsState.abilitiesListBack[k]);
         }
       }
@@ -1402,8 +1416,9 @@ const ItemEditForm = (props) => {
                                 onChange={()  => ToggleDoubleSide()} 
                                   defaultChecked={  props.initForm !== undefined &&
                                     props.initForm !== null && 
-                                    props.initForm.showResult === true  && isLoaded ? IsdoubleSide : false } />}
-                                label='Is Double Sided'
+                                    props.initForm.showResult === true  && props.initForm.apiMessage.isdoubleside 
+                                    ? props.initForm.apiMessage.isdoubleside : false } />}
+                                    label='Is Double Sided'
                                 />
        <FormControlLabel control={<Checkbox 
                                 onChange={()  => ToggleReadyForApprove()} 
