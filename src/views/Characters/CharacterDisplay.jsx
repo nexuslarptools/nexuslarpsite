@@ -2,7 +2,6 @@ import PropTypes from 'prop-types'
 import useGetData from '../../utils/getdata';
 import Loading from '../../components/loading/loading';
 import formJSON from '../../jsonfiles/characterinput.json';
-import CharacterWrapper from '../../components/character/characterwrapper';
 import DisplayScreen from '../../components/displayscreen/displayscreen';
 
 const CharacterDisplayPage = props => {

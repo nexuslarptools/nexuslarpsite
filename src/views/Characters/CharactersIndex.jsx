@@ -8,9 +8,22 @@ import CharacterDisplayPage from './CharacterDisplay';
 import CharacterCreate from './CharacterCreate';
 import formJSON from '../../jsonfiles/characterinput.json';
 import CharacterEdit from './CharacterEdit';
+import { ClickAwayListener, css, keyframes, styled } from '@mui/material';
+import { useSnackbar } from '@mui/base/useSnackbar';
 
 export default function CharactersIndex() {
     AuthRedirect(1)
+
+    const handleSnackClose = () => {
+      setSnackOpen({isOpen:false,
+        text: ''});
+    }
+    
+  const { getRootProps } = useSnackbar({
+    onClose: handleSnackClose,
+    open,
+    autoHideDuration: 5000,
+  });
 
     const approvQuery = useGetData('listApprovedCharacters', '/api/v1/CharacterSheetApproveds');  
     const unapprovQuery = useGetData('listUnapprovedCharacters', '/api/v1/CharacterSheets');
@@ -21,13 +34,25 @@ export default function CharactersIndex() {
           selectedApproved: true,
           commentFilter: false,
           showApprovableOnly: false,
+          readyApproved: false,
           viewingItem: false,
           viewItemGuid: '',
           viewItemPath: ''
       });
-    const [isCreate, setIsCreate] = useState(false);
-    //const [isSelect, setIsSelect] = useState(false);
+      
+      const [isCreate, setIsCreate] = useState(false);
+      const [snackOpen, setSnackOpen] = useState(
+        {isOpen:false,
+        text: ''});
+  
+
+     const OpenSnack = async (e) => {
+      await setSnackOpen(        {isOpen:true,
+        text: e});
+     }
+
     const [isEdit, setIsEdit] = useState({isEditing: false, guid: null});
+    const [filterInit, setfilterInit] = useState(false);
 
     const ToggleSwitch = async (e) => {
         let toggled=charactersState[e];
@@ -45,7 +70,8 @@ export default function CharactersIndex() {
             [e]: !toggled
         });
       }
-    }   
+    }  
+     
 
     const DirectToCharacter = async (path, guid) => {
         setCharactersState({
@@ -57,13 +83,10 @@ export default function CharactersIndex() {
 
     const GoBackToList = async () => {
       await setCharactersState({
-        selectedApproved: true,
-        commentFilter: false,
-        showApprovableOnly: false,
-        viewingItem: false,
-        viewItemGuid: '',
-        viewItemPath: ''
+        ...charactersState,
+        viewingItem: false
     });
+    await setfilterInit(true);
     }
 
     const GoToEditCharacter = async (path, guid) => {
@@ -74,21 +97,26 @@ export default function CharactersIndex() {
       
     }
 
+    const UnInitFiler = () => {
+      setfilterInit(false);
+    }
+
     const NewCharacterLink = async () => {
       await setIsCreate(true);
     }
 
     const GoBackFromCreateEdit = async () => {
-      await setCharactersState({
+      /* await setCharactersState({
         selectedApproved: true,
         commentFilter: false,
         showApprovableOnly: false,
         viewingItem: false,
         viewItemGuid: '',
         viewItemPath: ''
-    });
+    }); */
       await setIsCreate(false);
       await setIsEdit({isEditing: false, guid: null});
+      await setfilterInit(true);
     }
 
 
@@ -106,7 +134,10 @@ export default function CharactersIndex() {
  !isCreate ?
  !isEdit.isEditing ?
 <>
-<CharactersListPage appdata={approvQuery.data} 
+<CharactersListPage 
+FilterInit={filterInit}
+UnInitFiler={() => UnInitFiler()}
+appdata={approvQuery.data} 
   undata={unapprovQuery.data} 
   larpTags={allTagsQuery.data.find((tags) => tags.tagType === 'LARPRun')?.tagsList}
   tagslist={allTagsQuery.data.find((tags) => tags.tagType === 'Character')?.tagsList}
@@ -115,9 +146,11 @@ export default function CharactersIndex() {
   selectedApproved={charactersState.selectedApproved} 
   commentFilterOn={charactersState.commentFilter}
   showApprovableOnly={charactersState.showApprovableOnly}
+  readyApproved={charactersState.readyApproved}
   ToggleSwitch={() => ToggleSwitch('selectedApproved')}
   ToggleCommentSwitch={() => ToggleSwitch('commentFilter')}
   ToggleApprovableSwitch={() => ToggleSwitch('showApprovableOnly')}
+  ToggleApprovReadySwitch={() =>  ToggleSwitch('readyApproved')}
   DirectToCharacter={(path, guid) => DirectToCharacter(path, guid)}
   NewCharacterLink={(e) => NewCharacterLink(e)}
   GoToSearch={() => GoToSearch()}
@@ -127,7 +160,9 @@ export default function CharactersIndex() {
 : 
 <>
 <CharacterEdit authLevel={authLevel} formJSON={formJSON} tagslist={allTagsQuery.data} guid={isEdit.guid} path={isEdit.path}
-GoBack ={() => GoBackFromCreateEdit()}  />
+GoBack ={() => GoBackFromCreateEdit()} 
+OpenSnack ={(e) => OpenSnack(e)}
+/>
 </>
  :
 <>
@@ -140,9 +175,49 @@ GoBack ={() => GoBackFromCreateEdit()} />
 GoBackToList={() => GoBackToList()} />
 </>
 }
+{snackOpen.isOpen ? (
+        <ClickAwayListener onClickAway={() => handleSnackClose()}>
+          <CustomSnackbar {...getRootProps()}>{snackOpen.text}</CustomSnackbar>
+        </ClickAwayListener>
+      ) : null}
 </>
-    )
+)
 }
+
+
+const snackbarInRight = keyframes`
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+`;
+
+const CustomSnackbar = styled('div')(
+  ({ theme }) => css`
+    position: fixed;
+    z-index: 5500;
+    display: flex;
+    right: 16px;
+    bottom: 16px;
+    left: auto;
+    justify-content: space-between;
+    max-width: 560px;
+    min-width: 300px;
+    background-color: ${'#fff'};
+    border-radius: 8px;
+    border: 1px solid ${'#DAE2ED'};
+    box-shadow: ${`0 2px 8px ${'#DAE2ED'}`};
+    padding: 0.75rem;
+    color: ${'#1C2025'};
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 600;
+    animation: ${snackbarInRight} 200ms;
+    transition: transform 0.2s ease-out;
+  `
+);
 
 CharactersIndex.propTypes = {
   }

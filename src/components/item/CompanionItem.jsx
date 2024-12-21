@@ -2,6 +2,7 @@ import SpecialSkillsDisplayItem from '../specialskills/specialskillsdisplayitem'
 import PropTypes from 'prop-types';
 import Loading from '../loading/loading';
 import './_companionitem.scss';
+import { useDebugValue } from 'react';
 
 const CompanionItem = props => {
   if (!props || !props.item) {
@@ -22,14 +23,23 @@ const CompanionItem = props => {
                   <div className="column1">
                     <div className="columnentry">Power</div>
                     <div className="columnentry">Athletics</div>
-                   {props.item.fields.TYPE !== 'Mecha' ? <div className="columnentry">Confidence</div> :<></> }
-                   {props.item.fields.TYPE !== 'Mecha' ? <div className="columnentry">Brains</div> : <></> }
+                   {props.item.fields.TYPE !== 'Mecha' ? <div className="columnentry">Brains</div> :<></> }
+                   {props.item.fields.TYPE !== 'Mecha' ? <div className="columnentry">Confidence</div> : <></> }
+                   {props.item.fields.TYPE !== 'Mecha' ? <div className="columnentry">Charisma</div> : <></> }
                   </div>
                   <div className="column2">
-                    <div className="columnentry">{props.item.fields.Power}</div>
-                    <div className="columnentry">{props.item.fields.Athletics}</div>
-                    { props.item.fields.TYPE !== 'Mecha' ? <div className="columnentry">{props.item.fields.Confidence}</div> : <></>}
-                    {props.item.fields.TYPE !== 'Mecha' ? <div className="columnentry">{props.item.fields.Brains}</div>: <></>}
+                  <div className="columnentry"> {props.item.fields.Power === null 
+                    || props.item.fields.Power === undefined || props.item.fields.Power === '' ? '0': props.item.fields.Power}</div>
+                  <div className="columnentry"> {props.item.fields.Athletics === null 
+                    || props.item.fields.Athletics === undefined || props.item.fields.Athletics === '' ? '0': props.item.fields.Athletics}</div>
+                    { props.item.fields.TYPE !== 'Mecha' ? <div className="columnentry">{ props.item.fields.Brains === null 
+                    || props.item.fields.Brains === undefined || props.item.fields.Brains === '' ? '0': props.item.fields.Brains}</div>: <></>}
+                    { props.item.fields.TYPE !== 'Mecha' ? <div className="columnentry">{ props.item.fields.Confidence === null 
+                    || props.item.fields.Confidence === undefined 
+                    || props.item.fields.Confidence === '' ? '0': props.item.fields.Confidence}</div> : <></>}
+                    { props.item.fields.TYPE !== 'Mecha' ? <div className="columnentry">{props.item.fields.Charisma === null 
+                    || props.item.fields.Charisma === undefined 
+                    || props.item.fields.Charisma === '' ? '0': props.item.fields.Charisma}</div> : <></>}
                   </div>
                   <div className="column1">
                     <div className="columnentry">H2H</div>
@@ -37,13 +47,20 @@ const CompanionItem = props => {
                     <div className="columnentry">{props.item.fields.Fly !== null && props.item.fields.Fly !== undefined 
                    && props.item.fields.Fly !== '' ?
                      "Fly" : "Run"}</div>
+                     <div className="columnentry">Jump</div>
                   </div>
                   <div className="column2">
-                    <div className="columnentry">{props.item.fields.H2H}</div>
-                    <div className="columnentry">{props.item.fields.Dodge}</div>
+                    <div className="columnentry"> {props.item.fields.H2H === null 
+                    || props.item.fields.H2H === undefined || props.item.fields.H2H === '' ? '0': props.item.fields.H2H}</div>
+                    <div className="columnentry"> {props.item.fields.Dodge === null 
+                    || props.item.fields.Dodge === undefined || props.item.fields.Dodge === '' ? '0': props.item.fields.Dodge}</div>
                     <div className="columnentry">{props.item.fields.Fly !== null && props.item.fields.Fly !== undefined
                     && props.item.fields.Fly !== ''  ?  
-                    props.item.fields.Fly : props.item.fields.Run}</div>
+                    props.item.fields.Fly : props.item.fields.Run === undefined || props.item.fields.Run === null || 
+                    props.item.fields.Run === '' ? '0' : props.item.fields.Run }
+                    </div>
+                    <div className="columnentry"> {props.item.fields.Jump === null 
+                    || props.item.fields.Jump === undefined || props.item.fields.Jump === '' ? '0': props.item.fields.Jump}</div>
                   </div>
                 </div>
               </div>

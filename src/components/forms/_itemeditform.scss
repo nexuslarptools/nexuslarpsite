@@ -124,6 +124,12 @@
             float: right;
             margin-bottom: 5px;
         }
+        .reorder-ability.button-action{
+            float: right;
+            margin-bottom: 5px;
+            height: 25px;
+            min-width: 25px;
+        }
         .power .MuiFormGroup-root {
             @include roundedCorners();
             border: 1px solid $color-primary-dark;

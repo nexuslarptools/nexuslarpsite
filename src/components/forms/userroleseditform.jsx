@@ -210,7 +210,8 @@ return (
               onBlur={(e) => blurred(e)}
               onKeyUp={(e) => e.code === "Escape" ? blurred(e) : null}>
               <option className="select-default" key='default' value='default'>select preferred pronouns</option>
-              {pronounsData.data.map((obj) => {
+              {pronounsData.data !== undefined && pronounsData.data !== null ? 
+              pronounsData.data.map((obj) => {
                 return (
                   <>
                     { obj.guid !== null
@@ -221,7 +222,9 @@ return (
                     }
                   </>
                 )
-              })}
+              })
+            : <></> 
+            }
             </select>
           </div>
           <div className="input-pair">
