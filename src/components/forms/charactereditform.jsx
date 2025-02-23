@@ -1038,11 +1038,17 @@ isNew: true
               </div>
             </div>
           <div>  
-              {reviewsState.length > 0 ?
-              reviewsState.map(message => 
-                <ReviewNotesDisplay key={message} message={message} RemoveReview={(id) => RemoveReview(id)} />)
-                : <ReviewNotesForm  AddReview={(e) => AddReview(e)} type={'Character'} />
+              { props.messagesList !== undefined &&
+              props.messagesList.length > 0 ?
+              props.messagesList.map(message => 
+                <ReviewNotesDisplay key={message.id} guid={props.initForm.apiMessage.guid} type={'Character'}  message={message} RemoveReview={() => RemoveReview(message.id)} />)
+                : <></>
               }
+              { props.initForm.showResult !== null ?
+                <ReviewNotesForm  AddReview={(e) => props.AddReview(e)} type={'Character'} /> :
+                <></>
+              }
+  
               <div>
             {'&nbsp'}
             </div>
@@ -1145,6 +1151,7 @@ export default CharacterEditForm;
 CharacterEditForm.propTypes = {
   authLevel: PropTypes.number,
   currenUserGuid: PropTypes.string,
+  messagesList: PropTypes.array,
   formJSON: PropTypes.array,
   tagslist: PropTypes.object,
   appdata: PropTypes.object,
@@ -1160,6 +1167,7 @@ CharacterEditForm.propTypes = {
   ReturnItem: PropTypes.func,
   GoBack: PropTypes.func,
   Approve: PropTypes.func,
+  AddReview: PropTypes.func,
   seriesList: PropTypes.array,
   img: PropTypes.string,
   img2: PropTypes.string,
