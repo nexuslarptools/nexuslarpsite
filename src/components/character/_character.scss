@@ -346,10 +346,11 @@
             margin-bottom: 10px;
             padding-bottom: 3px;
             width: 100%;
+            page-break-after: avoid;
         }
         .gm-notes-text {
             font-family: "Arial";
-            height: 10.2in;
+            height: 9in;
             line-height: 1.3em;
             overflow: hidden; 
             p {
@@ -435,12 +436,6 @@
                     font-weight: 600;
                     margin-bottom: 20px;
                 }
-            }
-        }
-
-        .gm-notes {
-            .gm-notes-text {
-                font-size: 16pt;
             }
         }
 
