@@ -157,6 +157,7 @@ const ItemEditForm = (props) => {
             ) {
               let oldName = props.initForm.apiMessage.fields.Special_Skills[i].Name
               let oldCost = props.initForm.apiMessage.fields.Special_Skills[i].Cost
+              let oldUses = props.initForm.apiMessage.fields.Special_Skills[i].Uses
               const oldRank =
                 props.initForm.apiMessage.fields.Special_Skills[i].Rank
               let oldDescription =
@@ -174,6 +175,7 @@ const ItemEditForm = (props) => {
                   visible: true,
                     Name: oldName,
                     Cost: oldCost,
+                    Uses: oldUses,
                     Rank: oldRank,
                     Description: oldDescription,
                     Tags: oldTags,
@@ -191,7 +193,11 @@ const ItemEditForm = (props) => {
               if (oldCost === '') {
                 oldCost = null;
               }
-    
+
+              if (oldUses === '') {
+                oldUses = null;
+              }
+
               if (oldDescription === '') {
                 oldDescription = null;
               }
@@ -229,6 +235,7 @@ const ItemEditForm = (props) => {
             ) {
               let oldName = props.initForm.apiMessage.back.fields.Special_Skills[i].Name
               let oldCost = props.initForm.apiMessage.back.fields.Special_Skills[i].Cost
+              let oldUses = props.initForm.apiMessage.back.fields.Special_Skills[i].Uses
               const oldRank =
                 props.initForm.apiMessage.back.fields.Special_Skills[i].Rank
               let oldDescription =
@@ -246,6 +253,7 @@ const ItemEditForm = (props) => {
                   visible: true,
                     Name: oldName,
                     Cost: oldCost,
+                    Uses: oldUses,
                     Rank: oldRank,
                     Description: oldDescription,
                     Tags: oldTags,
@@ -262,6 +270,10 @@ const ItemEditForm = (props) => {
     
               if (oldCost === '') {
                 oldCost = null;
+              }
+
+              if (oldUses === '') {
+                oldUses = null;
               }
     
               if (oldDescription === '') {
