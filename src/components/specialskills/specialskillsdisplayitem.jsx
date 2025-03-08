@@ -20,6 +20,19 @@ const SpecialSkillsDisplayItem = props => {
             ? <div className='cost' key={"cost"+props.skill.Name + Math.random}>Cost: {props.skill.Cost}</div>
             : null
         }
+        {
+          props.skill.Uses !== undefined && props.skill.Uses !== null && props.skill.Uses.trim() !== ''
+            ? 
+            <div className='item-uses-container-mecha'>
+                      <div className ='item-uses-mecha-text'> Uses: 
+                      { Array.apply(null, { length: props.skill.Uses }).map((e, i) => (
+                         <span className="item-uses-mecha" key={i}>○</span>
+                        ))
+                      }
+                      </div>
+                    </div> :
+           <></>
+        }
       </span>
       {
         props.skill.Description !== undefined && props.skill.Description !== null
