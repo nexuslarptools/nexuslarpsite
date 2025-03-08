@@ -20,7 +20,8 @@ const SpecialSkillsDisplayItem = props => {
             ? <div className='cost' key={"cost"+props.skill.Name + Math.random}>Cost: {props.skill.Cost}</div>
             : null
         }
-        {
+      </span>
+      {
           props.skill.Uses !== undefined && props.skill.Uses !== null && props.skill.Uses.trim() !== ''
             ? 
             <div className='item-uses-container-mecha'>
@@ -31,9 +32,8 @@ const SpecialSkillsDisplayItem = props => {
                       }
                       </div>
                     </div> :
-           <></>
+             <></>
         }
-      </span>
       {
         props.skill.Description !== undefined && props.skill.Description !== null
           ? <div className='skill-text' key={"name"+props.skill.Name + Math.random}>
