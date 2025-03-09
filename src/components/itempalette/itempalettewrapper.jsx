@@ -344,6 +344,10 @@ itemPages.forEach(page => {
          <div key={index}>
         <ItemPalette2Back itemsList={page.items} type={page.pageType}  />
          </div> : 
+        page.pageType === 3 && page.side ==='back' ?
+        <div key={index}>
+       <ItemPalette2Back itemsList={page.items} type={page.pageType}  />
+        </div> : 
         <div key={index}>
         <ItemPalette2 itemsList={page.items} type={page.pageType}  />
         </div> 
