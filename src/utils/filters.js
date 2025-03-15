@@ -1,6 +1,10 @@
+function removeDiacritics(str) {
+  return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
 export function filterSeries(rows, titlefilter, jpntitlefilter, listtags, rowsPerPage, page) {
 
-    let filteredRows = rows.filter(character => character.title.toLocaleLowerCase().includes(titlefilter));
+    let filteredRows = rows.filter(character => removeDiacritics(character.title.toLocaleLowerCase()).includes(removeDiacritics(titlefilter.toLocaleLowerCase())));
     filteredRows = filterSeriesJpn(filteredRows, jpntitlefilter)
     filteredRows = filterSeriesTags(filteredRows, listtags.listTags)
 
@@ -14,7 +18,7 @@ export function filterSeries(rows, titlefilter, jpntitlefilter, listtags, rowsPe
 
 export function filterSeriesJpn(rows, jpntitlefilter) {
 
-    return rows.filter(character => character.titlejpn.toLocaleLowerCase().includes(jpntitlefilter));
+    return rows.filter(character => removeDiacritics(character.titlejpn.toLocaleLowerCase()).includes(removeDiacritics(jpntitlefilter.toLocaleLowerCase())));
 }
 
 export function filterSeriesTags(rows, listTags) {
@@ -38,6 +42,7 @@ export function filterSeriesTags(rows, listTags) {
     }
     return rows;
 }
+
 
 
 export default filterSeries

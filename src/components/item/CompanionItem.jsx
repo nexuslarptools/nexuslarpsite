@@ -2,7 +2,6 @@ import SpecialSkillsDisplayItem from '../specialskills/specialskillsdisplayitem'
 import PropTypes from 'prop-types';
 import Loading from '../loading/loading';
 import './_companionitem.scss';
-import { useDebugValue } from 'react';
 
 const CompanionItem = props => {
   if (!props || !props.item) {
@@ -44,23 +43,47 @@ const CompanionItem = props => {
                   <div className="column1">
                     <div className="columnentry">H2H</div>
                     <div className="columnentry">Dodge</div>
-                    <div className="columnentry">{props.item.fields.Fly !== null && props.item.fields.Fly !== undefined 
+                    <div className="columnentry">
+                      {props.item.fields.Move !== null && props.item.fields.Move !== undefined 
+                   && props.item.fields.Move !== '' ? "Move" :
+                     props.item.fields.Fly !== null && props.item.fields.Fly !== undefined 
                    && props.item.fields.Fly !== '' ?
-                     "Fly" : "Run"}</div>
+                     "Fly" :
+                      "Run"}</div>
+                  {props.item.fields.Jump === null 
+                    || props.item.fields.Jump === undefined 
+                    || props.item.fields.Jump === ''
+                    ||
+                    (props.item.fields.Move !== null 
+                      && props.item.fields.Move !== undefined
+                      && props.item.fields.Move !== ''
+                    )  ? <></> :
                      <div className="columnentry">Jump</div>
+                                         }
                   </div>
                   <div className="column2">
                     <div className="columnentry"> {props.item.fields.H2H === null 
                     || props.item.fields.H2H === undefined || props.item.fields.H2H === '' ? '0': props.item.fields.H2H}</div>
                     <div className="columnentry"> {props.item.fields.Dodge === null 
                     || props.item.fields.Dodge === undefined || props.item.fields.Dodge === '' ? '0': props.item.fields.Dodge}</div>
-                    <div className="columnentry">{props.item.fields.Fly !== null && props.item.fields.Fly !== undefined
+                    <div className="columnentry">
+                    {props.item.fields.Move !== null && props.item.fields.Move !== undefined 
+                    && props.item.fields.Move !== '' ? props.item.fields.Move :
+                    props.item.fields.Fly !== null && props.item.fields.Fly !== undefined
                     && props.item.fields.Fly !== ''  ?  
                     props.item.fields.Fly : props.item.fields.Run === undefined || props.item.fields.Run === null || 
                     props.item.fields.Run === '' ? '0' : props.item.fields.Run }
                     </div>
+                    {props.item.fields.Jump === null 
+                    || props.item.fields.Jump === undefined
+                    || props.item.fields.Jump === '' ||
+                    (props.item.fields.Move !== null 
+                      && props.item.fields.Move !== undefined
+                      && props.item.fields.Move !== ''
+                    )  ? <></> :
                     <div className="columnentry"> {props.item.fields.Jump === null 
                     || props.item.fields.Jump === undefined || props.item.fields.Jump === '' ? '0': props.item.fields.Jump}</div>
+                     }
                   </div>
                 </div>
               </div>

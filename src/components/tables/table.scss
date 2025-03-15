@@ -229,7 +229,7 @@
 		// text search filters
 		.filter-container{
 			align-items: center;
-			display: flex;	
+			display: inline-block;
 			width: 100%;
 			.MuiBox-root {
 				background: none;
@@ -238,8 +238,15 @@
 			}
 			.input-pair{
 				width: 100%;
+				display: inline-block;
+				.searchicon{
+					width: 20px;
+				}
+				.inputbox{
+					width: calc(100% - 25px);
+				}
 			}
-			input {
+			.input {
 				font-size: $font-size-small;
 			}
 			.MuiTextField-root {
@@ -249,6 +256,13 @@
 		}
 		.input-pair{
 			width: 100%;
+			display: inline-block;
+			.searchicon{
+				width: 20px;
+			}
+			.inputbox{
+				width: calc(100% - 25px);
+			}
 			.MuiFormControl-root {
 				padding-right: 0;
 			}
