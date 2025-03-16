@@ -54,6 +54,11 @@ const ItemTable = props => {
   });
 
   
+  function removeDiacritics(str) {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  }
+
+  
   useEffect(() => {
 
     let tagDrowdownList = [];
@@ -71,8 +76,8 @@ const ItemTable = props => {
 
     let filteredRows = props.appdata?.iteList;
 
-    filteredRows = filteredRows.filter(item => item.name.toLocaleLowerCase().includes(filterState.ItemsFilter.toLocaleLowerCase()));
-    filteredRows = filteredRows.filter(item => (item.series === null && filterState.SeriesFilter === '') || (item.series !== null && item.series.toLocaleLowerCase().includes(filterState.SeriesFilter.toLocaleLowerCase())));
+    filteredRows = filteredRows.filter(item => removeDiacritics(item.name.toLocaleLowerCase()).includes(removeDiacritics(filterState.ItemsFilter.toLocaleLowerCase())));
+    filteredRows = filteredRows.filter(item => (item.series === null && filterState.SeriesFilter === '') || (item.series !== null && removeDiacritics(item.series.toLocaleLowerCase()).includes(removeDiacritics(filterState.SeriesFilter.toLocaleLowerCase()))));
     if (props.showApprovableOnly) {
       filteredRows = filteredRows.filter(item => (item.editbyUserGuid !== props.userGuid && item.firstapprovalbyuserGuid !== props.userGuid));
     }
@@ -523,7 +528,7 @@ return (
                 {props.commentFilterOn !== undefined ?  <TableCell></TableCell> : <></>}
                 <TableCell>
                   <div className='filter-container'>
-                    <FilterIcon label="Items" clearfilter={clearfilterState} filterup={e => updateFilter(e, 'Items')}/>
+                    <FilterIcon label="Name" clearfilter={clearfilterState} filterup={e => updateFilter(e, 'Items')}/>
                   </div>
                 </TableCell>
                 <TableCell>

@@ -56,6 +56,11 @@ const CharacterTable = props => {
         row: null
       });
 
+      function removeDiacritics(str) {
+        return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      }
+    
+
       useEffect(() => {
         let tagDrowdownList = [];
         props.tagslist.forEach(tag => {
@@ -72,9 +77,9 @@ const CharacterTable = props => {
 
         let filteredRows = props.appdata;
 
-        filteredRows = filteredRows.filter(item => item.name.toLocaleLowerCase().includes(filterState.CharacterFilter.toLocaleLowerCase()));
+        filteredRows = filteredRows.filter(item => removeDiacritics(item.name.toLocaleLowerCase()).includes(removeDiacritics(filterState.CharacterFilter.toLocaleLowerCase())));
         filteredRows = filteredRows.filter(item => (item.series === null && filterState.SeriesFilter === '') 
-          || (item.title !== null && item.title.toLocaleLowerCase().includes(filterState.SeriesFilter.toLocaleLowerCase())));
+          || (item.title !== null && removeDiacritics(item.title.toLocaleLowerCase()).includes(removeDiacritics(filterState.SeriesFilter.toLocaleLowerCase()))));
         if (props.showApprovableOnly) {
           filteredRows = filteredRows.filter(item => (item.editbyUserGuid !== props.userGuid && item.firstapprovalbyuserGuid !== props.userGuid));
         }

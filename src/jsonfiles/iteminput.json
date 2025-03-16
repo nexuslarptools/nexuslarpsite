@@ -160,6 +160,16 @@
 					"Vehicle"
 				]
 			},
+			"Move": {
+				"Type": "Input",
+				"Label": "Move",
+				"Display": true,
+				"ToolTip": "Move is a catch all for Run/Jump/Fly/Swim/Burrow. \nUse only on pokemon or other companions where move type is obvious.",
+				"Types": [
+					"Companion",
+					"Pokemon"
+				]
+			},
 			"Grade": {
 				"Type": "Input",
 				"Label": "Grade",
@@ -258,6 +268,7 @@
 				"Type": "Input",
 				"Label": "Hide Stuff Modifier",
 				"Display": true,
+				"ToolTip": "Can be positive or negative, this applied to the skill of the user, so positive is smaller and negative is bigger.",
 				"Types": ["All"]
 			},
 			"Value": {
