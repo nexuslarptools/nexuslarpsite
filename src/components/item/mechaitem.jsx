@@ -74,9 +74,9 @@ const MechaItem = props => {
                       //'\u00a0\u00a0'
                   }
                   {
-                    props.item.fields.GRADE != null && props.item.fields.GRADE != ''
+                    props.item.fields.Grade != null && props.item.fields.Grade != ''
                       ? <div className='grade'>
-                        Grade: {props.item.fields.GRADE}
+                        Grade: {props.item.fields.Grade}
                       </div>
                       : <></>
                       //'\u00a0\u00a0'

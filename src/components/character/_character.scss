@@ -311,6 +311,9 @@
         .starting-items-amount {
             font-size: 10pt;
         }
+      //  .starting-items-list-sm {
+      //      font-size: 8pt;
+      //  }
     }
 
     // special skills
@@ -425,6 +428,10 @@
             width: 200px;
             .starting-items-header, .starting-items-amount, .starting-items-list {
                 font-size: 14pt;
+                font-weight: 600;
+            }
+            .starting-items-list-sm {
+                font-size: 12t;
                 font-weight: 600;
             }
         }
