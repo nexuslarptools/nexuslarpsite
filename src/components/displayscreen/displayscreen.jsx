@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import CharacterWrapperNo from '../character/characterwrapperno';
 import ItemPaletteWrapper from '../itempalette/itempalettewrapper';
+import CharacterGMNotes from '../character/charactergmnotes';
 
 const DisplayScreen = props => {
 
@@ -288,6 +289,7 @@ return (
       <ItemPaletteWrapper printfrontback={isDoublesidePrint} itemsList={props.id === 'character' ? props.character.starting_Items : props.itemList}
        itemsList2={props.id === 'character' ? props.character.upgrade_Items : []}  fullItems={props.id === 'character' ? fullItems : props.itemList} />
       </div>
+      <CharacterGMNotes character={props.character}/>
       </div>
 </>
 )
