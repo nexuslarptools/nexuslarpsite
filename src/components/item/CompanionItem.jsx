@@ -109,7 +109,7 @@ const CompanionItem = props => {
                     : <></>
                 }
               </div>
-              { props.item.fields.RESILIENCE != null || props.item.fields.GRADE != null
+              { props.item.fields.RESILIENCE != null || props.item.fields.Grade != null
                 ? <span className = "itemStats">
                   {
                     props.item.fields.RESILIENCE != null && props.item.fields.RESILIENCE != ''
@@ -120,9 +120,9 @@ const CompanionItem = props => {
                       //'\u00a0\u00a0'
                   }
                   {
-                    props.item.fields.GRADE != null && props.item.fields.GRADE != ''
+                    props.item.fields.Grade != null && props.item.fields.Grade != ''
                       ? <div className='grade'>
-                        Grade: {props.item.fields.GRADE}
+                        Grade: {props.item.fields.Grade}
                       </div>
                       : <></>
                       //'\u00a0\u00a0'

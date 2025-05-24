@@ -289,7 +289,9 @@ return (
       <ItemPaletteWrapper printfrontback={isDoublesidePrint} itemsList={props.id === 'character' ? props.character.starting_Items : props.itemList}
        itemsList2={props.id === 'character' ? props.character.upgrade_Items : []}  fullItems={props.id === 'character' ? fullItems : props.itemList} />
       </div>
-      <CharacterGMNotes character={props.character}/>
+      { props.character !== undefined && props.character !== null ?
+      <CharacterGMNotes character={props.character}/> :
+       <></>}
       </div>
 </>
 )

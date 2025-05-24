@@ -2,7 +2,8 @@ import PropTypes from 'prop-types';
 
 const CharacterGMNotes = props => {
 
-    if (props.character.gmnotes.length > 0) {
+    if (props.character.gmnotes !== undefined && props.character.gmnotes !== null 
+        && props.character.gmnotes.length > 0) {
     return (
                        
         <div className='sheet sheet3'>
