@@ -1,0 +1,30 @@
+@import "/src/variables";
+@import "/src/mixins";
+
+
+        .selectionlist-label {
+            padding-top: 10px;
+            padding-bottom: 10px;
+            text-align: center;
+            background-color: $color-primary-lighter;
+            font-family: "Warmonger BB", "Roboto", serif;
+            font-size: $font-size-large;
+            font-weight: bold;
+        }
+        .selectionlist-list {
+            z-index: -1;
+        }
+        .selectionlist-footer{
+            position: absolute;
+            align-content: center;
+            bottom: 0px;
+            left: 25%;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            width: 50%;
+            text-align: center;
+            font-family: "Warmonger BB", "Roboto", serif;
+            font-size: $font-size-large;
+            font-weight: bold;
+        }
+

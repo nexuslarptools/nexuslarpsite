@@ -29,7 +29,9 @@ const CharacterTable = props => {
     const [rowsPerPage, setRowsPerPage] = useState(25);
     const [filterState, setFilterState] = useState({
         SeriesFilter: '',
-        CharacterFilter: ''
+        CharacterFilter: '',
+        CreatorFilter: '',
+        EditorFilter: ''
       });
       const [tagState, setTagState] = useState({
         listTags: []
@@ -80,6 +82,11 @@ const CharacterTable = props => {
         filteredRows = filteredRows.filter(item => removeDiacritics(item.name.toLocaleLowerCase()).includes(removeDiacritics(filterState.CharacterFilter.toLocaleLowerCase())));
         filteredRows = filteredRows.filter(item => (item.series === null && filterState.SeriesFilter === '') 
           || (item.title !== null && removeDiacritics(item.title.toLocaleLowerCase()).includes(removeDiacritics(filterState.SeriesFilter.toLocaleLowerCase()))));
+          filteredRows = filteredRows.filter(item => removeDiacritics(item.createdByUser.toLocaleLowerCase()).includes(removeDiacritics(filterState.CreatorFilter.toLocaleLowerCase())));
+          filteredRows = filteredRows.filter(item => removeDiacritics(item.editbyUser.toLocaleLowerCase()).includes(removeDiacritics(filterState.EditorFilter.toLocaleLowerCase())));
+   
+          
+
         if (props.showApprovableOnly) {
           filteredRows = filteredRows.filter(item => (item.editbyUserGuid !== props.userGuid && item.firstapprovalbyuserGuid !== props.userGuid));
         }
@@ -239,6 +246,31 @@ const CharacterTable = props => {
               setBtnDisabledState(true);
             }
           }
+          if (updatedfeild === 'Editor') {
+            await setFilterState({
+              ...filterState,
+              EditorFilter: e
+            })
+    
+            if (e !== '' || filterState.EditorFilter !== '' || tagState.listguids.length > 0) {
+              setBtnDisabledState(false);
+            } else {
+              setBtnDisabledState(true);
+            }
+          }
+          if (updatedfeild === 'Creator') {
+            await setFilterState({
+              ...filterState,
+              CreatorFilter: e
+            })
+    
+            if (e !== '' || filterState.CreatorFilter !== '' || tagState.listguids.length > 0) {
+              setBtnDisabledState(false);
+            } else {
+              setBtnDisabledState(true);
+            }
+          }
+          
         } catch (error) {
           console.log(error);
         }
@@ -360,7 +392,6 @@ const CharacterTable = props => {
                     <button className='button-action' onClick={(e) => props.NewCharacterLink(e)}>Add New Character</button>
                     </TableCell>
                     <TableCell className='table-topper'>
-                    <button className='button-action' onClick={() => props.GoToSearch()}>Character Search</button>
                      </TableCell>
                     <TableCell className='table-topper'>
                      { props.authLevel > 1
@@ -481,7 +512,12 @@ const CharacterTable = props => {
                   </TableRow>
                   <TableRow className='table-filter-row'>
                 {props.selectedApproved  ?
-                       <TableCell></TableCell> : <TableCell colSpan={2}></TableCell>
+            <TableCell>   <FilterIcon label="Editor" clearfilter={clearfilterState} filterup={e => updateFilter(e, 'Editor')}/>
+                                     <FilterIcon label="Created By" clearfilter={clearfilterState} filterup={e => updateFilter(e, 'Creator')}/>          
+                                     </TableCell> : 
+                                     <TableCell colSpan={2}><FilterIcon label="Editor" clearfilter={clearfilterState} filterup={e => updateFilter(e, 'Editor')}/>
+                                     <FilterIcon label="Created By" clearfilter={clearfilterState} filterup={e => updateFilter(e, 'Creator')}/>          
+                                    </TableCell>
                   }
                 {props.commentFilterOn !== undefined ?  <TableCell></TableCell> : <></>}
                 <TableCell>

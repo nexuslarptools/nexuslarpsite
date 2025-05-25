@@ -1,19 +1,26 @@
-import AuthRedirect from '../../utils/authRedirect';
-import Loading from '../../components/loading/loading';
-import useGetData from '../../utils/getdata';
-import AuthLevelInfo from '../../utils/authLevelInfo';
-import { useEffect, useState } from 'react';
-import CharactersListPage from './CharactersListPage';
-import CharacterDisplayPage from './CharacterDisplay';
-import CharacterCreate from './CharacterCreate';
+import PropTypes from "prop-types";
+import AuthRedirect from "../../utils/authRedirect";
+import { useLocation } from "react-router-dom";
+import { css, keyframes } from "@emotion/react";
+import { styled } from "@mui/system";
+import { ClickAwayListener } from "@mui/material";
+import CharacterDisplayPage from "../Characters/CharacterDisplay";
+import CharacterCreate from "../Characters/CharacterCreate";
+import CharacterEdit from "../Characters/CharacterEdit";
+import CharactersListPage from "../Characters/CharactersListPage";
+import Loading from "../../components/loading/loading";
+import useGetData from "../../utils/getdata";
+import AuthLevelInfo from "../../utils/authLevelInfo";
 import formJSON from '../../jsonfiles/characterinput.json';
-import CharacterEdit from './CharacterEdit';
-import { ClickAwayListener, css, keyframes, styled } from '@mui/material';
-import { useSnackbar } from '@mui/base/useSnackbar';
-import PropTypes from 'prop-types';
+import { useState } from "react";
+import { useSnackbar } from "@mui/base";
 
-export default function CharactersIndex(props) {
+
+export default function CharacterSearch() {
+    const location = useLocation();
+
     AuthRedirect(1)
+
 
     const handleSnackClose = () => {
       setSnackOpen({isOpen:false,
@@ -26,8 +33,8 @@ export default function CharactersIndex(props) {
     autoHideDuration: 5000,
   });
 
-    const approvQuery = useGetData('listApprovedCharacters', '/api/v1/CharacterSheetApproveds');  
-    const unapprovQuery = useGetData('listUnapprovedCharacters', '/api/v1/CharacterSheets');
+    const approvQuery = useGetData('listApprovedCharactersSearch', '/api/v1/CharacterSheetApproveds/Search/'+JSON.stringify(location.state));  
+    const unapprovQuery = useGetData('listUnapprovedCharactersSearch', '/api/v1/CharacterSheets/Search/'+JSON.stringify(location.state));
     const allTagsQuery = useGetData('listTags', '/api/v1/Tags/groupbytyperead');
     const userGuidQuery = useGetData('userguid', '/api/v1/Users/CurrentGuid');
     const authLevel = AuthLevelInfo();
@@ -48,7 +55,7 @@ export default function CharactersIndex(props) {
   
 
      const OpenSnack = async (e) => {
-      await setSnackOpen(  {isOpen:true,
+      await setSnackOpen(        {isOpen:true,
         text: e});
      }
 
@@ -72,18 +79,6 @@ export default function CharactersIndex(props) {
         });
       }
     }  
-
-    useEffect(() => {
-      if (props.subState.ismain === true) {
-        setIsCreate(false);
-        setIsEdit({isEditing: false, guid: null});
-        setfilterInit(true);
-      }
-      else {
-        if (props.subState.funct === 'Create')
-          setIsCreate(true);
-      }
-    }, [props.subState])
      
 
     const DirectToCharacter = async (path, guid) => {
@@ -92,7 +87,6 @@ export default function CharactersIndex(props) {
             viewingItem: true,
             viewItemGuid: guid,
             viewItemPath: path});
-            props.toggleSubScreen(false, 'View', guid, path);
     }
 
     const GoBackToList = async () => {
@@ -100,13 +94,11 @@ export default function CharactersIndex(props) {
         ...charactersState,
         viewingItem: false
     });
-    props.toggleSubScreen(true, '', '' ,'');
     await setfilterInit(true);
     }
 
     const GoToEditCharacter = async (path, guid) => {
       await setIsEdit({isEditing: true, guid: guid, path: path});
-      props.toggleSubScreen(false, 'Edit', guid, path);
     }
 
     const GoToSearch = async () => {
@@ -118,8 +110,7 @@ export default function CharactersIndex(props) {
     }
 
     const NewCharacterLink = async () => {
-      //await setIsCreate(true);
-      props.toggleSubScreen(false, 'Create', '', '');
+      await setIsCreate(true);
     }
 
     const GoBackFromCreateEdit = async () => {
@@ -131,10 +122,9 @@ export default function CharactersIndex(props) {
         viewItemGuid: '',
         viewItemPath: ''
     }); */
-      //await setIsCreate(false);
-     // await setIsEdit({isEditing: false, guid: null});
-     // await setfilterInit(true);
-      props.toggleSubScreen(true, '', '','');
+      await setIsCreate(false);
+      await setIsEdit({isEditing: false, guid: null});
+      await setfilterInit(true);
     }
 
 
@@ -237,7 +227,7 @@ const CustomSnackbar = styled('div')(
   `
 );
 
-CharactersIndex.propTypes = {
-  toggleSubScreen: PropTypes.func,
-  subState: PropTypes.object
-  }
+
+CharacterSearch.propTypes = {
+    route: PropTypes.object
+}

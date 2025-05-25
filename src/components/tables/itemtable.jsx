@@ -30,7 +30,9 @@ const ItemTable = props => {
   });
   const [filterState, setFilterState] = useState({
     SeriesFilter: '',
-    ItemsFilter: ''
+    ItemsFilter: '',
+    EditorFilter: '',
+    CreatorFilter: ''
   });
   const [clearfilterState, setClearfilterState] = useState(false);
   const [selectedLarpTag, setSelectedLarpTag] = useState(null);
@@ -77,7 +79,11 @@ const ItemTable = props => {
     let filteredRows = props.appdata?.iteList;
 
     filteredRows = filteredRows.filter(item => removeDiacritics(item.name.toLocaleLowerCase()).includes(removeDiacritics(filterState.ItemsFilter.toLocaleLowerCase())));
-    filteredRows = filteredRows.filter(item => (item.series === null && filterState.SeriesFilter === '') || (item.series !== null && removeDiacritics(item.series.toLocaleLowerCase()).includes(removeDiacritics(filterState.SeriesFilter.toLocaleLowerCase()))));
+    filteredRows = filteredRows.filter(item => (item.series === null && filterState.SeriesFilter === '') || 
+       (item.series !== null && removeDiacritics(item.series.toLocaleLowerCase()).includes(removeDiacritics(filterState.SeriesFilter.toLocaleLowerCase()))));
+    filteredRows = filteredRows.filter(item => removeDiacritics(item.createdby.toLocaleLowerCase()).includes(removeDiacritics(filterState.CreatorFilter.toLocaleLowerCase())));
+    filteredRows = filteredRows.filter(item => removeDiacritics(item.editbyUser.toLocaleLowerCase()).includes(removeDiacritics(filterState.EditorFilter.toLocaleLowerCase())));
+   
     if (props.showApprovableOnly) {
       filteredRows = filteredRows.filter(item => (item.editbyUserGuid !== props.userGuid && item.firstapprovalbyuserGuid !== props.userGuid));
     }
@@ -229,7 +235,9 @@ const ItemTable = props => {
     await setFilterState({
       ...filterState,
       ItemsFilter: '',
-      SeriesFilter: ''
+      SeriesFilter: '',
+      CreatorFilter: '',
+      EditorFilter: '',
     });
 
     await setClearfilterState(true);
@@ -255,7 +263,8 @@ const ItemTable = props => {
     setTagSelectValues(setNewTagslist);
     }
 
-    if (filterState.ItemsFilter !== '' || filterState.SeriesFilter !== '' || listguids.length > 0) {
+    if (filterState.ItemsFilter !== '' || filterState.SeriesFilter !== '' 
+      || filterState.EditorFilter !== '' || filterState.CreatorFilter !== '' || listguids.length > 0) {
       setBtnDisabledState(false);
     } else {
       setBtnDisabledState(true);
@@ -284,6 +293,30 @@ const ItemTable = props => {
         })
 
         if (e !== '' || filterState.ItemsFilter !== '' || tagState.listguids.length > 0) {
+          setBtnDisabledState(false);
+        } else {
+          setBtnDisabledState(true);
+        }
+      }
+      if (updatedfeild === 'Editor') {
+        await setFilterState({
+          ...filterState,
+          EditorFilter: e
+        })
+
+        if (e !== '' || filterState.EditorFilter !== '' || tagState.listguids.length > 0) {
+          setBtnDisabledState(false);
+        } else {
+          setBtnDisabledState(true);
+        }
+      }
+      if (updatedfeild === 'Creator') {
+        await setFilterState({
+          ...filterState,
+          CreatorFilter: e
+        })
+
+        if (e !== '' || filterState.CreatorFilter !== '' || tagState.listguids.length > 0) {
           setBtnDisabledState(false);
         } else {
           setBtnDisabledState(true);
@@ -487,7 +520,7 @@ return (
           <TableRow>
             { !props.isSelector ?
           <TableCell className="short-column table-cell-center">Status</TableCell> :
-          <TableCell></TableCell> 
+          <></> 
             }
                 { props.isSelector ?
                 <TableCell></TableCell> :
@@ -520,10 +553,16 @@ return (
                  } 
         </TableRow>
         <TableRow className='table-filter-row'>
-                <TableCell></TableCell>
+        { !props.isSelector ?
+              <TableCell>   <FilterIcon label="Editor" clearfilter={clearfilterState} filterup={e => updateFilter(e, 'Editor')}/>
+              <FilterIcon label="Created By" clearfilter={clearfilterState} filterup={e => updateFilter(e, 'Creator')}/>          
+              </TableCell> :
+          <></> 
+            }
                 {props.selectedItemsApproved  ?
                   props.isSelector ? <TableCell></TableCell> : <></> :
-                   <TableCell ></TableCell>
+                   <TableCell >
+                   </TableCell>
                   }
                 {props.commentFilterOn !== undefined ?  <TableCell></TableCell> : <></>}
                 <TableCell>
@@ -573,7 +612,7 @@ return (
 {displayState.apimessage?.map(item => {
   return (
     <TableRow key={Math.random()}>
-                    { props.isSelector ? <TableCell></TableCell> :
+                    { props.isSelector ? <></> :
                         <TableCell className='item-default-cursor table-cell-center'>
                     {
                       item.createdbyuserGuid !== null && item.firstapprovalbyuserGuid !== null && item.secondapprovalbyuserGuid !== null

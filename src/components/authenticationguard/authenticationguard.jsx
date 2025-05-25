@@ -1,6 +1,7 @@
 import { withAuthenticationRequired } from "@auth0/auth0-react";
 import { Loading } from '../loading/loading'
 import PropTypes from 'prop-types'
+import { useEffect, useState } from "react";
 
 export const AuthenticationGuard = (props) => {
   const Component = withAuthenticationRequired(props.component, {
@@ -11,7 +12,15 @@ export const AuthenticationGuard = (props) => {
     ),
   });
 
-  return <Component toggleSubScreen={(e) => props.toggleSubScreen(e)}/>;
+  const [currentState, SetCurrentState] = useState(null)
+
+  useEffect(() => {
+    if (currentState !== props.subState){
+      SetCurrentState(props.subState)
+    }
+  }, [])
+
+  return <Component subState={props.subState} toggleSubScreen={(e, funct, guid, path) => props.toggleSubScreen(e, funct, guid, path)}/>;
 };
 
 export default AuthenticationGuard;
@@ -19,4 +28,5 @@ export default AuthenticationGuard;
 AuthenticationGuard.propTypes = {
     component: PropTypes.func,
     toggleSubScreen: PropTypes.func,
+    subState: PropTypes.object
 }
