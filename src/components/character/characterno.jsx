@@ -121,13 +121,17 @@ const CharacterNo = props => {
         <div className='sheet sheet1'>
           <div className='header-info'>
             <div className='sheet-name-series'>
-            { props.character.name.length > 30 || props.character.seriesTitle.length > 50 ?
+            { props.character.seriesTitle.length > 71 || props.character.name.length + props.character.seriesTitle.length > 100 ?
+              <div className='sheetNameXSM'>{props.character.name}</div> :
+            props.character.name.length > 30 || props.character.seriesTitle.length > 50 
+            || props.character.name.length + props.character.seriesTitle.length > 71  ?
                 <div className='sheetNameSM'>{props.character.name}</div>
                :<div className='sheetName'>{props.character.name}</div>  
             }
-              { props.character.seriesTitle.length > 71 ?
+              { props.character.seriesTitle.length > 71 || props.character.name.length + props.character.seriesTitle.length > 100 ?
               <div className='seriesNameXSM'>{props.character.seriesTitle}</div> :
-              props.character.seriesTitle.length > 30 ?
+              props.character.seriesTitle.length > 30  
+              || props.character.name.length + props.character.seriesTitle.length > 71 ?
               <div className='seriesNameSM'>{props.character.seriesTitle}</div> :
               <div className='seriesName'>{props.character.seriesTitle}</div>
               }
@@ -228,14 +232,18 @@ const CharacterNo = props => {
           !props.specialSkillSpace.isactive ?
             <div className='sheet sheet2'>
               <div className='header-info'>
-                <div className='sheet-name-series'>
-                { props.character.name.length > 30 || props.character.seriesTitle.length > 50 ?
+              <div className='sheet-name-series'>
+            { props.character.seriesTitle.length > 71 || props.character.name.length + props.character.seriesTitle.length > 100 ?
+              <div className='sheetNameXSM'>{props.character.name}</div> :
+            props.character.name.length > 30 || props.character.seriesTitle.length > 50 
+            || props.character.name.length + props.character.seriesTitle.length > 71  ?
                 <div className='sheetNameSM'>{props.character.name}</div>
                :<div className='sheetName'>{props.character.name}</div>  
             }
-              { props.character.seriesTitle.length > 71 ?
+              { props.character.seriesTitle.length > 71 || props.character.name.length + props.character.seriesTitle.length > 100 ?
               <div className='seriesNameXSM'>{props.character.seriesTitle}</div> :
-              props.character.seriesTitle.length > 30 ?
+              props.character.seriesTitle.length > 30  
+              || props.character.name.length + props.character.seriesTitle.length > 71 ?
               <div className='seriesNameSM'>{props.character.seriesTitle}</div> :
               <div className='seriesName'>{props.character.seriesTitle}</div>
               }
