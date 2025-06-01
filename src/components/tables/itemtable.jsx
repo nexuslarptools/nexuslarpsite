@@ -702,8 +702,8 @@ return (
                 <TableCell></TableCell> :
           props.commentFilterOn !== undefined ?  <TableCell className='short-column table-cell-center'>Item Comments</TableCell> : <></>
           }     
-          <TableCell className='short-column table-cell-center'> Item </TableCell>
-          <TableCell className='short-column table-cell-center'> Series </TableCell>
+          <TableCell className='short-column'> Item </TableCell>
+          <TableCell className='short-column'> Series </TableCell>
           <TableCell className='short-column table-cell-center'> Tags </TableCell>
           <TableCell key={Math.random()}  className='icon-column table-cell-center'> View </TableCell>
           { props.authLevel > 1 && !props.isSelector? 
