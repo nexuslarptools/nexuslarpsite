@@ -177,13 +177,12 @@ const SearchDrawer = props => {
     };
   
     return (
-        <>
          <Drawer open={props.open} onClose={() => props.toggleClose(false)}>
          <Box sx={{ width: 500 }} role="presentation">
            <div className="selectionlist-label">
             Search
             </div>
-            <div className="selection-list-list">
+            <div className="selectionlist-list">
            <TableContainer style={{
                 maxHeight: window.innerHeight - 178 ,
               }}>
@@ -192,15 +191,14 @@ const SearchDrawer = props => {
            </TableHead>
            <TableRow>
             <TableCell>
-            <FormControl fullWidth>
+     <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">Type</InputLabel>
         <Select sx={{ width: 400 }}
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           value={formState.type}
           label="Type"
-          onChange={(e) => handleChange(e)}
-          >
+          onChange={(e) => handleChange(e)} >
           <MenuItem value={'character'}>Character</MenuItem>
           <MenuItem value={'item'}>Item</MenuItem>
           </Select>
@@ -225,7 +223,6 @@ const SearchDrawer = props => {
             </div>
             </Box>
          </Drawer>
-      </>
     )
 }
 

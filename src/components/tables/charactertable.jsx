@@ -433,12 +433,20 @@ const CharacterTable = props => {
       } else {
         return (
           <>
-            <TableContainer className='characterTable nexus-table'>
+          <div className='characterTable nexus-table'>
+                <TableContainer className='characterTable nexus-table'>
+                 <Table stickyHeader>
+                <TableHead sx={{position: 'sticky', top: 0, 
+                  "& tr": {backgroundColor: "white" , padding:0,}}}>
+                  <TableRow  sx={{"& th": {backgroundColor: "white" , padding:0,}}}>
+                    <TableCell colSpan={9} sx={{bgcolor: 'white', padding:0}}>
+                <div className='nexus-table-header'>
+              {/* <TableContainer className='characterTable nexus-table'>
               <Table>
-                <TableHead sx={{ position: 'sticky', top: 0, backgroundColor: 'white' }}>
-                    <TableRow>
-                    <TableCell  colSpan={props.selectedItemsApproved ? 8 : 9}  className='table-topper'>
-                <div className='table-controls' >
+                <TableHead sx={{ position: 'sticky', top: 0, backgroundColor: 'white', border:0}}>
+                    <TableRow sx={{ borderBottomColor: 'black'}}>
+                    <TableCell  colSpan={props.selectedApproved ? 8 : 9}  className='table-topper'> */}
+                <div className='table-controls-toggles'>
                 <div className='table-topper-buttons'>
                     <button className='button-action' onClick={(e) => props.NewCharacterLink(e)}>Add New Character</button>
                     </div> 
@@ -465,10 +473,10 @@ const CharacterTable = props => {
                        /> : <></>}
                         <></>
                         </div>
-                     </TableCell>
+{/*                      </TableCell>
                     </TableRow>
                 <TableRow>
-                <TableCell colSpan={props.selectedItemsApproved ? 8 : 9} className='table-topper'>
+                <TableCell colSpan={props.selectedApproved ? 8 : 9} className='table-topper'> */}
                   <div className='table-controls-pagination'>
                    <div className='selectors'> 
                     {props.authLevel > 2 && !props.selectedApproved? (
@@ -522,7 +530,9 @@ const CharacterTable = props => {
                     />
                     </div>
                   </div>
+                  <div className='filter-button'>
                     <button className='button-cancel' disabled={btnDisabledState} onClick={() => clearfilters()}>Clear Filters</button>
+                    </div>
                     </div>
                     <div className='table-topper-pagination'>  
                   <TablePagination
@@ -535,14 +545,14 @@ const CharacterTable = props => {
                   />   
                   </div>
                   </div>
-                </TableCell>
+{/*                 </TableCell>
               </TableRow>
                   <TableRow className='table-filter-row'>
-                  <TableCell colSpan={props.selectedApproved ? 8 : 9}>
+                  <TableCell colSpan={props.selectedApproved ? 8 : 9}> */}
                       <div className='fullspan-cell'>
                       <div className='search-row'>
                       <div className='search-container'>
-                                      <div className='filter-container'>
+                              <div className='filter-container'>
                                       <Tooltip title="Filter by Last Editor">
                        <button className='button-action-round' onClick={() => FilterOpen('Editor')}>
                        <SearchSharpIcon sx={{fontSize: 23}} />
@@ -625,9 +635,11 @@ const CharacterTable = props => {
                   </div>
                   </div>
                   </div>
-                </TableCell>
-              </TableRow>
-              <TableRow>
+                  </div>
+                  </TableCell>
+                  </TableRow>
+                    <TableRow sx={{"& th": {paddingLeft:2, paddingRight:2}}} >
+              {/* <TableRow> */}
                     <TableCell className="short-column table-cell-center">Status</TableCell>
                     {props.selectedApproved ? <></> :
                     <TableCell className="short-column table-cell-center">Ready For Approval</TableCell>
@@ -649,7 +661,7 @@ const CharacterTable = props => {
                 </TableHead>
                 <TableBody>
                   {displayState.apimessage.map((row) => ( 
-                    <TableRow key={row.guid}>
+                    <TableRow key={row.guid} sx={{"& th": {paddingLeft:2, paddingRight:2}}} >
                       <TableCell className='table-default-cursor table-cell-center'>
                         {
                           row.createdbyuserGuid !== null && row.firstapprovalbyuserGuid !== null && row.secondapprovalbyuserGuid !== null
@@ -694,13 +706,13 @@ const CharacterTable = props => {
                       <TableCell>
                         <Tags tags={row.tags} clickable={true} tagClick={(e) => tagClicked(e)}/>
                       </TableCell>
-                      <TableCell>
+                      <TableCell align='center'>
                       <IconButton aria-label='edit' onClick={() => props.DirectToCharacter(props.selectedApproved ? 'CharacterSheetApproveds' 
                           : 'CharacterSheets', row.guid)}>
                       <ArrowCircleRightSharpIcon  className="table-icon-button" />
                           </IconButton>
                       </TableCell>
-                      <TableCell>
+                      <TableCell align='center'>
                         { props.authLevel > 1
                           ? <div>
                             <IconButton aria-label='edit' onClick = {() => props.Edit(props.selectedApproved ? 'CharacterSheetApproveds' 
@@ -712,7 +724,7 @@ const CharacterTable = props => {
                         }
                       </TableCell>
                         { props.authLevel >= 5 && props.selectedApproved
-                          ? <TableCell> <IconButton aria-label='kickback' onClick = {() => handleKickOpen(row)}>
+                          ? <TableCell align='center'> <IconButton aria-label='kickback' onClick = {() => handleKickOpen(row)}>
                               <FastRewindSharpIcon className="table-icon-button" />
                             </IconButton>
                             </TableCell>
@@ -720,7 +732,7 @@ const CharacterTable = props => {
                         }
                       
                         { props.authLevel > 5 && !props.selectedApproved ? 
-                          <TableCell>
+                          <TableCell align='center'>
                             <IconButton aria-label='delete' onClick = {() => Delete(row)}>
                               <DeleteSharpIcon />
                             </IconButton>
@@ -735,6 +747,7 @@ const CharacterTable = props => {
                 </TableBody>
               </Table>
             </TableContainer>
+            </div>
 
           {
           kickDialogOpen.row !== null

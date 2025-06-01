@@ -2,6 +2,8 @@ import PropTypes from 'prop-types';
 import SearchIcon from '../icon/searchicon';
 import { useEffect, useState } from 'react';
 import AttributeSearchField from '../inputs/attributesearchfield';
+import '../drawer/_searchdrawer.scss';
+import { Box } from '@mui/material';
 
 
 const CharacterSearchDrawer = props => {
@@ -41,18 +43,24 @@ const nofilterInit = async(e) => {
             props.init.Name !== undefined && props.init.Name !== null ? props.init.Name: null} 
             FilterInit={filterInit.Name} UnInitFiler={() => nofilterInit('Name')}
             clearfilter={props.clearfilterState} filterup={e => props.updatesearch(e, 'Name')}/>
-        <SearchIcon label="Alternate Name" initalFilter={ props.init !== null &&
+         <SearchIcon label="Alternate Name" initalFilter={ props.init !== null &&
             props.init.AlternateName !== undefined && props.init.AlternateName !== null ? props.init.AlternateName: null}  
             FilterInit={filterInit.AlternateName} UnInitFiler={() => nofilterInit('AlternateName')}
             clearfilter={props.clearfilterState} filterup={e => props.updatesearch(e, 'AlternateName')}/>
+            <hr/>
+            <div className='attributesearch-label'>
             Attribute Search:
+            </div>
             { props.init.Attribute !== undefined && props.init.Attribute !== null ?
             <> {  props.init.Attribute.map((attrib) =>
-            <> <AttributeSearchField key={attrib.Position}
+            <> 
+            <Box sx={{ border: '1px solid gray' }}>
+            <AttributeSearchField key={attrib.Position}
              init={attrib !== undefined && attrib !== null ? attrib : null}
              LoadingDone={(e) => props.LoadingDone(e, attrib.Position)}
              drop={(e) => props.dropatribute(e)}
              updateSearch={(e) => props.updatesearch(e, 'Attribute')}/>
+            </Box>
             </>
             )}
                 </> : 

@@ -13,7 +13,15 @@
         }
         .selectionlist-list {
             z-index: -1;
+            font-family: "Warmonger BB", "Roboto", serif;
+            font-size: $font-size-medium;
+            padding-left: .75em;
+            padding-right: .75em;
+            .attributesearch-label {
+                padding: 5px;
+            }
         }
+
         .selectionlist-footer{
             position: absolute;
             align-content: center;
@@ -27,4 +35,5 @@
             font-size: $font-size-large;
             font-weight: bold;
         }
+
 

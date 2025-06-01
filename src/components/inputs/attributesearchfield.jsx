@@ -3,21 +3,12 @@ import { useEffect, useState } from 'react';
 import SearchIcon from '../icon/searchicon';
 import PropTypes from 'prop-types';
 import Loading from '../loading/loading';
-import DeleteSharpIcon from '@mui/icons-material/DeleteSharp'
+import DeleteSharpIcon from '@mui/icons-material/DeleteSharp';
+import './_attributesearchfield.scss';
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import compareOptions from './../../jsonfiles/compareoptions.json'
 
 const AttributeSearchField = (props) => {
-
-    const compareOptions = [
-        {value: 'Equals', display:'Equals (Numeric)'},
-        {value: 'LessThan', display:'< (Numeric)'},
-        {value: 'LessThanEqual', display:'<= (Numeric)'},
-        {value: 'GreaterThan', display:'> (Numeric)'},
-        {value: 'GreaterThanEqual', display:'>= (Numeric)'},
-        {value: 'ExactEquals', display:'Exact Match'},
-        {value: 'Contains', display:'Contains Text'},
-        {value: 'StartsWith', display:'Starts With'},
-        {value: 'EndsWith', display:'Ends With'}
-    ]
 
     const [currValue, setCurrValue] = useState({
         Attribute: null,
@@ -28,7 +19,6 @@ const AttributeSearchField = (props) => {
     })
 
     const [checked, setChecked] = useState(true)
-
     const [filterInit, setfilterInit] = useState(
             {
                 Attribute: false,
@@ -64,20 +54,6 @@ const AttributeSearchField = (props) => {
             });
     
     };
-
-            // handles dropdown focus
-            const focused = (e, length) => {
-                if (length+1 > 6) {
-                  e.target.size = 6;
-                }
-                else {
-                  e.target.size = length+1;
-                }
-              }
-              const blurred = (e) => {
-                e.target.size = 1;
-                e.target.blur();
-              }
 
     const formData = [];
         for (const key of Object.keys(formJSON)) {
@@ -130,6 +106,7 @@ const handleChangeSelect = (e, fieldname) => {
     }
     props.updateSearch(newval);
 }
+
 if (!loaded) {
     <>
     <Loading/>
@@ -139,60 +116,53 @@ else {
     return (
         <>
         <div>
-          {/* <Select
-            labelId="demo-simple-select-label"
-             id="demo-simple-select"
-             value={currValue}
-             label="Attribute"
-             onChange={(e) => handleChangeSelect(e)}>
-                {
-                formData.map((item) => 
-                  <MenuItem key={item.Label} value={item.Label}>{item.Label}</MenuItem>)}
-             </Select> */}
+        <div className='attribute-fieldtext'>
+          <FormControl sx={{ width: '38%', paddingLeft: '5px', paddingRight: '5px',
+          paddingTop: '10px'}}>
+        <InputLabel  sx={currValue.Attribute === null ?
+        {fontSize: 15}: 
+        {fontSize: 15, paddingTop: '10px'}} 
+         id="demo-simple-select-label">Attribute</InputLabel>
+             <Select sx={{ height: 30, fontSize: 15}}
+                   labelId="demo-simple-select-label"
+                   id="demo-simple-select"
+                   value={currValue.Attribute}
+                   label="Attribute"
+                   onChange={(e) => handleChangeSelect(e, 'Attribute')}>
+                {formData.map(item => (  
+                  <MenuItem key={item.Name} value={item.Name}>{item.Label}</MenuItem>
+                   ))}
+                </Select>
+                </FormControl>
 
-             <select 
-              value={currValue.Attribute}
-              onChange={(e) => handleChangeSelect(e, 'Attribute')}
-              onFocus={(e) => focused(e, formData.length)}
-              onBlur={(e) => blurred(e)}
-              onKeyUp={(e) => e.code === "Escape" ? blurred(e) : null}>
-              {formData.map((item) => {
-                return (
-                  <>
-                    { <option className={'tagtype'} key={item.Name} value={item.Name}>
-                        {item.Label}
-                      </option>
-                    }
-                  </>
-                )
-              })}
-            </select>
+                <FormControl sx={{ width: '40%', paddingLeft: '5px', paddingRight: '5px',
+                   paddingTop: '10px'}}>
+              <InputLabel sx={currValue.CompareType === null ?
+                  {fontSize: 15}: 
+                  {fontSize: 15, paddingTop: '10px'}}  id="demo-simple-select-label">Comparison</InputLabel>
+               <Select sx={{ height: 30, fontSize: 15}}
+                   labelId="demo-simple-select-label"
+                   id="demo-simple-select"
+                   value={currValue.CompareType}
+                   label="Comparison"
+                   onChange={(e) => handleChangeSelect(e, 'CompareType')}>
+                {compareOptions.compareOptions.map(item => (  
+                  <MenuItem key={item.value} value={item.value}>{item.display}</MenuItem>
+                   ))}
+                </Select>
+                </FormControl>
 
-            <select 
-              value={currValue.CompareType}
-              onChange={(e) => handleChangeSelect(e, 'CompareType')}
-              onFocus={(e) => focused(e, compareOptions.length)}
-              onBlur={(e) => blurred(e)}
-              onKeyUp={(e) => e.code === "Escape" ? blurred(e) : null}>
-              {compareOptions.map((item) => {
-                return (
-                  <>
-                    { <option className={'tagtype'} key={item.value} value={item.value}>
-                        {item.display}
-                      </option>
-                    }
-                  </>
-                )
-              })}
-            </select>
-
-            <label>
+           {/* <label className='attribute-fieldtext'> */}
                 <input type="checkbox" 
                           checked={checked}
                           onChange={() => handleChangeSelect(checked, 'AndOr')} />
+                  <div className='attribute-wrapbox'>
                  Value MUST be present
-            </label>
+                 </div>
+            {/*   </label> */}
+          </div>
 
+          <div className='search-and-delete-row'>
           <SearchIcon label="Search Value" initalFilter={ props.init !== undefined &&  props.init !== null &&
             props.init.Value !== undefined && props.init.Value !== null ? props.init.Value: null}  
             FilterInit={filterInit.Value} UnInitFiler={() => nofilterInit('Value')}
@@ -201,7 +171,7 @@ else {
             <button className="button-cancel-square" onClick={() => props.drop(currValue.Position)}>
                 <DeleteSharpIcon />
             </button>
-
+            </div>
         </div>
         </>
     )
