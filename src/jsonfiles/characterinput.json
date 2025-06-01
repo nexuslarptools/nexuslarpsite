@@ -3,6 +3,7 @@
 		"Heading": "General",
 		"Values": {
 			"Name": {
+				"InDropDown":false,
 				"Type": "Input",
 				"Label": "Name",
                 "Display": true,
@@ -11,6 +12,7 @@
 			},
 
 			"Alternate_Names": {
+				"InDropDown":false,
 				"Type": "MultiInput",
 				"Label": "Alternate Names",
                 "Display": true,
@@ -18,12 +20,14 @@
 			},
 
 			"Linked_To": {
+				"InDropDown":false,
 				"Type": "Dropdown_Character",
 				"Label": "Linked to This Other Character",
                 "Display":false
 			},
 
 			"Bio": {
+				"InDropDown":false,
 				"Type": "Input",
 				"Label": "Character Bio",
                 "Display": true,
@@ -36,37 +40,44 @@
 		"Heading": "Statistics",
 		"Values": {
 			"Power": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Power",
                 "Display": true
 			},
 			"Athletics": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Athletics",
                 "Display": true
 			},
 			"Brains": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Brains",
                 "Display": true
 			},
 			"Confidence": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Confidence",
                 "Display": true
 			},
 			"Charisma": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Charisma",
                 "Display": true
 			},
 			"Affluence": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Affluence",
                 "Display": true
 			}
 			,
 			"Initiative": {
+				"InDropDown":false,
 				"Label": "Initiative",
                 "Display": true
 			}
@@ -76,103 +87,123 @@
 		"Heading": "Standard Skills",
 		"Values": {
 			"Acting": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Acting",
                 "Display": true
 			},
 			"Authority": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Authority",
                 "Display": true
 			},
 			"Authority_Type": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "over:",
                 "Display": true,
 				"ToolTip": "This is the organization, group, or type of character this character's Authority applies to. Leave blank if Authority is 0."
 			},
 			"Computer_Use": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Computer Use",
                 "Display": true
 			},
 			"Hide_Stuff": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Hide Stuff",
                 "Display": true
 			},
 			"Deception": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Deception",
                 "Display": true
 			},
 			"Disguise": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Disguise",
                 "Display": true
 			},
 			"Influence": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Influence",
                 "Display": true
 			},
 			"Jump": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Jump",
                 "Display": true
 			},
 			"Magic_Chi": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Magic/Chi",
                 "Display": true
 			},
 			"Mechanics": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Mechanics",
                 "Display": true
 			},
 			"Medicine": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Medicine",
                 "Display": true
 			},
 			"Pilot_Mecha": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Pilot Mecha",
                 "Display": true
 			},
 			"Pilot_Vehicle": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Pilot Vehicle",
                 "Display": true
 			},
 			"Vehicle_Type": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "vehicle:",
                 "Display": true,
 				"ToolTip": "These are the type of vehicles the character can drive. (e.g. Cars, Land Vehicles, Airplanes, Horses, Flying Brooms, etc) - Leave blank if pilot vehicle is 0."
 			},
 			"Run": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Run",
                 "Display": true
 			},
 			"Science": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Science",
                 "Display": true
 			},
 			"Search": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Search",
                 "Display": true
 			},
 			"Stealth": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Stealth",
                 "Display": true
 			},
 			"Yoink": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Yoink",
                 "Display": true
@@ -183,52 +214,62 @@
 		"Heading": "Combat Skills",
 		"Values": {
 			"Archery": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Archery",
                 "Display": true
 			},
 			"BFG": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "BFG",
                 "Display": true
 			},
 			"Blades": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Blades",
                 "Display": true
 			},
 			"Blunt": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Blunt",
                 "Display": true
 			},
 			"Dodge": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Dodge",
                 "Display": true
 			},
 			"Hand_to_Hand": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Hand to Hand",
                 "Display": true
 			},
 			"Marksmanship": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Marksmanship",
                 "Display": true
 			},
 			"Mecha_Waponry": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Mecha Weaponry",
                 "Display": true
 			},
 			"Special_Weapons": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Special Weapons",
                 "Display": true,
 				"ToolTip": "Reserved for only truly special weapons that apply under no other category and cannot be swapped out for any other weapon. Address this weapon in the character's powers below."
 			},
 			"Throw": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Throw",
                 "Display": true
@@ -239,37 +280,44 @@
 		"Heading": "Additional Stats",
 		"Values": {
 			"Body": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Body",
                 "Display": true
 			},
 			"Energy": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Energy",
                 "Display": true
 			},
 			"Resilience": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Resilience",
                 "Display": true
 			},
 			"Special_Skills": {
+				"InDropDown":false,
 				"Type": "SpecialSkillsInput",
 				"Label": "Special Skills",
                 "Display": true
 			},
 			"Sheet_Item": {
+				"InDropDown":false,
 				"Type": "Itemlist",
 				"Label": "Sheet Item",
                 "Display": true
 			},
 			"Starting_Items": {
+				"InDropDown":false,
 				"Type": "ItemPicker",
 				"Label": "Starting Items",
                 "Display": true,
 				"ToolTip": "If a character should start with any specific spells, transformations, weapons, or any other item that should be attached to them, please include that information in the GM notes along with how they would acquire the rest."
 			},
 			"Tags": {
+				"InDropDown":false,
 				"Type": "Tagslist",
 				"Label": "Tags",
                 "Display": true

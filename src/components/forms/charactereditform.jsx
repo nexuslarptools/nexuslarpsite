@@ -57,6 +57,7 @@ const CharacterEditForm = (props) => {
     showResult: true
   });
 
+  const [seriesListState, setSeriesListState] = useState(props.seriesList);
   const [selectedSeries, setSelectedSeries] = useState({
     guid:'',
     series: {
@@ -87,7 +88,17 @@ const CharacterEditForm = (props) => {
     showApprovableOnly: false,
     viewingItem: false,
     viewItemGuid: '',
-    viewItemPath: ''
+    viewItemPath: '',
+    filter:       {
+      SeriesFilter: '',
+      ItemsFilter: '',
+      CreatorFilter: '',
+      EditorFilter: '',
+      SelectedApproval : '',
+      LarpAutoCompValue: '',
+      SelectedLarpTag: '',
+      TagSelectValues: []
+    }
 });
 
   const [reviewsState, setReviewsState] = useState([]);
@@ -239,6 +250,16 @@ const CharacterEditForm = (props) => {
   }, [])
 
   const initForm = async (formJSON) => {
+let seriesList = seriesListState;
+seriesList.forEach((series, index) => {
+  if (series.title === '')
+  {
+    seriesList[index].title = "No Series"
+  }
+});
+
+  setSeriesListState(seriesList);
+
     const formData = [];
 
     for (const key of Object.keys(formJSON)) {
@@ -755,6 +776,12 @@ isNew: true
       });
   }
 
+  const ToggleSwitches = async (e) => {
+    for (const key of Object.keys(e)) {
+      await ToggleItemSwitch(key);
+    }
+  }
+
   if (JSONData.length === 0 || !itemsTableState.isMounted) {
     return (<div className='loading-container'><Loading /></div>)
   } else {
@@ -817,7 +844,7 @@ isNew: true
                   <FormLabel>Series</FormLabel>
                   <Autocomplete
                     id="select-series-tags"
-                    options={props.seriesList}
+                    options={seriesListState}
                     getOptionLabel={(option) => option.title}
                     onChange={(event, val) => upDateSeries(val)}
                     isOptionEqualToValue={(option, value) => option.guid === value.guid}
@@ -1121,6 +1148,7 @@ isNew: true
         </>
       )
     } else {
+
       return (
         <>   
           <ItemSelector 
@@ -1135,11 +1163,12 @@ isNew: true
            selectedApproved={itemsState.selectedApproved} 
            commentFilterOn={itemsState.commentFilter}
            showApprovableOnly={itemsState.showApprovableOnly}
-           ToggleSwitch={() => ToggleItemSwitch('selectedApproved')}
-           ToggleCommentSwitch={() => ToggleItemSwitch('commentFilter')}
-           ToggleApprovableSwitch={() => ToggleItemSwitch('showApprovableOnly')}
+           ToggleSwitches={(e) => ToggleSwitches(e)}
            UpdateItemList={(e) => UpdateItemList(e)}
-           GoBack={() => BackFromItemSelector()}/>
+           GoBack={() => BackFromItemSelector()}
+           Filters={itemsState.filter}
+           isLoading={false}
+           />
         </>
       )
     }
@@ -1171,4 +1200,5 @@ CharacterEditForm.propTypes = {
   seriesList: PropTypes.array,
   img: PropTypes.string,
   img2: PropTypes.string,
+  items: PropTypes.object
 }

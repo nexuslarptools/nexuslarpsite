@@ -28,24 +28,104 @@ class App extends Component {
     funct: '',
     guid: '',
     path: '',
+    characters: {
+      filter:       {
+        SeriesFilter: '',
+        CharacterFilter: '',
+        CreatorFilter: '',
+        EditorFilter: '',
+        SelectedApproval : '',
+        LarpAutoCompValue: '',
+        SelectedLarpTag: '',
+        TagSelectValues: []
+      },
+      selectedApproved: true,
+      commentFilter: false,
+      showApprovableOnly: false,
+      readyApproved: false,
+      viewingItem: false,
+      editingItem: false,
+      viewItemGuid: '',
+      viewItemPath: '',
+    },
+    items: {
+      filter:       {
+        SeriesFilter: '',
+        ItemsFilter: '',
+        CreatorFilter: '',
+        EditorFilter: '',
+        SelectedApproval : '',
+        LarpAutoCompValue: '',
+        SelectedLarpTag: '',
+        TagSelectValues: []
+      },
+      selectedApproved: true,
+      commentFilter: false,
+      showApprovableOnly: false,
+      readyApproved: false,
+      viewingItem: false,
+      editingItem: false,
+      viewItemGuid: '',
+      viewItemPath: ''
+    },
     currentURL: window.location.href 
   }
 
   ismain = true;
+
+  ToggleSwitch = async (e, type) => {
+    let newstate =this.state[type]
+    if (newstate === undefined)
+      {
+        newstate = { e: true };
+      }
+      else {
+        newstate[e] = !newstate[e]
+      }
+    this.setState({
+    ...this.state,
+    [type] :newstate
+    });
+  }
+
+  ToggleSwitches = async (e, type) => {
+    for (const key of Object.keys(e)) {
+      await this.ToggleSwitch(key, type);
+    }
+  }
 
   togglePreview = (e) => {
     this.setState({open: e});
     return {open: e};
   };
 
-  toggleSubScreen = async (e, funct, guid, path) => {
-    await this.setState(
-      {ismain: e,
-        funct: funct,
-        guid: guid,
-        path: path
-      });
+  toggleSubScreen = async (e, funct, guid, path, type, filters) => {
+    let newstate =this.state
+
+    newstate.ismain=e;
+    newstate.funct=funct;
+    newstate.guid=guid;
+    newstate.path=path;
+    if (newstate[type] === undefined)
+    {
+      newstate[type] = {};
+    }
+
+    newstate[type].funct=funct;
+    newstate[type].guid=guid;
+    newstate[type].path=path;
+
+    if (filters !== 'goback') {
+      newstate[type].filter = filters;
+    } 
+    else {
+      newstate[type].filter = this.state[type].filter;
+    }
+
+    await this.setState(newstate);
   };
+
+
 
   render() {
     return (
@@ -70,11 +150,21 @@ class App extends Component {
            />
             <Route
             path="/items"
-            element={<AuthenticationGuard toggleSubScreen={(e) => this.toggleSubScreen(e)}component={ItemsIndex} />}
+            element={<AuthenticationGuard 
+              subState={this.state.items !== undefined && this.state.items !== null ?this.state.items : this.state}
+              ismain={this.state.ismain}
+              ToggleSwitches={(e) => this.ToggleSwitches(e, 'items')}
+              toggleSubScreen={(e, funct, guid, path, filters) => this.toggleSubScreen(e, funct, guid, path, 'items', filters)} 
+              component={ItemsIndex} />}
            />
             <Route
             path="/characters"
-            element={(<AuthenticationGuard subState={this.state} toggleSubScreen={(e, funct, guid, path) => this.toggleSubScreen(e, funct, guid, path)} component={CharactersIndex} />)}
+            element={(<AuthenticationGuard 
+              subState={this.state.characters !== undefined && this.state.characters !== null ? this.state.characters : this.state}
+              ismain={this.state.ismain}
+              ToggleSwitches={(e) => this.ToggleSwitches(e, 'characters')}
+              toggleSubScreen={(e, funct, guid, path, filters) => this.toggleSubScreen(e, funct, guid, path, 'characters', filters)} 
+              component={CharactersIndex} />)}
            />
           <Route
             path="/series"
@@ -95,7 +185,12 @@ class App extends Component {
            />
           <Route
             path="/charactersearch/"
-            element={<AuthenticationGuard subState={this.state} toggleSubScreen={(e) => this.toggleSubScreen(e)} component={CharacterSearch} />}
+            element={<AuthenticationGuard 
+              subState={this.state.characters !== undefined && this.state.characters !== null ?this.state.characters : this.state}
+              ismain={this.state.ismain}
+              ToggleSwitches={(e) => this.ToggleSwitches(e, 'characters')}
+              toggleSubScreen={(e, funct, guid, path, filters) => this.toggleSubScreen(e, funct, guid, path, 'characters', filters)} 
+              component={CharacterSearch} />}
            />
           <Route 
           path="*"  

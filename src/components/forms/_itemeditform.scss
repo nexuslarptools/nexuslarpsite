@@ -2,10 +2,14 @@
 @import "/src/mixins";
 
 .crop-container {
-    z-index: 10;
+    z-index: 9;
+    position: absolute;
+    left: 50px;
+    height: calc(100vh - 350px);
+    width: calc(100vw - 150px);
     .reactEasyCrop_Container {
         .reactEasyCrop_CropArea {
-            max-height: calc(100vh - 1px);
+            max-height: calc(100vh - 100px);
         }
     }
 }

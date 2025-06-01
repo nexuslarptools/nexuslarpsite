@@ -12,11 +12,11 @@ import Loading from "../../components/loading/loading";
 import useGetData from "../../utils/getdata";
 import AuthLevelInfo from "../../utils/authLevelInfo";
 import formJSON from '../../jsonfiles/characterinput.json';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSnackbar } from "@mui/base";
 
 
-export default function CharacterSearch() {
+export default function CharacterSearch(props) {
     const location = useLocation();
 
     AuthRedirect(1)
@@ -47,7 +47,7 @@ export default function CharacterSearch() {
           viewItemGuid: '',
           viewItemPath: ''
       });
-      
+      const [filterState, setFilterState] = useState(null);
       const [isCreate, setIsCreate] = useState(false);
       const [snackOpen, setSnackOpen] = useState(
         {isOpen:false,
@@ -62,31 +62,35 @@ export default function CharacterSearch() {
     const [isEdit, setIsEdit] = useState({isEditing: false, guid: null});
     const [filterInit, setfilterInit] = useState(false);
 
-    const ToggleSwitch = async (e) => {
-        let toggled=charactersState[e];
+        useEffect(() => {
+          if (props.ismain === true) {
+            setIsCreate(false);
+            setIsEdit({isEditing: false, guid: null});
+            setfilterInit(true);
+            setFilterState(props.subState.filter);
+          }
+          else {
+            if (props.subState.funct === 'Create')
+              setIsCreate(true);
+          }
+          if (props.subState.funct === 'View')
+          {
+            setCharactersState({
+              ...charactersState,
+              viewingItem: true,
+              viewItemGuid: props.subState.guid,
+              viewItemPath: props.subState.path});
+          }
+        }, [props.subState]);
 
-        if (e === 'selectedApproved' && charactersState.showApprovableOnly) {
-          await setCharactersState({
-            ...charactersState,
-            [e]: !toggled,
-            showApprovableOnly:false
-        });
-        }
-        else {
-        await setCharactersState({
-            ...charactersState,
-            [e]: !toggled
-        });
-      }
-    }  
-     
-
+    
     const DirectToCharacter = async (path, guid) => {
-        setCharactersState({
+/*         setCharactersState({
             ...charactersState,
             viewingItem: true,
             viewItemGuid: guid,
-            viewItemPath: path});
+            viewItemPath: path}); */
+            props.toggleSubScreen(false, 'View', guid, path, filterState);
     }
 
     const GoBackToList = async () => {
@@ -95,14 +99,12 @@ export default function CharacterSearch() {
         viewingItem: false
     });
     await setfilterInit(true);
+    props.toggleSubScreen(true, '', '' ,'', 'goback');
     }
 
     const GoToEditCharacter = async (path, guid) => {
       await setIsEdit({isEditing: true, guid: guid, path: path});
-    }
-
-    const GoToSearch = async () => {
-      
+      props.toggleSubScreen(false, 'Edit', guid, path, filterState);
     }
 
     const UnInitFiler = () => {
@@ -111,6 +113,12 @@ export default function CharacterSearch() {
 
     const NewCharacterLink = async () => {
       await setIsCreate(true);
+      props.toggleSubScreen(false, 'Create', '', '', filterState);
+    }
+
+    const pushFilter = (filter) => {
+      setFilterState({...filterState,  filter});
+      props.toggleSubScreen(true, '', '','', filter);
     }
 
     const GoBackFromCreateEdit = async () => {
@@ -122,9 +130,10 @@ export default function CharacterSearch() {
         viewItemGuid: '',
         viewItemPath: ''
     }); */
-      await setIsCreate(false);
+/*       await setIsCreate(false);
       await setIsEdit({isEditing: false, guid: null});
-      await setfilterInit(true);
+      await setfilterInit(true); */
+      props.toggleSubScreen(true, '', '','', filterState);
     }
 
 
@@ -142,7 +151,7 @@ export default function CharacterSearch() {
  !isCreate ?
  !isEdit.isEditing ?
 <>
-<CharactersListPage 
+{/* <CharactersListPage 
 FilterInit={filterInit}
 UnInitFiler={() => UnInitFiler()}
 appdata={approvQuery.data} 
@@ -161,9 +170,50 @@ appdata={approvQuery.data}
   ToggleApprovReadySwitch={() =>  ToggleSwitch('readyApproved')}
   DirectToCharacter={(path, guid) => DirectToCharacter(path, guid)}
   NewCharacterLink={(e) => NewCharacterLink(e)}
-  GoToSearch={() => GoToSearch()}
   Edit={(path, guid) => GoToEditCharacter(path, guid)}
-  />
+  UpdateFilter={(filter) => setFilterState({...filterState,  filter})}
+  ToggleSwitches={(e) => props.ToggleSwitches(e)}
+  /> */}
+
+  <CharactersListPage 
+  FilterInit={filterInit}
+  UnInitFiler={() => UnInitFiler()}
+  Filters={props.subState !== undefined && props.subState !== null &&
+    props.subState.filter !== undefined && props.subState.filter !== null ? 
+    props.subState.filter : null
+  }
+  appdata={approvQuery.data} 
+    undata={unapprovQuery.data} 
+    larpTags={allTagsQuery.data.find((tags) => tags.tagType === 'LARPRun')?.tagsList}
+    tagslist={allTagsQuery.data.find((tags) => tags.tagType === 'Character')?.tagsList}
+    authLevel={authLevel}
+    userGuid={userGuidQuery.data}
+    selectedApproved={ props.subState !== undefined && props.subState !== null &&
+      props.subState.selectedApproved !== undefined && props.subState.selectedApproved !== null ? 
+      props.subState.selectedApproved : null
+      //charactersState.selectedApproved
+      } 
+    commentFilterOn={ props.subState !== undefined && props.subState !== null &&
+      props.subState.commentFilter !== undefined && props.subState.commentFilter !== null ? 
+      props.subState.commentFilter : false
+      //charactersState.commentFilter
+      }
+    showApprovableOnly={ props.subState !== undefined && props.subState !== null &&
+      props.subState.showApprovableOnly !== undefined && props.subState.showApprovableOnly !== null ? 
+      props.subState.showApprovableOnly : false
+      //charactersState.showApprovableOnly
+      }
+    readyApproved={ props.subState !== undefined && props.subState !== null &&
+      props.subState.readyApproved !== undefined && props.subState.readyApproved !== null ? 
+      props.subState.readyApproved : false
+      //charactersState.readyApproved
+      }
+    ToggleSwitches={(e) => props.ToggleSwitches(e)}
+    DirectToCharacter={(path, guid) => DirectToCharacter(path, guid)}
+    NewCharacterLink={(e) => NewCharacterLink(e)}
+    Edit={(path, guid) => GoToEditCharacter(path, guid)}
+    UpdateFilter={(filter) => pushFilter(filter)}
+    />
 </>
 : 
 <>
@@ -229,5 +279,8 @@ const CustomSnackbar = styled('div')(
 
 
 CharacterSearch.propTypes = {
-    route: PropTypes.object
+      toggleSubScreen: PropTypes.func,
+      subState: PropTypes.object,
+      ismain:PropTypes.bool,
+      ToggleSwitches: PropTypes.func
 }

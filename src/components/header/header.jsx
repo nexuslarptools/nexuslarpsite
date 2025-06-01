@@ -7,6 +7,7 @@ import './header.scss'
 import AuthLevelInfo from '../../utils/authLevelInfo.js'
 import MenuIcon from '@mui/icons-material/Menu';
 import { useEffect, useState } from 'react';
+import { Tooltip } from '@mui/material';
 
 const Header = props => {
 
@@ -23,13 +24,15 @@ const Header = props => {
         <header className={navClasses}>
         <nav className="navbar-navigation">
         <div className="navbar_logo" aria-label="Return Home">
-          { buttonactive ?
+{/*           { buttonactive ?
         <div className ='navbar_hamburger_button'>
-        <button className='button-hambuger'   onClick={() => props.drawerOpenCLick(true)}>
-          <MenuIcon />
+          <Tooltip title="Search Menu">
+             <button className='button-hambuger'   onClick={() => props.drawerOpenCLick(true)}>
+          <MenuIcon sx={{fontSize: 35}} />
         </button>
+        </Tooltip>
         </div> : <></>
-         }
+         } */}
         <div>
         <Link to={{ pathname: '/' }}>Nexus DB
               <div className='logo-image-container'>
@@ -86,6 +89,6 @@ const Header = props => {
 export default Header
 
 Header.propTypes = {
-  drawerOpenCLick: PropTypes.funct,
+  drawerOpenCLick: PropTypes.func,
   mainmenu: PropTypes.bool
   }

@@ -52,6 +52,7 @@ const ItemEditForm = (props) => {
     const [selectedOption, setSelectedOption] = useState('Generic');
     const [IsdoubleSide, setIsdoubleSide] = useState(false);
     const [isLoaded, setIsLoaded]=useState(false);
+    const [seriesListState, setSeriesListState] = useState(props.seriesList);
     const [selectedSeries, setSelectedSeries] = useState(
       '045a829c-8cff-11ea-99f9-4371def66a6d'
     );
@@ -108,6 +109,15 @@ const ItemEditForm = (props) => {
       }, [props.initForm])
 
       const initForm = async () => {
+
+        let seriesList = seriesListState;
+           seriesList.forEach((series, index) => {
+              if (series.title === '') {
+                seriesList[index].title = "No Series"
+        }});
+
+        setSeriesListState(seriesList);
+
         const formData = [];
     
         for (const key of Object.keys(props.formJSON)) {
@@ -1124,7 +1134,7 @@ const ItemEditForm = (props) => {
                       <FormLabel>Series</FormLabel>
                       <Autocomplete
                         id="select-series-tags"
-                        options={props.seriesList}
+                        options={seriesListState}
                         getOptionLabel={(option) => option.title}
                         onChange={(_, val) => upDateSeries(val)}
                         isOptionEqualToValue={(option, value) => option.guid === value.guid}

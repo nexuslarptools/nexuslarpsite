@@ -82,8 +82,12 @@ a{
 // holds loading spinner in center of the app body while loading something
 .loading-container {
     align-items: center;
-    display: flex;
-    height: calc(100vh - 160px);
+    height: calc(100vh - 200px);
     justify-content: center;
     width: 100%;
+    .loaderpic {
+        display: block;
+        margin: auto;
+        width: 30%;
+    }
 }

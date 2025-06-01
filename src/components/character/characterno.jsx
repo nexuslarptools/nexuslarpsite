@@ -181,7 +181,8 @@ const CharacterNo = props => {
                 </span>
               </div>
 
-              { imageData.image2 !== undefined && imageData.image2 !== null && imageData.image2 !== '' && imageData.image2 !== 'data:image/png;base64,null' ?
+              { imageData.image2 !== undefined && imageData.image2 !== null && imageData.image2 !== '' && 
+              imageData.image2 !== 'data:image/png;base64,null' ?
                 <div className='imgContainer full-body-image'>
                   <img src={imageData.image2} className='charFullBodyImg' alt="character full body shot"></img>
                 </div> 

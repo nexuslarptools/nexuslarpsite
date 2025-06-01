@@ -5,8 +5,6 @@ import { useEffect } from 'react';
 
 export default function HomePage(props) {
 
-  console.log('props obj:', props);
-
       useEffect(() => {
         props.toggleSubScreen(true)
       }, [])

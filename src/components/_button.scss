@@ -99,6 +99,9 @@
 // buttons to open menus
 .button-hambuger{
 	@include button-square($color-utility-lightest, $color-utility-lighter, $color-utility, $color-utility-darkest);
+	padding: 6px;
+	max-height: 50px;
+	max-width: 50px;
 }
 // buttons to take an important action
 .button-action{

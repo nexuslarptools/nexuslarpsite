@@ -56,6 +56,33 @@
 .button-action{
 	@include button($color-tertiary-lightest, $color-tertiary-lighter, $color-tertiary, $color-tertiary-darkest);
 }
+
+.button-action-square {
+	@include button($color-tertiary-lightest, $color-tertiary-lighter, $color-tertiary, $color-tertiary-darkest);
+	min-width: 5px;
+	padding: 1px;
+	border-radius: 30%;
+	margin-right: 8px;
+	&:focus {
+		filter: drop-shadow(0px 0px 8px $color-tertiary);
+		border-radius: 30%;
+	}
+}
+
+.button-action-round {
+	@include button($color-tertiary-lightest, $color-tertiary-lighter, $color-tertiary, $color-tertiary-darkest);
+	min-width: 33px;
+	min-height: 33px;
+	padding: 3px;
+	border-radius: 50%;
+	margin-right: 8px;
+	&:focus {
+		filter: drop-shadow(0px 0px 8px $color-tertiary);
+		border-radius: 50%;
+	}
+}
+
+
 // buttons that save to the DB or indicate success, always important
 .button-save{
 	@include button($color-success-lightest, $color-success-lighter, $color-success, $color-success-darker);
@@ -76,6 +103,32 @@
 		border: 1px solid $color-danger-lighter;
 		color: $color-danger-darker;
 	}
+}
+
+.button-cancel-square {
+	@include button(transparent, transparent, $color-neutral, $color-danger);
+	&:hover {
+		background-color: $color-danger-lightest;
+		background-image: linear-gradient($color-danger-lighter, $color-danger-lightest);
+		border: 1px solid $color-danger-lighter;
+		color: $color-danger-darker;
+	}
+	min-width: 10px;
+	padding: 3px;
+	border-radius: 15%;
+}
+
+.button-cancel-round {
+	@include button(transparent, transparent, $color-neutral, $color-danger);
+	&:hover {
+		background-color: $color-danger-lightest;
+		background-image: linear-gradient($color-danger-lighter, $color-danger-lightest);
+		border: 1px solid $color-danger-lighter;
+		color: $color-danger-darker;
+	}
+	min-width: 10px;
+	padding: 3px;
+	border-radius: 50%;
 }
 
 
