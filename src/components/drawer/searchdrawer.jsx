@@ -13,14 +13,14 @@ const SearchDrawer = props => {
     const [formState, setformState] = useState({type: ''});
     const [trackingState, setTrackingState] = useState({
         type: '',
-        Attribute: [{Attribute: null,
-            CompareType: null,
+        Attribute: [{Attribute: '',
+            CompareType: '',
             Value: null,
             AndOr: null,
             Position: 0,
             Loading: true}],
-        SpecialSkill: [{Attribute: null,
-            CompareType: null,
+        SpecialSkill: [{Attribute: '',
+            CompareType: '',
             Value: null,
             AndOr: null,
             Position: 0,
@@ -29,12 +29,17 @@ const SearchDrawer = props => {
 
       useEffect(() => { 
         let attribute = trackingState.Attribute
-        trackingState.Attribute.forEach((element) => {
+        attribute.forEach((element) => {
+            element.Loading = true;
+        });
+        let skill = trackingState.SpecialSkill
+        trackingState.SpecialSkill.forEach((element) => {
             element.Loading = true;
         });
         setTrackingState({
             ...trackingState,
-            Attribute:attribute
+            Attribute:attribute,
+            SpecialSkill: skill
         });
       }, [props.open]);
 
@@ -103,22 +108,22 @@ const SearchDrawer = props => {
         }
     };
 
-    const AddAttribute = async () => {
+    const AddAttribute = async (e) => {
     let newAttribute ={
-    Attribute: null,
-    CompareType: null,
+    Attribute: '',
+    CompareType: '',
     Value: null,
     AndOr: 'And',
-    Position: trackingState.Attribute.length,
+    Position: trackingState[e].length,
     Loading:true
     };
 
-    let attributes = trackingState.Attribute;
+    let attributes = trackingState[e];
     attributes.push(newAttribute)
 
     await setTrackingState({
         ...trackingState,
-        Attribute:attributes
+        [e]:attributes
     });
     }
 
@@ -211,7 +216,7 @@ const SearchDrawer = props => {
            </TableRow>
            {formState.type === 'character' ?
               <CharacterSearchDrawer init={trackingState}  updatesearch={(e, name) => updateSearchForm(e, name)}
-              dropatribute={(e) => dropattribute(e)} AddAttribute={() => AddAttribute()}
+              dropatribute={(e) => dropattribute(e)} AddAttribute={(e) => AddAttribute(e)}
               LoadingDone={(e, postion, type) => setDoneLoading(e, postion, type)}/>
             :
             <></>

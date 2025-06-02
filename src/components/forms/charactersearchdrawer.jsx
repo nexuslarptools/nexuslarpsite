@@ -54,8 +54,9 @@ const nofilterInit = async(e) => {
             Attribute Search:
             </div>
             { props.init.Attribute !== undefined && props.init.Attribute !== null ?
-            <> {  props.init.Attribute.map((attrib) =>
-                <> 
+                       <>
+                        {  props.init.Attribute.map((attrib) =>
+                <div key={attrib.Position}> 
                 <Box sx={{ border: '1px solid gray' }}>
                 <AttributeSearchField key={attrib.Position}
              init={attrib !== undefined && attrib !== null ? attrib : null}
@@ -63,17 +64,19 @@ const nofilterInit = async(e) => {
              drop={(e) => props.dropatribute(e)}
              updateSearch={(e) => props.updatesearch(e, 'Attribute')}/>
              </Box>
-            </>
+            </div>
             )}
                 </> : 
                 <></> }
-                <button className='.button-basic' onClick={() => props.AddAttribute()}>Add Attribute</button>
+                <button className='.button-basic' onClick={() => props.AddAttribute('Attribute')}>Add Attribute</button>
                 <hr/>
-{/*             <div className='attributesearch-label'>
+            <div className='attributesearch-label'>
             Special Skills Search:
             </div>
-            {props.init.SpecialSkill.map((attrib) =>
+            { props.init.SpecialSkill !== undefined && props.init.SpecialSkill !== null ?
             <>
+            {props.init.SpecialSkill.map((attrib) =>
+            <div key={attrib}> 
             <Box sx={{ border: '1px solid gray' }}>
                <GenericSearchField key={attrib.Position}
                 LoadingDone={(e) => props.LoadingDone(e, attrib.Position, 'SpecialSkill')}
@@ -82,8 +85,10 @@ const nofilterInit = async(e) => {
                 compareOptions={compareOptions.compareOptions}
                 />
             </Box>
-            </> )}
-            <button className='.button-basic' onClick={() => props.AddSkill()}>Add Special Skill</button> */}
+            </div> )}
+             </> : 
+                <></> }
+            <button className='.button-basic' onClick={() => props.AddAttribute('SpecialSkill')}>Add Special Skill</button>
         </> :
         <></>
     )
