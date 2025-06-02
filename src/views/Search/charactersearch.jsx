@@ -151,30 +151,6 @@ export default function CharacterSearch(props) {
  !isCreate ?
  !isEdit.isEditing ?
 <>
-{/* <CharactersListPage 
-FilterInit={filterInit}
-UnInitFiler={() => UnInitFiler()}
-appdata={approvQuery.data} 
-  undata={unapprovQuery.data} 
-  larpTags={allTagsQuery.data.find((tags) => tags.tagType === 'LARPRun')?.tagsList}
-  tagslist={allTagsQuery.data.find((tags) => tags.tagType === 'Character')?.tagsList}
-  authLevel={authLevel}
-  userGuid={userGuidQuery.data}
-  selectedApproved={charactersState.selectedApproved} 
-  commentFilterOn={charactersState.commentFilter}
-  showApprovableOnly={charactersState.showApprovableOnly}
-  readyApproved={charactersState.readyApproved}
-  ToggleSwitch={() => ToggleSwitch('selectedApproved')}
-  ToggleCommentSwitch={() => ToggleSwitch('commentFilter')}
-  ToggleApprovableSwitch={() => ToggleSwitch('showApprovableOnly')}
-  ToggleApprovReadySwitch={() =>  ToggleSwitch('readyApproved')}
-  DirectToCharacter={(path, guid) => DirectToCharacter(path, guid)}
-  NewCharacterLink={(e) => NewCharacterLink(e)}
-  Edit={(path, guid) => GoToEditCharacter(path, guid)}
-  UpdateFilter={(filter) => setFilterState({...filterState,  filter})}
-  ToggleSwitches={(e) => props.ToggleSwitches(e)}
-  /> */}
-
   <CharactersListPage 
   FilterInit={filterInit}
   UnInitFiler={() => UnInitFiler()}

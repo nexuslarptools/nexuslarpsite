@@ -18,6 +18,12 @@ const SearchDrawer = props => {
             Value: null,
             AndOr: null,
             Position: 0,
+            Loading: true}],
+        SpecialSkill: [{Attribute: null,
+            CompareType: null,
+            Value: null,
+            AndOr: null,
+            Position: 0,
             Loading: true}]
         });
 
@@ -156,16 +162,13 @@ const SearchDrawer = props => {
         );
     }
 
-    const setDoneLoading = async (e, position) => {
-        let attribute = trackingState.Attribute;
-
+    const setDoneLoading = async (e, position, type) => {
+        let attribute = trackingState[type];
         attribute[position].Loading = !e;
-
         await setTrackingState({
             ...trackingState,
-            Attribute:attribute
+            [type]:attribute
         });
-
     }
 
     const navigateout = async () => 
@@ -183,7 +186,7 @@ const SearchDrawer = props => {
            <div className="selectionlist-label">
             Search
             </div>
-            <div className="selection-list-list">
+            <div className="selectionlist-list">
            <TableContainer style={{
                 maxHeight: window.innerHeight - 178 ,
               }}>
@@ -199,8 +202,7 @@ const SearchDrawer = props => {
           id="demo-simple-select"
           value={formState.type}
           label="Type"
-          onChange={(e) => handleChange(e)}
-          >
+          onChange={(e) => handleChange(e)} >
           <MenuItem value={'character'}>Character</MenuItem>
           <MenuItem value={'item'}>Item</MenuItem>
           </Select>
@@ -210,7 +212,7 @@ const SearchDrawer = props => {
            {formState.type === 'character' ?
               <CharacterSearchDrawer init={trackingState}  updatesearch={(e, name) => updateSearchForm(e, name)}
               dropatribute={(e) => dropattribute(e)} AddAttribute={() => AddAttribute()}
-              LoadingDone={(e, postion) => setDoneLoading(e, postion)}/>
+              LoadingDone={(e, postion, type) => setDoneLoading(e, postion, type)}/>
             :
             <></>
             }

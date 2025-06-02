@@ -1,0 +1,11 @@
+{"compareOptions":[
+    {"value": "Name", "display":"Equals (Numeric)"},
+    {"value": "LessThan", "display":"< (Numeric)"},
+    {"value": "LessThanEqual", "display":"<= (Numeric)"},
+    {"value": "GreaterThan", "display":"> (Numeric)"},
+    {"value": "GreaterThanEqual", "display":">= (Numeric)"},
+    {"value": "ExactEquals", "display":"Exact Match"},
+    {"value": "Contains", "display":"Contains Text"},
+    {"value": "StartsWith", "display":"Starts With"},
+    {"value": "EndsWith", "display":"Ends With"}
+]}

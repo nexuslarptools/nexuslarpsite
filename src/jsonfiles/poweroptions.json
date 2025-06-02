@@ -1,0 +1,7 @@
+{"powerOptions":[
+    {"value": "Name", "display":"Name", "NumericCompare":false},
+    {"value": "Rank", "display":"Rank", "NumericCompare":true},
+    {"value": "Cost", "display":"Cost", "NumericCompare":true},
+    {"value": "Uses", "display":"Uses", "NumericCompare":true},
+    {"value": "Description", "display":"Description", "NumericCompare":false}
+]}

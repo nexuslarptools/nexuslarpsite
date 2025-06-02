@@ -73,6 +73,9 @@ export default function ItemsIndex(props) {
                 if (props.subState.funct === 'Create')
                   setIsCreate(true);
               }
+              if (props.subState.funct === 'Select') {
+                setIsSelect(true);
+              }
               if (props.subState.funct === 'View')
               {
                 setItemsState({
@@ -111,7 +114,15 @@ export default function ItemsIndex(props) {
         }
 
         const pushFilter = (filter) => {
-          props.toggleSubScreen(true, '', '','', filter);
+          if (isSelect) {
+          props.toggleSubScreen(true, 'Select', '','', filter);
+          return;
+        }
+        props.toggleSubScreen(true, '', '','', filter);
+        }
+
+        const GoToSelect = () => {
+          props.toggleSubScreen(true, 'Select', '','', filterState);
         }
 
       if (approvQuery.isLoading || unapprovQuery.isLoading || allTagsQuery.isLoading || userGuidQuery.isLoading) 
@@ -147,7 +158,7 @@ return (
   ToggleSwitches={(e) => props.ToggleSwitches(e)}
   DirectToItem={(path, guid) => DirectToItem(path, guid)}
   NewItemLink={(e) => NewItemLink(e)}
-  NavToSelectItems={() => setIsSelect(true)}
+  NavToSelectItems={() => GoToSelect()}
   Edit={(path, guid) => GoToEditItem(path, guid)}
   UpdateFilter={(filter) => pushFilter(filter)}
   />
@@ -166,9 +177,9 @@ return (
   tagslist={allTagsQuery.data.find((tags) => tags.tagType === 'Item')?.tagsList}
   authLevel={authLevel}
   userGuid={userGuidQuery.data}
-  selectedApproved={itemsState.selectedApproved} 
-  commentFilterOn={itemsState.commentFilter}
-  showApprovableOnly={itemsState.showApprovableOnly}
+  selectedApproved={props.subState.selectedApproved} 
+  commentFilterOn={props.subState.commentFilter}
+  showApprovableOnly={props.subState.showApprovableOnly}
   GoBack={() => setIsSelect(false)}
   UpdateItemList={() => void 0}
   UpdateFilter={(filter) => pushFilter(filter)}
