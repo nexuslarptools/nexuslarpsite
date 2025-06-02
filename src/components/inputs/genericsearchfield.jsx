@@ -1,4 +1,3 @@
-import formJSON from '../../jsonfiles/characterinput.json';
 import { useEffect, useState } from 'react';
 import SearchIcon from '../icon/searchicon';
 import PropTypes from 'prop-types';
@@ -6,16 +5,15 @@ import Loading from '../loading/loading';
 import DeleteSharpIcon from '@mui/icons-material/DeleteSharp';
 import './_attributesearchfield.scss';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
-import compareOptions from './../../jsonfiles/compareoptions.json'
 
-const AttributeSearchField = (props) => {
-
+const GenericSearchField = (props) => {
     const [currValue, setCurrValue] = useState({
         Attribute: null,
         CompareType: null,
         Value: null,
         AndOr: 'And',
-        Position: 0
+        Position: 0,
+        NumericCompare: false
     })
 
     const [checked, setChecked] = useState(true)
@@ -55,26 +53,6 @@ const AttributeSearchField = (props) => {
     
     };
 
-    const formData = [];
-        for (const key of Object.keys(formJSON)) {
-          for (const subkey of Object.keys(formJSON[key].Values)) {
-            const jsonItem = {
-              Label: formJSON[key].Values[subkey].Label,
-              Type: formJSON[key].Values[subkey].Type,
-              Required: formJSON[key].Values[subkey].Required,
-              ToolTip: formJSON[key].Values[subkey].ToolTip,
-              Name: subkey,
-              Limit: formJSON[key].Values[subkey].Limit,
-              Types: formJSON[key].Values[subkey].Types,
-              enums: formJSON[key].Values[subkey].enums,
-              inDropDown: formJSON[key].Values[subkey].InDropDown,
-            }
-            if(jsonItem.inDropDown) {
-            formData.push(jsonItem);
-            }
-          }
-        }
-
 
 const handleChangeSelect = (e, fieldname) => {
     let newval=currValue;
@@ -82,7 +60,8 @@ const handleChangeSelect = (e, fieldname) => {
         newval[fieldname]= e.target.value
       setCurrValue({
           ...currValue,
-          [fieldname]: e.target.value
+          [fieldname]: e.target.value,
+          NumericCompare: props.formData.find(item => item.value === newval.Attribute).NumericCompare
       });
     }
     else {
@@ -104,7 +83,7 @@ const handleChangeSelect = (e, fieldname) => {
           });
        }
     }
-    props.updateSearch(newval);
+    //props.updateSearch(newval);
 }
 
 if (!loaded) {
@@ -129,8 +108,8 @@ else {
                    value={currValue.Attribute}
                    label="Attribute"
                    onChange={(e) => handleChangeSelect(e, 'Attribute')}>
-                {formData.map(item => (  
-                  <MenuItem key={item.Name} value={item.Name}>{item.Label}</MenuItem>
+                {props.formData.map(item => (  
+                  <MenuItem key={item.value} value={item.value}>{item.display}</MenuItem>
                    ))}
                 </Select>
                 </FormControl>
@@ -146,20 +125,19 @@ else {
                    value={currValue.CompareType}
                    label="Comparison"
                    onChange={(e) => handleChangeSelect(e, 'CompareType')}>
-                {compareOptions.compareOptions.map(item => (  
+                {props.compareOptions.filter(item => !item.display.includes('Numeric')
+                || currValue.NumericCompare).map(item => (  
                   <MenuItem key={item.value} value={item.value}>{item.display}</MenuItem>
                    ))}
                 </Select>
                 </FormControl>
 
-           {/* <label className='attribute-fieldtext'> */}
                 <input type="checkbox" 
                           checked={checked}
                           onChange={() => handleChangeSelect(checked, 'AndOr')} />
                   <div className='attribute-wrapbox'>
                  Value MUST be present
                  </div>
-            {/*   </label> */}
           </div>
 
           <div className='search-and-delete-row'>
@@ -178,15 +156,15 @@ else {
   }
 }
 
+export default GenericSearchField;
 
-export default AttributeSearchField;
-
-AttributeSearchField.propTypes = {
+GenericSearchField.propTypes = {
     init: PropTypes.object,
-    updatesearch: PropTypes.func,
     clearfilterState: PropTypes.bool,
     updateSearch: PropTypes.func,
     drop: PropTypes.func,
     LoadingDone: PropTypes.func,
     reinit: PropTypes.bool,
+    formData: PropTypes.array,
+    compareOptions: PropTypes.array
 }
