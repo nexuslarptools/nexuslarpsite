@@ -18,7 +18,7 @@ export const AuthenticationGuard = (props) => {
     if (currentState !== props.subState){
       SetCurrentState(props.subState)
     }
-  }, [])
+  }, [currentState, props.subState])
 
   return <Component subState={props.subState} ismain={props.ismain}  
   toggleSubScreen={(e, funct, guid, path, filters) => props.toggleSubScreen(e, funct, guid, path, filters)}

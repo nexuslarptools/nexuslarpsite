@@ -1,0 +1,35 @@
+﻿{
+  "name": "Using fixtures to represent data",
+  "email": "hello@cypress.io",
+  "body": "Fixtures are a great way to mock data for responses to routes",
+  "items": [
+    {
+      "id": "item1",
+      "name": "Test Item 1",
+      "description": "This is the first test item"
+    },
+    {
+      "id": "item2",
+      "name": "Test Item 2",
+      "description": "This is the second test item"
+    }
+  ],
+  "characters": [
+    {
+      "id": "char1",
+      "name": "Test Character 1",
+      "description": "This is the first test character"
+    },
+    {
+      "id": "char2",
+      "name": "Test Character 2",
+      "description": "This is the second test character"
+    }
+  ],
+  "user": {
+    "id": "user1",
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "preferredname": "Johnny"
+  }
+}

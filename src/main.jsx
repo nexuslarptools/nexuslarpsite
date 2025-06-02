@@ -5,6 +5,10 @@ import history from './utils/history'
 import { Auth0Provider } from '@auth0/auth0-react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { initCsrfProtection } from './utils/csrf'
+
+// Initialize CSRF protection
+initCsrfProtection()
 
 
 const onRedirectCallback = (appState) => {
@@ -54,10 +58,16 @@ const providerConfig = {
   authorizationParams: {
     redirect_uri: window.location.origin,
     audience: import.meta.env.VITE_AUTH0_AUDIENCE,
+    scope: 'openid profile email read:users update:users offline_access',
   },
   onRedirectCallback,
   useRefreshTokens: true,
-  cacheLocation: 'localstorage'
+  cacheLocation: 'localstorage',
+  // Enable CSRF protection for Auth0
+  useCookiesForTransactions: true,
+  cookieDomain: window.location.hostname,
+  // Use SameSite=Strict for cookies
+  cookieSameSite: 'strict'
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(

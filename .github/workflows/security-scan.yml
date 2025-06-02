@@ -1,0 +1,83 @@
+﻿name: Security Scan
+
+on:
+  push:
+    branches: [ main, development ]
+  pull_request:
+    branches: [ main, development ]
+  schedule:
+    # Run weekly on Monday at 1:00 AM
+    - cron: '0 1 * * 1'
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run npm audit
+        run: npm audit --production
+        continue-on-error: true
+
+      - name: Run npm audit (JSON output)
+        id: audit-json
+        run: |
+          echo "::set-output name=audit_output::$(npm audit --json || true)"
+        continue-on-error: true
+
+      - name: Create GitHub Issue for High/Critical Vulnerabilities
+        if: ${{ always() }}
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const auditOutput = JSON.parse('${{ steps.audit-json.outputs.audit_output }}');
+            
+            // Check if there are any vulnerabilities
+            if (!auditOutput.vulnerabilities) {
+              console.log('No vulnerabilities found');
+              return;
+            }
+            
+            // Filter for high and critical vulnerabilities
+            const highCriticalVulns = Object.values(auditOutput.vulnerabilities)
+              .filter(vuln => ['high', 'critical'].includes(vuln.severity));
+            
+            if (highCriticalVulns.length === 0) {
+              console.log('No high or critical vulnerabilities found');
+              return;
+            }
+            
+            // Create a summary of the vulnerabilities
+            let vulnSummary = '## Security Vulnerabilities Detected\n\n';
+            vulnSummary += 'The following high or critical security vulnerabilities were found in the dependencies:\n\n';
+            
+            highCriticalVulns.forEach(vuln => {
+              vulnSummary += `### ${vuln.name} (${vuln.severity})\n`;
+              vulnSummary += `- Vulnerable versions: ${vuln.range}\n`;
+              vulnSummary += `- Fixed in: ${vuln.fixAvailable ? vuln.fixAvailable.version : 'No fix available'}\n`;
+              vulnSummary += `- Path: ${vuln.path}\n`;
+              vulnSummary += `- More info: ${vuln.url}\n\n`;
+            });
+            
+            vulnSummary += '### Recommended Action\n';
+            vulnSummary += 'Review these vulnerabilities and update the affected dependencies as soon as possible.\n';
+            
+            // Create an issue
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🚨 Security Alert: ${highCriticalVulns.length} High/Critical Vulnerabilities Detected`,
+              body: vulnSummary,
+              labels: ['security', 'dependencies']
+            });

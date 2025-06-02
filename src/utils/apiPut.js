@@ -1,22 +1,53 @@
 import configJson from '../auth_config.json'
 import { getConfig } from '../config'
+import { getCsrfToken } from './csrf'
+import { handleApiResponse, logError } from './errorHandler'
+import { applyRateLimit } from './rateLimit'
+import { sanitizeObject } from './inputValidation'
 
 const {
     apiOrigin =
     configJson.APILocation
   } = getConfig()
 
-
+/**
+ * Make a PUT request to the API with proper error handling and rate limiting
+ * @param {Object} auth - Auth0 authentication object
+ * @param {string} path - API endpoint path
+ * @param {Object} bodystring - Request body
+ * @returns {Promise<Object>} - Promise resolving to the API response
+ */
 export const apiPut = async (auth, path, bodystring) => {
-  const token = await auth.getAccessTokenSilently();
-  const response = await fetch(apiOrigin + path, {
-    method: 'put',
-    headers: {Authorization: `Bearer ${token}`, 
-    Accept: 'application/json, text/plain, */*',
-    'Content-Type': 'application/json'},
-    body: JSON.stringify(bodystring)
-  }).then(response => response.json())
-  return response;
+  // Define the actual API request function
+  const makeRequest = async () => {
+    try {
+      const token = await auth.getAccessTokenSilently();
+      const csrfToken = getCsrfToken();
+
+      // Sanitize the request body to prevent XSS and injection attacks
+      const sanitizedBody = sanitizeObject(bodystring);
+
+      const response = await fetch(apiOrigin + path, {
+        method: 'put',
+        headers: {
+          'Authorization': `Bearer ${token}`, 
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+          'X-XSRF-TOKEN': csrfToken
+        },
+        body: JSON.stringify(sanitizedBody),
+        credentials: 'include' // Include cookies in the request
+      });
+
+      return await handleApiResponse(response);
+    } catch (error) {
+      logError(error, `apiPut: ${path}`);
+      throw error;
+    }
+  };
+
+  // Apply rate limiting to the request function
+  return applyRateLimit(makeRequest, path)();
 }
 
 export default apiPut
