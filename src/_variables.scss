@@ -18,6 +18,15 @@ $color-neutral-dark: darken($color-neutral, 5%);
 $color-neutral-darker: darken($color-neutral, 15%);
 $color-neutral-darkest: darken($color-neutral, 50%);
 
+// Deeper Grays
+$color-utility: #5C5D67;
+$color-utility-lightest: lighten($color-neutral, 15%);
+$color-utility-lighter: lighten($color-neutral, 10%);
+$color-utility-light: lighten($color-neutral, 5%);
+$color-utility-dark: darken($color-neutral, 5%);
+$color-utility-darker: darken($color-neutral, 15%);
+$color-utility-darkest: darken($color-neutral, 50%);
+
 // reds
 $color-danger: #bb202e;
 $color-danger-lightest: lighten($color-danger, 45%);

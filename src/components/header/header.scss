@@ -24,16 +24,11 @@
     justify-content: space-between;
     padding: 0 1rem;
 
-    // mobile hamburger menu
-    .navbar_hamburger_button {
-        display: none;
-        @media (max-width: 768px) {
-            display: flex;
-        }
-    }
     
         // website logo, text
         .navbar_logo {
+            align-items: center;
+            display: flex;
             a {
                 color: $color-neutral-darkest;
                 //font-family: "Roboto", "Helvetica", "Arial", sans-serif;
@@ -49,6 +44,14 @@
                     text-align: center;
                 }
             }
+                // mobile hamburger menu
+              .navbar_hamburger_button {
+                padding-right: 20px;
+              //display: none;
+                @media (max-width: 768px) {
+                   display: inline-block;
+             }
+             }
             .logo-image-container {
                 align-items: center;
                 display: flex;

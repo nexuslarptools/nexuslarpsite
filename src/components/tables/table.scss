@@ -22,11 +22,74 @@
 	th {
 		background-color: $color-neutral-light;
 		border-bottom: 1px solid $color-neutral-darker;
-		padding: 10px 0;
-		&.short-column{
-			width: 10%;
+		padding: 7px 0;
+		td {
+			&.short-column{
+				width: 10%;
+			}
+			&.tags-column {
+				max-width: 30%;
+				min-width: 20%;
+			}
+			&.icon-column {
+				max-width: 60px;
+				min-width: 60px;
+			}
 		}
 	}
+	.table-controls {
+		width: 100%;
+		display: flex;
+		.selectors {
+		display: flex;
+		justify-content:left;
+		max-width: 75%;
+		min-width: 50%;
+		.selector {
+			justify-content: space-between;
+			min-width: 45%;
+			padding-inline: 1em;
+			
+		}
+	}
+}
+
+	.table-controls-pagination {
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		.selectors {
+		display: flex;
+		justify-content:left;
+		max-width: 75%;
+		min-width: 50%;
+		.selector {
+			justify-content: space-between;
+			min-width: 45%;
+			padding-inline: 1em;
+			
+		}
+	}
+
+	}
+	.fullspan-cell {
+		width: 100%;
+		display: flex;
+		justify-content:space-between;
+		.search-row {
+			min-width: 50%;
+		    display: flex;
+		    justify-content: left;
+		    .search-container {
+		    	min-width: 30%;
+		    	justify-content: space-evenly;
+		    }
+	    }
+		.tags-container{
+			min-width: 30%;
+			justify-content: right;
+		}
+    }
 	// table header
 	thead {
 		box-shadow: 0px 2px 0px 0px rgba(0,0,0,0.3);
@@ -117,6 +180,7 @@
 		background-color: $color-neutral-lightest;
 		padding: 10px 5px;
 		box-shadow: 0px 2px 0px 0px rgba(0,0,0,0.75);
+		width: 100%;
 		@media (max-width: 768px) {
 			flex-wrap: wrap;
 			justify-content: center;
@@ -145,6 +209,23 @@
 			flex-wrap: wrap;
 			float: left;
 			justify-content: center;
+			position: relative;
+			top: 5px;
+			button {
+				margin: 0 10px 10px 0;
+				width: 125px;
+			}
+			@media (max-width: 768px) {
+				justify-content: center;
+				width: 100%;
+			}
+		}
+		.table-topper-pagination {
+			align-items: center;
+			display: flex;
+			flex-wrap: wrap;
+			float: left;
+			justify-content: right;
 			position: relative;
 			top: 5px;
 			button {
@@ -228,9 +309,12 @@
 		th { padding: 0 0 5px 0; }
 		// text search filters
 		.filter-container{
+			display: flex;
+			font-size: $font-size-small;;
 			align-items: center;
-			display: inline-block;
 			width: 100%;
+			padding-left: 5px;
+			padding-top: 6px;
 			.MuiBox-root {
 				background: none;
 				border: 0;
@@ -252,6 +336,9 @@
 			.MuiTextField-root {
 				padding-right: 0;
 				width: calc(100% - 10px);
+			}
+			.inactive-text {
+				color: $color-utility-darker;
 			}
 		}
 		.input-pair{

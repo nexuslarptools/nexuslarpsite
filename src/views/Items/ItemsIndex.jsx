@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useGetData from '../../utils/getdata';
 import Loading from '../../components/loading/loading';
 import ItemsListPage from './ItemsListPage';
@@ -14,7 +14,7 @@ import { ClickAwayListener, css, keyframes, styled } from '@mui/material';
 import { useSnackbar } from '@mui/base';
 
 
-export default function ItemsIndex() {
+export default function ItemsIndex(props) {
   AuthRedirect(1)
 
   const handleSnackClose = () => {
@@ -41,54 +41,65 @@ export default function ItemsIndex() {
             viewItemGuid: '',
             viewItemPath: ''
         });
+      const [filterState, setFilterState] = useState(null);
       const [isCreate, setIsCreate] = useState(false);
       const [isSelect, setIsSelect] = useState(false);
       const [isEdit, setIsEdit] = useState({isEditing: false, guid: null});
       const [snackOpen, setSnackOpen] = useState(
         {isOpen:false,
         text: ''});
+
+
+        
+            useEffect(() => {
+              if (props.ismain === true) {
+                setIsCreate(false);
+                setIsEdit({isEditing: false, guid: null});
+                setFilterState(props.subState.filter);
+              
+                if (props.subState.filter !== undefined && props.subState.filter !== null ) {
+                for (const key in props.subState.filter) {
+                  if (props.subState.filter[key] !== undefined && props.subState.filter[key] !== null && key !== 'filters') {
+                    setItemsState({
+                      ...itemsState,
+                      [key]: props.subState.filter[key]
+                    });
+                  }
+              }
+            }
+        
+              }
+              else {
+                if (props.subState.funct === 'Create')
+                  setIsCreate(true);
+              }
+              if (props.subState.funct === 'View')
+              {
+                setItemsState({
+                  ...itemsState,
+                  viewingItem: true,
+                  viewItemGuid: props.subState.guid,
+                  viewItemPath: props.subState.path});
+              }
+              if (props.subState.funct === 'Edit')
+                {
+                  setIsEdit({isEditing: true, 
+                    guid: props.subState.guid,
+                    path: props.subState.path
+                  });
+                }
+            }, [])
   
      const OpenSnack = async (e) => {
       await setSnackOpen(        {isOpen:true,
         text: e});
      }
-
-      const ToggleSwitch = async (e) => {
-            let toggled=itemsState[e];
-
-            if (e === 'selectedApproved' && itemsState.showApprovableOnly) {
-              await setItemsState({
-                ...itemsState,
-                [e]: !toggled,
-                showApprovableOnly:false
-            });
-            }
-            else {
-            await setItemsState({
-                ...itemsState,
-                [e]: !toggled
-            });
-          }
-        }   
-
         const DirectToItem = async (path, guid) => {
-            setItemsState({
-                ...itemsState,
-                viewingItem: true,
-                viewItemGuid: guid,
-                viewItemPath: path});
-        }
-
-        const GoBackToList = async () => {
-            setItemsState({
-                ...itemsState,
-                viewingItem: false,
-                viewItemGuid: '',
-                viewItemPath: ''});
+          props.toggleSubScreen(false, 'View', guid, path, filterState);
         }
 
         const GoToEditItem = async (path, guid) => {
-          await setIsEdit({isEditing: true, guid: guid, path: path});
+           props.toggleSubScreen(false, 'Edit', guid, path, filterState);
         }
 
         const NewItemLink = async () => {
@@ -96,8 +107,11 @@ export default function ItemsIndex() {
         }
 
         const GoBackFromCreateEdit = async () => {
-          await setIsCreate(false);
-          await setIsEdit({isEditing: false, guid: null});
+          props.toggleSubScreen(true, '', '' ,'', 'goback');
+        }
+
+        const pushFilter = (filter) => {
+          props.toggleSubScreen(true, '', '','', filter);
         }
 
       if (approvQuery.isLoading || unapprovQuery.isLoading || allTagsQuery.isLoading || userGuidQuery.isLoading) 
@@ -115,24 +129,27 @@ return (
  !isEdit.isEditing ?
  !isSelect ?
 <>
+
 <ItemsListPage appdata={approvQuery.data} 
   undata={unapprovQuery.data} 
+  Filters={props.subState !== undefined && props.subState !== null &&
+    props.subState.filter !== undefined && props.subState.filter !== null ? 
+    props.subState.filter : null
+  }
   larpTags={allTagsQuery.data.find((tags) => tags.tagType === 'LARPRun')?.tagsList}
   tagslist={allTagsQuery.data.find((tags) => tags.tagType === 'Item')?.tagsList}
   authLevel={authLevel}
   userGuid={userGuidQuery.data}
-  selectedApproved={itemsState.selectedApproved} 
-  commentFilterOn={itemsState.commentFilter}
-  showApprovableOnly={itemsState.showApprovableOnly}
-  readyApproved={itemsState.readyApproved}
-  ToggleSwitch={() => ToggleSwitch('selectedApproved')}
-  ToggleCommentSwitch={() => ToggleSwitch('commentFilter')}
-  ToggleApprovableSwitch={() => ToggleSwitch('showApprovableOnly')}
-  ToggleApprovReadySwitch={() => ToggleSwitch('readyApproved')}
+  selectedApproved={props.subState.selectedApproved} 
+  commentFilterOn={props.subState.commentFilter}
+  showApprovableOnly={props.subState.showApprovableOnly}
+  readyApproved={props.subState.readyApproved}
+  ToggleSwitches={(e) => props.ToggleSwitches(e)}
   DirectToItem={(path, guid) => DirectToItem(path, guid)}
   NewItemLink={(e) => NewItemLink(e)}
   NavToSelectItems={() => setIsSelect(true)}
   Edit={(path, guid) => GoToEditItem(path, guid)}
+  UpdateFilter={(filter) => pushFilter(filter)}
   />
 </>
 :
@@ -140,6 +157,10 @@ return (
 <ItemSelector appdata={approvQuery.data} 
   isCharSheet={false}
   undata={unapprovQuery.data} 
+  Filters={props.subState !== undefined && props.subState !== null &&
+    props.subState.filter !== undefined && props.subState.filter !== null ? 
+    props.subState.filter : null
+  }
   initialItems={{show:false, label:'Selection for Printing'}}
   larpTags={allTagsQuery.data.find((tags) => tags.tagType === 'LARPRun')?.tagsList}
   tagslist={allTagsQuery.data.find((tags) => tags.tagType === 'Item')?.tagsList}
@@ -148,12 +169,10 @@ return (
   selectedApproved={itemsState.selectedApproved} 
   commentFilterOn={itemsState.commentFilter}
   showApprovableOnly={itemsState.showApprovableOnly}
-  ToggleSwitch={() => ToggleSwitch('selectedApproved')}
-  ToggleCommentSwitch={() => ToggleSwitch('commentFilter')}
-  ToggleApprovableSwitch={() => ToggleSwitch('showApprovableOnly')}
-  ToggleApprovReadySwitch={() => ToggleSwitch('readyApproved')}
   GoBack={() => setIsSelect(false)}
   UpdateItemList={() => void 0}
+  UpdateFilter={(filter) => pushFilter(filter)}
+  ToggleSwitches={(e) => props.ToggleSwitches(e)}
   />
 </> 
 : 
@@ -169,7 +188,7 @@ GoBack ={() => GoBackFromCreateEdit()} />
  :
 <>
 <ItemDisplay path={itemsState.viewItemPath} guid={itemsState.viewItemGuid}
-GoBackToList={() => GoBackToList()} />
+GoBackToList={() => GoBackFromCreateEdit()} />
 </>
 }
 {snackOpen.isOpen ? (
@@ -218,5 +237,9 @@ const CustomSnackBar = styled('div')(
 
 ItemsIndex.propTypes = {
   NewItemLink: PropTypes.func,
-  NavToSelectItems: PropTypes.func
+  NavToSelectItems: PropTypes.func,
+  subState: PropTypes.object,
+  ToggleSwitches: PropTypes.func,
+  toggleSubScreen: PropTypes.func,
+  ismain: PropTypes.bool
 }

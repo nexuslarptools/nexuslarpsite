@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import ItemTable from "../tables/itemtable";
 import ItemSelectonList from "./itemslectionlist";
 import { Stack } from "@mui/material";
-import DisplayScreen from "../displayscreen/displayscreen";
 import DisplayScreenItemsOnly from "../displayscreen/displayscreenitemsonly";
 
 const ItemSelector = (props) => {
@@ -174,11 +173,12 @@ const ItemSelector = (props) => {
       DirectToItem={(path, guid) => AddItemToList(path, guid)}
       NewItemLink={(e)=> props.NewItemLink(e)}
       NavToSelectItems={() => props.NavToSelectItems()}
-      ToggleSwitch={() => props.ToggleSwitch()}
-      ToggleCommentSwitch={() => props.ToggleCommentSwitch()}
-      ToggleApprovableSwitch={() => props.ToggleApprovableSwitch()}
+      ToggleSwitches={(e) => props.ToggleSwitches(e)}
       GoBack={() => props.GoBack()}
       GoToPrint={() => TogglePrint()}
+      UpdateFilter={(filter) => props.UpdateFilter(filter)}
+      isLoading={props.isLoading}
+      Filters={props.Filters}
       />
       </div>
 {/*       </Box>*/}
@@ -233,5 +233,9 @@ ItemSelector.propTypes = {
     NavToSelectItems: PropTypes.func,
     Edit: PropTypes.func,
     GoBack: PropTypes.func,
-    UpdateItemList: PropTypes.func
+    UpdateItemList: PropTypes.func,
+    UpdateFilter: PropTypes.func,
+    isLoading: PropTypes.bool,
+    ToggleSwitches: PropTypes.func,
+    Filters: PropTypes.object
 }

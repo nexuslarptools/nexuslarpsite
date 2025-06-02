@@ -6,8 +6,9 @@ export default function ItemsListPage(props) {
 return (
 <>
   <div>
-    <ItemTable 
+       <ItemTable 
     isSelector={false}
+    Filters={props.Filters}
     appdata={props.selectedApproved ? props.appdata : props.undata} 
       selectedItemsApproved={props.selectedApproved} 
       showApprovableOnly={props.showApprovableOnly}
@@ -20,11 +21,10 @@ return (
       DirectToItem={(path, guid) => props.DirectToItem(path, guid)}
       NewItemLink={(e)=> props.NewItemLink(e)}
       NavToSelectItems={() => props.NavToSelectItems()}
-      ToggleSwitch={() => props.ToggleSwitch()}
-      ToggleCommentSwitch={() => props.ToggleCommentSwitch()}
-      ToggleApprovableSwitch={() => props.ToggleApprovableSwitch()}
-      ToggleApprovReadySwitch={() => props.ToggleApprovReadySwitch()}
+      ToggleSwitches={(e) => props.ToggleSwitches(e)}
       Edit={(path, guid) => props.Edit(path, guid)}
+      UpdateFilter={(filter) => props.UpdateFilter(filter)}
+      isLoading={props.isLoading}
       />
     </div>
     </>
@@ -33,10 +33,7 @@ return (
 
 ItemsListPage.propTypes = {
   DirectToItem: PropTypes.func,
-  ToggleSwitch: PropTypes.func,
-  ToggleCommentSwitch: PropTypes.func,
-  ToggleApprovableSwitch: PropTypes.func,
-  ToggleApprovReadySwitch: PropTypes.func,
+  ToggleSwitches: PropTypes.func,
   showApprovableOnly: PropTypes.bool,
   selectedApproved: PropTypes.bool,
   commentFilterOn: PropTypes.bool,
@@ -49,5 +46,8 @@ ItemsListPage.propTypes = {
   userGuid: PropTypes.string,
   NewItemLink: PropTypes.func,
   NavToSelectItems: PropTypes.func,
-  Edit: PropTypes.func
+  Edit: PropTypes.func,
+  UpdateFilter: PropTypes.func,
+  isLoading: PropTypes.bool,
+  Filters: PropTypes.object
 }

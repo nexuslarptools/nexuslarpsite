@@ -2,7 +2,8 @@
 import ArrowCircleRightSharpIcon from '@mui/icons-material/ArrowCircleRightSharp';
 import { Autocomplete, FormControl, FormControlLabel, FormLabel, IconButton, InputLabel, 
   MenuItem, Select, Switch, Table, TableBody, TableCell, TableContainer, TableHead, 
-  TablePagination, TableRow, TextField } from '@mui/material';
+  TablePagination, TableRow, TextField, 
+  Tooltip} from '@mui/material';
 import PropTypes from 'prop-types';
 import './table.scss';
 import { Clear } from '@mui/icons-material';
@@ -11,11 +12,12 @@ import EditSharpIcon from '@mui/icons-material/EditSharp'
 import FastRewindSharpIcon from '@mui/icons-material/FastRewindSharp';
 import { useState, useEffect } from 'react';
 import Tags from '../tags/tags';
-import FilterIcon from '../icon/filtericon';
 import KickDialog from '../dialogs/kickdialogbox';
 import DeleteSanityDialog from '../dialogs/deletesanitydialog';
 import HoverText from '../hovertext/hovertext';
+import SearchSharpIcon from '@mui/icons-material/SearchSharp';
 import './_itemtable.scss'
+import TextBox from '../inputs/textbox';
 
 
 const ItemTable = props => {
@@ -28,19 +30,20 @@ const ItemTable = props => {
   const [tagState, setTagState] = useState({
     listTags: []
   });
-  const [filterState, setFilterState] = useState({
-    SeriesFilter: '',
-    ItemsFilter: '',
-    EditorFilter: '',
-    CreatorFilter: ''
-  });
+  const [filterState, setFilterState] = useState(props.Filters);
+      const [dialogStates, setDialogState] = useState({
+        Series: false,
+        Item: false,
+        Creator: false,
+        Editor: false
+      });
   const [clearfilterState, setClearfilterState] = useState(false);
-  const [selectedLarpTag, setSelectedLarpTag] = useState(null);
-  const [tagSelectValues, setTagSelectValues] = useState([]);
-  const [selectedApprovalState, setSelectedApprovalState] = useState('');
+  const [selectedLarpTag, setSelectedLarpTag] = useState(props.Filters.SelectedLarpTag);
+  const [tagSelectValues, setTagSelectValues] = useState(props.Filters.TagSelectValues);
+  const [selectedApprovalState] = useState(props.Filters.SelectedApproval);
   const [autocompSelectedValue, setAutocompSelectedValue] = useState(null);
   const [resetInputField, setResetInputField] = useState(false);
-  const [larpAutoCompValue, setLarpAutoCompValue] = useState(null);
+  const [larpAutoCompValue, setLarpAutoCompValue] = useState(props.Filters.LarpAutoCompValue);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(25);
   const [currentTagList, setCurrentTagList] = useState([]);
@@ -70,19 +73,19 @@ const ItemTable = props => {
       }
     });
 
-    if (selectedLarpTag !== null) {
+    if (selectedLarpTag !== null && selectedLarpTag !== '') {
       const fullSelectLARPTag = props.larpTags.find((tag) => tag.guid === selectedLarpTag);
       tagDrowdownList.push(fullSelectLARPTag);
     }
     setCurrentTagList(tagDrowdownList);
 
     let filteredRows = props.appdata?.iteList;
-
     filteredRows = filteredRows.filter(item => removeDiacritics(item.name.toLocaleLowerCase()).includes(removeDiacritics(filterState.ItemsFilter.toLocaleLowerCase())));
     filteredRows = filteredRows.filter(item => (item.series === null && filterState.SeriesFilter === '') || 
        (item.series !== null && removeDiacritics(item.series.toLocaleLowerCase()).includes(removeDiacritics(filterState.SeriesFilter.toLocaleLowerCase()))));
     filteredRows = filteredRows.filter(item => removeDiacritics(item.createdby.toLocaleLowerCase()).includes(removeDiacritics(filterState.CreatorFilter.toLocaleLowerCase())));
     filteredRows = filteredRows.filter(item => removeDiacritics(item.editbyUser.toLocaleLowerCase()).includes(removeDiacritics(filterState.EditorFilter.toLocaleLowerCase())));
+   
     if (props.showApprovableOnly) {
       filteredRows = filteredRows.filter(item => (item.editbyUserGuid !== props.userGuid && item.firstapprovalbyuserGuid !== props.userGuid));
     }
@@ -100,7 +103,7 @@ const ItemTable = props => {
       filteredRows = filteredRows.filter(character => (character.firstapprovalbyuserGuid !== null ));
     }
 
-    if (tagState.listTags.length > 0 || props.larpTags.length > 0) {
+    if (tagSelectValues.length > 0 || props.larpTags.length > 0) {
       const newfilter = [];
       filteredRows.forEach((row) => {
         if (row.tags !== null) {
@@ -110,7 +113,7 @@ const ItemTable = props => {
             })
             if (listguids.length === 0 || props.larpTags.every(elem => !listguids.includes(elem.guid)) ||
             listguids.includes(selectedLarpTag)) {
-              if (tagState.listTags.every(elem => listguids.includes(elem))) {
+              if (tagSelectValues.every(elem => listguids.includes(elem.guid))) {
                 newfilter.push(row);
               }
             }
@@ -126,6 +129,14 @@ const ItemTable = props => {
     const filteredrowstotal = filteredRows.length;
     const filteredPageRows = filteredRows.filter((series, index) => index >= (rowsPerPage * (page)) && index < (rowsPerPage * (page + 1)));
 
+    for (const key of Object.keys(props.Filters)) {
+      if ((key === 'TagSelectValues' && props.Filters[key].length > 0) || 
+          (key !== 'TagSelectValues'  && props.Filters[key] !== '')) {
+         setBtnDisabledState(false)
+      }
+    }
+
+
     setDisplayState({
       ...displayState,
       apimessage: filteredPageRows,
@@ -136,30 +147,32 @@ const ItemTable = props => {
     filterState, tagState, selectedLarpTag, selectedApprovalState, page, rowsPerPage]);
 
 
-
-  const UpdateApprovalFilter = async (e) => {
-    setSelectedApprovalState(e.target.value);
-  }
-
-  const UpdateLarpAutoComp =(e) => {
-    setLarpAutoCompValue(e);
-    if (e === '')
-    {
-      setResetInputField(true);
-      selectLarpTag(null);
-      setAutocompSelectedValue(null);
-      setResetInputField(false);
+    const UpdateApprovalFilter = async (e) => {
+      let setfilter = filterState;
+      setfilter.SelectedApproval = e.target.value;
+      props.UpdateFilter(setfilter);
     }
-  }
+
+    const UpdateLarpAutoComp =(e) => {
+      let setFilters = filterState;
+      setFilters.LarpAutoCompValue = e;
+      setLarpAutoCompValue(e);
+      if (e === '')
+      {
+        setResetInputField(true);
+        selectLarpTag(null);
+        setAutocompSelectedValue(null);
+        setResetInputField(false);
+      }
+    }
 
   const selectLarpTag = async (e) => {
-    if (e !== null) {
-    setAutocompSelectedValue(e.name);
-    setLarpAutoCompValue(e.name);
-    }
+    let setFilters = filterState;
 
     if (e === undefined || e === null) {
       setLarpAutoCompValue('');
+      setFilters.LarpAutoCompValue = '';
+      setFilters.SelectedLarpTag = '';
       let newTagFilter = [];
 
       tagSelectValues.forEach(tag => {
@@ -183,6 +196,9 @@ const ItemTable = props => {
       await setSelectedLarpTag(null);
     }
     else {
+      setAutocompSelectedValue(e.name);
+      setLarpAutoCompValue(e.name);
+      setFilters.LarpAutoCompValue = e.name;
       let newTagFilter = [];
 
       tagSelectValues.forEach(tag => {
@@ -204,7 +220,9 @@ const ItemTable = props => {
       })
       await setTagSelectValues(newTagFilter);
       await setSelectedLarpTag(e.guid);
+      setFilters.SelectedLarpTag = e.guid;
     }
+    props.UpdateFilter(setFilters);
   }
 
   const handleChangePage = (
@@ -221,33 +239,14 @@ const ItemTable = props => {
     setPage(0);
   }
 
-  const clearfilters = async () => {
-    setBtnDisabledState(true);
-
-    setTagState({
-      ...tagState,
-      listTags: []
-    });
-
-    setTagSelectValues([]);
-
-    await setFilterState({
-      ...filterState,
-      ItemsFilter: '',
-      SeriesFilter: '',
-      CreatorFilter: '',
-      EditorFilter: ''
-    });
-
-    await setClearfilterState(true);
-    await setClearfilterState(false);
-  }
 
   const tagClicked = (e) => {
-    const newtag = currentTagList.find((element) => element.guid === e )
-    if (newtag !== undefined ) {
+    let setfilter = filterState;
+
     const listguids = tagState.listTags;
-    if (listguids.findIndex(element => element === e) === -1 ) {
+
+    if (listguids.findIndex(element => element === e) === -1 
+    && currentTagList.findIndex(el => el.guid === e) !== -1) {
       listguids.push(e);
     }
 
@@ -256,97 +255,103 @@ const ItemTable = props => {
       listTags: listguids
     });
 
-    if (tagSelectValues.length === 0 || tagSelectValues.findIndex((element) => element.guid === e) === -1) {
-    const setNewTagslist = tagSelectValues;
-    setNewTagslist.push(newtag);
-    setTagSelectValues(setNewTagslist);
-    }
-
-
-    if (filterState.ItemsFilter !== '' || filterState.SeriesFilter !== '' 
-      || filterState.EditorFilter !== '' || filterState.CreatorFilter !== '' || listguids.length > 0) {
-      setBtnDisabledState(false);
-    } else {
-      setBtnDisabledState(true);
+    const newtag = currentTagList.find((element) => element.guid === e )
+    if (newtag !== undefined 
+      && (tagSelectValues.length === 0 || tagSelectValues.findIndex((element) => element.guid === e) === -1)) {
+      const setNewTagslist = tagSelectValues;
+      setNewTagslist.push(newtag);
+      setTagSelectValues(setNewTagslist);
+      setfilter.TagSelectValues = setNewTagslist;
+      props.UpdateFilter(setfilter);
     }
   }
+
+  const clearfilters = async () => {
+    let setfilter = {
+      SeriesFilter: '',
+      ItemsFilter: '',
+      CreatorFilter: '',
+      EditorFilter: '',
+      SelectedApproval : '',
+      LarpAutoCompValue: '',
+      SelectedLarpTag: '',
+      TagSelectValues: []
+    };
+
+    props.UpdateFilter(setfilter);
   }
+
 
   const updateFilter = async (e, updatedfeild) => {
+    if (e === undefined)
+    {
+      let togglestate = dialogStates[updatedfeild];
+      await setDialogState({
+        ...dialogStates,
+        [updatedfeild]: !togglestate
+      });
+      return;
+    }
+    await FilterOpen(updatedfeild);
+    let setfilter = filterState;
+    let value = e;
     try {
-      if (updatedfeild === 'Items') {
+      if (updatedfeild === 'Item') {
         await setFilterState({
           ...filterState,
           ItemsFilter: e
         })
+        setfilter.ItemsFilter = value;
 
-        if (e !== '' || filterState.SeriesFilter !== '' || tagState.listguids.length > 0) {
-          setBtnDisabledState(false);
-        } else {
-          setBtnDisabledState(true);
-        }
       }
       if (updatedfeild === 'Series') {
         await setFilterState({
           ...filterState,
           SeriesFilter: e
         })
+        setfilter.SeriesFilter = value;
 
-        if (e !== '' || filterState.ItemsFilter !== '' || tagState.listguids.length > 0) {
-          setBtnDisabledState(false);
-        } else {
-          setBtnDisabledState(true);
-        }
       }
       if (updatedfeild === 'Editor') {
         await setFilterState({
           ...filterState,
           EditorFilter: e
         })
-        if (e !== '' || filterState.EditorFilter !== '' || tagState.listguids.length > 0) {
-          setBtnDisabledState(false);
-        } else {
-          setBtnDisabledState(true);
-        }
+        setfilter.EditorFilter = value;
+
       }
       if (updatedfeild === 'Creator') {
         await setFilterState({
           ...filterState,
           CreatorFilter: e
         })
-        if (e !== '' || filterState.CreatorFilter !== '' || tagState.listguids.length > 0) {
-          setBtnDisabledState(false);
-        } else {
-          setBtnDisabledState(true);
-        }
+        setfilter.CreatorFilter = value;
+
       }
+      props.UpdateFilter(setfilter);
     } catch (error) {
       console.log(error);
     }
   }
 
   const updateTags = (e) => {
-    const listguids = [];
-
+    let setfilter = filterState;
+    const listguids = []
     e.forEach(element => {
-      if (!listguids.find(e => e === element.guid)) {
-        listguids.push(element.guid)
-      }
-    })
-
-    setTagSelectValues(e);
-
+      listguids.push(element.guid)
+    });
     setTagState({
       ...tagState,
       listTags: listguids
-    })
+    });
 
-    if (filterState.ItemsFilter !== '' || filterState.SeriesFilter !== '' || listguids.length > 0) {
-      setBtnDisabledState(false);
-    } else {
-      setBtnDisabledState(true);
-    }
+    setTagSelectValues(e);
+
+    setfilter.TagSelectValues = e;
+    props.UpdateFilter(setfilter);
+
   }
+
 
   const handleKickOpen = (e) => {
     setKickDialogOpen({
@@ -363,6 +368,14 @@ const ItemTable = props => {
     })
   }
 
+  const FilterOpen = async(e) => {
+    let togglestate = dialogStates[e];
+    await setDialogState({
+      ...dialogStates,
+      [e]: !togglestate
+    });
+  }
+
   const handleKickClose =() => {
     setKickDialogOpen({
       ...kickDialogOpen,
@@ -371,16 +384,37 @@ const ItemTable = props => {
     })    
   }
 
+  const SelectApproveToggle = async() => {
+    let switchinfo = 
+    {
+      selectedApproved: !props.selectedItemsApproved
+    }
+    if (!props.selectedItemsApproved)
+    {
+      if (props.showApprovableOnly)
+      {
+        switchinfo.showApprovableOnly = false;
+      }
+      if (props.readyApproved)
+        {
+          switchinfo.readyApproved = false;
+        }
+    }
+    props.ToggleSwitches(switchinfo)
+  }
+
 return (
   !displayState.display ? 
   <></>:
-<div className='itemTable-display'>
+  <div className='itemTable-display' >
   <TableContainer className='nexus-table'>
-    <Table>
+    <Table  sx={ {'& thead th:nth-child(9)': { width: '1%' },
+        '& thead th:nth-child(10)': { width: '1%' }}
+      } >
     <TableHead sx={{ position: 'sticky', top: 0, backgroundColor: 'white' }}>
     <TableRow>
-    <TableCell colSpan={2} className='table-topper'>
-      
+    <TableCell  colSpan={props.selectedItemsApproved ? 8 : 9}  className='table-topper'>
+    <div className='table-controls' >
     <div className='table-topper-buttons'>
     { !props.isSelector?
     <>
@@ -398,66 +432,68 @@ return (
    <button className="button-action" onClick={() => props.GoBack(false)}> Save and Return </button>
   }
   </>
-
     }           
     </div> 
      
-    </TableCell>
-    <TableCell className='table-topper'>
       {props.authLevel > 1 ?
       <FormControlLabel
       control={
-        <Switch onChange={() => props.ToggleSwitch()}
+        <Switch onChange={() => SelectApproveToggle() }
         checked={props.selectedItemsApproved}/>
       }
       label={props.selectedItemsApproved ? 'Approved Items' : 'Unapproved Items'}
       /> :
       <></>}
-      </TableCell>
-      <TableCell className='table-topper'>
-      {props.commentFilterOn !== undefined && !props.isSelector ?
+      {
+      props.authLevel > 1 ? 
+      props.commentFilterOn !== undefined && !props.isSelector ?
       <FormControlLabel
       control={
-        <Switch onChange={() => props.ToggleCommentSwitch()}
+        <Switch onChange={() => 
+          props.ToggleSwitches({commentFilter: !props.commentFilterOn})}
         checked={!props.commentFilterOn}/>}
       label={props.commentFilterOn ? 'Only Commented Items' : 'All Items'}
       /> :
-      <></>}
-      </TableCell>
-      <TableCell className='table-topper'>
+      <></> : <></>
+    }
       {props.authLevel > 2 && !props.selectedItemsApproved && !props.isSelector ?
       <FormControlLabel
       control={
-        <Switch onChange={() => props.ToggleApprovReadySwitch()}
+        <Switch onChange={() => 
+          props.ToggleSwitches({readyApproved: !props.readyApproved})}
         checked={!props.readyApproved}/>
       }
       label={props.readyApproved ? 'Ready for Approval' : 'All Items'}
       /> :
       <></>}
-      </TableCell>
-      <TableCell className='table-topper'>
       {props.authLevel > 2 && !props.selectedItemsApproved && !props.isSelector ?
       <FormControlLabel
       control={
-        <Switch onChange={() => props.ToggleApprovableSwitch()}
+        <Switch onChange={() => 
+          props.ToggleSwitches({showApprovableOnly: !props.showApprovableOnly})}
         checked={!props.showApprovableOnly}/>
       }
       label={props.showApprovableOnly ? 'Approvable Items' : 'All Items'}
       /> :
       <></>}
+      </div>
       </TableCell>
-      <TableCell colSpan={3} className='table-topper'/>
+
       </TableRow>
+      
         <TableRow>
-        <TableCell colSpan={props.authLevel > 2 && !props.selectedItemsApproved ? 3 : 3} className='table-topper'>
+        <TableCell colSpan={props.selectedItemsApproved ? 8 : 9} className='table-topper'>
+          <div className='table-controls-pagination'>
+          <div className='selectors'>     
           {props.authLevel > 2 && !props.selectedItemsApproved && !props.isSelector ? (
-            <div className='input-pair'>
+            <div className='selector'>
               <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label">Select Sheet Status</InputLabel>
                   <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     label="Sheet Status"
+                    value={props.Filters.SelectedApproval}
                     onChange={e => UpdateApprovalFilter(e)}  
                     >
                     <MenuItem value={''}>All Approval States</MenuItem>
@@ -466,10 +502,12 @@ return (
                   </Select>
                   </FormControl> 
                   </div> )
-                 : (<div></div>)} </TableCell>
-                <TableCell colSpan={1} className='table-topper'>
+                 : (<></>)}
+
+                { props.larpTags.length > 0 ?
+                 <div className='selector'>
                   <div className='input-pair'>
-                    <FormLabel>Include Items from Specific LARP</FormLabel>
+                  <FormLabel sx={{fontSize: 12}}>Include Items linked to Specific LARP</FormLabel>
                     <Autocomplete 
                       id="include-items-from-specific-larp"
                       value={autocompSelectedValue}
@@ -483,7 +521,7 @@ return (
                             ...params.inputProps,
                             value:larpAutoCompValue
                           }}
-                          placeholder="select larp"
+                          placeholder="Select LARP"
                           variant="outlined"
                           onChange={(e) => UpdateLarpAutoComp(e.target.value)}
                           InputProps={{
@@ -496,14 +534,14 @@ return (
                         getoptionselected={(opt, val) => opt === val}
                         onChange={(event, val) => selectLarpTag(val)}
                     />
-                  </div>
-          </TableCell>
-          <TableCell className='table-topper'>  
-          <div className='table-topper-buttons'>     
+                   </div>
+                  </div> :
+                  <></>
+}
+       
             <button className='button-cancel' disabled={btnDisabledState} onClick={clearfilters}>Clear Filters</button>
             </div>
-          </TableCell>
-          <TableCell colSpan={4} className='table-topper'>
+            <div className='table-topper-pagination'>   
                   <TablePagination
                     component="div"
                     count={displayState.totalrows}
@@ -512,67 +550,111 @@ return (
                     rowsPerPage={rowsPerPage}
                     onRowsPerPageChange={handleChangeRowsPerPage}
                   />
+                  </div>
+                  </div>
                 </TableCell>
-               
           </TableRow>
-          <TableRow>
-            { !props.isSelector ?
-          <TableCell className="short-column table-cell-center">Status</TableCell> :
-          <></>
+
+          <TableRow className='table-filter-row'>
+            <TableCell colSpan={props.selectedItemsApproved ? 8 : 9}>
+          <div className='fullspan-cell'>
+          <div className='search-row'>
+            {!props.isSelector ?
+           <div className='search-container'>
+            <div className='filter-container'>
+                                    <Tooltip title="Filter by Last Editor">
+                                <button className='button-action-round' onClick={() => FilterOpen('Editor')}>
+                                <SearchSharpIcon sx={{fontSize: 23}} />
+                                 </button>
+                                   </Tooltip>
+                                 <TextBox title={'Sheet Editor Name'} onClose={(e) => updateFilter(e, 'Editor')} value={props.Filters.EditorFilter !== undefined 
+                                      && props.Filters.EditorFilter !== null ?
+                                      props.Filters.EditorFilter : ''} open={dialogStates.Editor}/>
+                                      {props.Filters.EditorFilter !== undefined 
+                                      && props.Filters.EditorFilter !== null && props.Filters.EditorFilter !== '' ?
+                                      props.Filters.EditorFilter : <div className='inactive-text'>Last Edited By</div>}
+                                </div>
+                                <hr/> 
+                                </div>      
+               :
+          <></> 
             }
-                { props.isSelector ?
-                <TableCell></TableCell> :
-                props.selectedItemsApproved ? <></> :
-                   <TableCell className='short-column table-cell-center'>Ready For Approval
-                   </TableCell>
-                    }
-            { props.isSelector ?
-                <TableCell></TableCell> :
-          props.commentFilterOn !== undefined ?  <TableCell>Item Comments</TableCell> : <></>
-          }     
-          <TableCell> Name </TableCell>
-          <TableCell> Series </TableCell>
-          <TableCell> Tags </TableCell>
-          <TableCell> View </TableCell>
-          { props.authLevel >= 1 && !props.isSelector? 
-                <>
-                <TableCell >Edit</TableCell> 
-                </> :<TableCell ></TableCell> 
-          } 
-          {props.selectedItemsApproved  && props.authLevel >= 5 && !props.isSelector ? 
-                <>
-                <TableCell >Kick</TableCell> 
-                </> :<></>
-                 }
-          { props.authLevel >= 6 && !props.isSelector && !props.selectedItemsApproved ?
-                <>
-                <TableCell >Delete</TableCell> 
-                </> :<TableCell ></TableCell> 
-                 } 
-        </TableRow>
-        <TableRow className='table-filter-row'>
-        { !props.isSelector ?
-<TableCell>   <FilterIcon label="Editor" clearfilter={clearfilterState} filterup={e => updateFilter(e, 'Editor')}/>
-<FilterIcon label="Created By" clearfilter={clearfilterState} filterup={e => updateFilter(e, 'Creator')}/>          
-</TableCell> :
-<></> 
-}
                 {props.selectedItemsApproved  ?
-                  props.isSelector ? <TableCell></TableCell> : <></> :
-                   <TableCell ></TableCell>
+                  props.isSelector ? <></> : <></> :
+                            <div className='search-container'>
+                         
+                               <div className='filter-container'>
+                                  <Tooltip title="Filter by Sheet Creator">
+                                <button className='button-action-round' onClick={() => FilterOpen('Creator')}>
+                                <SearchSharpIcon sx={{fontSize: 23}} />
+                                 </button>
+                                 </Tooltip>
+                                 <TextBox title={'Sheet Creator Name'} onClose={(e) => updateFilter(e, 'Creator')} value={props.Filters.CreatorFilter !== undefined 
+                                      && props.Filters.CreatorFilter !== null ?
+                                      props.Filters.CreatorFilter : ''} open={dialogStates.Creator}/>
+                                      {props.Filters.CreatorFilter !== undefined 
+                                      && props.Filters.CreatorFilter !== null && props.Filters.CreatorFilter !== '' ?
+                                      props.Filters.CreatorFilter : <div className='inactive-text'>Created By</div>}
+                                      
+                                </div>
+                                <hr/> 
+                                </div>
                   }
-                {props.commentFilterOn !== undefined ?  <TableCell></TableCell> : <></>}
-                <TableCell>
-                  <div className='filter-container'>
-                    <FilterIcon label="Name" clearfilter={clearfilterState} filterup={e => updateFilter(e, 'Items')}/>
+                {props.commentFilterOn !== undefined ?
+                  !props.selectedItemsApproved  ?
+                <></> :
+                   <div className='search-container'>
+                <div className='filter-container'>
+                                  <Tooltip title="Filter by Sheet Creator">
+                                <button className='button-action-round' onClick={() => FilterOpen('Creator')}>
+                                <SearchSharpIcon sx={{fontSize: 23}} />
+                                 </button>
+                                 </Tooltip>
+                                 <TextBox title={'Sheet Creator Name'} onClose={(e) => updateFilter(e, 'Creator')} value={props.Filters.CreatorFilter !== undefined 
+                                      && props.Filters.CreatorFilter !== null ?
+                                      props.Filters.CreatorFilter : ''} open={dialogStates.Creator}/>
+                                      {props.Filters.CreatorFilter !== undefined 
+                                      && props.Filters.CreatorFilter !== null && props.Filters.CreatorFilter !== '' ?
+                                      props.Filters.CreatorFilter : <div className='inactive-text'>Created By</div>}
+                                      
+                                </div>
+                                <hr/> 
+
+                                </div> : <></>}
+              <div className='search-container'>
+                <div className='filter-container'>
+                <Tooltip title="Filter by Item Name">
+                  <button className='button-action-round' onClick={() => FilterOpen('Item')}>
+                  <SearchSharpIcon sx={{fontSize: 23}} />
+                   </button>
+                   </Tooltip>
+                   <TextBox title={'Item Name'} onClose={(e) => updateFilter(e, 'Item')} value={props.Filters.ItemsFilter !== undefined 
+                        && props.Filters.ItemsFilter !== null ?
+                        props.Filters.ItemsFilter : ''} open={dialogStates.Item}/>
+                        {props.Filters.ItemsFilter !== undefined 
+                        && props.Filters.ItemsFilter !== null  && props.Filters.ItemsFilter !== '' ?
+                        props.Filters.ItemsFilter : <div className='inactive-text'>Item Name</div>}
                   </div>
-                </TableCell>
-                <TableCell>
-                  <div className='filter-container'>
-                    <FilterIcon label="Series" clearfilter={clearfilterState} filterup={e => updateFilter(e, 'Series')}/>
+                  <hr/>
                   </div>
-                </TableCell>
-                <TableCell colSpan={props.selectedItemsApproved  && props.authLevel > 5 ? 3 : 2  }>
+                <div className='search-container'>
+                <div className='filter-container'>                   
+                    <Tooltip title="Filter by Series">
+                  <button className='button-action-round' onClick={() => FilterOpen('Series')}>
+                  <SearchSharpIcon sx={{fontSize: 23}} />
+                   </button>
+                   </Tooltip>
+                   <TextBox title={'Series'} onClose={(e) => updateFilter(e, 'Series')} value={props.Filters.SeriesFilter !== undefined 
+                        && props.Filters.SeriesFilter !== null ?
+                        props.Filters.SeriesFilter : ''} open={dialogStates.Series}/>
+                        {props.Filters.SeriesFilter !== undefined 
+                        && props.Filters.SeriesFilter !== null  && props.Filters.SeriesFilter !== '' ?
+                        props.Filters.SeriesFilter : <div className='inactive-text'>Series</div>}
+                  </div>
+                  <hr/>
+                  </div>
+                  </div>
+                <div className='tags-container'>
                   <div className='input-pair'>
                     <Autocomplete
                       multiple
@@ -587,23 +669,59 @@ return (
                       )}
                     />
                   </div>
-                </TableCell>
+                  </div>
                 {props.authLevel > 1? 
                 <>
-                <TableCell ></TableCell> 
                 </> :<></>
                  }
                 {!props.selectedItemsApproved  || props.authLevel <= 5? 
                 <>
-                <TableCell ></TableCell> 
                 </> :<></>
                  }
-                {props.selectedItemsApproved  && props.authLevel >= 5 && !props.isSelector? 
+{/*                 {props.selectedItemsApproved  && props.authLevel >= 5 && !props.isSelector? 
                 <>
                 <TableCell ></TableCell> 
                 </> :<></>
-                 }
+                 } */}
+                 </div>
+                 </TableCell>
               </TableRow>
+
+          <TableRow>
+            { !props.isSelector ?
+          <TableCell className="short-column table-cell-center">Status</TableCell> :
+          <></> 
+            }
+                { props.isSelector ?
+                <TableCell></TableCell> :
+                props.selectedItemsApproved ? <></> :
+                   <TableCell className='short-column table-cell-center'>Ready For Approval
+                   </TableCell>
+                    }
+            { props.isSelector ?
+                <TableCell></TableCell> :
+          props.commentFilterOn !== undefined ?  <TableCell className='short-column table-cell-center'>Item Comments</TableCell> : <></>
+          }     
+          <TableCell className='short-column'> Item </TableCell>
+          <TableCell className='short-column'> Series </TableCell>
+          <TableCell className='short-column table-cell-center'> Tags </TableCell>
+          <TableCell key={Math.random()}  className='icon-column table-cell-center'> View </TableCell>
+          { props.authLevel > 1 && !props.isSelector? 
+                <>
+                 <TableCell key={Math.random()} className='icon-column table-cell-center'>Edit</TableCell> 
+                </> :<TableCell ></TableCell> 
+          } 
+          {props.selectedItemsApproved  && props.authLevel >= 5 && !props.isSelector ? 
+                <>
+                 <TableCell key={Math.random()} className='icon-column table-cell-center'>Kick</TableCell> 
+                </> :<></>
+                 }
+          { props.authLevel >= 6 && !props.isSelector && !props.selectedItemsApproved ?
+                <>
+                 <TableCell key={Math.random()} className='icon-column table-cell-center'>Delete</TableCell> 
+                </> :<></>
+                 } 
+        </TableRow>
         </TableHead>
         <TableBody>
 {displayState.apimessage?.map(item => {
@@ -642,7 +760,7 @@ return (
                     }
       { props.isSelector ? <TableCell></TableCell> :
         props.commentFilterOn !== undefined ?  
-      <TableCell>
+      <TableCell className='table-default-cursor table-cell-center'>
        {item.hasreview ? 'Yes' : 'No'}
       </TableCell> : <></>}
     <TableCell key={Math.random()}>
@@ -653,10 +771,10 @@ return (
       ? item.series
       : ''}
     </TableCell>
-    <TableCell key={Math.random()}>
+    <TableCell key={Math.random()} className='tags-column'>
     <Tags tags={item.tags} clickable={true} tagClick={(e) => tagClicked(e)}/>
     </TableCell>
-    <TableCell key={Math.random()}>
+    <TableCell className='icon-column table-cell-center'>
     <IconButton  onClick={() => props.DirectToItem(props.selectedItemsApproved ? 'ItemSheetApproveds' 
      : 'ItemSheets', item.guid)}>
   <ArrowCircleRightSharpIcon  className="table-icon-button" />
@@ -664,7 +782,7 @@ return (
   </TableCell>
   {props.authLevel >= 2 && !props.isSelector? 
                 <>
-                <TableCell >
+                   <TableCell className='icon-column table-cell-center'>
                 {props.authLevel > 1
              ? <div>
               <IconButton  onClick = {() => props.Edit(props.selectedItemsApproved ? 'ItemSheetApproveds' 
@@ -678,7 +796,7 @@ return (
                  } 
            {props.selectedItemsApproved  && props.authLevel >= 5 && !props.isSelector? 
                 <>
-                <TableCell > 
+                   <TableCell className='icon-column table-cell-center' >
                   <IconButton onClick = {() => handleKickOpen(item)}>
                   <FastRewindSharpIcon className="table-icon-button" />
                    </IconButton>
@@ -687,18 +805,16 @@ return (
                 </> 
                 :<></>
                  }
-  {props.authLevel >= 5 && !props.isSelector? 
+             {props.authLevel >= 5 && !props.isSelector? 
                 <>
-                <TableCell >
                 {props.authLevel > 5 && !props.selectedItemsApproved 
-             ? <div>
+                ? <TableCell className='icon-column table-cell-center'>
               <IconButton aria-label='delete' onClick = {() => Delete(item)}>
               <DeleteSharpIcon className="table-icon-button" />
               </IconButton>
-              </div>
-              : <div></div>}
               </TableCell> 
-                </> :<TableCell ></TableCell> 
+              : <></>}
+                </> : <></>
                  } 
   </TableRow>
   )
@@ -769,5 +885,8 @@ Edit: PropTypes.func,
 isSelector: PropTypes.bool,
 isCharSheet: PropTypes.bool,
 GoBack: PropTypes.func,
-GoToPrint: PropTypes.func
+GoToPrint: PropTypes.func,
+Filters: PropTypes.object,
+UpdateFilter: PropTypes.func,
+ToggleSwitches: PropTypes.func
 }

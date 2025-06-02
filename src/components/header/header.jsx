@@ -1,11 +1,20 @@
+import PropTypes from 'prop-types';
 import LoginButton from '../loginbuttons/loginbutton.jsx'
 import LogoutButton from '../loginbuttons/logoutbutton.jsx'
 import { useAuth0 } from '@auth0/auth0-react'
 import { Link } from 'react-router-dom'
 import './header.scss'
 import AuthLevelInfo from '../../utils/authLevelInfo.js'
+import MenuIcon from '@mui/icons-material/Menu';
+import { useEffect, useState } from 'react';
+import { Tooltip } from '@mui/material';
 
-const Header = () => {
+const Header = props => {
+
+  const [buttonactive, SetButtonActive] = useState(true);
+      useEffect(() => {
+        SetButtonActive(props.mainmenu);
+      }, [props.mainmenu])
 
   const { user, isAuthenticated, isAuthLoading } = useAuth0()
   const authLevel = AuthLevelInfo();
@@ -15,6 +24,16 @@ const Header = () => {
         <header className={navClasses}>
         <nav className="navbar-navigation">
         <div className="navbar_logo" aria-label="Return Home">
+{/*           { buttonactive ?
+        <div className ='navbar_hamburger_button'>
+          <Tooltip title="Search Menu">
+             <button className='button-hambuger'   onClick={() => props.drawerOpenCLick(true)}>
+          <MenuIcon sx={{fontSize: 35}} />
+        </button>
+        </Tooltip>
+        </div> : <></>
+         } */}
+        <div>
         <Link to={{ pathname: '/' }}>Nexus DB
               <div className='logo-image-container'>
                 <div className='logo-img rock' alt="Rock"></div>
@@ -22,6 +41,7 @@ const Header = () => {
                 <div className='logo-img scissors' alt="Scissors"></div>
               </div>
             </Link>
+            </div>
           </div>
   <div className="navigation-items">
   <ul>
@@ -67,3 +87,8 @@ const Header = () => {
 }
 
 export default Header
+
+Header.propTypes = {
+  drawerOpenCLick: PropTypes.func,
+  mainmenu: PropTypes.bool
+  }

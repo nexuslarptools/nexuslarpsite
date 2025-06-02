@@ -31,8 +31,6 @@ const GoToEdit = async (e) => {
     viewingEdit: true,
     guid: e
   });
-
-  props.toggleSubScreen(true);
 }
 
 const GoBack = async () => {
