@@ -1,4 +1,4 @@
-﻿import { fireEvent, screen, waitFor } from '@testing-library/react';
+﻿import { fireEvent, screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 /**
@@ -8,7 +8,9 @@ import userEvent from '@testing-library/user-event';
  */
 export const clickButton = async (buttonText) => {
   const button = screen.getByRole('button', { name: buttonText });
-  await userEvent.click(button);
+  await act(async () => {
+    await userEvent.click(button);
+  });
 };
 
 /**
@@ -18,19 +20,28 @@ export const clickButton = async (buttonText) => {
  */
 export const clickLink = async (linkText) => {
   const link = screen.getByRole('link', { name: linkText });
-  await userEvent.click(link);
+  await act(async () => {
+    await userEvent.click(link);
+  });
 };
 
 /**
- * Helper function to fill in a form field by its label
- * @param {string} labelText - The text of the label for the field
+ * Helper function to fill in a form field by its label or directly with an element
+ * @param {string|HTMLElement} labelOrElement - The text of the label for the field or the field element itself
  * @param {string} value - The value to enter into the field
  * @returns {Promise<void>}
  */
-export const fillField = async (labelText, value) => {
-  const field = screen.getByLabelText(labelText);
-  await userEvent.clear(field);
-  await userEvent.type(field, value);
+export const fillField = async (labelOrElement, value) => {
+  // If labelOrElement is a string, find the field by label text
+  // Otherwise, use the element directly
+  const field = typeof labelOrElement === 'string' 
+    ? screen.getByLabelText(labelOrElement)
+    : labelOrElement;
+
+  await act(async () => {
+    await userEvent.clear(field);
+    await userEvent.type(field, value);
+  });
 };
 
 /**
@@ -41,7 +52,9 @@ export const fillField = async (labelText, value) => {
  */
 export const selectOption = async (labelText, optionText) => {
   const dropdown = screen.getByLabelText(labelText);
-  await userEvent.selectOptions(dropdown, optionText);
+  await act(async () => {
+    await userEvent.selectOptions(dropdown, optionText);
+  });
 };
 
 /**
@@ -52,7 +65,9 @@ export const selectOption = async (labelText, optionText) => {
 export const checkCheckbox = async (labelText) => {
   const checkbox = screen.getByLabelText(labelText);
   if (!checkbox.checked) {
-    await userEvent.click(checkbox);
+    await act(async () => {
+      await userEvent.click(checkbox);
+    });
   }
 };
 
@@ -64,7 +79,9 @@ export const checkCheckbox = async (labelText) => {
 export const uncheckCheckbox = async (labelText) => {
   const checkbox = screen.getByLabelText(labelText);
   if (checkbox.checked) {
-    await userEvent.click(checkbox);
+    await act(async () => {
+      await userEvent.click(checkbox);
+    });
   }
 };
 
@@ -107,7 +124,9 @@ export const waitForLoadingToFinish = async () => {
 export const navigateTo = async (route) => {
   // This assumes you're using React Router and have a link to the route
   const link = screen.getByRole('link', { name: new RegExp(route, 'i') });
-  await userEvent.click(link);
+  await act(async () => {
+    await userEvent.click(link);
+  });
 };
 
 /**
@@ -117,7 +136,9 @@ export const navigateTo = async (route) => {
  */
 export const submitForm = async (submitButtonText = 'Submit') => {
   const submitButton = screen.getByRole('button', { name: submitButtonText });
-  await userEvent.click(submitButton);
+  await act(async () => {
+    await userEvent.click(submitButton);
+  });
 };
 
 export default {

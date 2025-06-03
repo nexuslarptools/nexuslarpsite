@@ -10,31 +10,35 @@ export const mockApiResponses = {
     preferredname: 'Test User',
     authLevel: 'Reader'
   },
-  
+
   // Characters data
   '/api/v1/Characters': [
     { id: '1', name: 'Character 1', description: 'Test character 1' },
     { id: '2', name: 'Character 2', description: 'Test character 2' }
   ],
-  
+
   // Items data
-  '/api/v1/Items': [
-    { id: '1', name: 'Item 1', description: 'Test item 1' },
-    { id: '2', name: 'Item 2', description: 'Test item 2' }
-  ],
-  
+  '/api/v1/Items': {
+    items: [
+      { id: '1', name: 'Item 1', description: 'Test item 1' },
+      { id: '2', name: 'Item 2', description: 'Test item 2' }
+    ]
+  },
+  // Single item data
+  'singleItem': { id: '1', name: 'Item 1', description: 'Test item 1' },
+
   // Series data
   '/api/v1/Series': [
     { id: '1', name: 'Series 1' },
     { id: '2', name: 'Series 2' }
   ],
-  
+
   // Tags data
   '/api/v1/Tags': [
     { id: '1', name: 'Tag 1' },
     { id: '2', name: 'Tag 2' }
   ],
-  
+
   // Larps data
   '/api/v1/Larps': [
     { id: '1', name: 'Larp 1' },

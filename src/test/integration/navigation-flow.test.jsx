@@ -95,7 +95,7 @@ describe('Navigation Flow', () => {
 
     // Check that we're on the items page
     await waitFor(() => {
-      expect(screen.getByText(/items list/i)).toBeInTheDocument();
+      expect(screen.getByText(/item management/i)).toBeInTheDocument();
     });
   });
 
@@ -120,7 +120,7 @@ describe('Navigation Flow', () => {
 
     // Check that we're on the characters page
     await waitFor(() => {
-      expect(screen.getByText(/characters list/i)).toBeInTheDocument();
+      expect(screen.getByText(/character management/i)).toBeInTheDocument();
     });
   });
 
@@ -170,7 +170,7 @@ describe('Navigation Flow', () => {
 
     // Wait for the items page to load
     await waitFor(() => {
-      expect(screen.getByText(/items list/i)).toBeInTheDocument();
+      expect(screen.getByText(/item management/i)).toBeInTheDocument();
     });
 
     // Find and click the logo to go back to home

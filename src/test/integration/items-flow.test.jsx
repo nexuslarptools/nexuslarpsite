@@ -23,7 +23,7 @@ vi.mock('../../utils/apiGet', async () => {
     apiGet: vi.fn((auth, path) => {
       // Return mock items data for the items endpoint
       if (path === '/api/v1/Items') {
-        return Promise.resolve(mockApiResponses.items);
+        return Promise.resolve(mockApiResponses['/api/v1/Items']);
       }
       // Return mock item data for a specific item endpoint
       if (path.startsWith('/api/v1/Items/') && path !== '/api/v1/Items/') {
@@ -36,7 +36,7 @@ vi.mock('../../utils/apiGet', async () => {
       // Default fallback
       return Promise.resolve({});
     }),
-    apiGetWithPage: vi.fn(() => Promise.resolve(mockApiResponses.items))
+    apiGetWithPage: vi.fn(() => Promise.resolve(mockApiResponses['/api/v1/Items']))
   };
 });
 
@@ -90,12 +90,12 @@ describe('Items Flow', () => {
 
     // Check that we're on the items page
     await waitFor(() => {
-      expect(screen.getByText(/items list/i)).toBeInTheDocument();
+      expect(screen.getByText(/item management/i)).toBeInTheDocument();
     });
 
     // Check that items are displayed
     await waitFor(() => {
-      expect(screen.getByText(mockApiResponses.items.items[0].name)).toBeInTheDocument();
+      expect(screen.getByText(mockApiResponses['/api/v1/Items'].items[0].name)).toBeInTheDocument();
     });
   });
 
@@ -120,7 +120,7 @@ describe('Items Flow', () => {
 
     // Wait for items to load
     await waitFor(() => {
-      expect(screen.getByText(/items list/i)).toBeInTheDocument();
+      expect(screen.getByText(/item management/i)).toBeInTheDocument();
     });
 
     // Find and click the view button for the first item
@@ -161,7 +161,7 @@ describe('Items Flow', () => {
 
     // Wait for items to load
     await waitFor(() => {
-      expect(screen.getByText(/items list/i)).toBeInTheDocument();
+      expect(screen.getByText(/item management/i)).toBeInTheDocument();
     });
 
     // Find and click the edit button for the first item
@@ -192,7 +192,7 @@ describe('Items Flow', () => {
 
     // Check that we're back on the items list page
     await waitFor(() => {
-      expect(screen.getByText(/items list/i)).toBeInTheDocument();
+      expect(screen.getByText(/item management/i)).toBeInTheDocument();
     });
   });
 
@@ -207,7 +207,7 @@ describe('Items Flow', () => {
     // Render the app
     render(
       <TestWrapper>
-        <App />
+        <MockApp />
       </TestWrapper>
     );
 
@@ -220,7 +220,7 @@ describe('Items Flow', () => {
 
     // Wait for items to load
     await waitFor(() => {
-      expect(screen.getByText(/items list/i)).toBeInTheDocument();
+      expect(screen.getByText(/item management/i)).toBeInTheDocument();
     });
 
     // Find and click the new item button
@@ -252,7 +252,7 @@ describe('Items Flow', () => {
 
     // Check that we're back on the items list page
     await waitFor(() => {
-      expect(screen.getByText(/items list/i)).toBeInTheDocument();
+      expect(screen.getByText(/item management/i)).toBeInTheDocument();
     });
   });
 
@@ -281,7 +281,7 @@ describe('Items Flow', () => {
 
     // Wait for items to load
     await waitFor(() => {
-      expect(screen.getByText(/items list/i)).toBeInTheDocument();
+      expect(screen.getByText(/item management/i)).toBeInTheDocument();
     });
 
     // Find and click the edit button for the first item

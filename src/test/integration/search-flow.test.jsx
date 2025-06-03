@@ -1,10 +1,10 @@
 ﻿import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
 import { TestWrapper } from './test-wrapper';
 import MockApp from './app-mock';
 import { mockAuthState } from './auth-mock';
 import { clickButton, fillField, waitForLoadingToFinish } from './user-events';
-import { mockApiResponses, setMockApiResponse } from './api-mock';
+import { mockApiResponses, setMockApiResponse, mockApiGet } from './api-mock';
 
 // Mock the Auth0 hook
 vi.mock('@auth0/auth0-react', async () => {
@@ -27,12 +27,16 @@ const mockSearchResults = {
   ]
 };
 
-// Mock API responses
-vi.mock('../../utils/apiGet', async () => {
-  const actual = await vi.importActual('../../utils/apiGet');
-  return {
-    ...actual,
-    apiGet: vi.fn((auth, path) => {
+describe('Search Flow', () => {
+  beforeEach(() => {
+    // Reset mocks before each test
+    vi.clearAllMocks();
+
+    // Set up mock API responses
+    setMockApiResponse('/api/v1/Search', mockSearchResults);
+
+    // Reset mockApiGet implementation
+    mockApiGet.mockImplementation((auth, path) => {
       // Return mock search results for the search endpoint
       if (path.includes('/api/v1/Search')) {
         return Promise.resolve(mockSearchResults);
@@ -43,18 +47,7 @@ vi.mock('../../utils/apiGet', async () => {
       }
       // Default fallback
       return Promise.resolve({});
-    }),
-    apiGetWithPage: vi.fn(() => Promise.resolve({}))
-  };
-});
-
-describe('Search Flow', () => {
-  beforeEach(() => {
-    // Reset mocks before each test
-    vi.clearAllMocks();
-
-    // Set up mock API responses
-    setMockApiResponse('/api/v1/Search', mockSearchResults);
+    });
   });
 
   afterEach(() => {
@@ -66,9 +59,6 @@ describe('Search Flow', () => {
     // Set up the mock to return authenticated state
     const { useAuth0 } = await import('@auth0/auth0-react');
     useAuth0.mockReturnValue(mockAuthState.authenticated);
-
-    // Get the apiGet mock
-    const { apiGet } = await import('../../utils/apiGet');
 
     // Render the app
     render(
@@ -93,15 +83,14 @@ describe('Search Flow', () => {
     const searchInput = screen.getByPlaceholderText(/search/i);
     await fillField(searchInput, 'test');
 
-    // Click the search button
-    const searchSubmitButton = screen.getByRole('button', { name: /search/i });
+    // Click the search submit button
+    const searchSubmitButton = screen.getByRole('button', { name: /submit search/i });
     await searchSubmitButton.click();
 
     // Check that the API was called with the search term
-    expect(apiGet).toHaveBeenCalledWith(
+    expect(mockApiGet).toHaveBeenCalledWith(
       expect.anything(),
-      expect.stringContaining('/api/v1/Search'),
-      expect.any(Object)
+      expect.stringContaining('/api/v1/Search?q=test')
     );
 
     // Check that search results are displayed
@@ -133,7 +122,7 @@ describe('Search Flow', () => {
     // Enter a search term and submit
     const searchInput = screen.getByPlaceholderText(/search/i);
     await fillField(searchInput, 'test');
-    const searchSubmitButton = screen.getByRole('button', { name: /search/i });
+    const searchSubmitButton = screen.getByRole('button', { name: /submit search/i });
     await searchSubmitButton.click();
 
     // Wait for search results to appear
@@ -143,7 +132,9 @@ describe('Search Flow', () => {
 
     // Click on a character result
     const characterResult = screen.getByText('Character One');
-    await characterResult.click();
+    await act(async () => {
+      await characterResult.click();
+    });
 
     // Check that we navigate to the character details page
     await waitFor(() => {
@@ -156,9 +147,8 @@ describe('Search Flow', () => {
     const { useAuth0 } = await import('@auth0/auth0-react');
     useAuth0.mockReturnValue(mockAuthState.authenticated);
 
-    // Get the apiGet mock and make it return empty results
-    const { apiGet } = await import('../../utils/apiGet');
-    apiGet.mockImplementationOnce((auth, path) => {
+    // Make the apiGet mock return empty results
+    mockApiGet.mockImplementationOnce((auth, path) => {
       if (path.includes('/api/v1/Search')) {
         return Promise.resolve({ characters: [], items: [] });
       }
@@ -182,7 +172,7 @@ describe('Search Flow', () => {
     // Enter a search term and submit
     const searchInput = screen.getByPlaceholderText(/search/i);
     await fillField(searchInput, 'nonexistent');
-    const searchSubmitButton = screen.getByRole('button', { name: /search/i });
+    const searchSubmitButton = screen.getByRole('button', { name: /submit search/i });
     await searchSubmitButton.click();
 
     // Check that a "no results" message is displayed
@@ -196,9 +186,8 @@ describe('Search Flow', () => {
     const { useAuth0 } = await import('@auth0/auth0-react');
     useAuth0.mockReturnValue(mockAuthState.authenticated);
 
-    // Get the apiGet mock and make it reject
-    const { apiGet } = await import('../../utils/apiGet');
-    apiGet.mockRejectedValueOnce(new Error('Search failed'));
+    // Make the apiGet mock reject
+    mockApiGet.mockRejectedValueOnce(new Error('Search failed'));
 
     // Render the app
     render(
@@ -217,7 +206,7 @@ describe('Search Flow', () => {
     // Enter a search term and submit
     const searchInput = screen.getByPlaceholderText(/search/i);
     await fillField(searchInput, 'test');
-    const searchSubmitButton = screen.getByRole('button', { name: /search/i });
+    const searchSubmitButton = screen.getByRole('button', { name: /submit search/i });
     await searchSubmitButton.click();
 
     // Check that an error message is displayed
