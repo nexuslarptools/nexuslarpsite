@@ -41,11 +41,6 @@ export default function CharacterEdit(props) {
 
     const SubmitForm = async (data, image1, image2, newimage1, newimage2) => {
         let bodyData = data
-/*         const larpguid = []
-        larpguid.push(data.larptagGuid)
-        if (data.larptagGuid !== undefined && data.larptagGuid !== null && data.larptagGuid !== '') {
-        bodyData.larptagGuid=larpguid
-        } */
         if (newimage1) {
           uploadToS3('images/Characters/' + props.guid  + '.jpg', image1);
         }
@@ -196,7 +191,7 @@ export default function CharacterEdit(props) {
             Submit={(e, f, g, h, i) => SubmitForm(e, f, g, h, i)}
             GoBack={() => props.GoBack()}
             Approve={() => Approve()}
-            /> 
+            />
         </>
     )}
     CharacterEdit.propTypes = {

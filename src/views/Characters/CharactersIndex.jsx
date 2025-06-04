@@ -8,23 +8,19 @@ import CharacterDisplayPage from './CharacterDisplay';
 import CharacterCreate from './CharacterCreate';
 import formJSON from '../../jsonfiles/characterinput.json';
 import CharacterEdit from './CharacterEdit';
-import { ClickAwayListener, css, keyframes, styled } from '@mui/material';
-import { useSnackbar } from '@mui/base/useSnackbar';
+import { createTheme, IconButton, lighten, Slide, Snackbar, ThemeProvider } from '@mui/material';
 import PropTypes from 'prop-types';
+import CloseSharpIcon from '@mui/icons-material/CloseSharp';
 
 export default function CharactersIndex(props) {
+
     AuthRedirect(1)
 
     const handleSnackClose = () => {
       setSnackOpen({isOpen:false,
-        text: ''});
+        text: ''
+      });
     }
-    
-  const { getRootProps } = useSnackbar({
-    onClose: handleSnackClose,
-    open,
-    autoHideDuration: 5000,
-  });
 
     const approvQuery = useGetData('listApprovedCharacters', '/api/v1/CharacterSheetApproveds');  
     const unapprovQuery = useGetData('listUnapprovedCharacters', '/api/v1/CharacterSheets');
@@ -45,12 +41,14 @@ export default function CharactersIndex(props) {
       const [isCreate, setIsCreate] = useState(false);
       const [snackOpen, setSnackOpen] = useState(
         {isOpen:false,
-        text: ''});
+        text: ''
+      });
   
 
      const OpenSnack = async (e) => {
       await setSnackOpen(  {isOpen:true,
-        text: e});
+        text: e
+      });
      }
 
     const [isEdit, setIsEdit] = useState({isEditing: false, guid: null});
@@ -148,6 +146,26 @@ export default function CharactersIndex(props) {
       props.toggleSubScreen(true, '', '','', filter);
     }
 
+    const theme = createTheme({
+      palette: {
+        success: {
+          main: '#1e9f32',
+          light: lighten('#1e9f32', 0.1),
+          lighter: lighten('#1e9f32', 0.2),
+          lightest: lighten('#1e9f32', 0.3)
+        },
+        fail: {
+          main: '#bb202e',
+          light: lighten('#bb202e', 0.1),
+          lighter: lighten('#bb202e', 0.2)
+        },
+        gradient: {
+          primary:  'linear-gradient(to top,  #187f28, #1e9f32)',
+          fail:  'linear-gradient(to top,  #961a25, #bb202e)',
+        }
+      },
+    });
+
 
     if (approvQuery.isLoading || unapprovQuery.isLoading || allTagsQuery.isLoading || userGuidQuery.isLoading) 
         return (<div>
@@ -220,49 +238,28 @@ GoBack ={() => GoBackFromCreateEdit()} />
 GoBackToList={() => GoBackToList()} />
 </>
 }
-{snackOpen.isOpen ? (
-        <ClickAwayListener onClickAway={() => handleSnackClose()}>
-          <CustomSnackbar {...getRootProps()}>{snackOpen.text}</CustomSnackbar>
-        </ClickAwayListener>
-      ) : null}
+<ThemeProvider theme={theme}>
+<Slide in={snackOpen.isOpen} direction='up' >
+<Snackbar ContentProps={{sx:{background: (theme) => theme.palette.gradient.primary}}}
+        open={snackOpen.isOpen}
+        autoHideDuration={5000}
+        onClose={handleSnackClose}
+        message={snackOpen.text}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} 
+        action={
+        <>
+             <IconButton
+              sx={{ p: 0.5, position:'left' }}
+              onClick={handleSnackClose}>
+              <CloseSharpIcon />
+            </IconButton> 
+            </> }
+            />
+   </Slide>
+ </ThemeProvider>
 </>
 )
 }
-
-
-const snackbarInRight = keyframes`
-  from {
-    transform: translateX(100%);
-  }
-
-  to {
-    transform: translateX(0);
-  }
-`;
-
-const CustomSnackbar = styled('div')(
-  ({ theme }) => css`
-    position: fixed;
-    z-index: 5500;
-    display: flex;
-    right: 16px;
-    bottom: 16px;
-    left: auto;
-    justify-content: space-between;
-    max-width: 560px;
-    min-width: 300px;
-    background-color: ${'#fff'};
-    border-radius: 8px;
-    border: 1px solid ${'#DAE2ED'};
-    box-shadow: ${`0 2px 8px ${'#DAE2ED'}`};
-    padding: 0.75rem;
-    color: ${'#1C2025'};
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-weight: 600;
-    animation: ${snackbarInRight} 200ms;
-    transition: transform 0.2s ease-out;
-  `
-);
 
 CharactersIndex.propTypes = {
   toggleSubScreen: PropTypes.func,

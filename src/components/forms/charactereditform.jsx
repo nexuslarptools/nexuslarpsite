@@ -10,8 +10,7 @@ import {
   Autocomplete, TextField,
   FormControlLabel, FormLabel, Input, Dialog, DialogTitle, 
   IconButton, DialogContent, Typography, DialogActions, Button, Box, Checkbox, Drawer,
-  FormHelperText
-} from '@mui/material';
+  FormHelperText } from '@mui/material';
 import Loading from '../../components/loading/loading';
 import { green } from '@mui/material/colors';
 import ReviewNotesDisplay from '../reviewnotes/reviewnotesdisplay';
@@ -22,7 +21,7 @@ import Character from '../character/character';
 import { characterDataProcess } from '../../utils/characterdataprocess';
 
 const CharacterEditForm = (props) => {
-  const { register, handleSubmit, getValues, setValue } = useForm({
+  const { register, handleSubmit, setValue } = useForm({
     mode: 'onSubmit',
     reValidateMode: 'onBlur'
   });
@@ -113,6 +112,14 @@ const CharacterEditForm = (props) => {
       ...itemsTableState,
       show,
       label
+    });
+  }
+
+  const UpdateFilter = (e) => 
+  {
+    setItemsState({
+      ...itemsState,
+      filter:e
     });
   }
 
@@ -466,20 +473,6 @@ seriesList.forEach((series, index) => {
       if (element.id !== id) {
         newReviewList.push(element);
       }
-    });
-    setReviewsState(newReviewList);
-  }
-
-  const AddReview =(message) => {
-    const newReviewList = [];
-    newReviewList.push({
-      createdate: '2024-01-28T22:18:41.687672',
-      createdby: 'Wizard',
-createdbyuserGuid: 'c3b9af32-8676-11ed-b512-df76a0797704',
-id: 1,
-isActive: true,
-message: message,
-isNew: true
     });
     setReviewsState(newReviewList);
   }
@@ -1108,7 +1101,6 @@ isNew: true
                 , selectedSeries, gmNotes)} img={finalImage} img2={finalImage2}/>
              </Box>
           </Drawer>
-
           
         {deleteDialogOpen.row !== null
           ? <Dialog
@@ -1168,6 +1160,7 @@ isNew: true
            GoBack={() => BackFromItemSelector()}
            Filters={itemsState.filter}
            isLoading={false}
+           UpdateFilter={(e) => UpdateFilter(e)}
            />
         </>
       )

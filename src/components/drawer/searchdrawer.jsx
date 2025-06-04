@@ -52,7 +52,7 @@ const SearchDrawer = props => {
 
     const updateSearchForm = async (e, name) => 
     {
-        if (name !== 'Attribute')
+        if (name !== 'Attribute' && name !== 'SpecialSkill' )
         {
           await setformState({
               ...formState,
@@ -65,48 +65,29 @@ const SearchDrawer = props => {
         });
         }
         else {
-
             let Attribute = [];
-            let newstate = formState;
-            newstate.OrAttributeSkillList = [];
-            newstate.AndAttributeSkillList = [];
-            if (trackingState.Attribute !== undefined && trackingState.Attribute !== null)
-            {
-                trackingState.Attribute.forEach((element, index) => {
-                  if (index !== e.Position) {
-                    Attribute.push(element);
 
-                    if (element.AndOr === 'Or') {
-                        newstate.OrAttributeSkillList.push(element);
-                       }
-                       else {
-                        newstate.AndAttributeSkillList.push(element);
-                       }
-                  }
-                  else 
-                  {
-                    Attribute.push(e);
-                    if (e.AndOr === 'Or') {
-                        newstate.OrAttributeSkillList.push(e);
-                       }
-                       else {
-                        newstate.AndAttributeSkillList.push(e);
-                       }
-                  }
-
-
-                });
-            }
+            if (trackingState[name] !== undefined && trackingState[name] !== null)
+                {
+                    trackingState[name].forEach((element, index) => {
+                      if (index !== e.Position) {
+                        Attribute.push(element);
+                      }
+                      if (index === e.Position) {
+                        let newelement = e;
+                        newelement.Loading = true;
+                        Attribute.push(newelement);
+                      }
+                    });
+                }
 
             await setTrackingState({
                 ...trackingState,
-                Attribute:Attribute
+                [name]:Attribute
             });
-            await setformState(
-                newstate
-            );
         }
     };
+
 
     const AddAttribute = async (e) => {
     let newAttribute ={
@@ -127,44 +108,70 @@ const SearchDrawer = props => {
     });
     }
 
-    const dropattribute = async (e) => {
+    const dropattribute = async (position, type) => {
         
-        let Attribute = [];
-        let newstate = formState;
-        newstate.OrAttributeSkillList = [];
-        newstate.AndAttributeSkillList = [];
-        if (trackingState.Attribute !== undefined && trackingState.Attribute !== null)
-        {
-            trackingState.Attribute.forEach((element, index) => {
-              if (index < e) {
-                element.Loading = true;
-                Attribute.push(element);
-              }
-              if (index > e) {
-                let newelement = element;
-                newelement.Position = newelement.Position - 1;
-                newelement.Loading = true;
-                Attribute.push(newelement);
-              }
-              if (index !== e)
-              {
-                if (element.AndOr === 'Or') {
-                    newstate.OrAttributeSkillList.push(element)
+        let Attributelist = [];
+        trackingState[type].forEach((element, index) => {
+            if (index !== position) {
+                if (index > position) {
+                element.Position = index-1;
                 }
-                else {
-                    newstate.AndAttributeSkillList.push(element)
-                }
-              }
-            });
-        }
 
-        await setTrackingState({
-            ...trackingState,
-            Attribute:Attribute
+                Attributelist.push(element)
+            }
         });
-        await setformState(
-            newstate
-        );
+          await setTrackingState({
+              ...trackingState,
+              [type]:Attributelist
+          });
+    }
+
+    const createSearchJSON =() => {
+       let results ={}
+        for (const key of Object.keys(trackingState)) {
+          if (key !== 'Attribute' && key !== 'SpecialSkill' ) {
+            results[key] = trackingState[key]
+          }
+          else {
+            if (key === 'Attribute') {
+                results.OrAttributeSkillList = [];
+                results.AndAttributeSkillList = [];
+                if (trackingState.Attribute !== undefined && trackingState.Attribute !== null) {
+                    trackingState.Attribute.forEach(element => {
+                      if (element.AndOr === 'Or') {
+                             results.OrAttributeSkillList.push(element);
+                           }
+                           else {
+                            results.AndAttributeSkillList.push(element);
+                           }
+                    });
+                }
+
+            }
+            if (key === 'SpecialSkill') {
+                results.OrSpecialSkillList = [];
+                results.AndSpecialSkillList = [];
+                if (trackingState.SpecialSkill !== undefined && trackingState.SpecialSkill !== null) {
+                    trackingState.SpecialSkill.forEach(element => {
+                        let superElement = {[element.Attribute]:element}
+                        if (element.Attribute === 'Description')
+                            {
+                              let newdescarray = []
+                              newdescarray.push(element)
+                              superElement = {[element.Attribute]:newdescarray}
+                            }
+                      if (element.AndOr === 'Or') {
+                             results.OrSpecialSkillList.push(superElement);
+                           }
+                           else {
+                            results.AndSpecialSkillList.push(superElement);
+                           }
+                    });
+                }
+            }
+        }
+        }
+       return results;
     }
 
     const setDoneLoading = async (e, position, type) => {
@@ -179,7 +186,7 @@ const SearchDrawer = props => {
     const navigateout = async () => 
     {
         navigate('/'+formState.type+'search/', {state:
-                formState
+                createSearchJSON()
             })
         props.toggleClose(false)
     };
@@ -216,7 +223,7 @@ const SearchDrawer = props => {
            </TableRow>
            {formState.type === 'character' ?
               <CharacterSearchDrawer init={trackingState}  updatesearch={(e, name) => updateSearchForm(e, name)}
-              dropatribute={(e) => dropattribute(e)} AddAttribute={(e) => AddAttribute(e)}
+              dropatribute={(e, f) => dropattribute(e, f)} AddAttribute={(e) => AddAttribute(e)}
               LoadingDone={(e, postion, type) => setDoneLoading(e, postion, type)}/>
             :
             <></>
@@ -226,10 +233,11 @@ const SearchDrawer = props => {
             </div>
             <div className="selectionlist-footer">
             <button className="button-save" 
-            onClick={() => navigateout()}
-            disabled={formState.type === null ||  formState.type === ''}
-            >Search</button>
-            </div>
+              onClick={() => navigateout()}
+              disabled={formState.type === null ||  formState.type === ''}>
+                Search
+                </button>
+             </div>
             </Box>
          </Drawer>
       </>

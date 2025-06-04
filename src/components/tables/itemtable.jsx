@@ -30,7 +30,6 @@ const ItemTable = props => {
   const [tagState, setTagState] = useState({
     listTags: []
   });
-  const [filterState, setFilterState] = useState(props.Filters);
       const [dialogStates, setDialogState] = useState({
         Series: false,
         Item: false,
@@ -65,7 +64,6 @@ const ItemTable = props => {
 
   
   useEffect(() => {
-
     let tagDrowdownList = [];
     props.tagslist.forEach(tag => {
       if (tag.tagtypeguid === '26cdc31c-9401-11ea-899b-b3284e6703b8') {
@@ -80,11 +78,11 @@ const ItemTable = props => {
     setCurrentTagList(tagDrowdownList);
 
     let filteredRows = props.appdata?.iteList;
-    filteredRows = filteredRows.filter(item => removeDiacritics(item.name.toLocaleLowerCase()).includes(removeDiacritics(filterState.ItemsFilter.toLocaleLowerCase())));
-    filteredRows = filteredRows.filter(item => (item.series === null && filterState.SeriesFilter === '') || 
-       (item.series !== null && removeDiacritics(item.series.toLocaleLowerCase()).includes(removeDiacritics(filterState.SeriesFilter.toLocaleLowerCase()))));
-    filteredRows = filteredRows.filter(item => removeDiacritics(item.createdby.toLocaleLowerCase()).includes(removeDiacritics(filterState.CreatorFilter.toLocaleLowerCase())));
-    filteredRows = filteredRows.filter(item => removeDiacritics(item.editbyUser.toLocaleLowerCase()).includes(removeDiacritics(filterState.EditorFilter.toLocaleLowerCase())));
+    filteredRows = filteredRows.filter(item => removeDiacritics(item.name.toLocaleLowerCase()).includes(removeDiacritics(props.Filters.ItemsFilter.toLocaleLowerCase())));
+    filteredRows = filteredRows.filter(item => (item.series === null && props.Filters.SeriesFilter === '') || 
+       (item.series !== null && removeDiacritics(item.series.toLocaleLowerCase()).includes(removeDiacritics(props.Filters.SeriesFilter.toLocaleLowerCase()))));
+    filteredRows = filteredRows.filter(item => removeDiacritics(item.createdby.toLocaleLowerCase()).includes(removeDiacritics(props.Filters.CreatorFilter.toLocaleLowerCase())));
+    filteredRows = filteredRows.filter(item => removeDiacritics(item.editbyUser.toLocaleLowerCase()).includes(removeDiacritics(props.Filters.EditorFilter.toLocaleLowerCase())));
    
     if (props.showApprovableOnly) {
       filteredRows = filteredRows.filter(item => (item.editbyUserGuid !== props.userGuid && item.firstapprovalbyuserGuid !== props.userGuid));
@@ -136,7 +134,6 @@ const ItemTable = props => {
       }
     }
 
-
     setDisplayState({
       ...displayState,
       apimessage: filteredPageRows,
@@ -144,17 +141,17 @@ const ItemTable = props => {
       display: true
     })
   }, [props.appdata, props.showallLARPLinked, props.showApprovableOnly, props.readyApproved,  props.commentFilterOn,
-    filterState, tagState, selectedLarpTag, selectedApprovalState, page, rowsPerPage]);
+    props.Filters, tagState, selectedLarpTag, selectedApprovalState, page, rowsPerPage]);
 
 
     const UpdateApprovalFilter = async (e) => {
-      let setfilter = filterState;
+      let setfilter = props.Filters;
       setfilter.SelectedApproval = e.target.value;
       props.UpdateFilter(setfilter);
     }
 
     const UpdateLarpAutoComp =(e) => {
-      let setFilters = filterState;
+      let setFilters = props.Filters;
       setFilters.LarpAutoCompValue = e;
       setLarpAutoCompValue(e);
       if (e === '')
@@ -167,7 +164,7 @@ const ItemTable = props => {
     }
 
   const selectLarpTag = async (e) => {
-    let setFilters = filterState;
+    let setFilters = props.Filters;
 
     if (e === undefined || e === null) {
       setLarpAutoCompValue('');
@@ -241,7 +238,7 @@ const ItemTable = props => {
 
 
   const tagClicked = (e) => {
-    let setfilter = filterState;
+    let setfilter = props.Filters;
 
     const listguids = tagState.listTags;
 
@@ -293,40 +290,20 @@ const ItemTable = props => {
       return;
     }
     await FilterOpen(updatedfeild);
-    let setfilter = filterState;
+    let setfilter = props.Filters;
     let value = e;
     try {
       if (updatedfeild === 'Item') {
-        await setFilterState({
-          ...filterState,
-          ItemsFilter: e
-        })
         setfilter.ItemsFilter = value;
-
       }
       if (updatedfeild === 'Series') {
-        await setFilterState({
-          ...filterState,
-          SeriesFilter: e
-        })
         setfilter.SeriesFilter = value;
-
       }
       if (updatedfeild === 'Editor') {
-        await setFilterState({
-          ...filterState,
-          EditorFilter: e
-        })
         setfilter.EditorFilter = value;
-
       }
       if (updatedfeild === 'Creator') {
-        await setFilterState({
-          ...filterState,
-          CreatorFilter: e
-        })
         setfilter.CreatorFilter = value;
-
       }
       props.UpdateFilter(setfilter);
     } catch (error) {
@@ -335,7 +312,7 @@ const ItemTable = props => {
   }
 
   const updateTags = (e) => {
-    let setfilter = filterState;
+    let setfilter = props.Filters;
     const listguids = []
     e.forEach(element => {
       listguids.push(element.guid)

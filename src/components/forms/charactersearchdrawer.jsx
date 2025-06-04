@@ -61,7 +61,7 @@ const nofilterInit = async(e) => {
                 <AttributeSearchField key={attrib.Position}
              init={attrib !== undefined && attrib !== null ? attrib : null}
              LoadingDone={(e) => props.LoadingDone(e, attrib.Position, 'Attribute')}
-             drop={(e) => props.dropatribute(e)}
+             drop={(e) => props.dropatribute(e, 'Attribute')}
              updateSearch={(e) => props.updatesearch(e, 'Attribute')}/>
              </Box>
             </div>
@@ -82,7 +82,9 @@ const nofilterInit = async(e) => {
                 LoadingDone={(e) => props.LoadingDone(e, attrib.Position, 'SpecialSkill')}
                 init={attrib !== undefined && attrib !== null ? attrib : null}
                 formData={powerOptions.powerOptions}
+                drop={(e) => props.dropatribute(e, 'SpecialSkill')}
                 compareOptions={compareOptions.compareOptions}
+                updateSearch={(e) => props.updatesearch(e, 'SpecialSkill')}
                 />
             </Box>
             </div> )}

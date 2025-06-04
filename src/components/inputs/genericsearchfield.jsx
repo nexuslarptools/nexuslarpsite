@@ -83,7 +83,7 @@ const handleChangeSelect = (e, fieldname) => {
           });
        }
     }
-    //props.updateSearch(newval);
+    props.updateSearch(newval);
 }
 
 if (!loaded) {

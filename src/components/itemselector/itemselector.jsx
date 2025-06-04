@@ -11,7 +11,7 @@ const ItemSelector = (props) => {
     const [printView, setPrintView] = useState(false);
 
     useEffect(() => {
-        const newItemList=[]
+        let newItemList=[]
         if (props.initialItems.label !== 'Selection for Printing') {
         if (props.initialItems !== undefined && props.initialItems !== null)
         if (props.initialItems.label === 'Sheet Item' && props.initialItems.sheetItemGuid !== '') {
@@ -62,6 +62,9 @@ const ItemSelector = (props) => {
         }
         }
       }
+      }
+      else {
+        newItemList = props.initialItems.startingItems;
       }
         setItemListState(newItemList);
       }, [props.initialItems.show])
@@ -178,7 +181,18 @@ const ItemSelector = (props) => {
       GoToPrint={() => TogglePrint()}
       UpdateFilter={(filter) => props.UpdateFilter(filter)}
       isLoading={props.isLoading}
-      Filters={props.Filters}
+      Filters={{
+        SeriesFilter: props.Filters.SeriesFilter,
+        ItemsFilter: props.Filters.ItemsFilter,
+        CreatorFilter: props.Filters.CreatorFilter,
+        EditorFilter: props.Filters.EditorFilter,
+        SelectedApproval : props.Filters.SelectedApproval,
+        LarpAutoCompValue: props.Filters.LarpAutoCompValue,
+        SelectedLarpTag: props.Filters.SelectedLarpTag,
+        TagSelectValues: props.Filters.TagSelectValues
+      }
+
+      }
       />
       </div>
 {/*       </Box>*/}
