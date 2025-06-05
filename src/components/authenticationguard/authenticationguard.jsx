@@ -24,6 +24,7 @@ export const AuthenticationGuard = (props) => {
   toggleSubScreen={(e, funct, guid, path, filters) => props.toggleSubScreen(e, funct, guid, path, filters)}
   ToggleSwitch={(e) => props.ToggleSwitch(e)}
   ToggleSwitches={(e) => props.ToggleSwitches(e)}
+  UpdateItemsList={(e) => props.UpdateItemsList(e)}
   />;
 };
 
@@ -35,5 +36,6 @@ AuthenticationGuard.propTypes = {
     subState: PropTypes.object,
     ismain:PropTypes.bool,
     ToggleSwitch:PropTypes.func,
-    ToggleSwitches:PropTypes.func
+    ToggleSwitches:PropTypes.func,
+    UpdateItemsList:PropTypes.func
 }

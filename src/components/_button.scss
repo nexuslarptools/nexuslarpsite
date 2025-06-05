@@ -109,7 +109,7 @@
 }
 // buttons that save to the DB or indicate success, always important
 .button-save{
-	@include button($color-success-lightest, $color-success-lighter, $color-success, $color-success-darker);
+	@include button($color-neutral-lightest, $color-neutral-lighter, $color-success, $color-success-darker);
 }
 // buttons that remove or delete information, always important
 .button-danger{

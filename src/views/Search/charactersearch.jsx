@@ -13,8 +13,6 @@ import useGetData from "../../utils/getdata";
 import AuthLevelInfo from "../../utils/authLevelInfo";
 import formJSON from '../../jsonfiles/characterinput.json';
 import { useEffect, useState } from "react";
-import { useSnackbar } from "@mui/base";
-
 
 export default function CharacterSearch(props) {
     const location = useLocation();
@@ -26,13 +24,7 @@ export default function CharacterSearch(props) {
       setSnackOpen({isOpen:false,
         text: ''});
     }
-    
-  const { getRootProps } = useSnackbar({
-    onClose: handleSnackClose,
-    open,
-    autoHideDuration: 5000,
-  });
-
+  
     const approvQuery = useGetData('listApprovedCharactersSearch', '/api/v1/CharacterSheetApproveds/Search/'+JSON.stringify(location.state));  
     const unapprovQuery = useGetData('listUnapprovedCharactersSearch', '/api/v1/CharacterSheets/Search/'+JSON.stringify(location.state));
     const allTagsQuery = useGetData('listTags', '/api/v1/Tags/groupbytyperead');

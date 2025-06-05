@@ -83,7 +83,7 @@ const handleChangeSelect = (e, fieldname) => {
           });
        }
     }
-    //props.updateSearch(newval);
+    props.updateSearch(newval);
 }
 
 if (!loaded) {
@@ -98,7 +98,7 @@ else {
         <div className='attribute-fieldtext'>
           <FormControl sx={{ width: '38%', paddingLeft: '5px', paddingRight: '5px',
           paddingTop: '10px'}}>
-        <InputLabel  sx={currValue.Attribute === null ?
+        <InputLabel  sx={currValue.Attribute === null || currValue.Attribute === '' ?
         {fontSize: 15}: 
         {fontSize: 15, paddingTop: '10px'}} 
          id="demo-simple-select-label">Attribute</InputLabel>
@@ -116,9 +116,10 @@ else {
 
                 <FormControl sx={{ width: '40%', paddingLeft: '5px', paddingRight: '5px',
                    paddingTop: '10px'}}>
-              <InputLabel sx={currValue.CompareType === null ?
+              <InputLabel sx={currValue.CompareType === null || currValue.CompareType === '' ?
                   {fontSize: 15}: 
-                  {fontSize: 15, paddingTop: '10px'}}  id="demo-simple-select-label">Comparison</InputLabel>
+                  {fontSize: 15, paddingTop: '10px'}}  
+                   id="demo-simple-select-label">Comparison</InputLabel>
                <Select sx={{ height: 30, fontSize: 15}}
                    labelId="demo-simple-select-label"
                    id="demo-simple-select"

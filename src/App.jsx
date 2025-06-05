@@ -66,7 +66,8 @@ class App extends Component {
       viewingItem: false,
       editingItem: false,
       viewItemGuid: '',
-      viewItemPath: ''
+      viewItemPath: '',
+      listItems:[]
     },
     currentURL: window.location.href 
   }
@@ -125,6 +126,14 @@ class App extends Component {
     await this.setState(newstate);
   };
 
+  UpdateItemsList = async (e) => {
+    this.setState({
+      ...this.state,
+      items:{
+      ...this.state.items, 
+      listItems:e}
+      });
+  }
 
 
   render() {
@@ -154,6 +163,7 @@ class App extends Component {
               subState={this.state.items !== undefined && this.state.items !== null ?this.state.items : this.state}
               ismain={this.state.ismain}
               ToggleSwitches={(e) => this.ToggleSwitches(e, 'items')}
+              UpdateItemsList={(e) => this.UpdateItemsList(e)}
               toggleSubScreen={(e, funct, guid, path, filters) => this.toggleSubScreen(e, funct, guid, path, 'items', filters)} 
               component={ItemsIndex} />}
            />
