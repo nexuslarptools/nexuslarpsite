@@ -4,6 +4,7 @@ import { apiGet, apiGetWithPage } from './apiGet'
 
 export const useGetData = (statename, path) => {
   const auth = useAuth0();
+
   return useQuery({
     queryKey:[statename],
     queryFn: () => apiGet(auth, path)});

@@ -18,13 +18,13 @@ const Header = props => {
 
   const { user, isAuthenticated, isAuthLoading } = useAuth0()
   const authLevel = AuthLevelInfo();
-    
+
       let navClasses = 'navbar-container';
       return (
         <header className={navClasses}>
         <nav className="navbar-navigation">
         <div className="navbar_logo" aria-label="Return Home">
-{/*         { buttonactive ?
+        { buttonactive ?
         <div className ='navbar_hamburger_button'>
           <Tooltip title="Search Menu">
              <button className='button-hambuger'   onClick={() => props.drawerOpenCLick(true)}>
@@ -32,7 +32,7 @@ const Header = props => {
         </button>
         </Tooltip>
         </div> : <></>
-         }   */}
+         }   
         <div>
         <Link to={{ pathname: '/' }}>Nexus DB
               <div className='logo-image-container'>

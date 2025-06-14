@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 
 const UserDisplay = (props) => {
+
 return (
     <>
     <p>Name: {props?.data?.firstname} {props?.data?.lastname} </p>
@@ -16,6 +17,7 @@ return (
     {larp.roles?.map((role) =>
     <p key={Math.random()}>{role.roleName}</p> )}
     </div>
+  <p>Claims: {props.claims  !== undefined ? props.claims  : ''} </p> 
     </div>
     )}
       <div className="edit-bottom">
