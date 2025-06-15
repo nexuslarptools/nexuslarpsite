@@ -6,25 +6,21 @@ import './_searchdrawer.scss'
 import { useEffect, useState } from 'react';
 import CharacterSearchDrawer from '../forms/charactersearchdrawer';
 import { useNavigate } from 'react-router-dom';
+import useGetData from '../../utils/getdata';
 
 const SearchDrawer = props => {
 
     const navigate = useNavigate();
+
+    const allTagsQuery = useGetData('listTags', '/api/v1/Tags/groupbytyperead');
+
     const [formState, setformState] = useState({type: ''});
     const [trackingState, setTrackingState] = useState({
         type: '',
-        Attribute: [{Attribute: '',
-            CompareType: '',
-            Value: null,
-            AndOr: null,
-            Position: 0,
-            Loading: true}],
-        SpecialSkill: [{Attribute: '',
-            CompareType: '',
-            Value: null,
-            AndOr: null,
-            Position: 0,
-            Loading: true}]
+        Attribute: [],
+        SpecialSkill: [],
+        AndTags:[],
+        OrTags:[]
         });
 
       useEffect(() => { 
@@ -36,10 +32,11 @@ const SearchDrawer = props => {
         trackingState.SpecialSkill.forEach((element) => {
             element.Loading = true;
         });
+
         setTrackingState({
             ...trackingState,
             Attribute:attribute,
-            SpecialSkill: skill
+            SpecialSkill:skill
         });
       }, [props.open]);
 
@@ -129,7 +126,9 @@ const SearchDrawer = props => {
     const createSearchJSON =() => {
        let results ={}
         for (const key of Object.keys(trackingState)) {
-          if (key !== 'Attribute' && key !== 'SpecialSkill' ) {
+          if (key !== 'Attribute' && key !== 'SpecialSkill' && key !== 'AndTags' 
+            && key !== 'OrTags'
+           ) {
             results[key] = trackingState[key]
           }
           else {
@@ -169,8 +168,24 @@ const SearchDrawer = props => {
                     });
                 }
             }
+            if(key === 'AndTags') {
+               results.AndTagsList = [];
+              if (trackingState.AndTags !== undefined && trackingState.AndTags !== null) {
+                    trackingState.AndTags.forEach(element => {
+                      results.AndTagsList.push(element.guid);
+                    });
+            }
+          }
+            if(key === 'OrTags') {
+              results.OrTagsList = [];
+                  if (trackingState.OrTags !== undefined && trackingState.OrTags !== null) {
+                    trackingState.OrTags.forEach(element => {
+                      results.OrTagsList.push(element.guid);
+                    });
+            }
         }
         }
+      }
        return results;
     }
 
@@ -190,6 +205,9 @@ const SearchDrawer = props => {
             })
         props.toggleClose(false)
     };
+
+        if (allTagsQuery.isLoading) 
+            return (<></>)
   
     return (
         <>
@@ -221,8 +239,9 @@ const SearchDrawer = props => {
          </FormControl>
             </TableCell>
            </TableRow>
-           {formState.type === 'character' ?
+           {allTagsQuery.isError ?  <div>Error Returning Tag Data</div> :  formState.type === 'character' ?
               <CharacterSearchDrawer init={trackingState}  updatesearch={(e, name) => updateSearchForm(e, name)}
+              tagslist={allTagsQuery.data}
               dropatribute={(e, f) => dropattribute(e, f)} AddAttribute={(e) => AddAttribute(e)}
               LoadingDone={(e, postion, type) => setDoneLoading(e, postion, type)}/>
             :
