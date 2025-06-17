@@ -1,7 +1,7 @@
 {
   "NAPILocation":"http://LARPPi:6004",
-  "APILocation":"http://localhost",
-  "NAWAPILocation": "https://decade.kylebrighton.com:6006",
+  "NAWAPILocation":"http://localhost",
+  "APILocation": "https://decade.kylebrighton.com:6006",
   "appOrigin": "https://decade.kylebrighton.com:6006",
   "nobucketName":"nexusdevdata",
   "bucketName":"nexusdata",

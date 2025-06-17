@@ -7,6 +7,7 @@ export default function CharactersListPage(props) {
         <>
               <div>
     <CharacterTable 
+    isSearch={props.isSearch}
     isSelector={false}
     FilterInit={props.FilterInit}
     UnInitFiler={() => props.UnInitFiler()}
@@ -54,5 +55,6 @@ CharactersListPage.propTypes = {
     Edit: PropTypes.func,
     UpdateFilter: PropTypes.func,
     isLoading: PropTypes.bool,
-    Filters: PropTypes.object
+    Filters: PropTypes.object,
+    isSearch: PropTypes.bool
 }

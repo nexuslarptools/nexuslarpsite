@@ -184,6 +184,7 @@ export default function CharacterSearch(props) {
  !isEdit.isEditing ?
 <>
   <CharactersListPage 
+  isSearch={true}
   FilterInit={filterInit}
   UnInitFiler={() => UnInitFiler()}
   Filters={props.subState !== undefined && props.subState !== null &&

@@ -1,12 +1,14 @@
 import PropTypes from 'prop-types';
 import Drawer from '@mui/material/Drawer';
-import { Box, FormControl, InputLabel, MenuItem, Select, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Box, FormControl, InputLabel, MenuItem, Select, TableCell, TableContainer, 
+  TableHead, TableRow } from '@mui/material';
 import { Table } from 'reactstrap';
 import './_searchdrawer.scss'
 import { useEffect, useState } from 'react';
 import CharacterSearchDrawer from '../forms/charactersearchdrawer';
 import { useNavigate } from 'react-router-dom';
 import useGetData from '../../utils/getdata';
+import ItemSearchDrawer from '../forms/itemsearchdrawer';
 
 const SearchDrawer = props => {
 
@@ -20,7 +22,8 @@ const SearchDrawer = props => {
         Attribute: [],
         SpecialSkill: [],
         AndTags:[],
-        OrTags:[]
+        OrTags:[],
+        ItemType: ''
         });
 
       useEffect(() => { 
@@ -42,9 +45,18 @@ const SearchDrawer = props => {
 
     const handleChange = async (e) => {
         await setformState({
-            ...formState,
             type:e.target.value
         });
+
+        await setTrackingState({
+        type: '',
+        Attribute: [],
+        SpecialSkill: [],
+        AndTags:[],
+        OrTags:[],
+        ItemType: ''
+        });
+
     };
 
     const updateSearchForm = async (e, name) => 
@@ -241,6 +253,12 @@ const SearchDrawer = props => {
            </TableRow>
            {allTagsQuery.isError ?  <div>Error Returning Tag Data</div> :  formState.type === 'character' ?
               <CharacterSearchDrawer init={trackingState}  updatesearch={(e, name) => updateSearchForm(e, name)}
+              tagslist={allTagsQuery.data}
+              dropatribute={(e, f) => dropattribute(e, f)} AddAttribute={(e) => AddAttribute(e)}
+              LoadingDone={(e, postion, type) => setDoneLoading(e, postion, type)}/>
+            :
+            formState.type === 'item' ?
+              <ItemSearchDrawer init={trackingState}  updatesearch={(e, name) => updateSearchForm(e, name)}
               tagslist={allTagsQuery.data}
               dropatribute={(e, f) => dropattribute(e, f)} AddAttribute={(e) => AddAttribute(e)}
               LoadingDone={(e, postion, type) => setDoneLoading(e, postion, type)}/>

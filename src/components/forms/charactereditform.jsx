@@ -1144,6 +1144,7 @@ seriesList.forEach((series, index) => {
       return (
         <>   
           <ItemSelector 
+           isSearch={false}
           isCharSheet={true}
            appdata={props.appdata} 
            undata={props.undata} 

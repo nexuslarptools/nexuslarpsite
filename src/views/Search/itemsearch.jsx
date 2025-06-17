@@ -1,20 +1,22 @@
 import { useEffect, useState } from 'react';
 import useGetData from '../../utils/getdata';
 import Loading from '../../components/loading/loading';
-import ItemsListPage from './ItemsListPage';
-import ItemDisplay from './ItemDisplay';
+import ItemsListPage from '../Items/ItemsListPage';
+import ItemDisplay from '../Items/ItemDisplay';
 import AuthRedirect from '../../utils/authRedirect';
 import AuthLevelInfo from '../../utils/authLevelInfo';
 import PropTypes from 'prop-types';
-import ItemCreate from './ItemCreate';
+import ItemCreate from '../Items/ItemCreate';
 import formJSON from '../../jsonfiles/iteminput.json';
-import ItemEdit from './ItemEdit';
+import ItemEdit from '../Items/ItemEdit';
 import ItemSelector from '../../components/itemselector/itemselector';
 import { createTheme,  IconButton, lighten, Slide, Snackbar, ThemeProvider } from '@mui/material';
-import './_ItemsIndex.scss'
+import '../Items/_ItemsIndex.scss'
 import CloseSharpIcon from '@mui/icons-material/CloseSharp';
+import { useLocation } from 'react-router-dom';
 
-export default function ItemsIndex(props) {
+export default function ItemSearch(props) {
+  const location = useLocation();
   AuthRedirect(1)
 
   const handleSnackClose = () => {
@@ -22,8 +24,8 @@ export default function ItemsIndex(props) {
       text: ''});
   }
 
-      const approvQuery = useGetData('listApprovedItems', '/api/v1/ItemSheetApproveds/FullListWithTagsNoImages');  
-      const unapprovQuery = useGetData('listUnapprovedItems', '/api/v1/ItemSheets/FullListWithTagsNoImages');
+      const approvQuery = useGetData('listApprovedItemssSearch', '/api/v1/ItemSheetApproveds/Search/'+JSON.stringify(location.state));  
+      const unapprovQuery = useGetData('listUnapprovedItemsSearch', '/api/v1/ItemSheets/Search/'+JSON.stringify(location.state));
       const allTagsQuery = useGetData('listTags', '/api/v1/Tags/groupbytyperead');
       const userGuidQuery = useGetData('userguid', '/api/v1/Users/CurrentGuid');
       const authLevel = AuthLevelInfo();
@@ -161,7 +163,7 @@ return (
 <>
 
 <ItemsListPage 
- isSearch={false}
+  isSearch={true}
 appdata={approvQuery.data} 
   undata={unapprovQuery.data} 
   Filters={props.subState !== undefined && props.subState !== null &&
@@ -187,8 +189,8 @@ appdata={approvQuery.data}
 :
 <> 
 <ItemSelector appdata={approvQuery.data} 
- isSearch={false}
   isCharSheet={false}
+   isSearch={true}
   undata={unapprovQuery.data} 
   Filters={props.subState !== undefined && props.subState !== null &&
     props.subState.filter !== undefined && props.subState.filter !== null ? 
@@ -251,7 +253,7 @@ GoBackToList={() => GoBackFromCreateEdit()} />
 }
 
 
-ItemsIndex.propTypes = {
+ItemSearch.propTypes = {
   NewItemLink: PropTypes.func,
   NavToSelectItems: PropTypes.func,
   subState: PropTypes.object,

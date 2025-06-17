@@ -163,6 +163,7 @@ const ItemSelector = (props) => {
       {/* <Box> */}
       <div className="topPane">
       <ItemTable 
+      isSearch={props.isSearch}
       isSelector={true}
       isCharSheet={props.isCharSheet}
       appdata={props.selectedApproved ? props.appdata : props.undata} 
@@ -251,5 +252,6 @@ ItemSelector.propTypes = {
     UpdateFilter: PropTypes.func,
     isLoading: PropTypes.bool,
     ToggleSwitches: PropTypes.func,
-    Filters: PropTypes.object
+    Filters: PropTypes.object,
+    isSearch: PropTypes.bool
 }
