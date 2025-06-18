@@ -3,7 +3,7 @@ import Loading from '../loading/loading'
 import './_specialskillssearchfield.scss'
 import PropTypes from 'prop-types';
 import compareOptions from './../../jsonfiles/compareoptions.json'
-import powerOptions from './../../jsonfiles/powerOptions.json'
+import powerOptions from '../../jsonfiles/powerOptions.json'
 import GenericSearchField from './genericsearchfield';
 
 

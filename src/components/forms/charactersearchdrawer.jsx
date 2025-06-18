@@ -5,7 +5,7 @@ import AttributeSearchField from '../inputs/attributesearchfield';
 import '../drawer/_searchdrawer.scss';
 import { Autocomplete, Box, TextField } from '@mui/material';
 import GenericSearchField from '../inputs/genericsearchfield';
-import powerOptions from './../../jsonfiles/poweroptions.json'
+import powerOptions from '../../jsonfiles/powerOptions.json'
 import compareOptions from './../../jsonfiles/compareoptions.json'
 
 const CharacterSearchDrawer = props => {

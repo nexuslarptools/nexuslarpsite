@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import '../drawer/_searchdrawer.scss';
 import { Autocomplete, Box, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import GenericSearchField from '../inputs/genericsearchfield';
-import powerOptions from './../../jsonfiles/powerOptions.json'
+import powerOptions from '../../jsonfiles/powerOptions.json'
 import compareOptions from './../../jsonfiles/compareoptions.json'
 import ItemAttributeSearchField from '../inputs/itemattributesearchfield';
 
