@@ -1,9 +1,8 @@
 import PropTypes from "prop-types";
 import AuthRedirect from "../../utils/authRedirect";
 import { useLocation } from "react-router-dom";
-import { css, keyframes } from "@emotion/react";
-import { styled } from "@mui/system";
-import { ClickAwayListener } from "@mui/material";
+import { lighten, ThemeProvider } from "@mui/system";
+import { createTheme, IconButton, Slide, Snackbar } from "@mui/material";
 import CharacterDisplayPage from "../Characters/CharacterDisplay";
 import CharacterCreate from "../Characters/CharacterCreate";
 import CharacterEdit from "../Characters/CharacterEdit";
@@ -13,6 +12,7 @@ import useGetData from "../../utils/getdata";
 import AuthLevelInfo from "../../utils/authLevelInfo";
 import formJSON from '../../jsonfiles/characterinput.json';
 import { useEffect, useState } from "react";
+import CloseSharpIcon from '@mui/icons-material/CloseSharp';
 
 export default function CharacterSearch(props) {
     const location = useLocation();
@@ -47,33 +47,53 @@ export default function CharacterSearch(props) {
   
 
      const OpenSnack = async (e) => {
-      await setSnackOpen(        {isOpen:true,
-        text: e});
+      await setSnackOpen(  {isOpen:true,
+        text: e
+      });
      }
 
     const [isEdit, setIsEdit] = useState({isEditing: false, guid: null});
     const [filterInit, setfilterInit] = useState(false);
 
-        useEffect(() => {
-          if (props.ismain === true) {
-            setIsCreate(false);
-            setIsEdit({isEditing: false, guid: null});
-            setfilterInit(true);
-            setFilterState(props.subState.filter);
-          }
-          else {
-            if (props.subState.funct === 'Create')
-              setIsCreate(true);
-          }
-          if (props.subState.funct === 'View')
-          {
-            setCharactersState({
+          useEffect(() => {
+      if (props.ismain === true) {
+        setIsCreate(false);
+        setIsEdit({isEditing: false, guid: null});
+        setfilterInit(true);
+        setFilterState(props.subState.filter);
+      
+        if (props.subState.filter !== undefined && props.subState.filter !== null ) {
+        for (const key in props.subState.filter) {
+          if (props.subState.filter[key] !== undefined && props.subState.filter[key] !== null && key !== 'filters') {
+               setCharactersState({
               ...charactersState,
-              viewingItem: true,
-              viewItemGuid: props.subState.guid,
-              viewItemPath: props.subState.path});
+              [key]: props.subState.filter[key]
+            });
           }
-        }, [props.subState]);
+      }
+    }
+
+      }
+      else {
+        if (props.subState.funct === 'Create')
+          setIsCreate(true);
+      }
+      if (props.subState.funct === 'View')
+      {
+        setCharactersState({
+          ...charactersState,
+          viewingItem: true,
+          viewItemGuid: props.subState.guid,
+          viewItemPath: props.subState.path});
+      }
+      if (props.subState.funct === 'Edit')
+        {
+          setIsEdit({isEditing: true, 
+            guid: props.subState.guid,
+            path: props.subState.path
+          });
+        }
+    }, [])
 
     
     const DirectToCharacter = async (path, guid) => {
@@ -95,7 +115,6 @@ export default function CharacterSearch(props) {
     }
 
     const GoToEditCharacter = async (path, guid) => {
-      await setIsEdit({isEditing: true, guid: guid, path: path});
       props.toggleSubScreen(false, 'Edit', guid, path, filterState);
     }
 
@@ -114,19 +133,40 @@ export default function CharacterSearch(props) {
     }
 
     const GoBackFromCreateEdit = async () => {
-      /* await setCharactersState({
+       await setCharactersState({
         selectedApproved: true,
         commentFilter: false,
         showApprovableOnly: false,
         viewingItem: false,
         viewItemGuid: '',
         viewItemPath: ''
-    }); */
-/*       await setIsCreate(false);
-      await setIsEdit({isEditing: false, guid: null});
-      await setfilterInit(true); */
-      props.toggleSubScreen(true, '', '','', filterState);
+    }); 
+      //await setIsCreate(false);
+      // await setIsEdit({isEditing: false, guid: null});
+     // await setfilterInit(true);
+      props.toggleSubScreen(true, '', '','', 'goback');
     }
+
+    
+        const theme = createTheme({
+          palette: {
+            success: {
+              main: '#1e9f32',
+              light: lighten('#1e9f32', 0.1),
+              lighter: lighten('#1e9f32', 0.2),
+              lightest: lighten('#1e9f32', 0.3)
+            },
+            fail: {
+              main: '#bb202e',
+              light: lighten('#bb202e', 0.1),
+              lighter: lighten('#bb202e', 0.2)
+            },
+            gradient: {
+              primary:  'linear-gradient(to top,  #187f28, #1e9f32)',
+              fail:  'linear-gradient(to top,  #961a25, #bb202e)',
+            }
+          },
+        });
 
 
     if (approvQuery.isLoading || unapprovQuery.isLoading || allTagsQuery.isLoading || userGuidQuery.isLoading) 
@@ -144,6 +184,7 @@ export default function CharacterSearch(props) {
  !isEdit.isEditing ?
 <>
   <CharactersListPage 
+  isSearch={true}
   FilterInit={filterInit}
   UnInitFiler={() => UnInitFiler()}
   Filters={props.subState !== undefined && props.subState !== null &&
@@ -189,6 +230,7 @@ export default function CharacterSearch(props) {
 GoBack ={() => GoBackFromCreateEdit()} 
 OpenSnack ={(e) => OpenSnack(e)}
 />
+
 </>
  :
 <>
@@ -201,50 +243,28 @@ GoBack ={() => GoBackFromCreateEdit()} />
 GoBackToList={() => GoBackToList()} />
 </>
 }
-{snackOpen.isOpen ? (
-        <ClickAwayListener onClickAway={() => handleSnackClose()}>
-          <CustomSnackbar {...getRootProps()}>{snackOpen.text}</CustomSnackbar>
-        </ClickAwayListener>
-      ) : null}
+<ThemeProvider theme={theme}>
+<Slide in={snackOpen.isOpen} direction='up' >
+<Snackbar ContentProps={{sx:{background: (theme) => theme.palette.gradient.primary}}}
+        open={snackOpen.isOpen}
+        autoHideDuration={5000}
+        onClose={handleSnackClose}
+        message={snackOpen.text}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} 
+        action={
+        <>
+             <IconButton
+              sx={{ p: 0.5, position:'left' }}
+              onClick={handleSnackClose}>
+              <CloseSharpIcon />
+            </IconButton> 
+            </> }
+            />
+   </Slide>
+ </ThemeProvider>
 </>
 )
 }
-
-
-const snackbarInRight = keyframes`
-  from {
-    transform: translateX(100%);
-  }
-
-  to {
-    transform: translateX(0);
-  }
-`;
-
-const CustomSnackbar = styled('div')(
-  ({ theme }) => css`
-    position: fixed;
-    z-index: 5500;
-    display: flex;
-    right: 16px;
-    bottom: 16px;
-    left: auto;
-    justify-content: space-between;
-    max-width: 560px;
-    min-width: 300px;
-    background-color: ${'#fff'};
-    border-radius: 8px;
-    border: 1px solid ${'#DAE2ED'};
-    box-shadow: ${`0 2px 8px ${'#DAE2ED'}`};
-    padding: 0.75rem;
-    color: ${'#1C2025'};
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-weight: 600;
-    animation: ${snackbarInRight} 200ms;
-    transition: transform 0.2s ease-out;
-  `
-);
-
 
 CharacterSearch.propTypes = {
       toggleSubScreen: PropTypes.func,

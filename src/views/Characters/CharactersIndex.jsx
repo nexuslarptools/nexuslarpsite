@@ -182,6 +182,7 @@ export default function CharactersIndex(props) {
  !isEdit.isEditing ?
 <>
 <CharactersListPage 
+isSearch={false}
 FilterInit={filterInit}
 UnInitFiler={() => UnInitFiler()}
 Filters={props.subState !== undefined && props.subState !== null &&

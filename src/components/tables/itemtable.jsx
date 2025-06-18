@@ -36,7 +36,7 @@ const ItemTable = props => {
         Creator: false,
         Editor: false
       });
-  const [clearfilterState, setClearfilterState] = useState(false);
+  const [clearfilterState] = useState(false);
   const [selectedLarpTag, setSelectedLarpTag] = useState(props.Filters.SelectedLarpTag);
   const [tagSelectValues, setTagSelectValues] = useState(props.Filters.TagSelectValues);
   const [selectedApprovalState] = useState(props.Filters.SelectedApproval);
@@ -71,10 +71,16 @@ const ItemTable = props => {
       }
     });
 
-    if (selectedLarpTag !== null && selectedLarpTag !== '') {
+    if (!props.isSearch && selectedLarpTag !== null && selectedLarpTag !== '') {
       const fullSelectLARPTag = props.larpTags.find((tag) => tag.guid === selectedLarpTag);
       tagDrowdownList.push(fullSelectLARPTag);
     }
+    if (props.isSearch) {
+      props.larpTags.forEach(tag => {
+        tagDrowdownList.push(tag);
+      })
+    }
+
     setCurrentTagList(tagDrowdownList);
 
     let filteredRows = props.appdata?.iteList;
@@ -110,7 +116,7 @@ const ItemTable = props => {
               listguids.push(tag.guid);
             })
             if (listguids.length === 0 || props.larpTags.every(elem => !listguids.includes(elem.guid)) ||
-            listguids.includes(selectedLarpTag)) {
+                  listguids.includes(selectedLarpTag)) {
               if (tagSelectValues.every(elem => listguids.includes(elem.guid))) {
                 newfilter.push(row);
               }
@@ -481,7 +487,7 @@ return (
                   </div> )
                  : (<></>)}
 
-                { props.larpTags.length > 0 ?
+                { props.larpTags.length > 0  && !props.isSearch ?
                  <div className='selector'>
                   <div className='input-pair'>
                   <FormLabel sx={{fontSize: 12}}>Include Items linked to Specific LARP</FormLabel>
@@ -865,5 +871,6 @@ GoBack: PropTypes.func,
 GoToPrint: PropTypes.func,
 Filters: PropTypes.object,
 UpdateFilter: PropTypes.func,
-ToggleSwitches: PropTypes.func
+ToggleSwitches: PropTypes.func,
+isSearch: PropTypes.bool
 }

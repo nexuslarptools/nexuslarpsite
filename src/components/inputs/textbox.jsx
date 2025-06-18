@@ -23,14 +23,15 @@ const TextBox = props => {
       };
 
       return (
-      <Dialog
+      <Dialog disableRestoreFocus
     sx={{ '& .MuiDialog-paper': { width: '80%', maxHeight: 435 } }}
     maxWidth="xs"
     open={open}
     {...other}>
+      <form onSubmit={handleOk}>
     <DialogTitle>Set {props.title} Filter</DialogTitle>
     <DialogContent dividers>
-        <TextField variant="standard" type="input" className="form-control" 
+        <TextField  autoFocus variant="standard" type="input" className="form-control" 
           // id={props.index.toString()}
            defaultValue={value}
            onChange={(e) => setValue(e.target.value)}
@@ -39,9 +40,10 @@ const TextBox = props => {
     <DialogActions>
       <button className='button-cancel' onClick={handleCancel}>Cancel</button>
       {/*<Button autoFocus onClick={handleCancel}> Cancel </Button>*/}
-      <button className='button-action' onClick={handleOk}>Ok</button>
+      <button className='button-action' type='submit' onClick={handleOk}>Ok</button>
       {/* <Button onClick={handleOk}>Ok</Button> */}
     </DialogActions>
+    </form>
   </Dialog>
 );
 

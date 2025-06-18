@@ -5,6 +5,7 @@
 		"Heading": "General Item Info",
 		"Values": {
 			"TYPE": {
+				"InDropDown":false,
 				"Type": "Dropdown",
 				"Label": "Item Type",
 				"Display": true,
@@ -39,6 +40,7 @@
 				"Types": ["All"]
 			},
 			"Name": {
+				"InDropDown":false,
 				"Type": "Input",
 				"Label": "Name",
 				"Display": true,
@@ -46,6 +48,7 @@
 				"Types": ["All"]
 			},
 			"Description": {
+				"InDropDown":true,
 				"Type": "TextField",
 				"Label": "Description",
 				"Display": true,
@@ -64,6 +67,7 @@
 		"Heading": "Mecha/Companion Stats",
 		"Values": {
 			"Power": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Power",
 				"Display": true,
@@ -74,6 +78,7 @@
 				]
 			},
 			"Athletics": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Athletics",
 				"Display": true,
@@ -84,6 +89,7 @@
 				]
 			},
 			"Brains": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Brains",
 				"Display": true,
@@ -93,6 +99,7 @@
 				]
 			},
 			"Confidence": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Confidence",
 				"Display": true,
@@ -102,6 +109,7 @@
 				]
 			},
 			"Charisma": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Charisma",
 				"Display": true,
@@ -111,6 +119,7 @@
 				]
 			},
 			"H2H": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Hand to Hand",
 				"Display": true,
@@ -120,6 +129,7 @@
 				]
 			},
 			"Dodge": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Dodge",
 				"Display": true,
@@ -129,6 +139,7 @@
 				]
 			},
 			"Run": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Run",
 				"Display": true,
@@ -140,6 +151,7 @@
 				]
 			},
 			"Jump": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Jump",
 				"Display": true,
@@ -150,6 +162,7 @@
 				]
 			},
 			"Fly": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Fly",
 				"Display": true,
@@ -161,6 +174,7 @@
 				]
 			},
 			"Move": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Move",
 				"Display": true,
@@ -171,6 +185,7 @@
 				]
 			},
 			"Grade": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Grade",
 				"Display": true,
@@ -182,6 +197,7 @@
 				]
 			},
 			"RESILIENCE": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Resilience",
 				"Display": true,
@@ -193,6 +209,7 @@
 				]
 			},
 			"Body": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Body",
 				"Display": true,
@@ -202,6 +219,7 @@
 				]
 			},
 			"Energy": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Energy",
 				"Display": true,
@@ -225,6 +243,7 @@
 		"Heading": "Item Abilites",
 		"Values": {
 			"Special_Skills": {
+				"InDropDown":false,
 				"Type": "SpecialSkillsInput",
 				"Label": "Special Skills",
 				"Display": true,
@@ -243,6 +262,7 @@
 		"Heading": "Generic Stats",
 		"Values": {
 			"EnergyCost": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Energy Cost",
 				"Display": true,
@@ -252,6 +272,7 @@
 				]
 			},
 			"Magic": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Magic",
 				"Display": true,
@@ -259,12 +280,14 @@
 				"Types": ["Spell"]
 			},
 			"INTEGRITY": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Integrity",
 				"Display": true,
 				"Types": ["All"]
 			},
 			"HS": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "Hide Stuff Modifier",
 				"Display": true,
@@ -272,6 +295,7 @@
 				"Types": ["All"]
 			},
 			"Value": {
+				"InDropDown":true,
 				"Type": "Dropdown",
 				"Label": "Item Cost",
 				"Display": true,
@@ -293,6 +317,7 @@
 				"Types": ["All"]
 			},
 			"Uses": {
+				"InDropDown":true,
 				"Type": "Input",
 				"Label": "# of Uses",
 				"Display": true,
@@ -325,6 +350,7 @@
 		"Heading": "Generic Stats Second Side",
 		"Values": {
 			"Description2ndSide": {
+				"InDropDown":false,
 				"Type": "TextField",
 				"Label": "Description of second side",
 				"Display": true,
@@ -343,6 +369,7 @@
 		"Heading": "Item Abilites Second Side",
 		"Values": {
 			"Special_Skills2ndSide": {
+				"InDropDown":false,
 				"Type": "SpecialSkillsInput",
 				"Label": "Special Skills on second side",
 				"Display": true,

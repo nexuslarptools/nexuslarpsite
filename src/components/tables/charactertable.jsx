@@ -48,7 +48,7 @@ const CharacterTable = props => {
     const [btnDisabledState, setBtnDisabledState] = useState(true);
     const [tagSelectValues, setTagSelectValues] = useState(props.Filters.TagSelectValues);
     const [currentTagList, setCurrentTagList] = useState([]);
-    const [clearfilterState, setClearfilterState] = useState(null);
+    const [clearfilterState] = useState(null);
     const [displayState, setDisplayState] = useState({
         apimessage: [],
         display: false
@@ -79,6 +79,13 @@ const CharacterTable = props => {
           const fullSelectLARPTag = props.larpTags.find((tag) => tag.guid === selectedLarpTag);
           tagDrowdownList.push(fullSelectLARPTag);
         }
+            if (props.isSearch) {
+      props.larpTags.forEach(tag => {
+        tagDrowdownList.push(tag);
+         })
+       }
+
+
         setCurrentTagList(tagDrowdownList);
 
         let filteredRows = props.appdata;
@@ -491,6 +498,8 @@ const CharacterTable = props => {
                       </div>
                       </div>)
                     : (<div></div>)}
+
+                    { !props.isSearch ?
                      <div className='selector'>
                   <div className='input-pair'>
                     <FormLabel sx={{fontSize: 12}}>Include Characters linked to Specific LARP</FormLabel>
@@ -521,7 +530,9 @@ const CharacterTable = props => {
                         onChange={(event, val) => selectLarpTag(val)}
                     />
                     </div>
-                  </div>
+                  </div> 
+                  :<></>
+                }
                     <button className='button-cancel' disabled={btnDisabledState} onClick={() => clearfilters()}>Clear Filters</button>
                     </div>
                     <div className='table-topper-pagination'>  
@@ -771,6 +782,7 @@ const CharacterTable = props => {
     showApprovableOnly: PropTypes.bool,
     readyApproved: PropTypes.bool,
     showallLARPLinked: PropTypes.bool,
+    selectedItemsApproved: PropTypes.bool,
     appdata: PropTypes.array,
       apiMessage: PropTypes.array,
       authLevel: PropTypes.number,
@@ -790,6 +802,7 @@ const CharacterTable = props => {
       initFilter: PropTypes.string,
       UpdateFilter: PropTypes.func,
       isLoading: PropTypes.bool,
-      Filters: PropTypes.object
+      Filters: PropTypes.object,
+      isSearch: PropTypes.bool
     }
 

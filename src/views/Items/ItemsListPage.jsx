@@ -7,6 +7,7 @@ return (
 <>
   <div>
        <ItemTable 
+          isSearch={props.isSearch}
     isSelector={false}
     Filters={props.Filters}
     appdata={props.selectedApproved ? props.appdata : props.undata} 
@@ -49,5 +50,6 @@ ItemsListPage.propTypes = {
   Edit: PropTypes.func,
   UpdateFilter: PropTypes.func,
   isLoading: PropTypes.bool,
-  Filters: PropTypes.object
+  Filters: PropTypes.object,
+  isSearch: PropTypes.bool
 }

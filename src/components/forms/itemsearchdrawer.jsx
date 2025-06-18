@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types';
 import SearchIcon from '../icon/searchicon';
 import { useEffect, useState } from 'react';
-import AttributeSearchField from '../inputs/attributesearchfield';
 import '../drawer/_searchdrawer.scss';
-import { Autocomplete, Box, TextField } from '@mui/material';
+import { Autocomplete, Box, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import GenericSearchField from '../inputs/genericsearchfield';
-import powerOptions from './../../jsonfiles/poweroptions.json'
+import powerOptions from './../../jsonfiles/powerOptions.json'
 import compareOptions from './../../jsonfiles/compareoptions.json'
+import ItemAttributeSearchField from '../inputs/itemattributesearchfield';
 
-const CharacterSearchDrawer = props => {
+const ItemSearchDrawer = props => {
 
     const [filterInit, setfilterInit] = useState(
         {
@@ -16,13 +16,48 @@ const CharacterSearchDrawer = props => {
             AlternateName: false
         }
     );
+
+const types = [     '',
+                    "Accessory",
+					"Ammo",
+					"Armor",
+					"Artifact",
+					"Book",
+					"Clothing",
+					"Companion",
+					"Document",
+					"Food",
+					"Furniture",
+					"Generic",
+					"Instrument",
+					"Location",
+					"Material",
+					"Mecha",
+					"Medical",
+					"Pokemon",
+					"Power",
+					"Spell",
+					"Supplies",
+					"Tech",
+					"Unique",
+					"Valuable",
+					"Vehicle",
+					"Weapon"
+				];
+
     const [loaded, setLoaded] = useState(false);
-    const [tagSelectValuesCharacter, setTagSelectValuesCharacter] = useState([]);
-    const [tagSelectValuesCharacterOr, setTagSelectValuesCharacterOr] = useState([]);
-    const [currentCharacterTagList, setCurrentCharacterTagList] = useState([]);
+     const [itemType, setItemType] = useState('');
+    const [tagSelectValuesItem, setTagSelectValuesItem] = useState([]);
+    const [tagSelectValuesItemOr, setTagSelectValuesItemOr] = useState([]);
+    const [currentItemTagList, setCurrentItemTagList] = useState([]);
     const [tagSelectValuesAbility, setTagSelectValuesAbility] = useState([]);
     const [tagSelectValuesAbilityOr, setTagSelectValuesAbilityOr] = useState([]);
     const [currentAbilityTagList, setCurrentAbilityTagList] = useState([]);
+
+    const handleItemTypeChange = async(e) => {
+      await setItemType(e.target.value);
+      props.updatesearch(e.target.value, 'ItemType');
+    }
 
     useEffect(() => {
         if (props.init !== undefined && props.init !== null) {
@@ -30,7 +65,7 @@ const CharacterSearchDrawer = props => {
         let tagCharDrowdownList = [];
         let tagAbilDrowdownList = [];
         props.tagslist.forEach(taggroup => {
-             if (taggroup.tagType === 'Character' || taggroup.tagType === 'LARPRun' ) {
+             if (taggroup.tagType === 'Item' || taggroup.tagType === 'LARPRun' ) {
                  taggroup.tagsList.forEach(tag => {
                     tagCharDrowdownList.push(tag);
                  })
@@ -41,7 +76,7 @@ const CharacterSearchDrawer = props => {
                  })
              }
         })
-        setCurrentCharacterTagList(tagCharDrowdownList);
+        setCurrentItemTagList(tagCharDrowdownList);
         setCurrentAbilityTagList(tagAbilDrowdownList);
 
         let initobj = {}
@@ -53,11 +88,11 @@ const CharacterSearchDrawer = props => {
                         props.init[key].forEach(tag => {
                            if (tagCharDrowdownList.includes(tag)) {
                              Chartags.push(tag);
-                           } else if (tagAbilDrowdownList.includes(tag)) {
+                           }  else if (tagAbilDrowdownList.includes(tag)) {
                              Abiltags.push(tag);
                            }
                         })
-                        setTagSelectValuesCharacter(Chartags);
+                        setTagSelectValuesItem(Chartags);
                         setTagSelectValuesAbility(Abiltags);
                     }
                     else if (key === "OrTags") {
@@ -70,8 +105,10 @@ const CharacterSearchDrawer = props => {
                              Abiltags.push(tag);
                            }
                         })
-                        setTagSelectValuesCharacterOr(Chartags);
+                        setTagSelectValuesItemOr(Chartags);
                         setTagSelectValuesAbilityOr(Abiltags);
+                    } else if (key === 'ItemType') {
+                        setItemType(props.init[key])
                     }
                     else {
                     initobj[key] = true
@@ -89,8 +126,8 @@ const CharacterSearchDrawer = props => {
           currtagslist.push(element)
         });
 
-        if(type === 'Character') {
-        await setTagSelectValuesCharacter(e);
+        if(type === 'Item') {
+        await setTagSelectValuesItem(e);
         tagSelectValuesAbility.forEach(element => {
           currtagslist.push(element)
         });
@@ -99,14 +136,14 @@ const CharacterSearchDrawer = props => {
 
         if(type === 'Ability') {
         await setTagSelectValuesAbility(e);
-        tagSelectValuesCharacter.forEach(element => {
+        tagSelectValuesItem.forEach(element => {
            currtagslist.push(element)
         });
         props.updatesearch(currtagslist, 'AndTags');
         }
 
-        if(type === 'CharacterOr') {
-        await setTagSelectValuesCharacterOr(e);
+        if(type === 'ItemOr') {
+        await setTagSelectValuesItemOr(e);
         tagSelectValuesAbilityOr.forEach(element => {
         currtagslist.push(element)
         });
@@ -115,7 +152,7 @@ const CharacterSearchDrawer = props => {
 
         if(type === 'AbilityOr') {
         await setTagSelectValuesAbilityOr(e);
-        tagSelectValuesCharacterOr.forEach(element => {
+        tagSelectValuesItemOr.forEach(element => {
         currtagslist.push(element)
         });
         props.updatesearch(currtagslist, 'OrTags');
@@ -136,10 +173,22 @@ const nofilterInit = async(e) => {
             props.init.Name !== undefined && props.init.Name !== null ? props.init.Name: null} 
             FilterInit={filterInit.Name} UnInitFiler={() => nofilterInit('Name')}
             clearfilter={props.clearfilterState} filterup={e => props.updatesearch(e, 'Name')}/>
-         <SearchIcon label="Alternate Name" initalFilter={ props.init !== null &&
-            props.init.AlternateName !== undefined && props.init.AlternateName !== null ? props.init.AlternateName: null}  
-            FilterInit={filterInit.AlternateName} UnInitFiler={() => nofilterInit('AlternateName')}
-            clearfilter={props.clearfilterState} filterup={e => props.updatesearch(e, 'AlternateName')}/>
+
+        <FormControl fullWidth>
+        <InputLabel id="demo-simple-select-label">Item Type</InputLabel>
+        <Select sx={{ width: 400 }}
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={itemType}
+          label="Type"
+          onChange={(e) => handleItemTypeChange(e)} >
+            {types.map(item => (
+            <MenuItem key={item}
+              value={item}>{item === '' ? 'No Selection': item}</MenuItem>
+            ))}
+          </Select>
+         </FormControl>
+            
             <hr/>
             <div className='attributesearch-label'>
             Attribute Search:
@@ -149,7 +198,7 @@ const nofilterInit = async(e) => {
                         {  props.init.Attribute.map((attrib) =>
                 <div key={attrib.Position}> 
                 <Box sx={{ border: '1px solid gray' }}>
-                <AttributeSearchField key={attrib.Position}
+                <ItemAttributeSearchField key={attrib.Position} type={itemType}
              init={attrib !== undefined && attrib !== null ? attrib : null}
              LoadingDone={(e) => props.LoadingDone(e, attrib.Position, 'Attribute')}
              drop={(e) => props.dropatribute(e, 'Attribute')}
@@ -165,31 +214,31 @@ const nofilterInit = async(e) => {
                                     <Autocomplete
                                       multiple
                                       key={'characterlist'}
-                                      value={tagSelectValuesCharacter}
+                                      value={tagSelectValuesItem}
                                       id="multiple-limit-tags"
-                                      options={currentCharacterTagList}
+                                      options={currentItemTagList}
                                       getOptionLabel={(option) => option !== undefined 
                                          && option.name !== undefined ?
                                         option.name : ''}
-                                      onChange={(event, val) => updateTags('Character', val)}
+                                      onChange={(event, val) => updateTags('Item', val)}
                                       renderInput={(params) => (
-                                        <TextField placeholder='Character Tags That WILL Be Present' {...params} />
+                                        <TextField placeholder='Item Tags That WILL Be Present' {...params} />
                                       )}
                                     />
                                   </div>
-                                                                    <div className='input-pair'>
+                                  <div className='input-pair'>
                                     <Autocomplete
                                       multiple
                                       key={'characterlist'}
-                                      value={tagSelectValuesCharacterOr}
+                                      value={tagSelectValuesItemOr}
                                       id="multiple-limit-tags"
-                                      options={currentCharacterTagList}
+                                      options={currentItemTagList}
                                       getOptionLabel={(option) => option !== undefined 
                                          && option.name !== undefined ?
                                         option.name : ''}
-                                      onChange={(event, val) => updateTags('CharacterOr', val)}
+                                      onChange={(event, val) => updateTags('ItemOr', val)}
                                       renderInput={(params) => (
-                                        <TextField placeholder='Character Tags That MAY Be Present' {...params} />
+                                        <TextField placeholder='Item Tags That MAY Be Present' {...params} />
                                       )}
                                     />
                                   </div>
@@ -232,8 +281,7 @@ const nofilterInit = async(e) => {
                                       )}
                                     />
                                   </div>
-                                  
-                                              <div className='input-pair'>
+                                <div className='input-pair'>
                                     <Autocomplete
                                       multiple
                                       key={'characterlist'}
@@ -256,9 +304,9 @@ const nofilterInit = async(e) => {
     )
 }
 
-export default CharacterSearchDrawer
+export default ItemSearchDrawer
 
-CharacterSearchDrawer.propTypes = {
+ItemSearchDrawer.propTypes = {
     init: PropTypes.object,
     clearfilterState: PropTypes.bool,
     updatesearch: PropTypes.func,

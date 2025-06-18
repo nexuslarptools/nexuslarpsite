@@ -17,6 +17,7 @@ import CharactersIndex from './views/Characters/CharactersIndex';
 import { FaroRoutes } from '@grafana/faro-react';
 import SearchDrawer from './components/drawer/searchdrawer';
 import CharacterSearch from './views/Search/charactersearch';
+import ItemSearch from './views/Search/itemsearch';
 
 
 
@@ -201,6 +202,16 @@ class App extends Component {
               ToggleSwitches={(e) => this.ToggleSwitches(e, 'characters')}
               toggleSubScreen={(e, funct, guid, path, filters) => this.toggleSubScreen(e, funct, guid, path, 'characters', filters)} 
               component={CharacterSearch} />}
+           />
+                     <Route
+            path="/itemsearch/"
+            element={<AuthenticationGuard 
+              subState={this.state.items !== undefined && this.state.items !== null ?this.state.items : this.state}
+              ismain={this.state.ismain}
+              ToggleSwitches={(e) => this.ToggleSwitches(e, 'items')}
+              UpdateItemsList={(e) => this.UpdateItemsList(e)}
+              toggleSubScreen={(e, funct, guid, path, filters) => this.toggleSubScreen(e, funct, guid, path, 'items', filters)} 
+              component={ItemSearch}/>}
            />
           <Route 
           path="*"  
