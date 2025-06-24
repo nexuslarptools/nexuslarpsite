@@ -1140,7 +1140,6 @@ seriesList.forEach((series, index) => {
         </>
       )
     } else {
-
       return (
         <>   
           <ItemSelector 

@@ -286,6 +286,10 @@ const ItemTable = props => {
 
 
   const updateFilter = async (e, updatedfeild) => {
+    
+    await FilterClose(updatedfeild);
+
+
     if (e === undefined)
     {
       let togglestate = dialogStates[updatedfeild];
@@ -295,7 +299,6 @@ const ItemTable = props => {
       });
       return;
     }
-    await FilterOpen(updatedfeild);
     let setfilter = props.Filters;
     let value = e;
     try {
@@ -311,7 +314,7 @@ const ItemTable = props => {
       if (updatedfeild === 'Creator') {
         setfilter.CreatorFilter = value;
       }
-      props.UpdateFilter(setfilter);
+        props.UpdateFilter(setfilter);
     } catch (error) {
       console.log(error);
     }
@@ -359,6 +362,16 @@ const ItemTable = props => {
     });
   }
 
+    const FilterClose = async(e) => {
+    if (dialogStates[e] !== false )
+      {
+      await setDialogState({
+        ...dialogStates,
+        [e]: false
+      });
+     }
+  }
+
   const handleKickClose =() => {
     setKickDialogOpen({
       ...kickDialogOpen,
@@ -385,7 +398,6 @@ const ItemTable = props => {
     }
     props.ToggleSwitches(switchinfo)
   }
-
 return (
   !displayState.display ? 
   <></>:

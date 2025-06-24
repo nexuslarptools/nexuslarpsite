@@ -112,6 +112,7 @@ export default function ItemsIndex(props) {
           props.toggleSubScreen(true, 'Select', '','', filter);
           return;
         }
+        
         props.toggleSubScreen(true, '', '','', filter);
         }
 
