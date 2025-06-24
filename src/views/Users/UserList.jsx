@@ -78,7 +78,7 @@ useEffect(() => {
         arrowsList: fillin
       })
 
-      props.toggleSubScreen(true);
+      //props.toggleSubScreen(true);
   }
 
 if (userData.isLoading || currentUserGuid.isLoading) return (<div>
