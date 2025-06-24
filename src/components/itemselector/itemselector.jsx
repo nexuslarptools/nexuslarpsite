@@ -153,8 +153,7 @@ const ItemSelector = (props) => {
       let view = !printView;
       setPrintView(view);
     }
-
-
+    
     return (
       !printView ?
     <>

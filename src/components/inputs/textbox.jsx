@@ -28,13 +28,17 @@ const TextBox = props => {
     maxWidth="xs"
     open={open}
     {...other}>
-      <form onSubmit={handleOk}>
+      {/* <form onSubmit={handleOk}> */}
     <DialogTitle>Set {props.title} Filter</DialogTitle>
     <DialogContent dividers>
         <TextField  autoFocus variant="standard" type="input" className="form-control" 
           // id={props.index.toString()}
            defaultValue={value}
            onChange={(e) => setValue(e.target.value)}
+           onKeyDown={(event) => {
+                  if (event.key === 'Enter')
+                     handleOk()
+                  }}
            />
     </DialogContent>
     <DialogActions>
@@ -43,7 +47,7 @@ const TextBox = props => {
       <button className='button-action' type='submit' onClick={handleOk}>Ok</button>
       {/* <Button onClick={handleOk}>Ok</Button> */}
     </DialogActions>
-    </form>
+    {/* </form> */}
   </Dialog>
 );
 
