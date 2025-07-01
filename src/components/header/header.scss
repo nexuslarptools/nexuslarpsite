@@ -32,7 +32,7 @@
             a {
                 color: $color-neutral-darkest;
                 //font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-                font-family: "Warmonger BB", "Roboto", serif;
+                font-family: "OpenSans", "Roboto", serif;
                 font-size: $font-size-largest;
                 font-weight: bold;
                 margin-left: 0;
@@ -85,12 +85,14 @@
             display: none;
         }
        a{
+            font-family: "OpenSans", "Roboto", serif;
             border-bottom: 3px solid transparent;
             color: $color-neutral-darkest;
             font-size: $font-size-large;
             font-weight: bold;
             text-decoration: none;
-            text-transform: capitalize;
+            text-transform: Uppercase;
+            
             @media (max-width: 1000px) {
                 font-size: $font-size-medium;
             }

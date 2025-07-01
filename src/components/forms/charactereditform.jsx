@@ -312,6 +312,8 @@ seriesList.forEach((series, index) => {
             props.initForm.apiMessage.fields.Special_Skills[i].Rank
           let oldDescription =
             props.initForm.apiMessage.fields.Special_Skills[i].Description
+          let oldUses =
+            props.initForm.apiMessage.fields.Special_Skills[i].Uses
           let oldTags = props.initForm.apiMessage.fields.Special_Skills[i].Tags
 
           
@@ -329,6 +331,7 @@ seriesList.forEach((series, index) => {
                 Rank: oldRank,
                 Description: oldDescription,
                 Tags: oldTags,
+                Uses: oldUses,
                 FullTags: initial
             })
           );
@@ -351,6 +354,10 @@ seriesList.forEach((series, index) => {
             oldTags = null;
           }
 
+          if (oldUses === '') {
+            oldUses = null;
+          }
+
           newData = JSON.parse(
             JSON.stringify({
               arraynum: i,
@@ -360,6 +367,7 @@ seriesList.forEach((series, index) => {
                 Rank: oldRank,
                 Description: oldDescription,
                 Tags: oldTags,
+                Uses: oldUses,
                 FullTags: initial
 
             })
@@ -683,6 +691,7 @@ seriesList.forEach((series, index) => {
         Cost: null,
         Rank: null,
         Description: '',
+        Uses: null,
         Tags: [],
         FullTags: []
     }
