@@ -241,7 +241,10 @@ GoBackToList={() => GoBackToList()} />
 }
 <ThemeProvider theme={theme}>
 <Slide in={snackOpen.isOpen} direction='up' >
-<Snackbar ContentProps={{sx:{background: (theme) => theme.palette.gradient.primary}}}
+<Snackbar ContentProps={
+  snackOpen.text.includes('Success') ?
+  {sx:{background: (theme) => theme.palette.gradient.primary}} :
+  {sx:{background: (theme) => theme.palette.gradient.fail}}}
         open={snackOpen.isOpen}
         autoHideDuration={5000}
         onClose={handleSnackClose}
