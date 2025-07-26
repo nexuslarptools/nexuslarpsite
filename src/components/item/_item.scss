@@ -20,6 +20,7 @@
         display: grid;
         grid-template-columns: 2fr 1fr;
         width: 100%;
+                min-height: 19.19px;
     }
     .itemTextBox {
         background-color: #ffffff;
@@ -40,6 +41,22 @@
         margin: 5px 5px 0 5px;
         padding: 5px;
         width: auto;
+            .seriesItemText {
+        background-color:#ffffff; 
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+        font-family: OpenSans;
+        font-size: 11px;
+        height: 100%;
+        position: relative;
+        width: 100%;
+        .item-description{
+            font-family: OpenSans;
+            font-size: 11px;
+            gap: 1px;
+        }
+        }
     }
     .seriesItem{
         box-sizing: border-box;

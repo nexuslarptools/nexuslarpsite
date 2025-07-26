@@ -1,20 +1,30 @@
 @import "/src/variables";
 
 
-span {
-    &.titlespan {
+.itemspecialSkill {
+    //margin: 0px;
+    overflow: auto;
+    margin-top: 1.5px;
+    margin-bottom: 1.5px;
+}
+
+.titlespan {
         width: 100%;
+        float:left ;
         display: inline-flex;
+        position: relative;
         grid-template-rows: 20% 80%;
-        margin-bottom: 0pt;
-        margin-top: 0pt;
+        margin-bottom: 1px;
+        //margin-top: 2px;
+        padding: 0px;
+        //overflow: auto;
         div { 
 
             &.name {
                 font-family: "OpenSans";
                 font-size: 8pt;
                 font-weight: bold;
-                text-decoration: underline;
+                //text-decoration: underline;
                 margin-right: 8px;
                 justify-content: left;
             }
@@ -31,8 +41,8 @@ span {
                 width: max-content;
             }
         }   
-    }
 }
+
 
 div {
     .item-uses-container-mecha {
@@ -66,7 +76,7 @@ div {
         font-size: 7pt;
         margin-bottom: 0px;
         margin-top: 0px;
-        overflow: wrap;
+       // overflow-x: wrap;
         p {
 margin: 1px;
         }

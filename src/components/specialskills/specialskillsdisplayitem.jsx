@@ -1,10 +1,12 @@
 import PropTypes from 'prop-types';
 import './_specialskillsdisplayitem.scss';
+import { formatText } from '../../utils/textParse';
 
 const SpecialSkillsDisplayItem = props => {
   return (
     <>
-      <span className='titlespan'>
+    <div className='itemspecialSkill'>
+      <div className='titlespan'>
         {
           props.skill.Name !== undefined && props.skill.Name !== null
             ? <div className='name' key={"name"+props.skill.Name + Math.random}>[ {props.skill.Name} ]</div>
@@ -20,7 +22,7 @@ const SpecialSkillsDisplayItem = props => {
             ? <div className='cost' key={"cost"+props.skill.Name + Math.random}>Cost: {props.skill.Cost}</div>
             : null
         }
-      </span>
+      </div>
       {
           props.skill.Uses !== undefined && props.skill.Uses !== null && props.skill.Uses.trim() !== ''
             ? 
@@ -39,13 +41,14 @@ const SpecialSkillsDisplayItem = props => {
           ? <div className='skill-text' key={"name"+props.skill.Name + Math.random}>
              {props.skill.Description.split('\n').map((i,key) => {
             return <div className="item-description" key={key}><p>{
-              i.split('--').map((s, j) => j % 2 !== 0 ? <><u> {s} </u></> : (' ' + s ))
+              formatText(i)
               }</p></div>;
              })
             }
           </div>
           : null
       }
+      </div>
     </>
   )
 }

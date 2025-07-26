@@ -1,6 +1,7 @@
 @import "/src/variables";
 
 div {
+    font-family: OpenSans;
     &.companionItem {
         background-image: url("../../assets/backgroudpattern.png");
         text-indent: 4.1in, 2.625in; 
@@ -56,14 +57,15 @@ div {
             background-color: #f5f5f5;;
         }
 &.bodyandenergywrap{
-    height: 7%
+    overflow: auto;
+    margin-bottom: 3px;
 }
     
     &.bodywrap
     {
         font-size: x-small;
         overflow-wrap: break-word;
-        width: 47%;
+        width: 49%;
         text-align: left;
         display: inline;
         float: left;
@@ -74,7 +76,7 @@ div {
     {
         font-size: x-small;
         overflow-wrap: break-word;
-        width: 47%;
+        width: 49%;
         text-align: left;
         display: inline;
         float: right;
@@ -101,8 +103,14 @@ div {
     }
     &.companionitemDescription {
         font-size:6pt;
-        line-height:0.15in;
+        line-height:0.11in;
         width: 100%;
+        margin: 0;
+        p
+        {
+          margin: 0;
+          padding: 0px;
+        }
     } 
 
 }
@@ -124,7 +132,8 @@ img {
 
 
 p {
-  
+     margin: 0;
+     padding: 1px;
     &.companionitemStats {
         font-size:8pt; 
         line-height:0.15in;
@@ -165,7 +174,8 @@ span {
         justify-content: space-between;
         font-size: x-small;
         width: 100%;
-        margin-bottom: 0px;
+        margin: 0px;
+        min-height: 0px;
     }
     &.busterCards2
     {
@@ -177,10 +187,16 @@ span {
     }
 }
 hr {
-    &.divideline
-    {
         margin-top: 0px;
         margin-bottom: 0px;
+        border: none;
+       height: 1.25px;
+       /* Set the hr color */
+       color: #333;  /* old IE */
+       background-color: #333;  /* Modern Browsers */
+    &.divideline
+    {
+        margin-top: 1px;
     }
 }
 
