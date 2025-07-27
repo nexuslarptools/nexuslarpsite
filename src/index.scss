@@ -13,6 +13,11 @@ a{
     &:visited{color: $color-primary-darker;}
 }
 
+    p {
+        margin: 0;
+        padding: 0;
+    }
+
 // main app container
 .app {
     height: 100vh;

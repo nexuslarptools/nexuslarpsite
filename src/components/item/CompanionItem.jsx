@@ -2,6 +2,7 @@ import SpecialSkillsDisplayItem from '../specialskills/specialskillsdisplayitem'
 import PropTypes from 'prop-types';
 import Loading from '../loading/loading';
 import './_companionitem.scss';
+import { formatText } from '../../utils/textParse';
 
 const CompanionItem = props => {
   if (!props || !props.item) {
@@ -24,7 +25,6 @@ const CompanionItem = props => {
                     <div className="columnentry">Athletics</div>
                    {props.item.fields.TYPE !== 'Mecha' ? <div className="columnentry">Brains</div> :<></> }
                    {props.item.fields.TYPE !== 'Mecha' ? <div className="columnentry">Confidence</div> : <></> }
-                   {props.item.fields.TYPE !== 'Mecha' ? <div className="columnentry">Charisma</div> : <></> }
                   </div>
                   <div className="column2">
                   <div className="columnentry"> {props.item.fields.Power === null 
@@ -36,11 +36,9 @@ const CompanionItem = props => {
                     { props.item.fields.TYPE !== 'Mecha' ? <div className="columnentry">{ props.item.fields.Confidence === null 
                     || props.item.fields.Confidence === undefined 
                     || props.item.fields.Confidence === '' ? '0': props.item.fields.Confidence}</div> : <></>}
-                    { props.item.fields.TYPE !== 'Mecha' ? <div className="columnentry">{props.item.fields.Charisma === null 
-                    || props.item.fields.Charisma === undefined 
-                    || props.item.fields.Charisma === '' ? '0': props.item.fields.Charisma}</div> : <></>}
                   </div>
                   <div className="column1">
+                      {props.item.fields.TYPE !== 'Mecha' ? <div className="columnentry">Charisma</div> : <></> }
                     <div className="columnentry">H2H</div>
                     <div className="columnentry">Dodge</div>
                     <div className="columnentry">
@@ -62,6 +60,9 @@ const CompanionItem = props => {
                                          }
                   </div>
                   <div className="column2">
+                    { props.item.fields.TYPE !== 'Mecha' ? <div className="columnentry">{props.item.fields.Charisma === null 
+                    || props.item.fields.Charisma === undefined 
+                    || props.item.fields.Charisma === '' ? '0': props.item.fields.Charisma}</div> : <></>}
                     <div className="columnentry"> {props.item.fields.H2H === null 
                     || props.item.fields.H2H === undefined || props.item.fields.H2H === '' ? '0': props.item.fields.H2H}</div>
                     <div className="columnentry"> {props.item.fields.Dodge === null 
@@ -109,7 +110,10 @@ const CompanionItem = props => {
                     : <></>
                 }
               </div>
-              { props.item.fields.RESILIENCE != null || props.item.fields.Grade != null
+              { (props.item.fields.RESILIENCE != null && props.item.fields.RESILIENCE !== ""
+              )
+               || (props.item.fields.Grade != null && props.item.fields.Grade !== ""
+                )
                 ? <span className = "itemStats">
                   {
                     props.item.fields.RESILIENCE != null && props.item.fields.RESILIENCE != ''
@@ -130,10 +134,11 @@ const CompanionItem = props => {
                 </span>
                 : <div></div>
               }
-              {props.item.fields.Description !== undefined && props.item.fields.Description !== null ?
+              {props.item.fields.Description !== undefined && props.item.fields.Description !== null &&
+              props.item.fields.Description !== '' ?
               props.item.fields.Description.split('\n').map((i,key) => {
             return <div className="companionitemDescription" key={key}><p>{
-              i.split('--').map((s, j) => j % 2 !== 0 ? <><u> {s} </u></> : (' ' + s ))
+              formatText(i)
               }</p></div>;
         })
             : <></>}

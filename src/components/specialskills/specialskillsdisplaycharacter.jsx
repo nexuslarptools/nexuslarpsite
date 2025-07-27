@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { formatText } from '../../utils/textParse';
 
 const SpecialSkillsDisplayCharacter = props => {
   return (
@@ -38,7 +39,7 @@ const SpecialSkillsDisplayCharacter = props => {
           ? <div className='skill-text'>
             {props.skill.Description.split('\n').map((i,key) => {
             return <div className="skill-description" key={key}><p>{
-              i.split('--').map((s, j) => j % 2 !== 0 ? <><u> {s} </u></> : (' ' + s ))
+              formatText(i)
               }</p></div>;
         })
             }
