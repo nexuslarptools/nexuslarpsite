@@ -8,8 +8,8 @@ export const formatText = (text) => {
   const italicRegex = /^\*\*[^*]+\*\*$/;
   const underlineRegex = /^--[^--]+--$/;
   const boldAndItalicRegex = /^\*\*\*\*[^*]+\*\*\*\*$/;
-  const boldAndUnderlineRegex = /^\*\*--[^*]+--\*\*$|^--\*\*[^*]+\*\*--$/;
-  const italicAndUnderlineRegex = /^\*\*\*--[^*]+--\*\*\*$|^--\*\*\*[^*]+\*\*\*--$/;
+  const boldAndUnderlineRegex = /^\*\*\*--[^*]+--\*\*\*$|^--\*\*\*[^*]+\*\*\*--$/;
+  const italicAndUnderlineRegex = /^\*\*--[^*]+--\*\*$|^--\*\*[^*]+\*\*--$/;
   const boldItalicAndUnderlineRegex = /^\*\*\*\*--[^*]+--\*\*\*\*$|^--\*\*\*\*[^*]+\*\*\*\*--$/;
 
   const textStyle = {
@@ -32,19 +32,19 @@ export const formatText = (text) => {
       );
     }
 
-        // Italic and underline text
-    if (italicAndUnderlineRegex.test(part)) {
+              // Bold and underline text
+    if (boldAndUnderlineRegex.test(part)) {
       return (
-        <FormattedText key={index} style={textStyle.italicAndUnderline}>
+        <FormattedText key={index} style={textStyle.boldAndUnderline}>
           {part.slice(5, -5)}
         </FormattedText>
       );
     }
 
-          // Bold and underline text
-    if (boldAndUnderlineRegex.test(part)) {
+        // Italic and underline text
+    if (italicAndUnderlineRegex.test(part)) {
       return (
-        <FormattedText key={index} style={textStyle.boldAndUnderline}>
+        <FormattedText key={index} style={textStyle.italicAndUnderline}>
           {part.slice(4, -4)}
         </FormattedText>
       );
