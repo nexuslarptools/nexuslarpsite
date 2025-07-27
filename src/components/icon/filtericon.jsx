@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { Box, ClickAwayListener, InputAdornment, TextField } from '@mui/material';
-import SearchSharpIcon from '@mui/icons-material/SearchSharp';
+import FilterAltSharpIcon from '@mui/icons-material/FilterAltSharp';
 
 const FilterIcon = props => {
   const [open, setOpen] = useState(false);
@@ -63,7 +63,7 @@ if (props.FilterInit) {
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
-                        <SearchSharpIcon />
+                        <FilterAltSharpIcon />
                       </InputAdornment>
                     ),
                   }}

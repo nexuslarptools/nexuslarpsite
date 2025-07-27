@@ -22,7 +22,7 @@ import { Clear } from '@mui/icons-material';
 import KickDialog from '../dialogs/kickdialogbox';
 import DeleteDialogFull from '../dialogs/deletedialogcomplete';
 import HoverText from '../hovertext/hovertext';
-import SearchSharpIcon from '@mui/icons-material/SearchSharp';
+import FilterAltSharpIcon from '@mui/icons-material/FilterAltSharp';
 import TextBox from '../inputs/textbox';
 
 const CharacterTable = props => {
@@ -555,8 +555,8 @@ const CharacterTable = props => {
                       <div className='search-container'>
                                       <div className='filter-container'>
                                       <Tooltip title="Filter by Last Editor">
-                       <button className='button-action-round' onClick={() => FilterOpen('Editor')}>
-                       <SearchSharpIcon sx={{fontSize: 23}} />
+                       <button className='button-action-square' onClick={() => FilterOpen('Editor')}>
+                       <FilterAltSharpIcon sx={{fontSize: 23}} />
                    </button>
                    </Tooltip>
                    <TextBox title={'Sheet Editor Name'} onClose={(e) => updateFilter(e, 'Editor')} value={props.Filters.EditorFilter !== undefined 
@@ -572,8 +572,8 @@ const CharacterTable = props => {
                   <div className='search-container'>
                   <div className='filter-container'>
                   <Tooltip title="Filter by Sheet Creator">
-                  <button className='button-action-round' onClick={() => FilterOpen('Creator')}>
-                  <SearchSharpIcon sx={{fontSize: 23}} />
+                  <button className='button-action-square' onClick={() => FilterOpen('Creator')}>
+                  <FilterAltSharpIcon sx={{fontSize: 23}} />
                    </button>
                    </Tooltip>
                    <TextBox title={'Sheet Creator Name'} onClose={(e) => updateFilter(e, 'Creator')} value={props.Filters.CreatorFilter !== undefined 
@@ -588,8 +588,8 @@ const CharacterTable = props => {
                   <div className='search-container'>
                 <div className='filter-container'>
                 <Tooltip title="Filter by Character Name">
-                  <button className='button-action-round' onClick={() => FilterOpen('Name')}>
-                  <SearchSharpIcon sx={{fontSize: 23}} />
+                  <button className='button-action-square' onClick={() => FilterOpen('Name')}>
+                  <FilterAltSharpIcon sx={{fontSize: 23}} />
                    </button>
                    </Tooltip>
                    <TextBox title={'Character Name'} onClose={(e) => updateFilter(e, 'Name')} value={props.Filters.CharacterFilter !== undefined 
@@ -604,8 +604,8 @@ const CharacterTable = props => {
                   <div className='search-container'>
                   <div className='filter-container'>                   
                     <Tooltip title="Filter by Series">
-                  <button className='button-action-round' onClick={() => FilterOpen('Series')}>
-                  <SearchSharpIcon sx={{fontSize: 23}} />
+                  <button className='button-action-square' onClick={() => FilterOpen('Series')}>
+                  <FilterAltSharpIcon sx={{fontSize: 23}} />
                    </button>
                    </Tooltip>
                    <TextBox title={'Series'} onClose={(e) => updateFilter(e, 'Series')} value={props.Filters.SeriesFilter !== undefined 

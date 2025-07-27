@@ -15,7 +15,7 @@ import Tags from '../tags/tags';
 import KickDialog from '../dialogs/kickdialogbox';
 import DeleteSanityDialog from '../dialogs/deletesanitydialog';
 import HoverText from '../hovertext/hovertext';
-import SearchSharpIcon from '@mui/icons-material/SearchSharp';
+import FilterAltSharpIcon from '@mui/icons-material/FilterAltSharp';
 import './_itemtable.scss'
 import TextBox from '../inputs/textbox';
 
@@ -558,8 +558,8 @@ return (
            <div className='search-container'>
             <div className='filter-container'>
                                     <Tooltip title="Filter by Last Editor">
-                                <button className='button-action-round' onClick={() => FilterOpen('Editor')}>
-                                <SearchSharpIcon sx={{fontSize: 23}} />
+                                <button className='button-action-square' onClick={() => FilterOpen('Editor')}>
+                                <FilterAltSharpIcon sx={{fontSize: 23}} />
                                  </button>
                                    </Tooltip>
                                  <TextBox title={'Sheet Editor Name'} onClose={(e) => updateFilter(e, 'Editor')} value={props.Filters.EditorFilter !== undefined 
@@ -580,8 +580,8 @@ return (
                          
                                <div className='filter-container'>
                                   <Tooltip title="Filter by Sheet Creator">
-                                <button className='button-action-round' onClick={() => FilterOpen('Creator')}>
-                                <SearchSharpIcon sx={{fontSize: 23}} />
+                                <button className='button-action-square' onClick={() => FilterOpen('Creator')}>
+                                <FilterAltSharpIcon sx={{fontSize: 23}} />
                                  </button>
                                  </Tooltip>
                                  <TextBox title={'Sheet Creator Name'} onClose={(e) => updateFilter(e, 'Creator')} value={props.Filters.CreatorFilter !== undefined 
@@ -601,8 +601,8 @@ return (
                    <div className='search-container'>
                 <div className='filter-container'>
                                   <Tooltip title="Filter by Sheet Creator">
-                                <button className='button-action-round' onClick={() => FilterOpen('Creator')}>
-                                <SearchSharpIcon sx={{fontSize: 23}} />
+                                <button className='button-action-square' onClick={() => FilterOpen('Creator')}>
+                                <FilterAltSharpIcon sx={{fontSize: 23}} />
                                  </button>
                                  </Tooltip>
                                  <TextBox title={'Sheet Creator Name'} onClose={(e) => updateFilter(e, 'Creator')} value={props.Filters.CreatorFilter !== undefined 
@@ -619,8 +619,8 @@ return (
               <div className='search-container'>
                 <div className='filter-container'>
                 <Tooltip title="Filter by Item Name">
-                  <button className='button-action-round' onClick={() => FilterOpen('Item')}>
-                  <SearchSharpIcon sx={{fontSize: 23}} />
+                  <button className='button-action-square' onClick={() => FilterOpen('Item')}>
+                  <FilterAltSharpIcon sx={{fontSize: 23}} />
                    </button>
                    </Tooltip>
                    <TextBox title={'Item Name'} onClose={(e) => updateFilter(e, 'Item')} value={props.Filters.ItemsFilter !== undefined 
@@ -635,8 +635,8 @@ return (
                 <div className='search-container'>
                 <div className='filter-container'>                   
                     <Tooltip title="Filter by Series">
-                  <button className='button-action-round' onClick={() => FilterOpen('Series')}>
-                  <SearchSharpIcon sx={{fontSize: 23}} />
+                  <button className='button-action-square' onClick={() => FilterOpen('Series')}>
+                  <FilterAltSharpIcon sx={{fontSize: 23}} />
                    </button>
                    </Tooltip>
                    <TextBox title={'Series'} onClose={(e) => updateFilter(e, 'Series')} value={props.Filters.SeriesFilter !== undefined 
