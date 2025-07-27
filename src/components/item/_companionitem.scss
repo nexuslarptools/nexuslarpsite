@@ -2,6 +2,14 @@
 
 div {
     font-family: OpenSans;
+    &.imgAndAttributesCompanion5
+    {
+        height: 84px;
+    }
+    &.imgAndAttributesCompanion4
+    {
+        height: 68px;
+    }
     &.companionItem {
         background-image: url("../../assets/backgroudpattern.png");
         text-indent: 4.1in, 2.625in; 
