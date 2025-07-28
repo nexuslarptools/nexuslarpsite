@@ -17,3 +17,18 @@
         }
     }
 }
+
+.character-sheet-review-notes {
+    display: block;
+    margin-top: 20px;
+    padding: 10px;
+    width: 30%;
+    .input-pair {
+        @include roundedCorners();
+        display: inline;
+        padding-right: 0;
+        &::before {
+            border-bottom: 0;
+        }
+    }
+}

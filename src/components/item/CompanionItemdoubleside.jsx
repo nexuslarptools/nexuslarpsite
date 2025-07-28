@@ -65,7 +65,7 @@ const CompanionItemdoubleside = props => {
                     : <div></div>
                 }
               </div>
-              { props.item.fields.RESILIENCE != null || props.item.fields.GRADE != null
+              { props.item.fields.RESILIENCE != null || props.item.fields.Grade != null
                 ? <span className = "itemStats">
                   {
                     props.item.fields.RESILIENCE != null
@@ -75,9 +75,9 @@ const CompanionItemdoubleside = props => {
                       : '\u00a0\u00a0'
                   }
                   {
-                    props.item.fields.GRADE != null
+                    props.item.fields.Grade != null
                       ? <div className='grade'>
-                        Grade: {props.item.fields.GRADE}
+                        Grade: {props.item.fields.Grade}
                       </div>
                       : '\u00a0\u00a0'
                   }

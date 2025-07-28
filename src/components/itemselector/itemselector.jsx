@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import ItemTable from "../tables/itemtable";
 import ItemSelectonList from "./itemslectionlist";
 import { Stack } from "@mui/material";
-import DisplayScreen from "../displayscreen/displayscreen";
 import DisplayScreenItemsOnly from "../displayscreen/displayscreenitemsonly";
 
 const ItemSelector = (props) => {
@@ -12,7 +11,7 @@ const ItemSelector = (props) => {
     const [printView, setPrintView] = useState(false);
 
     useEffect(() => {
-        const newItemList=[]
+        let newItemList=[]
         if (props.initialItems.label !== 'Selection for Printing') {
         if (props.initialItems !== undefined && props.initialItems !== null)
         if (props.initialItems.label === 'Sheet Item' && props.initialItems.sheetItemGuid !== '') {
@@ -63,6 +62,9 @@ const ItemSelector = (props) => {
         }
         }
       }
+      }
+      else {
+        newItemList = props.initialItems.startingItems;
       }
         setItemListState(newItemList);
       }, [props.initialItems.show])
@@ -151,8 +153,7 @@ const ItemSelector = (props) => {
       let view = !printView;
       setPrintView(view);
     }
-
-
+    
     return (
       !printView ?
     <>
@@ -161,6 +162,7 @@ const ItemSelector = (props) => {
       {/* <Box> */}
       <div className="topPane">
       <ItemTable 
+      isSearch={props.isSearch}
       isSelector={true}
       isCharSheet={props.isCharSheet}
       appdata={props.selectedApproved ? props.appdata : props.undata} 
@@ -174,11 +176,23 @@ const ItemSelector = (props) => {
       DirectToItem={(path, guid) => AddItemToList(path, guid)}
       NewItemLink={(e)=> props.NewItemLink(e)}
       NavToSelectItems={() => props.NavToSelectItems()}
-      ToggleSwitch={() => props.ToggleSwitch()}
-      ToggleCommentSwitch={() => props.ToggleCommentSwitch()}
-      ToggleApprovableSwitch={() => props.ToggleApprovableSwitch()}
+      ToggleSwitches={(e) => props.ToggleSwitches(e)}
       GoBack={() => props.GoBack()}
       GoToPrint={() => TogglePrint()}
+      UpdateFilter={(filter) => props.UpdateFilter(filter)}
+      isLoading={props.isLoading}
+      Filters={{
+        SeriesFilter: props.Filters.SeriesFilter,
+        ItemsFilter: props.Filters.ItemsFilter,
+        CreatorFilter: props.Filters.CreatorFilter,
+        EditorFilter: props.Filters.EditorFilter,
+        SelectedApproval : props.Filters.SelectedApproval,
+        LarpAutoCompValue: props.Filters.LarpAutoCompValue,
+        SelectedLarpTag: props.Filters.SelectedLarpTag,
+        TagSelectValues: props.Filters.TagSelectValues
+      }
+
+      }
       />
       </div>
 {/*       </Box>*/}
@@ -233,5 +247,10 @@ ItemSelector.propTypes = {
     NavToSelectItems: PropTypes.func,
     Edit: PropTypes.func,
     GoBack: PropTypes.func,
-    UpdateItemList: PropTypes.func
+    UpdateItemList: PropTypes.func,
+    UpdateFilter: PropTypes.func,
+    isLoading: PropTypes.bool,
+    ToggleSwitches: PropTypes.func,
+    Filters: PropTypes.object,
+    isSearch: PropTypes.bool
 }

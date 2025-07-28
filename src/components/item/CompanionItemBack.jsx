@@ -2,6 +2,7 @@ import SpecialSkillsDisplayItem from '../specialskills/specialskillsdisplayitem'
 import PropTypes from 'prop-types';
 import Loading from '../loading/loading';
 import './_companionitem.scss';
+import { formatText } from '../../utils/textParse';
 
 const CompanionItemBack = props => {
   if (!props || !props.item) {
@@ -12,14 +13,18 @@ const CompanionItemBack = props => {
         <div className = "companionItemBox">
         <span className="companionitemTitle">
               <p className="companionitemName">{props.item.name}</p>
-              <p className="companionitemType">{props.item.fields.TYPE}</p>
+              { props.item.name !== '' ?
+              <p className="companionitemType">{props.item.fields.TYPE}</p> :
+              <>
+              </>
+              }
         </span>
         <div className='itemSecondSideTextBox'>
           <div className="seriesItemText">
           {props.item.back.fields !== null && props.item.back.fields.Description !== undefined && props.item.back.fields.Description !== null ?
               props.item.back.fields.Description.split('\n').map((i,key) => {
             return <div className="companionitemDescription" key={key}><p>{
-              i.split('--').map((s, j) => j % 2 !== 0 ? <><u> {s} </u></> : (' ' + s ))
+              formatText(i)
               }</p></div>;
         })
             : <></>}

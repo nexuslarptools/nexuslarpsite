@@ -8,10 +8,10 @@ import {
   FormControl,
   InputLabel,
   MenuItem,
-  FormLabel
+  FormLabel,
+  Tooltip
 } from '@mui/material';
 import PropTypes from 'prop-types';
-import FilterIcon from '../icon/filtericon';
 import Tags from '../tags/tags';
 import EditSharpIcon from '@mui/icons-material/EditSharp';
 import DeleteSharpIcon from '@mui/icons-material/DeleteSharp';
@@ -22,27 +22,33 @@ import { Clear } from '@mui/icons-material';
 import KickDialog from '../dialogs/kickdialogbox';
 import DeleteDialogFull from '../dialogs/deletedialogcomplete';
 import HoverText from '../hovertext/hovertext';
+import FilterAltSharpIcon from '@mui/icons-material/FilterAltSharp';
+import TextBox from '../inputs/textbox';
 
 const CharacterTable = props => {
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(25);
-    const [filterState, setFilterState] = useState({
-        SeriesFilter: '',
-        CharacterFilter: ''
-      });
+    const [filterState, setFilterState] = useState(props.Filters);
+    const [dialogStates, setDialogState] = useState({
+      Series: false,
+      Character: false,
+      Creator: false,
+      Editor: false
+    });
       const [tagState, setTagState] = useState({
         listTags: []
       });
-    const [selectedLarpTag, setSelectedLarpTag] = useState(null);
-    const [selectedApprovalState, setSelectedApprovalState]  = useState('');
+    const [selectedLarpTag, setSelectedLarpTag] = useState(props.Filters.SelectedLarpTag !== undefined && 
+      props.Filters.SelectedLarpTag !== null ?
+       props.Filters.SelectedLarpTag : '');
     const [autocompSelectedValue, setAutocompSelectedValue] = useState(null);
     const [resetInputField, setResetInputField] = useState(false);
-    const [larpAutoCompValue, setLarpAutoCompValue] = useState(null);
+    const [larpAutoCompValue, setLarpAutoCompValue] = useState(props.Filters.LarpAutoCompValue);
     const [btnDisabledState, setBtnDisabledState] = useState(true);
-    const [tagSelectValues, setTagSelectValues] = useState([]);
+    const [tagSelectValues, setTagSelectValues] = useState(props.Filters.TagSelectValues);
     const [currentTagList, setCurrentTagList] = useState([]);
-    const [clearfilterState, setClearfilterState] = useState(false);
+    const [clearfilterState] = useState(null);
     const [displayState, setDisplayState] = useState({
         apimessage: [],
         display: false
@@ -56,6 +62,11 @@ const CharacterTable = props => {
         row: null
       });
 
+      function removeDiacritics(str) {
+        return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      }
+    
+
       useEffect(() => {
         let tagDrowdownList = [];
         props.tagslist.forEach(tag => {
@@ -64,27 +75,48 @@ const CharacterTable = props => {
           }
         });
     
-        if (selectedLarpTag !== null) {
+        if (selectedLarpTag !== null && selectedLarpTag !== '') {
           const fullSelectLARPTag = props.larpTags.find((tag) => tag.guid === selectedLarpTag);
           tagDrowdownList.push(fullSelectLARPTag);
         }
+            if (props.isSearch) {
+      props.larpTags.forEach(tag => {
+        tagDrowdownList.push(tag);
+         })
+       }
+
+
         setCurrentTagList(tagDrowdownList);
 
         let filteredRows = props.appdata;
+        filteredRows = filteredRows.filter(item => (item.name === null && (props.Filters.CharacterFilter === undefined 
+          || props.Filters.CharacterFilter === null || props.Filters.CharacterFilter === '')) 
+         || (item.title !== null && removeDiacritics(item.name.toLocaleLowerCase()).includes(removeDiacritics(
+           props.Filters.CharacterFilter !== undefined 
+             && props.Filters.CharacterFilter !== null ?
+             props.Filters.CharacterFilter.toLocaleLowerCase() : ''))));
+        
+        filteredRows = filteredRows.filter(item => (item.series === null && (props.Filters.SeriesFilter === undefined 
+           || props.Filters.SeriesFilter === null || props.Filters.SeriesFilter === '')) 
+          || (item.title !== null && removeDiacritics(item.title.toLocaleLowerCase()).includes(removeDiacritics(
+            props.Filters.SeriesFilter !== undefined 
+              && props.Filters.SeriesFilter !== null ?
+              props.Filters.SeriesFilter.toLocaleLowerCase() : ''))));
+          filteredRows = filteredRows.filter(item => removeDiacritics(item.createdByUser.toLocaleLowerCase()).includes(removeDiacritics(filterState.CreatorFilter.toLocaleLowerCase())));
+          filteredRows = filteredRows.filter(item => removeDiacritics(item.editbyUser.toLocaleLowerCase()).includes(removeDiacritics(filterState.EditorFilter.toLocaleLowerCase())));
+   
+          
 
-        filteredRows = filteredRows.filter(item => item.name.toLocaleLowerCase().includes(filterState.CharacterFilter.toLocaleLowerCase()));
-        filteredRows = filteredRows.filter(item => (item.series === null && filterState.SeriesFilter === '') 
-          || (item.title !== null && item.title.toLocaleLowerCase().includes(filterState.SeriesFilter.toLocaleLowerCase())));
         if (props.showApprovableOnly) {
           filteredRows = filteredRows.filter(item => (item.editbyUserGuid !== props.userGuid && item.firstapprovalbyuserGuid !== props.userGuid));
         }
     
-        if (selectedApprovalState === 'U')
+        if (props.Filters.SelectedApproval === 'U')
         {
           filteredRows = filteredRows.filter(character => (character.firstapprovalbyuserGuid === null ));
         }
     
-        if (selectedApprovalState === '1')
+        if (props.Filters.SelectedApproval === '1')
         {
           filteredRows = filteredRows.filter(character => (character.firstapprovalbyuserGuid !== null ));
         }
@@ -94,7 +126,7 @@ const CharacterTable = props => {
           filteredRows = filteredRows.filter(character => (character.readyforapproval  === true ));
         }
     
-        if (tagState.listTags.length > 0 || props.larpTags.length > 0) {
+        if (tagSelectValues.length > 0 || props.larpTags.length > 0) {
           const newfilter = [];
           filteredRows.forEach((row) => {
             if (row.tags !== null) {
@@ -104,7 +136,7 @@ const CharacterTable = props => {
                 })
                 if (listguids.length === 0 || props.larpTags.every(elem => !listguids.includes(elem.guid)) ||
                 listguids.includes(selectedLarpTag)) {
-                  if (tagState.listTags.every(elem => listguids.includes(elem))) {
+                  if (tagSelectValues.every(elem => listguids.includes(elem.guid))) {
                     newfilter.push(row);
                   }
                 }
@@ -126,8 +158,16 @@ const CharacterTable = props => {
           totalrows: filteredrowstotal,
           display: true
         })
+
+        for (const key of Object.keys(props.Filters)) {
+          if ((key === 'TagSelectValues' && props.Filters[key].length > 0) || 
+              (key !== 'TagSelectValues'  && props.Filters[key] !== '')) {
+             setBtnDisabledState(false)
+          }
+        }
+
       }, [props.appdata, props.showallLARPLinked, props.showApprovableOnly,  props.readyApproved, props.commentFilterOn,
-        filterState, tagState, selectedLarpTag, selectedApprovalState, page, rowsPerPage]);
+        props.Filters, page, rowsPerPage]);
 
       const handleChangePage = (
         event,
@@ -143,13 +183,12 @@ const CharacterTable = props => {
       }
 
       const selectLarpTag = async (e) => {
-        if (e !== null) {
-        setAutocompSelectedValue(e.name);
-        setLarpAutoCompValue(e.name);
-        }
-    
+        let setFilters = filterState;
+
         if (e === undefined || e === null) {
           setLarpAutoCompValue('');
+          setFilters.LarpAutoCompValue = '';
+          setFilters.SelectedLarpTag = '';
           let newTagFilter = [];
     
           tagSelectValues.forEach(tag => {
@@ -173,6 +212,9 @@ const CharacterTable = props => {
           await setSelectedLarpTag(null);
         }
         else {
+          setAutocompSelectedValue(e.name);
+          setLarpAutoCompValue(e.name);
+          setFilters.LarpAutoCompValue = e.name;
           let newTagFilter = [];
     
           tagSelectValues.forEach(tag => {
@@ -192,12 +234,18 @@ const CharacterTable = props => {
             ...tagState,
             listTags:newlisttags
           })
+
           await setTagSelectValues(newTagFilter);
           await setSelectedLarpTag(e.guid);
+          setFilters.SelectedLarpTag = e.guid;
         }
+        
+        props.UpdateFilter(setFilters);
       }
 
       const UpdateLarpAutoComp =(e) => {
+        let setFilters = filterState;
+        setFilters.LarpAutoCompValue = e;
         setLarpAutoCompValue(e);
         if (e === '')
         {
@@ -209,41 +257,68 @@ const CharacterTable = props => {
       }
 
       const updateFilter = async (e, updatedfeild) => {
+        await FilterOpen(updatedfeild);
+        let value = e;
+        if (e === undefined || e === null)
+        {
+          if (e === undefined)
+            {
+              let togglestate = dialogStates[updatedfeild];
+              await setDialogState({
+                ...dialogStates,
+                [updatedfeild]: !togglestate
+              });
+              return;
+            }
+        }
         try {
+          let setfilter = filterState;
           if (updatedfeild === 'Name') {
             await setFilterState({
               ...filterState,
-              CharacterFilter: e
+              CharacterFilter: value
             })
-    
-            if (e !== '' || filterState.SeriesFilter !== '' || tagState.listguids.length > 0) {
-              setBtnDisabledState(false);
-            } else {
-              setBtnDisabledState(true);
-            }
+            setfilter.CharacterFilter = value;
+
           }
           if (updatedfeild === 'Series') {
             await setFilterState({
               ...filterState,
-              SeriesFilter: e
+              SeriesFilter: value
             })
-    
-            if (e !== '' || filterState.ItemsFilter !== '' || tagState.listguids.length > 0) {
-              setBtnDisabledState(false);
-            } else {
-              setBtnDisabledState(true);
-            }
+            setfilter.SeriesFilter = value;
+
           }
+          if (updatedfeild === 'Editor') {
+            await setFilterState({
+              ...filterState,
+              EditorFilter: value
+            })
+            setfilter.EditorFilter = value;
+
+          }
+          if (updatedfeild === 'Creator') {
+            await setFilterState({
+              ...filterState,
+              CreatorFilter: value
+            })
+            setfilter.CreatorFilter = value;
+
+          }
+          props.UpdateFilter(setfilter);
         } catch (error) {
           console.log(error);
         }
       }
 
       const UpdateApprovalFilter = async (e) => {
-        setSelectedApprovalState(e.target.value);
+        let setfilter = filterState;
+        setfilter.SelectedApproval = e.target.value;
+        props.UpdateFilter(setfilter);
       }
 
       const updateTags = (e) => {
+        let setfilter = filterState;
         const listguids = []
         e.forEach(element => {
           listguids.push(element.guid)
@@ -254,15 +329,15 @@ const CharacterTable = props => {
         });
     
         setTagSelectValues(e);
-    
-        if (filterState.CharacterFilter !== '' || filterState.SeriesFilter !== '' || listguids.length > 0) {
-          setBtnDisabledState(false);
-        } else {
-          setBtnDisabledState(true);
-        }
+
+        setfilter.TagSelectValues = e;
+        props.UpdateFilter(setfilter);
+
       }
 
       const tagClicked = (e) => {
+        let setfilter = filterState;
+
         const listguids = tagState.listTags;
     
         if (listguids.findIndex(element => element === e) === -1 
@@ -276,38 +351,29 @@ const CharacterTable = props => {
         });
     
         const newtag = currentTagList.find((element) => element.guid === e )
-        if (newtag !== undefined && (tagSelectValues.length === 0 || tagSelectValues.findIndex((element) => element.guid === e) === -1)) {
+        if (newtag !== undefined 
+          && (tagSelectValues.length === 0 || tagSelectValues.findIndex((element) => element.guid === e) === -1)) {
           const setNewTagslist = tagSelectValues;
           setNewTagslist.push(newtag);
           setTagSelectValues(setNewTagslist);
-        }
-    
-        if (filterState.TitleFilter !== '' || filterState.TitleJpnFilter !== '' || listguids.length > 0) {
-          setBtnDisabledState(false);
-        } else {
-          setBtnDisabledState(true);
+          setfilter.TagSelectValues = setNewTagslist;
+          props.UpdateFilter(setfilter);
         }
       }
 
     const clearfilters = async () => {
-        await setFilterState({
-            ...filterState,
-            SeriesFilter: '',
-            CharacterFilter: ''
-          });
-          setBtnDisabledState(true);
-          setTagState({
-            ...tagState,
-            listTags: []
-          });
-          await setFilterState({
-            ...filterState,
-            CharacterFilter: '',
-            SeriesFilter: ''
-          });
-          setTagSelectValues([]);
-          await setClearfilterState(true);
-          await setClearfilterState(false);
+      let setfilter = {
+        SeriesFilter: '',
+        CharacterFilter: '',
+        CreatorFilter: '',
+        EditorFilter: '',
+        SelectedApproval : '',
+        LarpAutoCompValue: '',
+        SelectedLarpTag: '',
+        TagSelectValues: []
+      };
+
+      props.UpdateFilter(setfilter);
     }
 
     const handleKickOpen = (e) => {
@@ -340,9 +406,36 @@ const CharacterTable = props => {
         open: true
       })
     }
+
+    const FilterOpen = async(e) => {
+      let togglestate = dialogStates[e];
+      await setDialogState({
+        ...dialogStates,
+        [e]: !togglestate
+      });
+    }
+
+    const SelectApproveToggle = async() => {
+      let switchinfo = 
+      {
+        selectedApproved: !props.selectedApproved
+      }
+      if (!props.selectedApproved)
+      {
+        if (props.showApprovableOnly)
+        {
+          switchinfo.showApprovableOnly = false;
+        }
+        if (props.readyApproved)
+          {
+            switchinfo.readyApproved = false;
+          }
+      }
+      props.ToggleSwitches(switchinfo)
+    }
   
 
-    if (props === undefined || props.authLevel < 1 || !displayState.display ) {
+    if (props === undefined || props.authLevel < 1 || !displayState.display || props.isLoading ) {
         return (<div className='loading-container'><Loading /></div>)
       } else {
         return (
@@ -351,44 +444,42 @@ const CharacterTable = props => {
               <Table>
                 <TableHead sx={{ position: 'sticky', top: 0, backgroundColor: 'white' }}>
                     <TableRow>
-                    <TableCell  className='table-topper'>
+                    <TableCell  colSpan={props.selectedItemsApproved ? 8 : 9}  className='table-topper'>
+                <div className='table-controls' >
+                <div className='table-topper-buttons'>
                     <button className='button-action' onClick={(e) => props.NewCharacterLink(e)}>Add New Character</button>
-                    </TableCell>
-                    <TableCell className='table-topper'>
-                    <button className='button-action' onClick={() => props.GoToSearch()}>Character Search</button>
-                     </TableCell>
-                    <TableCell className='table-topper'>
+                    </div> 
                      { props.authLevel > 1
-                      ? <FormControlLabel control={ <Switch checked={props.selectedApproved} onChange={() => props.ToggleSwitch()} /> }
+                      ? <FormControlLabel control={ <Switch defaultChecked={props.selectedApproved} 
+                            onChange={() => SelectApproveToggle() } /> }
                             label={props.selectedApproved ? 'Approved Characters' : 'Unapproved Characters'} />
                       : <div></div>
                     }
-                    </TableCell>
-                    <TableCell className='table-topper'>
-                  <FormControlLabel control={ <Switch defaultChecked onChange={() => props.ToggleCommentSwitch()} /> }
-                            label={props.commentFilterOn ? 'Only Commented Sheets' : 'All Sheets'} />
-                    </TableCell>
-                    <TableCell className='table-topper'>
+                  <FormControlLabel control={ <Switch defaultChecked={!props.commentFilterOn}  onChange={() => 
+                            props.ToggleSwitches({commentFilter: !props.commentFilterOn})} /> }
+                            label={props.commentFilterOn ? 'Only Commented Sheets' : 'All Sheets'}/> 
                     {props.authLevel > 2 && !props.selectedApproved? (
-                      <FormControlLabel control={ <Switch defaultChecked onChange={() => props.ToggleApprovableSwitch()} /> }
-                        label={props.showApprovableOnly ? 'Characters You Can Approve' : 'All Unapproved Characters'} /> )
+                      <FormControlLabel control={ <Switch defaultChecked={!props.showApprovableOnly} onChange={() => 
+                        props.ToggleSwitches({showApprovableOnly: !props.showApprovableOnly})} /> }
+                        label={props.showApprovableOnly ? 'Characters You Can Approve' : 'All Unapproved Characters'}  /> )
                     : (<div></div>)}
-                     </TableCell>
-                     <TableCell className='table-topper'>
                      {props.authLevel > 2 && !props.selectedApproved ?
                       <FormControlLabel
-                       control={<Switch onChange={() => props.ToggleApprovReadySwitch()}
-                            checked={!props.readyApproved}/>}
+                       control={<Switch onChange={() => 
+                            props.ToggleSwitches({readyApproved: !props.readyApproved})} 
+                            defaultChecked={!props.readyApproved}/>}
                             label={props.readyApproved ? 'Ready for Approval' : 'All Characters'}
                        /> : <></>}
-                     </TableCell>
-                     <TableCell className='table-topper' colSpan={3}>
                         <></>
+                        </div>
                      </TableCell>
                     </TableRow>
                 <TableRow>
-                <TableCell colSpan={3} className='table-topper'>
+                <TableCell colSpan={props.selectedItemsApproved ? 8 : 9} className='table-topper'>
+                  <div className='table-controls-pagination'>
+                   <div className='selectors'> 
                     {props.authLevel > 2 && !props.selectedApproved? (
+                       <div className='selector'>
                        <div className='input-pair'>
                        <FormControl fullWidth>
                        <InputLabel id="demo-simple-select-label">Select Sheet Status
@@ -396,20 +487,22 @@ const CharacterTable = props => {
                       <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        //value={age}
+                        value={props.Filters.SelectedApproval}
                         label="Sheet Status"
                         onChange={e => UpdateApprovalFilter(e)}>
-  <MenuItem value={''}>All Approval States</MenuItem>
-  <MenuItem value={'U'}>Unapproved</MenuItem>
-  <MenuItem value={'1'}>First Approval Done</MenuItem>
+                            <MenuItem value={''}>All Approval States</MenuItem>
+                            <MenuItem value={'U'}>Unapproved</MenuItem>
+                            <MenuItem value={'1'}>First Approval Done</MenuItem>
                       </Select>
                       </FormControl> 
+                      </div>
                       </div>)
                     : (<div></div>)}
-                 </TableCell>
-                  <TableCell colSpan={1} className='table-topper'>
+
+                    { !props.isSearch ?
+                     <div className='selector'>
                   <div className='input-pair'>
-                    <FormLabel>Include Characters linked to Specific LARP</FormLabel>
+                    <FormLabel sx={{fontSize: 12}}>Include Characters linked to Specific LARP</FormLabel>
                     <Autocomplete 
                       id="include-items-from-specific-larp"
                       value={autocompSelectedValue}
@@ -423,9 +516,9 @@ const CharacterTable = props => {
                             ...params.inputProps,
                             value:larpAutoCompValue
                           }}
-                          placeholder="select larp"
-                          variant="outlined"
                           onChange={(e) => UpdateLarpAutoComp(e.target.value)}
+                          placeholder="Select LARP"
+                          variant="outlined"
                           InputProps={{
                             ...params.InputProps,
                             endAdornment: <IconButton 
@@ -436,12 +529,13 @@ const CharacterTable = props => {
                         //getoptionselected={(opt, val) => opt === val}
                         onChange={(event, val) => selectLarpTag(val)}
                     />
-                  </div>
-                </TableCell>
-                <TableCell className='table-topper'>
+                    </div>
+                  </div> 
+                  :<></>
+                }
                     <button className='button-cancel' disabled={btnDisabledState} onClick={() => clearfilters()}>Clear Filters</button>
-                </TableCell>
-                <TableCell className='table-topper' colSpan={props.authLevel === 5 ? 4:5} >
+                    </div>
+                    <div className='table-topper-pagination'>  
                   <TablePagination
                     component="div"
                     count={displayState.totalrows}
@@ -450,16 +544,108 @@ const CharacterTable = props => {
                     rowsPerPage={rowsPerPage}
                     onRowsPerPageChange={handleChangeRowsPerPage}
                   />   
+                  </div>
+                  </div>
                 </TableCell>
               </TableRow>
-                  <TableRow>
+                  <TableRow className='table-filter-row'>
+                  <TableCell colSpan={props.selectedApproved ? 8 : 9}>
+                      <div className='fullspan-cell'>
+                      <div className='search-row'>
+                      <div className='search-container'>
+                                      <div className='filter-container'>
+                                      <Tooltip title="Filter by Last Editor">
+                       <button className='button-action-square' onClick={() => FilterOpen('Editor')}>
+                       <FilterAltSharpIcon sx={{fontSize: 23}} />
+                   </button>
+                   </Tooltip>
+                   <TextBox title={'Sheet Editor Name'} onClose={(e) => updateFilter(e, 'Editor')} value={props.Filters.EditorFilter !== undefined 
+                        && props.Filters.EditorFilter !== null ?
+                        props.Filters.EditorFilter : ''} open={dialogStates.Editor}/>
+                        {props.Filters.EditorFilter !== undefined 
+                        && props.Filters.EditorFilter !== null && props.Filters.EditorFilter !== ''?
+                        props.Filters.EditorFilter : <div className='inactive-text'>Last Edited By</div>}
+
+                  </div>
+                  <hr/>
+                  </div>
+                  <div className='search-container'>
+                  <div className='filter-container'>
+                  <Tooltip title="Filter by Sheet Creator">
+                  <button className='button-action-square' onClick={() => FilterOpen('Creator')}>
+                  <FilterAltSharpIcon sx={{fontSize: 23}} />
+                   </button>
+                   </Tooltip>
+                   <TextBox title={'Sheet Creator Name'} onClose={(e) => updateFilter(e, 'Creator')} value={props.Filters.CreatorFilter !== undefined 
+                        && props.Filters.CreatorFilter !== null ?
+                        props.Filters.CreatorFilter : ''} open={dialogStates.Creator}/>
+                        {props.Filters.CreatorFilter !== undefined 
+                        && props.Filters.CreatorFilter !== null && props.Filters.CreatorFilter !== '' ?
+                        props.Filters.CreatorFilter : <div className='inactive-text'>Created By</div>}
+                  </div>
+                  <hr/> 
+                  </div>
+                  <div className='search-container'>
+                <div className='filter-container'>
+                <Tooltip title="Filter by Character Name">
+                  <button className='button-action-square' onClick={() => FilterOpen('Name')}>
+                  <FilterAltSharpIcon sx={{fontSize: 23}} />
+                   </button>
+                   </Tooltip>
+                   <TextBox title={'Character Name'} onClose={(e) => updateFilter(e, 'Name')} value={props.Filters.CharacterFilter !== undefined 
+                        && props.Filters.CharacterFilter !== null ?
+                        props.Filters.CharacterFilter : ''} open={dialogStates.Name}/>
+                        {props.Filters.CharacterFilter !== undefined 
+                        && props.Filters.CharacterFilter !== null  && props.Filters.CharacterFilter !== '' ?
+                        props.Filters.CharacterFilter : <div className='inactive-text'>Character Name</div>}
+                  </div>
+                  <hr/>
+                  </div>
+                  <div className='search-container'>
+                  <div className='filter-container'>                   
+                    <Tooltip title="Filter by Series">
+                  <button className='button-action-square' onClick={() => FilterOpen('Series')}>
+                  <FilterAltSharpIcon sx={{fontSize: 23}} />
+                   </button>
+                   </Tooltip>
+                   <TextBox title={'Series'} onClose={(e) => updateFilter(e, 'Series')} value={props.Filters.SeriesFilter !== undefined 
+                        && props.Filters.SeriesFilter !== null ?
+                        props.Filters.SeriesFilter : ''} open={dialogStates.Series}/>
+                        {props.Filters.SeriesFilter !== undefined 
+                        && props.Filters.SeriesFilter !== null  && props.Filters.SeriesFilter !== '' ?
+                        props.Filters.SeriesFilter : <div className='inactive-text'>Series</div>}
+                  </div>
+                  <hr/>
+                  </div>
+                  </div>
+                  <div className='tags-container'>
+                  <div className='input-pair'>
+                    <Autocomplete
+                      multiple
+                      key={clearfilterState}
+                      value={tagSelectValues}
+                      id="multiple-limit-tags"
+                      options={currentTagList}
+                      getOptionLabel={(option) => option !== undefined && option.name !== undefined ?
+                        option.name : ''}
+                      onChange={(event, val) => updateTags(val)}
+                      renderInput={(params) => (
+                        <TextField placeholder='filter tags' {...params} />
+                      )}
+                    />
+                  </div>
+                  </div>
+                  </div>
+                </TableCell>
+              </TableRow>
+              <TableRow>
                     <TableCell className="short-column table-cell-center">Status</TableCell>
                     {props.selectedApproved ? <></> :
                     <TableCell className="short-column table-cell-center">Ready For Approval</TableCell>
                     }
                     <TableCell className="short-column table-cell-center">Sheet Comments</TableCell>
-                    <TableCell>Series</TableCell>
                     <TableCell>Character Name</TableCell>
+                    <TableCell>Series</TableCell>
                     <TableCell>Tags</TableCell>
                     <TableCell>View</TableCell>
                     { props.authLevel > 1
@@ -471,62 +657,6 @@ const CharacterTable = props => {
                     { props.authLevel > 2 && props.authLevel <6 && props.selectedApproved
                           ? <TableCell className="short-column"></TableCell> : <></>} 
                   </TableRow>
-                  <TableRow className='table-filter-row'>
-                    
-                  </TableRow>
-                  <TableRow className='table-filter-row'>
-                {props.selectedApproved  ?
-                       <TableCell></TableCell> : <TableCell colSpan={2}></TableCell>
-                  }
-                {props.commentFilterOn !== undefined ?  <TableCell></TableCell> : <></>}
-                <TableCell>
-                  <div className='filter-container'>
-                    <FilterIcon label="series" clearfilter={clearfilterState} filterup={e => updateFilter(e, 'Series')}  
-                      initalFilter={filterState.SeriesFilter} FilterInit={props.FilterInit} UnInitFiler={() => props.UnInitFiler()}  />
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <div className='filter-container'>
-                    <FilterIcon label="name" clearfilter={clearfilterState} filterup={e => updateFilter(e, 'Name')}/>
-                  </div>
-                </TableCell>
-                <TableCell colSpan={props.selectedApproved  && props.authLevel > 5 ? 3 :
-                  props.selectedApproved  && props.authLevel <= 3 ? 2 :
-                  props.selectedApproved  && props.authLevel > 3 ? 3 :
-                  !props.selectedApproved && props.authLevel > 2 ? 2 : 1  }>
-                  <div className='input-pair'>
-                    <Autocomplete
-                      multiple
-                      key={clearfilterState}
-                      value={tagSelectValues}
-                      id="multiple-limit-tags"
-                      options={currentTagList}
-                      getOptionLabel={(option) => option.name}
-                      onChange={(event, val) => updateTags(val)}
-                      renderInput={(params) => (
-                        <TextField placeholder='filter tags' {...params} />
-                      )}
-                    />
-                  </div>
-                </TableCell>
-                {props.authLevel > 5 && !props.selectedApproved  ? 
-                <>
-                <TableCell ></TableCell> 
-                </> :<></>
-                 }
-                {!props.selectedApproved  || props.authLevel <= 5? 
-                <>
-                <TableCell ></TableCell> 
-                </> :<></>
-                 }
-                {props.selectedApproved  && props.authLevel >= 5 ? 
-                <>
-                <TableCell ></TableCell> 
-                </> :<></>
-                 }
-
-
-              </TableRow>
                 </TableHead>
                 <TableBody>
                   {displayState.apimessage.map((row) => ( 
@@ -561,16 +691,16 @@ const CharacterTable = props => {
                         <TableCell className='table-default-cursor table-cell-center'>
                           <div>{row.hasreview ? 'Yes':'No'}</div>
                         </TableCell>
-                      <TableCell>
-                        <div className='titleInfo'>{row.title}</div>
-                      </TableCell>
-                      <TableCell>
+                        <TableCell>
                         { props.authLevel > 0
                           ? <div className='titleInfo'>
                               {row.name}
                             </div>
                           : <div></div>
                         }
+                      </TableCell>
+                      <TableCell>
+                        <div className='titleInfo'>{row.title}</div>
                       </TableCell>
                       <TableCell>
                         <Tags tags={row.tags} clickable={true} tagClick={(e) => tagClicked(e)}/>
@@ -652,13 +782,11 @@ const CharacterTable = props => {
     showApprovableOnly: PropTypes.bool,
     readyApproved: PropTypes.bool,
     showallLARPLinked: PropTypes.bool,
+    selectedItemsApproved: PropTypes.bool,
     appdata: PropTypes.array,
       apiMessage: PropTypes.array,
       authLevel: PropTypes.number,
-      ToggleSwitch: PropTypes.func,
-      ToggleCommentSwitch: PropTypes.func,
-      ToggleApprovableSwitch: PropTypes.func,
-      ToggleApprovReadySwitch: PropTypes.func,
+      ToggleSwitches: PropTypes.func,
       seriesfilterup: PropTypes.func,
       charfilterup: PropTypes.func,
       DeleteCharacter: PropTypes.func,
@@ -671,6 +799,10 @@ const CharacterTable = props => {
       approvedState: PropTypes.array,
       userGuid: PropTypes.string,
       approvableOnly: PropTypes.bool,
-      initFilter: PropTypes.string
+      initFilter: PropTypes.string,
+      UpdateFilter: PropTypes.func,
+      isLoading: PropTypes.bool,
+      Filters: PropTypes.object,
+      isSearch: PropTypes.bool
     }
 

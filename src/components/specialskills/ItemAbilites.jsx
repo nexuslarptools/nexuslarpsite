@@ -110,6 +110,10 @@ const ItemAbilites = props => {
                       <FormLabel>Energy Cost:</FormLabel>
                       <Input type="text" name={'Cost'} key={'Cost ' + props.abilityState.arraynum} onChange={(e) => handleChange(e)} value={props.abilityState.Cost !== null? props.abilityState.Cost:''} />
                     </div>
+                    <div className='input-pair'>
+                      <FormLabel>Uses (If no Energy Cost):</FormLabel>
+                      <Input type="text" name={'Uses'} key={'Uses ' + props.abilityState.arraynum} onChange={(e) => handleChange(e)} value={props.abilityState.Uses !== null? props.abilityState.Uses:''} />
+                    </div>
                     <div className='input-pair power-description'>
                       <FormLabel>Description:</FormLabel>
                       <TextField multiline rows={5} type="text" name={'Description'} key={'Description ' + props.abilityState.arraynum} onChange={(e) => handleChange(e)} value={props.abilityState.Description !== null?props.abilityState.Description:''} />

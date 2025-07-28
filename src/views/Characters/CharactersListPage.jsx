@@ -7,9 +7,11 @@ export default function CharactersListPage(props) {
         <>
               <div>
     <CharacterTable 
+    isSearch={props.isSearch}
     isSelector={false}
     FilterInit={props.FilterInit}
     UnInitFiler={() => props.UnInitFiler()}
+    Filters={props.Filters}
     appdata={props.selectedApproved ? props.appdata : props.undata} 
       selectedApproved={props.selectedApproved} 
       showApprovableOnly={props.showApprovableOnly}
@@ -23,11 +25,10 @@ export default function CharactersListPage(props) {
       NewCharacterLink={(e)=> props.NewCharacterLink(e)}
       GoToSearch={() => props.GoToSearch()}
       NavToSelectItems={() => props.NavToSelectItems()}
-      ToggleSwitch={() => props.ToggleSwitch()}
-      ToggleCommentSwitch={() => props.ToggleCommentSwitch()}
-      ToggleApprovableSwitch={() => props.ToggleApprovableSwitch()}
-      ToggleApprovReadySwitch={() => props.ToggleApprovReadySwitch()}
+      ToggleSwitches={(e) => props.ToggleSwitches(e)}
       Edit={(path, guid) => props.Edit(path, guid)}
+      UpdateFilter={(filter) => props.UpdateFilter(filter)}
+      isLoading={props.isLoading}
       />
     </div>
         </>
@@ -37,10 +38,7 @@ export default function CharactersListPage(props) {
 
 CharactersListPage.propTypes = {
     DirectToCharacter: PropTypes.func,
-    ToggleSwitch: PropTypes.func,
-    ToggleCommentSwitch: PropTypes.func,
-    ToggleApprovableSwitch: PropTypes.func,
-    ToggleApprovReadySwitch: PropTypes.func,
+    ToggleSwitches: PropTypes.func,
     GoToSearch: PropTypes.func,
     showApprovableOnly: PropTypes.bool,
     selectedApproved: PropTypes.bool,
@@ -54,5 +52,9 @@ CharactersListPage.propTypes = {
     userGuid: PropTypes.string,
     NewCharacterLink: PropTypes.func,
     NavToSelectItems: PropTypes.func,
-    Edit: PropTypes.func
+    Edit: PropTypes.func,
+    UpdateFilter: PropTypes.func,
+    isLoading: PropTypes.bool,
+    Filters: PropTypes.object,
+    isSearch: PropTypes.bool
 }

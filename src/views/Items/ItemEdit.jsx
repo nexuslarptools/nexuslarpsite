@@ -6,6 +6,7 @@ import usePutData from '../../utils/putdata';
 import uploadToS3 from '../../utils/s3';
 import ItemEditFormWrapper from '../../components/forms/itemeditfromwrapper';
 import { useState } from 'react';
+import PostData from "../../utils/postdata"
 
 
 export default function ItemEdit(props) {
@@ -63,11 +64,24 @@ export default function ItemEdit(props) {
         props.GoBack(true)
       }
 
+      const AddReview = async (e) => {
+        let newmessage = {
+          message: e,
+          acks: [],
+          sheetId: itemQuery.data.id
+        }
+        await newMesageMutation.mutate(newmessage)
+        queryClient.invalidateQueries(['messages_' + props.guid, 'issubbed_' + props.guid] )
+      }
+
     const currItemMutation = usePutData('/api/v1/ItemSheets/' + props.guid, ['editItem', props.guid])
+    const newMesageMutation = PostData('/api/v1/ReviewMessages/Item', ['messages_' + props.guid])
     const newApprovalMutation = usePutData('/api/v1/ItemSheets/' + props.guid + '/Approve', [props.guid, 'listApprovedItems', 'listUnapprovedItems']);
     const itemQuery = useGetData(props.guid + "_editfetch", '/api/v1/' + props.path + '/' + props.guid)  
     const tagsQuery = useGetData('listTags', '/api/v1/Tags/groupbytyperead') 
     const seriesQuery = useGetData('listSeriesShort', '/api/v1/Series/ShortList') 
+    const messagesQuery = useGetData('messages_' + props.guid , '/api/v1/ReviewMessages/Item/' + props.guid) 
+    const subscriptionQuery = useGetData('issubbed_' + props.guid , '/api/v1/ReviewSub/Item/IsSubbbed/' + props.guid) 
     const userGuidQuery = useGetData('userguid', '/api/v1/Users/CurrentGuid');
  
 
@@ -125,11 +139,15 @@ export default function ItemEdit(props) {
         setIsMutating(false);
       }
 
-    if (tagsQuery.isLoading || seriesQuery.isLoading || itemQuery.isLoading || userGuidQuery.isLoading) 
+    if (tagsQuery.isLoading || seriesQuery.isLoading || itemQuery.isLoading || userGuidQuery.isLoading || messagesQuery.isLoading 
+      || subscriptionQuery.isLoading
+    ) 
     return (<div>
       <Loading />
       </div>)
-    if (tagsQuery.isError || seriesQuery.isError || itemQuery.isError || userGuidQuery.isError ) 
+    if (tagsQuery.isError || seriesQuery.isError || itemQuery.isError || userGuidQuery.isError || messagesQuery.isError 
+      || subscriptionQuery.isError
+    ) 
     return (<div>
               Error!
               </div>)
@@ -140,6 +158,9 @@ export default function ItemEdit(props) {
         <ItemEditFormWrapper 
         path={props.path}
         formJSON={initForm(props.formJSON)} 
+        messagesList = {messagesQuery.data}
+        isSubbed={subscriptionQuery.data}
+        AddReview={(e) => AddReview(e)}
             tagslist={TagsFilter(props.tagslist)} 
             seriesList={seriesQuery.data}
             initForm={{

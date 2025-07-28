@@ -31,8 +31,6 @@ const GoToEdit = async (e) => {
     viewingEdit: true,
     guid: e
   });
-
-  props.toggleSubScreen(true);
 }
 
 const GoBack = async () => {
@@ -80,7 +78,7 @@ useEffect(() => {
         arrowsList: fillin
       })
 
-      props.toggleSubScreen(true);
+      //props.toggleSubScreen(true);
   }
 
 if (userData.isLoading || currentUserGuid.isLoading) return (<div>

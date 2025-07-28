@@ -6,6 +6,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import uploadToS3 from '../../utils/s3';
 import CharacterEditFormWrapper from '../../components/forms/charactereditformWrapper';
 import { useState } from 'react';
+import PostData from "../../utils/postdata"
 
 export default function CharacterEdit(props) {
     const [isMutating, setIsMutating] = useState(false);
@@ -40,11 +41,6 @@ export default function CharacterEdit(props) {
 
     const SubmitForm = async (data, image1, image2, newimage1, newimage2) => {
         let bodyData = data
-/*         const larpguid = []
-        larpguid.push(data.larptagGuid)
-        if (data.larptagGuid !== undefined && data.larptagGuid !== null && data.larptagGuid !== '') {
-        bodyData.larptagGuid=larpguid
-        } */
         if (newimage1) {
           uploadToS3('images/Characters/' + props.guid  + '.jpg', image1);
         }
@@ -56,6 +52,16 @@ export default function CharacterEdit(props) {
         await setIsMutating(true);
       }
 
+      const AddReview = async (e) => {
+        let newmessage = {
+          message: e,
+          acks: [],
+          sheetId: characterQuery.data.id
+        }
+        await newMesageMutation.mutate(newmessage)
+        queryClient.invalidateQueries('messages_' + props.guid)
+      }
+
     const Approve = async () => {
         await newApprovalMutation.mutate();
         queryClient.invalidateQueries(props.guid, 'listUnapprovedCharacters', 'listApprovedCharacters');
@@ -63,11 +69,14 @@ export default function CharacterEdit(props) {
       }
 
     const newCharacterMutation = usePutData('/api/v1/CharacterSheets/' + props.guid, [props.guid, 'listUnapprovedCharacters']);
+    const newMesageMutation = PostData('/api/v1/ReviewMessages/Character', ['messages_' + props.guid])
     const newApprovalMutation = usePutData('/api/v1/CharacterSheets/' + props.guid + '/Approve', [props.guid, 'listUnapprovedCharacters']);
     const characterQuery = useGetData(props.guid, '/api/v1/' + props.path + '/' + props.guid)  
+    const messagesQuery = useGetData('messages_' + props.guid , '/api/v1/ReviewMessages/Character/' + props.guid) 
     const tagsQuery = useGetData('listTags', '/api/v1/Tags/groupbytyperead'); 
     const seriesQuery = useGetData('listSeriesShort', '/api/v1/Series/ShortList');
-    const approvQuery = useGetData('listApprovedItems', '/api/v1/ItemSheetApproveds/FullListWithTagsNoImages');  
+    const approvQuery = useGetData('listApprovedItems', '/api/v1/ItemSheetApproveds/FullListWithTagsNoImages'); 
+    const subscriptionQuery = useGetData('issubbed_' + props.guid , '/api/v1/ReviewSub/Character/IsSubbbed/' + props.guid)  
     const unapprovQuery = useGetData('listUnapprovedItems', '/api/v1/ItemSheets/FullListWithTagsNoImages'); 
     const userGuidQuery = useGetData('userguid', '/api/v1/Users/CurrentGuid');
 
@@ -149,11 +158,13 @@ export default function CharacterEdit(props) {
       }
 
     if (tagsQuery.isLoading || seriesQuery.isLoading || approvQuery.isLoading 
-    || unapprovQuery.isLoading || characterQuery.isLoading || userGuidQuery.isLoading) return (<div>
+    || unapprovQuery.isLoading || characterQuery.isLoading || userGuidQuery.isLoading || messagesQuery.isLoading ||
+    subscriptionQuery.isLoading) return (<div>
       <Loading />
       </div>)
     if (tagsQuery.isError || seriesQuery.isError || approvQuery.isError 
-    || unapprovQuery.isError || characterQuery.isError || userGuidQuery.isError) return (<div>
+    || unapprovQuery.isError || characterQuery.isError || userGuidQuery.isError || messagesQuery.isError ||
+     subscriptionQuery.isError) return (<div>
               Error!
               </div>)
 
@@ -162,7 +173,9 @@ export default function CharacterEdit(props) {
         <CharacterEditFormWrapper
         path={props.path} 
         authLevel={props.authLevel}
+        isSubbed={subscriptionQuery.data}
         currenUserGuid={userGuidQuery.data}
+        messagesList = {messagesQuery.data}
         formJSON={initForm(props.formJSON)} 
             tagslist={TagsFilter(props.tagslist)} 
             seriesList={seriesQuery.data}
@@ -173,11 +186,12 @@ export default function CharacterEdit(props) {
             itemTags={TagsFilterItems(props.tagslist)}
             appdata={approvQuery.data} 
             undata={unapprovQuery.data} 
+            AddReview={(e) => AddReview(e)}
             larpRunTags={TagsFilterLARP(props.tagslist)}
             Submit={(e, f, g, h, i) => SubmitForm(e, f, g, h, i)}
             GoBack={() => props.GoBack()}
             Approve={() => Approve()}
-            /> 
+            />
         </>
     )}
     CharacterEdit.propTypes = {

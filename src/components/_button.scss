@@ -45,6 +45,50 @@
 	}
 }
 
+@mixin button-square ($background-color, $background-color2, $border-color, $text-color, $inactive: false) {
+	@include roundedCorners();
+	background-color: $background-color;
+  	background-image: linear-gradient($background-color, $background-color2);
+	border: 1px solid $border-color;
+	color: $text-color;
+	height: fit-content;
+	min-width: 50px;
+	padding: 7px 10px;
+	text-align: center;
+	width: fit-content;
+	@if $inactive{
+		cursor: not-allowed;
+	}
+	@else{
+		cursor: pointer;
+	}
+	&:hover{
+		background-color: $background-color;
+		background-image: linear-gradient($border-color, $background-color2);
+		border: 1px solid $border-color;
+	}
+	&:active{
+		background-image: linear-gradient($background-color2, $background-color2);
+	}
+	&:disabled{
+		background-color: $color-neutral-light;
+		background-image: none;
+		border: 1px solid $color-neutral-darker;
+		color: $color-neutral-darker;
+		cursor: not-allowed;
+		&:hover{
+			background-color: $color-neutral-light;
+			background-image: none;
+			border: 1px solid $color-neutral-darker;
+			color: $color-neutral-darker;
+			cursor: not-allowed;
+		}
+	}
+	&:focus {
+		filter: drop-shadow(0px 0px 8px $color-tertiary);
+	}
+}
+
 // buttons to take lesser/secondary actions
 .button-basic{
 	@include button($color-neutral-lightest, $color-neutral-lighter, $color-neutral-darker, $color-neutral-darkest);
@@ -52,13 +96,20 @@
 		background-color: $color-primary-lightest;
 	}
 }
+// buttons to open menus
+.button-hambuger{
+	@include button-square($color-utility-lightest, $color-utility-lighter, $color-utility, $color-utility-darkest);
+	padding: 6px;
+	max-height: 50px;
+	max-width: 50px;
+}
 // buttons to take an important action
 .button-action{
 	@include button($color-tertiary-lightest, $color-tertiary-lighter, $color-tertiary, $color-tertiary-darkest);
 }
 // buttons that save to the DB or indicate success, always important
 .button-save{
-	@include button($color-success-lightest, $color-success-lighter, $color-success, $color-success-darker);
+	@include button($color-neutral-lightest, $color-neutral-lighter, $color-success, $color-success-darker);
 }
 // buttons that remove or delete information, always important
 .button-danger{

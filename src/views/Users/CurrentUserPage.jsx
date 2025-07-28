@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import getUserData from '../../utils/getcurrentuser'
 import UserDisplay from '../../components/displays/userdisplay'
-import UserSelfEditForm from '../../components/forms/userselfeditform'
 import useGetData from '../../utils/getdata'
 import Loading from '../../components/loading/loading'
 import UserRolesEditForm from '../../components/forms/userroleseditform'
@@ -37,7 +36,7 @@ const ToggleEdit = async (refresh) => {
           </div>)
 
 
-return (
+return ( 
 <>
 { currUserState.viewingEdit === false ? 
 <>
@@ -52,5 +51,6 @@ return (
 </>
 }
 </>
-)
+) 
 }
+

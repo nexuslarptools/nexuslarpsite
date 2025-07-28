@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import Loading from '../../components/loading/loading';
+import { formatText } from '../../utils/textParse';
 
 const BasicItemBack = props => {
 
@@ -14,8 +15,11 @@ const BasicItemBack = props => {
               <h3 className='itemName'>{props.item.name}</h3> :
               <h3 className='itemNameSM'>{props.item.name}</h3> 
             }
-            {/* <h3 className="itemName">{props.item.name}</h3> */}
-            <h3 className="itemType">{props.item.fields.TYPE}</h3>
+            {
+              props.item.name!== '' ?
+            <h3 className="itemType">{props.item.fields.TYPE}</h3> :
+            <></>
+            /* <h3 className="itemName">{props.item.name}</h3> */}
           </div>
         <div className='itemSecondSideTextBox'>
           <div className="seriesItemText">
@@ -24,9 +28,9 @@ const BasicItemBack = props => {
           props.item.back.fields.Description !== undefined && props.item.back.fields.Description !== null ?
           props.item.back.fields.Description.split('\n').map((i,key) => {
             return <div className="item-Description" key={key}><p>{
-              i.split('--').map((s, j) => j % 2 !== 0 ? <><u> {s} </u></> : (' ' + s ))
+            formatText(i)
               }</p></div>;
-        })
+          })
             : <></>}
                           {
                   props.item.fields.Magic != null && props.item.fields.Magic != ''

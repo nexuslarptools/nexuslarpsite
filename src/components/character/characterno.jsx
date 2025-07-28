@@ -6,6 +6,7 @@ import CharacterSheetTable from '../charactersections/charactersheettable';
 import SpecialSkillsDisplayCharacter from '../specialskills/specialskillsdisplaycharacter';
 import PopupItem from '../item/popupitem';
 import ItemWrapper from '../item/itemWrapper';
+import Startingitems from '../text/startingitemsresult';
 
 const CharacterNo = props => {
 
@@ -120,13 +121,17 @@ const CharacterNo = props => {
         <div className='sheet sheet1'>
           <div className='header-info'>
             <div className='sheet-name-series'>
-            { props.character.name.length > 30 || props.character.seriesTitle.length > 50 ?
+            { props.character.seriesTitle.length > 71 || props.character.name.length + props.character.seriesTitle.length > 100 ?
+              <div className='sheetNameXSM'>{props.character.name}</div> :
+            props.character.name.length > 30 || props.character.seriesTitle.length > 50 
+            || props.character.name.length + props.character.seriesTitle.length > 71  ?
                 <div className='sheetNameSM'>{props.character.name}</div>
                :<div className='sheetName'>{props.character.name}</div>  
             }
-              { props.character.seriesTitle.length > 71 ?
+              { props.character.seriesTitle.length > 71 || props.character.name.length + props.character.seriesTitle.length > 100 ?
               <div className='seriesNameXSM'>{props.character.seriesTitle}</div> :
-              props.character.seriesTitle.length > 30 ?
+              props.character.seriesTitle.length > 30  
+              || props.character.name.length + props.character.seriesTitle.length > 71 ?
               <div className='seriesNameSM'>{props.character.seriesTitle}</div> :
               <div className='seriesName'>{props.character.seriesTitle}</div>
               }
@@ -180,7 +185,8 @@ const CharacterNo = props => {
                 </span>
               </div>
 
-              { imageData.image2 !== undefined && imageData.image2 !== null && imageData.image2 !== '' && imageData.image2 !== 'data:image/png;base64,null' ?
+              { imageData.image2 !== undefined && imageData.image2 !== null && imageData.image2 !== '' && 
+              imageData.image2 !== 'data:image/png;base64,null' ?
                 <div className='imgContainer full-body-image'>
                   <img src={imageData.image2} className='charFullBodyImg' alt="character full body shot"></img>
                 </div> 
@@ -197,10 +203,15 @@ const CharacterNo = props => {
                 || props.character.fields.iteminfo === null
                 || props.character.fields.iteminfo === '') ? props.character.starting_Items !== undefined ?
                 "(" + props.character.starting_Items.length + ")" : "(" + 0 + ")" : ""}</span></div>
-            <div className='starting-items-list'> 
-{props.character.fields.iteminfo !== undefined 
+
+
+{/* 
+             <div className='starting-items-list'>
+             {props.character.fields.iteminfo !== undefined 
               && props.character.fields.iteminfo !== null
-              && props.character.fields.iteminfo !== '' ? props.character.fields.iteminfo + " " : null}
+              && props.character.fields.iteminfo !== '' ? 
+              props.character.fields.iteminfo + " " : null
+              }
             {itemList.length > 0 ? itemList.map((item, i) => 
                 i + 1 === itemList.length
                   ? item.itemName
@@ -210,22 +221,30 @@ const CharacterNo = props => {
               ) :
                  (props.character.fields.iteminfo !== undefined 
               && props.character.fields.iteminfo !== null
-              && props.character.fields.iteminfo !== '' ? null : 'No Starting Items')}
+              && props.character.fields.iteminfo !== '' ? null : 'No Starting Items')
+              }
             </div>
+ */}
+         <Startingitems iteminfo={props.character.fields.iteminfo} itemList={itemList} />
+
           </div>
         </div>
         { 
           !props.specialSkillSpace.isactive ?
             <div className='sheet sheet2'>
               <div className='header-info'>
-                <div className='sheet-name-series'>
-                { props.character.name.length > 30 || props.character.seriesTitle.length > 50 ?
+              <div className='sheet-name-series'>
+            { props.character.seriesTitle.length > 71 || props.character.name.length + props.character.seriesTitle.length > 100 ?
+              <div className='sheetNameXSM'>{props.character.name}</div> :
+            props.character.name.length > 30 || props.character.seriesTitle.length > 50 
+            || props.character.name.length + props.character.seriesTitle.length > 71  ?
                 <div className='sheetNameSM'>{props.character.name}</div>
                :<div className='sheetName'>{props.character.name}</div>  
             }
-              { props.character.seriesTitle.length > 71 ?
+              { props.character.seriesTitle.length > 71 || props.character.name.length + props.character.seriesTitle.length > 100 ?
               <div className='seriesNameXSM'>{props.character.seriesTitle}</div> :
-              props.character.seriesTitle.length > 30 ?
+              props.character.seriesTitle.length > 30  
+              || props.character.name.length + props.character.seriesTitle.length > 71 ?
               <div className='seriesNameSM'>{props.character.seriesTitle}</div> :
               <div className='seriesName'>{props.character.seriesTitle}</div>
               }
@@ -299,39 +318,6 @@ const CharacterNo = props => {
               :<></>
   }
             </>
-        }
-
-        {
-          props.character.gmnotes.length > 0
-            ?  
-              !props.extraGmSpaceOn.isactive ?
-                <div className='sheet sheet3'>
-                  <div className='gm-notes'>
-                    <div className='gm-notes-heading'>GM Notes for {props.character.name}</div>
-                    <div className='gm-notes-text'>
-                      {props.character.gmnotes.split('\n').map(str => <p key={Math.random}> {str}</p>)}
-                      </div>
-                  </div>
-                </div>
-              : <>
-                  <div className='sheet sheet3'>
-                    <div className='gm-notes'>
-                      <div className='gm-notes-heading'>GM Notes for {props.character.name} [1]</div>
-                      <div className='gm-notes-text'>
-                        {props.extraGmSpaceOn.page1.split('\n').map(str => <p key={Math.random}>{str}</p>)}
-                        </div>
-                    </div>
-                  </div>
-                  <div className='sheet sheet3' >
-                  <div className='gm-notes'>
-                    <div className='gm-notes-heading'>GM Notes for {props.character.name} [2]</div>
-                    <div className='gm-notes-text'>
-                      {props.extraGmSpaceOn.page2.split('\n').map(str => <p key={Math.random()}>{str}</p>)}
-                      </div>
-                  </div>
-                  </div> 
-                </>
-              : null
         }
       </div>
     </>

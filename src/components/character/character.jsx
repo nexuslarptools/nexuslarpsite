@@ -454,7 +454,37 @@ const Character = props => {
               </div>
             </>
         }
-
+        <>
+        {
+          props.character.starting_Items !== undefined && props.character.starting_Items.length > 0 && props.character.starting_Items.length <= 9
+          ? <div className='sheet sheet4'>
+              <ItemPalette apiMessage={props.character.starting_Items} remove={() => null}></ItemPalette>
+            </div>
+          : props.character.starting_Items !== undefined && props.character.starting_Items.length > 9 && props.character.starting_Items.length < 19
+            ? <>
+                <div className='sheet sheet4'>
+                  <ItemPalette apiMessage={fullItems[0]} remove={() => null}></ItemPalette>
+                </div>
+                <div className='sheet sheet5'>
+                  <ItemPalette apiMessage={fullItems[1]} remove={() => null}></ItemPalette>
+                </div>
+              </>
+            :  props.character.starting_Items !== undefined && props.character.starting_Items.length > 18
+            ? <>
+                <div className='sheet sheet4'>
+                  <ItemPalette apiMessage={fullItems[0]} remove={() => null}></ItemPalette>
+                </div>
+                <div className='sheet sheet5'>
+                  <ItemPalette apiMessage={fullItems[1]} remove={() => null}></ItemPalette>
+                </div>
+                <div className='sheet sheet6'>
+                  <ItemPalette apiMessage={fullItems[2]} remove={() => null}></ItemPalette>
+                </div>
+              </>
+            : null
+        }
+        </>
+        <>
         {
           props.character.gmnotes.length > 0
             ?  
@@ -487,35 +517,7 @@ const Character = props => {
                 </>
               : null
         }
-        
-        {
-          props.character.starting_Items !== undefined && props.character.starting_Items.length > 0 && props.character.starting_Items.length <= 9
-          ? <div className='sheet sheet4'>
-              <ItemPalette apiMessage={props.character.starting_Items} remove={() => null}></ItemPalette>
-            </div>
-          : props.character.starting_Items !== undefined && props.character.starting_Items.length > 9 && props.character.starting_Items.length < 19
-            ? <>
-                <div className='sheet sheet4'>
-                  <ItemPalette apiMessage={fullItems[0]} remove={() => null}></ItemPalette>
-                </div>
-                <div className='sheet sheet5'>
-                  <ItemPalette apiMessage={fullItems[1]} remove={() => null}></ItemPalette>
-                </div>
-              </>
-            :  props.character.starting_Items !== undefined && props.character.starting_Items.length > 18
-            ? <>
-                <div className='sheet sheet4'>
-                  <ItemPalette apiMessage={fullItems[0]} remove={() => null}></ItemPalette>
-                </div>
-                <div className='sheet sheet5'>
-                  <ItemPalette apiMessage={fullItems[1]} remove={() => null}></ItemPalette>
-                </div>
-                <div className='sheet sheet6'>
-                  <ItemPalette apiMessage={fullItems[2]} remove={() => null}></ItemPalette>
-                </div>
-              </>
-            : null
-        }
+        </>
       </div>
     </>
     )

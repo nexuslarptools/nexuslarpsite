@@ -2,6 +2,7 @@ import SpecialSkillsDisplayItem from '../specialskills/specialskillsdisplayitem'
 import PropTypes from 'prop-types';
 import Loading from '../loading/loading';
 import './_companionitem.scss';
+import { formatText } from '../../utils/textParse';
 
 const MechaItem = props => {
   if (!props || !props.item) {
@@ -74,9 +75,9 @@ const MechaItem = props => {
                       //'\u00a0\u00a0'
                   }
                   {
-                    props.item.fields.GRADE != null && props.item.fields.GRADE != ''
+                    props.item.fields.Grade != null && props.item.fields.Grade != ''
                       ? <div className='grade'>
-                        Grade: {props.item.fields.GRADE}
+                        Grade: {props.item.fields.Grade}
                       </div>
                       : <></>
                       //'\u00a0\u00a0'
@@ -87,7 +88,7 @@ const MechaItem = props => {
               {props.item.fields.Description !== undefined && props.item.fields.Description !== null ?
               props.item.fields.Description.split('\n').map((i,key) => {
             return <div className="companionitemDescription" key={key}><p>{
-              i.split('--').map((s, j) => j % 2 !== 0 ? <><u> {s} </u></> : (' ' + s ))
+              formatText(i)
               }</p></div>;
         })
             : <></>}

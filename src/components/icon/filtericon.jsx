@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { Box, ClickAwayListener, TextField } from '@mui/material';
+import { Box, ClickAwayListener, InputAdornment, TextField } from '@mui/material';
+import FilterAltSharpIcon from '@mui/icons-material/FilterAltSharp';
 
 const FilterIcon = props => {
   const [open, setOpen] = useState(false);
@@ -53,10 +54,20 @@ if (props.FilterInit) {
     <>
       <div className='input-pair'>
         <ClickAwayListener onClickAway={handleClose} key={props.label}>
-          <div ref={anchorRef}>
+          <div className='inputbox' ref={anchorRef}>
             <Box>
-              <TextField id={id} value={filterState}
-                variant="standard" onChange={e => updateFilter(e.target.value)} placeholder={'filter ' + props.label + ' list'} />
+              <TextField id={id} value={filterState}  
+                variant="standard"
+                 onChange={e => updateFilter(e.target.value)}
+                  placeholder={props.label}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <FilterAltSharpIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                  />
             </Box>
           </div>
         </ClickAwayListener>

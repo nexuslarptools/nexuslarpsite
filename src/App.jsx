@@ -15,6 +15,9 @@ import ContactFooter from './components/contactfooter/contactbar';
 import ContactUs from './views/EmailHelp/EmailHelp';
 import CharactersIndex from './views/Characters/CharactersIndex';
 import { FaroRoutes } from '@grafana/faro-react';
+import SearchDrawer from './components/drawer/searchdrawer';
+import CharacterSearch from './views/Search/charactersearch';
+import ItemSearch from './views/Search/itemsearch';
 
 
 
@@ -22,7 +25,75 @@ class App extends Component {
 
   state = {
     open: false,
+    ismain: true,
+    funct: '',
+    guid: '',
+    path: '',
+    characters: {
+      filter:       {
+        SeriesFilter: '',
+        CharacterFilter: '',
+        CreatorFilter: '',
+        EditorFilter: '',
+        SelectedApproval : '',
+        LarpAutoCompValue: '',
+        SelectedLarpTag: '',
+        TagSelectValues: []
+      },
+      selectedApproved: true,
+      commentFilter: false,
+      showApprovableOnly: false,
+      readyApproved: false,
+      viewingItem: false,
+      editingItem: false,
+      viewItemGuid: '',
+      viewItemPath: '',
+    },
+    items: {
+      filter:       {
+        SeriesFilter: '',
+        ItemsFilter: '',
+        CreatorFilter: '',
+        EditorFilter: '',
+        SelectedApproval : '',
+        LarpAutoCompValue: '',
+        SelectedLarpTag: '',
+        TagSelectValues: []
+      },
+      selectedApproved: true,
+      commentFilter: false,
+      showApprovableOnly: false,
+      readyApproved: false,
+      viewingItem: false,
+      editingItem: false,
+      viewItemGuid: '',
+      viewItemPath: '',
+      listItems:[]
+    },
     currentURL: window.location.href 
+  }
+
+  ismain = true;
+
+  ToggleSwitch = async (e, type) => {
+    let newstate =this.state[type]
+    if (newstate === undefined)
+      {
+        newstate = { e: true };
+      }
+      else {
+        newstate[e] = !newstate[e]
+      }
+    this.setState({
+    ...this.state,
+    [type] :newstate
+    });
+  }
+
+  ToggleSwitches = async (e, type) => {
+    for (const key of Object.keys(e)) {
+      await this.ToggleSwitch(key, type);
+    }
   }
 
   togglePreview = (e) => {
@@ -30,50 +101,122 @@ class App extends Component {
     return {open: e};
   };
 
+  toggleSubScreen = async (e, funct, guid, path, type, filters) => {
+    let newstate =this.state
+
+    newstate.ismain=e;
+    newstate.funct=funct;
+    newstate.guid=guid;
+    newstate.path=path;
+    if (newstate[type] === undefined)
+    {
+      newstate[type] = {};
+    }
+
+    newstate[type].funct=funct;
+    newstate[type].guid=guid;
+    newstate[type].path=path;
+
+    if (filters !== 'goback') {
+      newstate[type].filter = filters;
+    } 
+    else {
+      newstate[type].filter = this.state[type].filter;
+    }
+
+    await this.setState(newstate);
+  };
+
+  UpdateItemsList = async (e) => {
+    this.setState({
+      ...this.state,
+      items:{
+      ...this.state.items, 
+      listItems:e}
+      });
+  }
+
+
   render() {
     return (
       <BrowserRouter>
+       <SearchDrawer open={this.state.open} toggleClose={() => this.togglePreview(false)} />
       <div className="app">
-      <Header drawerOpenCLick={(e) => this.togglePreview(e)} />
+      <Header drawerOpenCLick={(e) => this.togglePreview(e)} mainmenu={this.state.ismain}/>
       <div className={"app-body"}>
           <FaroRoutes>
 
-          <Route exact path="/" element={<HomePage />}>
-          </Route>
+          <Route 
+          exact path="/" 
+          element={(<HomePage subState={this.state} toggleSubScreen={(e) => this.toggleSubScreen(e)} />)} 
+          />
             <Route
             path="/profile"
-            element={<AuthenticationGuard component={CurrentUserPage} />}
+            element={<AuthenticationGuard subState={this.state} toggleSubScreen={(e) => this.toggleSubScreen(e)} component={CurrentUserPage} />}
            />
             <Route
             path="/users"
-            element={<AuthenticationGuard component={UsersPage} />}
+            element={<AuthenticationGuard subState={this.state} toggleSubScreen={(e) => this.toggleSubScreen(e)} component={UsersPage} />}
            />
             <Route
             path="/items"
-            element={<AuthenticationGuard component={ItemsIndex} />}
+            element={<AuthenticationGuard 
+              subState={this.state.items !== undefined && this.state.items !== null ?this.state.items : this.state}
+              ismain={this.state.ismain}
+              ToggleSwitches={(e) => this.ToggleSwitches(e, 'items')}
+              UpdateItemsList={(e) => this.UpdateItemsList(e)}
+              toggleSubScreen={(e, funct, guid, path, filters) => this.toggleSubScreen(e, funct, guid, path, 'items', filters)} 
+              component={ItemsIndex} />}
            />
             <Route
             path="/characters"
-            element={<AuthenticationGuard component={CharactersIndex} />}
+            element={(<AuthenticationGuard 
+              subState={this.state.characters !== undefined && this.state.characters !== null ? this.state.characters : this.state}
+              ismain={this.state.ismain}
+              ToggleSwitches={(e) => this.ToggleSwitches(e, 'characters')}
+              toggleSubScreen={(e, funct, guid, path, filters) => this.toggleSubScreen(e, funct, guid, path, 'characters', filters)} 
+              component={CharactersIndex} />)}
            />
           <Route
             path="/series"
-            element={<AuthenticationGuard component={SeriesIndex} />}
+            element={<AuthenticationGuard subState={this.state} toggleSubScreen={(e) => this.toggleSubScreen(e)} component={SeriesIndex} />}
            />
           <Route
             path="/tags"
-            element={<AuthenticationGuard component={TagsIndex} />}
+            element={<AuthenticationGuard subState={this.state} toggleSubScreen={(e) => this.toggleSubScreen(e)} component={TagsIndex} />}
            />
           <Route
             path="/larps"
-            element={<AuthenticationGuard component={LarpsIndex} />}
+            element={<AuthenticationGuard subState={this.state} toggleSubScreen={(e) => this.toggleSubScreen(e)} component={LarpsIndex} />}
            />
           <Route
+
             path="/contactus"
-            element={<AuthenticationGuard component={ContactUs} />}
+            element={<AuthenticationGuard subState={this.state} toggleSubScreen={(e) => this.toggleSubScreen(e)} component={ContactUs} />}
            />
-          <Route path="*" element={<HomePage />}
-                />
+          <Route
+            path="/charactersearch/"
+            element={<AuthenticationGuard 
+              subState={this.state.characters !== undefined && this.state.characters !== null ?this.state.characters : this.state}
+              ismain={this.state.ismain}
+              ToggleSwitches={(e) => this.ToggleSwitches(e, 'characters')}
+              toggleSubScreen={(e, funct, guid, path, filters) => this.toggleSubScreen(e, funct, guid, path, 'characters', filters)} 
+              component={CharacterSearch} />}
+           />
+                     <Route
+            path="/itemsearch/"
+            element={<AuthenticationGuard 
+              subState={this.state.items !== undefined && this.state.items !== null ?this.state.items : this.state}
+              ismain={this.state.ismain}
+              ToggleSwitches={(e) => this.ToggleSwitches(e, 'items')}
+              UpdateItemsList={(e) => this.UpdateItemsList(e)}
+              toggleSubScreen={(e, funct, guid, path, filters) => this.toggleSubScreen(e, funct, guid, path, 'items', filters)} 
+              component={ItemSearch}/>}
+           />
+          <Route 
+          path="*"  
+          element={(<HomePage subState={this.state} toggleSubScreen={(e) => this.toggleSubScreen(e)} />)} 
+          />
           </FaroRoutes>
           </div>
           </div>

@@ -52,6 +52,7 @@ const ItemEditForm = (props) => {
     const [selectedOption, setSelectedOption] = useState('Generic');
     const [IsdoubleSide, setIsdoubleSide] = useState(false);
     const [isLoaded, setIsLoaded]=useState(false);
+    const [seriesListState, setSeriesListState] = useState(props.seriesList);
     const [selectedSeries, setSelectedSeries] = useState(
       '045a829c-8cff-11ea-99f9-4371def66a6d'
     );
@@ -108,6 +109,15 @@ const ItemEditForm = (props) => {
       }, [props.initForm])
 
       const initForm = async () => {
+
+        let seriesList = seriesListState;
+           seriesList.forEach((series, index) => {
+              if (series.title === '') {
+                seriesList[index].title = "No Series"
+        }});
+
+        setSeriesListState(seriesList);
+
         const formData = [];
     
         for (const key of Object.keys(props.formJSON)) {
@@ -157,6 +167,7 @@ const ItemEditForm = (props) => {
             ) {
               let oldName = props.initForm.apiMessage.fields.Special_Skills[i].Name
               let oldCost = props.initForm.apiMessage.fields.Special_Skills[i].Cost
+              let oldUses = props.initForm.apiMessage.fields.Special_Skills[i].Uses
               const oldRank =
                 props.initForm.apiMessage.fields.Special_Skills[i].Rank
               let oldDescription =
@@ -174,6 +185,7 @@ const ItemEditForm = (props) => {
                   visible: true,
                     Name: oldName,
                     Cost: oldCost,
+                    Uses: oldUses,
                     Rank: oldRank,
                     Description: oldDescription,
                     Tags: oldTags,
@@ -191,7 +203,11 @@ const ItemEditForm = (props) => {
               if (oldCost === '') {
                 oldCost = null;
               }
-    
+
+              if (oldUses === '') {
+                oldUses = null;
+              }
+
               if (oldDescription === '') {
                 oldDescription = null;
               }
@@ -229,6 +245,7 @@ const ItemEditForm = (props) => {
             ) {
               let oldName = props.initForm.apiMessage.back.fields.Special_Skills[i].Name
               let oldCost = props.initForm.apiMessage.back.fields.Special_Skills[i].Cost
+              let oldUses = props.initForm.apiMessage.back.fields.Special_Skills[i].Uses
               const oldRank =
                 props.initForm.apiMessage.back.fields.Special_Skills[i].Rank
               let oldDescription =
@@ -246,6 +263,7 @@ const ItemEditForm = (props) => {
                   visible: true,
                     Name: oldName,
                     Cost: oldCost,
+                    Uses: oldUses,
                     Rank: oldRank,
                     Description: oldDescription,
                     Tags: oldTags,
@@ -262,6 +280,10 @@ const ItemEditForm = (props) => {
     
               if (oldCost === '') {
                 oldCost = null;
+              }
+
+              if (oldUses === '') {
+                oldUses = null;
               }
     
               if (oldDescription === '') {
@@ -395,6 +417,10 @@ const ItemEditForm = (props) => {
             }
           });
         });
+
+        if (outputbody.Fields.Value != undefined && outputbody.Fields.Value === 'Remove Value') {
+          outputbody.Fields.Value = null;
+        }
 
         outputbody.Seriesguid =selectedSeries;
         outputbody.Gmnotes =gmNotes;
@@ -1108,7 +1134,7 @@ const ItemEditForm = (props) => {
                       <FormLabel>Series</FormLabel>
                       <Autocomplete
                         id="select-series-tags"
-                        options={props.seriesList}
+                        options={seriesListState}
                         getOptionLabel={(option) => option.title}
                         onChange={(_, val) => upDateSeries(val)}
                         isOptionEqualToValue={(option, value) => option.guid === value.guid}
@@ -1451,14 +1477,28 @@ const ItemEditForm = (props) => {
                 </div>
 
           <div>  
-              {reviewsState.length > 0 ?
-              reviewsState.map(message => 
-                <ReviewNotesDisplay key={message} message={message} RemoveReview={(id) => RemoveReview(id)} />)
-                : <ReviewNotesForm  AddReview={(e) => AddReview(e)} type={'Item'} />
+              {props.initForm.showResult !== null &&  props.messagesList.length > 0 ?
+              "Review Notes: " : <></> }
+              <>
+              {props.initForm.showResult !== null &&  props.messagesList.length > 0 ?
+                 props.messagesList.map(message => 
+                <ReviewNotesDisplay key={message.id} 
+                guid={props.initForm.apiMessage.guid} 
+                type={'Item'}  message={message} 
+                RemoveReview={() => RemoveReview(message.id)} />)
+                : <></> }
+              </>
+              { props.initForm.showResult !== null ?
+               <ReviewNotesForm  AddReview={(e) => props.AddReview(e)} type={'Item'} />
+               : <></>
               }
-          <div>
-            {'&nbsp'}
-            </div>
+               {props.initForm.showResult !== null && (props.isSubbed.id === 0 || props.isSubbed.stopdate !== null) ?
+               <button className='button-action' onClick={() => props.Subscribe()}> Subscribe to Review </button> :
+               props.initForm.showResult !== null ?
+               <button className='button-cancel' onClick={() => props.Unsubscribe()}> Unsubscribe </button> :
+               <></>
+               } 
+
             </div>
 
         <div className="edit-bottom">
@@ -1479,10 +1519,15 @@ export default ItemEditForm;
 
 ItemEditForm.propTypes = {
   formJSON: PropTypes.array,
+  isSubbed: PropTypes.object,
   tagslist: PropTypes.object,
   itemList: PropTypes.object,
   itemTags: PropTypes.array,
+  messagesList: PropTypes.array,
+  Subscribe: PropTypes.func,
+  Unsubscribe: PropTypes.func,
   Submit: PropTypes.func,
+  AddReview: PropTypes.func,
   FetchPopoverItem: PropTypes.func,
   showResult: PropTypes.bool,
   initForm: PropTypes.object,

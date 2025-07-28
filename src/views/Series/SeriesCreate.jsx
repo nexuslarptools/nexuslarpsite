@@ -36,7 +36,8 @@ loadData()
         bodyData.larptagGuid=larpguid
         }
         bodyData.guid = v4()
-
+        bodyData.isactive=true
+        
         await newSeriesMutation.mutate(bodyData)
 
         props.GoBack(true)

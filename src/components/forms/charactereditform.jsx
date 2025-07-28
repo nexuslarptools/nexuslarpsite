@@ -10,8 +10,7 @@ import {
   Autocomplete, TextField,
   FormControlLabel, FormLabel, Input, Dialog, DialogTitle, 
   IconButton, DialogContent, Typography, DialogActions, Button, Box, Checkbox, Drawer,
-  FormHelperText
-} from '@mui/material';
+  FormHelperText } from '@mui/material';
 import Loading from '../../components/loading/loading';
 import { green } from '@mui/material/colors';
 import ReviewNotesDisplay from '../reviewnotes/reviewnotesdisplay';
@@ -22,7 +21,7 @@ import Character from '../character/character';
 import { characterDataProcess } from '../../utils/characterdataprocess';
 
 const CharacterEditForm = (props) => {
-  const { register, handleSubmit, getValues, setValue } = useForm({
+  const { register, handleSubmit, setValue } = useForm({
     mode: 'onSubmit',
     reValidateMode: 'onBlur'
   });
@@ -57,6 +56,7 @@ const CharacterEditForm = (props) => {
     showResult: true
   });
 
+  const [seriesListState, setSeriesListState] = useState(props.seriesList);
   const [selectedSeries, setSelectedSeries] = useState({
     guid:'',
     series: {
@@ -87,7 +87,17 @@ const CharacterEditForm = (props) => {
     showApprovableOnly: false,
     viewingItem: false,
     viewItemGuid: '',
-    viewItemPath: ''
+    viewItemPath: '',
+    filter:       {
+      SeriesFilter: '',
+      ItemsFilter: '',
+      CreatorFilter: '',
+      EditorFilter: '',
+      SelectedApproval : '',
+      LarpAutoCompValue: '',
+      SelectedLarpTag: '',
+      TagSelectValues: []
+    }
 });
 
   const [reviewsState, setReviewsState] = useState([]);
@@ -102,6 +112,14 @@ const CharacterEditForm = (props) => {
       ...itemsTableState,
       show,
       label
+    });
+  }
+
+  const UpdateFilter = (e) => 
+  {
+    setItemsState({
+      ...itemsState,
+      filter:e
     });
   }
 
@@ -239,6 +257,16 @@ const CharacterEditForm = (props) => {
   }, [])
 
   const initForm = async (formJSON) => {
+let seriesList = seriesListState;
+seriesList.forEach((series, index) => {
+  if (series.title === '')
+  {
+    seriesList[index].title = "No Series"
+  }
+});
+
+  setSeriesListState(seriesList);
+
     const formData = [];
 
     for (const key of Object.keys(formJSON)) {
@@ -284,6 +312,8 @@ const CharacterEditForm = (props) => {
             props.initForm.apiMessage.fields.Special_Skills[i].Rank
           let oldDescription =
             props.initForm.apiMessage.fields.Special_Skills[i].Description
+          let oldUses =
+            props.initForm.apiMessage.fields.Special_Skills[i].Uses
           let oldTags = props.initForm.apiMessage.fields.Special_Skills[i].Tags
 
           
@@ -301,6 +331,7 @@ const CharacterEditForm = (props) => {
                 Rank: oldRank,
                 Description: oldDescription,
                 Tags: oldTags,
+                Uses: oldUses,
                 FullTags: initial
             })
           );
@@ -323,6 +354,10 @@ const CharacterEditForm = (props) => {
             oldTags = null;
           }
 
+          if (oldUses === '') {
+            oldUses = null;
+          }
+
           newData = JSON.parse(
             JSON.stringify({
               arraynum: i,
@@ -332,6 +367,7 @@ const CharacterEditForm = (props) => {
                 Rank: oldRank,
                 Description: oldDescription,
                 Tags: oldTags,
+                Uses: oldUses,
                 FullTags: initial
 
             })
@@ -445,20 +481,6 @@ const CharacterEditForm = (props) => {
       if (element.id !== id) {
         newReviewList.push(element);
       }
-    });
-    setReviewsState(newReviewList);
-  }
-
-  const AddReview =(message) => {
-    const newReviewList = [];
-    newReviewList.push({
-      createdate: '2024-01-28T22:18:41.687672',
-      createdby: 'Wizard',
-createdbyuserGuid: 'c3b9af32-8676-11ed-b512-df76a0797704',
-id: 1,
-isActive: true,
-message: message,
-isNew: true
     });
     setReviewsState(newReviewList);
   }
@@ -669,6 +691,7 @@ isNew: true
         Cost: null,
         Rank: null,
         Description: '',
+        Uses: null,
         Tags: [],
         FullTags: []
     }
@@ -755,6 +778,12 @@ isNew: true
       });
   }
 
+  const ToggleSwitches = async (e) => {
+    for (const key of Object.keys(e)) {
+      await ToggleItemSwitch(key);
+    }
+  }
+
   if (JSONData.length === 0 || !itemsTableState.isMounted) {
     return (<div className='loading-container'><Loading /></div>)
   } else {
@@ -817,7 +846,7 @@ isNew: true
                   <FormLabel>Series</FormLabel>
                   <Autocomplete
                     id="select-series-tags"
-                    options={props.seriesList}
+                    options={seriesListState}
                     getOptionLabel={(option) => option.title}
                     onChange={(event, val) => upDateSeries(val)}
                     isOptionEqualToValue={(option, value) => option.guid === value.guid}
@@ -1038,11 +1067,17 @@ isNew: true
               </div>
             </div>
           <div>  
-              {reviewsState.length > 0 ?
-              reviewsState.map(message => 
-                <ReviewNotesDisplay key={message} message={message} RemoveReview={(id) => RemoveReview(id)} />)
-                : <ReviewNotesForm  AddReview={(e) => AddReview(e)} type={'Character'} />
+              { props.messagesList !== undefined &&
+              props.messagesList.length > 0 ?
+              props.messagesList.map(message => 
+                <ReviewNotesDisplay key={message.id} guid={props.initForm.apiMessage.guid} type={'Character'}  message={message} RemoveReview={() => RemoveReview(message.id)} />)
+                : <></>
               }
+              { props.initForm.showResult !== null ?
+                <ReviewNotesForm  AddReview={(e) => props.AddReview(e)} type={'Character'} /> :
+                <></>
+              }
+  
               <div>
             {'&nbsp'}
             </div>
@@ -1075,7 +1110,6 @@ isNew: true
                 , selectedSeries, gmNotes)} img={finalImage} img2={finalImage2}/>
              </Box>
           </Drawer>
-
           
         {deleteDialogOpen.row !== null
           ? <Dialog
@@ -1118,6 +1152,7 @@ isNew: true
       return (
         <>   
           <ItemSelector 
+           isSearch={false}
           isCharSheet={true}
            appdata={props.appdata} 
            undata={props.undata} 
@@ -1129,11 +1164,13 @@ isNew: true
            selectedApproved={itemsState.selectedApproved} 
            commentFilterOn={itemsState.commentFilter}
            showApprovableOnly={itemsState.showApprovableOnly}
-           ToggleSwitch={() => ToggleItemSwitch('selectedApproved')}
-           ToggleCommentSwitch={() => ToggleItemSwitch('commentFilter')}
-           ToggleApprovableSwitch={() => ToggleItemSwitch('showApprovableOnly')}
+           ToggleSwitches={(e) => ToggleSwitches(e)}
            UpdateItemList={(e) => UpdateItemList(e)}
-           GoBack={() => BackFromItemSelector()}/>
+           GoBack={() => BackFromItemSelector()}
+           Filters={itemsState.filter}
+           isLoading={false}
+           UpdateFilter={(e) => UpdateFilter(e)}
+           />
         </>
       )
     }
@@ -1145,6 +1182,7 @@ export default CharacterEditForm;
 CharacterEditForm.propTypes = {
   authLevel: PropTypes.number,
   currenUserGuid: PropTypes.string,
+  messagesList: PropTypes.array,
   formJSON: PropTypes.array,
   tagslist: PropTypes.object,
   appdata: PropTypes.object,
@@ -1160,7 +1198,9 @@ CharacterEditForm.propTypes = {
   ReturnItem: PropTypes.func,
   GoBack: PropTypes.func,
   Approve: PropTypes.func,
+  AddReview: PropTypes.func,
   seriesList: PropTypes.array,
   img: PropTypes.string,
   img2: PropTypes.string,
+  items: PropTypes.object
 }

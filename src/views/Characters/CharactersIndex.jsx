@@ -2,28 +2,25 @@ import AuthRedirect from '../../utils/authRedirect';
 import Loading from '../../components/loading/loading';
 import useGetData from '../../utils/getdata';
 import AuthLevelInfo from '../../utils/authLevelInfo';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CharactersListPage from './CharactersListPage';
 import CharacterDisplayPage from './CharacterDisplay';
 import CharacterCreate from './CharacterCreate';
 import formJSON from '../../jsonfiles/characterinput.json';
 import CharacterEdit from './CharacterEdit';
-import { ClickAwayListener, css, keyframes, styled } from '@mui/material';
-import { useSnackbar } from '@mui/base/useSnackbar';
+import { createTheme, IconButton, lighten, Slide, Snackbar, ThemeProvider } from '@mui/material';
+import PropTypes from 'prop-types';
+import CloseSharpIcon from '@mui/icons-material/CloseSharp';
 
-export default function CharactersIndex() {
+export default function CharactersIndex(props) {
+
     AuthRedirect(1)
 
     const handleSnackClose = () => {
       setSnackOpen({isOpen:false,
-        text: ''});
+        text: ''
+      });
     }
-    
-  const { getRootProps } = useSnackbar({
-    onClose: handleSnackClose,
-    open,
-    autoHideDuration: 5000,
-  });
 
     const approvQuery = useGetData('listApprovedCharacters', '/api/v1/CharacterSheetApproveds');  
     const unapprovQuery = useGetData('listUnapprovedCharacters', '/api/v1/CharacterSheets');
@@ -39,46 +36,72 @@ export default function CharactersIndex() {
           viewItemGuid: '',
           viewItemPath: ''
       });
-      
+
+      const [filterState, setFilterState] = useState(null);
       const [isCreate, setIsCreate] = useState(false);
       const [snackOpen, setSnackOpen] = useState(
         {isOpen:false,
-        text: ''});
+        text: ''
+      });
   
 
      const OpenSnack = async (e) => {
-      await setSnackOpen(        {isOpen:true,
-        text: e});
+      await setSnackOpen(  {isOpen:true,
+        text: e
+      });
      }
 
     const [isEdit, setIsEdit] = useState({isEditing: false, guid: null});
     const [filterInit, setfilterInit] = useState(false);
 
-    const ToggleSwitch = async (e) => {
-        let toggled=charactersState[e];
-
-        if (e === 'selectedApproved' && charactersState.showApprovableOnly) {
-          await setCharactersState({
-            ...charactersState,
-            [e]: !toggled,
-            showApprovableOnly:false
-        });
-        }
-        else {
-        await setCharactersState({
-            ...charactersState,
-            [e]: !toggled
-        });
+    useEffect(() => {
+      if (props.ismain === true) {
+        setIsCreate(false);
+        setIsEdit({isEditing: false, guid: null});
+        setfilterInit(true);
+        setFilterState(props.subState.filter);
+      
+        if (props.subState.filter !== undefined && props.subState.filter !== null ) {
+        for (const key in props.subState.filter) {
+          if (props.subState.filter[key] !== undefined && props.subState.filter[key] !== null && key !== 'filters') {
+               setCharactersState({
+              ...charactersState,
+              [key]: props.subState.filter[key]
+            });
+          }
       }
-    }  
+    }
+
+      }
+      else {
+        if (props.subState.funct === 'Create')
+          setIsCreate(true);
+      }
+      if (props.subState.funct === 'View')
+      {
+        setCharactersState({
+          ...charactersState,
+          viewingItem: true,
+          viewItemGuid: props.subState.guid,
+          viewItemPath: props.subState.path});
+      }
+      if (props.subState.funct === 'Edit')
+        {
+          setIsEdit({isEditing: true, 
+            guid: props.subState.guid,
+            path: props.subState.path
+          });
+        }
+    }, [])
      
 
     const DirectToCharacter = async (path, guid) => {
-        setCharactersState({
-            ...charactersState,
-            viewingItem: true,
-            viewItemGuid: guid,
-            viewItemPath: path});
+      //  setCharactersState({
+      //      ...charactersState,
+      //      viewingItem: true,
+      //      viewItemGuid: guid,
+      //      viewItemPath: path});
+     props.toggleSubScreen(false, 'View', guid, path, filterState);
     }
 
     const GoBackToList = async () => {
@@ -86,15 +109,12 @@ export default function CharactersIndex() {
         ...charactersState,
         viewingItem: false
     });
+    props.toggleSubScreen(true, '', '' ,'', 'goback');
     await setfilterInit(true);
     }
 
     const GoToEditCharacter = async (path, guid) => {
-      await setIsEdit({isEditing: true, guid: guid, path: path});
-    }
-
-    const GoToSearch = async () => {
-      
+      props.toggleSubScreen(false, 'Edit', guid, path, filterState);
     }
 
     const UnInitFiler = () => {
@@ -102,22 +122,49 @@ export default function CharactersIndex() {
     }
 
     const NewCharacterLink = async () => {
-      await setIsCreate(true);
+      //await setIsCreate(true);
+      props.toggleSubScreen(false, 'Create', '', '', filterState);
     }
 
     const GoBackFromCreateEdit = async () => {
-      /* await setCharactersState({
+       await setCharactersState({
         selectedApproved: true,
         commentFilter: false,
         showApprovableOnly: false,
         viewingItem: false,
         viewItemGuid: '',
         viewItemPath: ''
-    }); */
-      await setIsCreate(false);
-      await setIsEdit({isEditing: false, guid: null});
-      await setfilterInit(true);
+    }); 
+      //await setIsCreate(false);
+      // await setIsEdit({isEditing: false, guid: null});
+     // await setfilterInit(true);
+      props.toggleSubScreen(true, '', '','', 'goback');
     }
+
+    const pushFilter = (filter) => {
+      setFilterState({...filterState,  filter});
+      props.toggleSubScreen(true, '', '','', filter);
+    }
+
+    const theme = createTheme({
+      palette: {
+        success: {
+          main: '#1e9f32',
+          light: lighten('#1e9f32', 0.1),
+          lighter: lighten('#1e9f32', 0.2),
+          lightest: lighten('#1e9f32', 0.3)
+        },
+        fail: {
+          main: '#bb202e',
+          light: lighten('#bb202e', 0.1),
+          lighter: lighten('#bb202e', 0.2)
+        },
+        gradient: {
+          primary:  'linear-gradient(to top,  #187f28, #1e9f32)',
+          fail:  'linear-gradient(to top,  #961a25, #bb202e)',
+        }
+      },
+    });
 
 
     if (approvQuery.isLoading || unapprovQuery.isLoading || allTagsQuery.isLoading || userGuidQuery.isLoading) 
@@ -135,34 +182,51 @@ export default function CharactersIndex() {
  !isEdit.isEditing ?
 <>
 <CharactersListPage 
+isSearch={false}
 FilterInit={filterInit}
 UnInitFiler={() => UnInitFiler()}
+Filters={props.subState !== undefined && props.subState !== null &&
+  props.subState.filter !== undefined && props.subState.filter !== null ? 
+  props.subState.filter : null
+}
 appdata={approvQuery.data} 
   undata={unapprovQuery.data} 
   larpTags={allTagsQuery.data.find((tags) => tags.tagType === 'LARPRun')?.tagsList}
   tagslist={allTagsQuery.data.find((tags) => tags.tagType === 'Character')?.tagsList}
   authLevel={authLevel}
   userGuid={userGuidQuery.data}
-  selectedApproved={charactersState.selectedApproved} 
-  commentFilterOn={charactersState.commentFilter}
-  showApprovableOnly={charactersState.showApprovableOnly}
-  readyApproved={charactersState.readyApproved}
-  ToggleSwitch={() => ToggleSwitch('selectedApproved')}
-  ToggleCommentSwitch={() => ToggleSwitch('commentFilter')}
-  ToggleApprovableSwitch={() => ToggleSwitch('showApprovableOnly')}
-  ToggleApprovReadySwitch={() =>  ToggleSwitch('readyApproved')}
+  selectedApproved={ props.subState !== undefined && props.subState !== null &&
+    props.subState.selectedApproved !== undefined && props.subState.selectedApproved !== null ? 
+    props.subState.selectedApproved : null
+    //charactersState.selectedApproved
+    } 
+  commentFilterOn={ props.subState !== undefined && props.subState !== null &&
+    props.subState.commentFilter !== undefined && props.subState.commentFilter !== null ? 
+    props.subState.commentFilter : false
+    //charactersState.commentFilter
+    }
+  showApprovableOnly={ props.subState !== undefined && props.subState !== null &&
+    props.subState.showApprovableOnly !== undefined && props.subState.showApprovableOnly !== null ? 
+    props.subState.showApprovableOnly : false
+    //charactersState.showApprovableOnly
+    }
+  readyApproved={ props.subState !== undefined && props.subState !== null &&
+    props.subState.readyApproved !== undefined && props.subState.readyApproved !== null ? 
+    props.subState.readyApproved : false
+    //charactersState.readyApproved
+    }
+  ToggleSwitches={(e) => props.ToggleSwitches(e)}
   DirectToCharacter={(path, guid) => DirectToCharacter(path, guid)}
   NewCharacterLink={(e) => NewCharacterLink(e)}
-  GoToSearch={() => GoToSearch()}
   Edit={(path, guid) => GoToEditCharacter(path, guid)}
+  UpdateFilter={(filter) => pushFilter(filter)}
   />
 </>
 : 
 <>
 <CharacterEdit authLevel={authLevel} formJSON={formJSON} tagslist={allTagsQuery.data} guid={isEdit.guid} path={isEdit.path}
 GoBack ={() => GoBackFromCreateEdit()} 
-OpenSnack ={(e) => OpenSnack(e)}
-/>
+OpenSnack ={(e) => OpenSnack(e)}/>
 </>
  :
 <>
@@ -171,53 +235,39 @@ GoBack ={() => GoBackFromCreateEdit()} />
 </>
  :
 <>
- <CharacterDisplayPage path={charactersState.viewItemPath} guid={charactersState.viewItemGuid} userGuid={userGuidQuery.data}
+<CharacterDisplayPage path={charactersState.viewItemPath} guid={charactersState.viewItemGuid} userGuid={userGuidQuery.data}
 GoBackToList={() => GoBackToList()} />
 </>
 }
-{snackOpen.isOpen ? (
-        <ClickAwayListener onClickAway={() => handleSnackClose()}>
-          <CustomSnackbar {...getRootProps()}>{snackOpen.text}</CustomSnackbar>
-        </ClickAwayListener>
-      ) : null}
+<ThemeProvider theme={theme}>
+<Slide in={snackOpen.isOpen} direction='up' >
+<Snackbar ContentProps={
+  snackOpen.text.includes('Success') ?
+  {sx:{background: (theme) => theme.palette.gradient.primary}} :
+  {sx:{background: (theme) => theme.palette.gradient.fail}}}
+        open={snackOpen.isOpen}
+        autoHideDuration={5000}
+        onClose={handleSnackClose}
+        message={snackOpen.text}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} 
+        action={
+        <>
+             <IconButton
+              sx={{ p: 0.5, position:'left' }}
+              onClick={handleSnackClose}>
+              <CloseSharpIcon />
+            </IconButton> 
+            </> }
+            />
+   </Slide>
+ </ThemeProvider>
 </>
 )
 }
 
-
-const snackbarInRight = keyframes`
-  from {
-    transform: translateX(100%);
-  }
-
-  to {
-    transform: translateX(0);
-  }
-`;
-
-const CustomSnackbar = styled('div')(
-  ({ theme }) => css`
-    position: fixed;
-    z-index: 5500;
-    display: flex;
-    right: 16px;
-    bottom: 16px;
-    left: auto;
-    justify-content: space-between;
-    max-width: 560px;
-    min-width: 300px;
-    background-color: ${'#fff'};
-    border-radius: 8px;
-    border: 1px solid ${'#DAE2ED'};
-    box-shadow: ${`0 2px 8px ${'#DAE2ED'}`};
-    padding: 0.75rem;
-    color: ${'#1C2025'};
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-weight: 600;
-    animation: ${snackbarInRight} 200ms;
-    transition: transform 0.2s ease-out;
-  `
-);
-
 CharactersIndex.propTypes = {
+  toggleSubScreen: PropTypes.func,
+  subState: PropTypes.object,
+  ismain:PropTypes.bool,
+  ToggleSwitches: PropTypes.func
   }

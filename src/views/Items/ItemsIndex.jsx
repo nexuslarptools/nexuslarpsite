@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useGetData from '../../utils/getdata';
 import Loading from '../../components/loading/loading';
 import ItemsListPage from './ItemsListPage';
@@ -10,23 +10,17 @@ import ItemCreate from './ItemCreate';
 import formJSON from '../../jsonfiles/iteminput.json';
 import ItemEdit from './ItemEdit';
 import ItemSelector from '../../components/itemselector/itemselector';
-import { ClickAwayListener, css, keyframes, styled } from '@mui/material';
-import { useSnackbar } from '@mui/base';
+import { createTheme,  IconButton, lighten, Slide, Snackbar, ThemeProvider } from '@mui/material';
+import './_ItemsIndex.scss'
+import CloseSharpIcon from '@mui/icons-material/CloseSharp';
 
-
-export default function ItemsIndex() {
+export default function ItemsIndex(props) {
   AuthRedirect(1)
 
   const handleSnackClose = () => {
     setSnackOpen({isOpen:false,
       text: ''});
   }
-
-  const { getRootProps } = useSnackbar({
-    onClose: handleSnackClose,
-    open,
-    autoHideDuration: 5000,
-  });
 
       const approvQuery = useGetData('listApprovedItems', '/api/v1/ItemSheetApproveds/FullListWithTagsNoImages');  
       const unapprovQuery = useGetData('listUnapprovedItems', '/api/v1/ItemSheets/FullListWithTagsNoImages');
@@ -41,54 +35,68 @@ export default function ItemsIndex() {
             viewItemGuid: '',
             viewItemPath: ''
         });
+      const [filterState, setFilterState] = useState(null);
       const [isCreate, setIsCreate] = useState(false);
       const [isSelect, setIsSelect] = useState(false);
       const [isEdit, setIsEdit] = useState({isEditing: false, guid: null});
       const [snackOpen, setSnackOpen] = useState(
         {isOpen:false,
         text: ''});
+
+
+        
+            useEffect(() => {
+              if (props.ismain === true) {
+                setIsCreate(false);
+                setIsEdit({isEditing: false, guid: null});
+                setFilterState(props.subState.filter);
+              
+                if (props.subState.filter !== undefined && props.subState.filter !== null ) {
+                for (const key in props.subState.filter) {
+                  if (props.subState.filter[key] !== undefined && props.subState.filter[key] !== null && key !== 'filters') {
+                    setItemsState({
+                      ...itemsState,
+                      [key]: props.subState.filter[key]
+                    });
+                  }
+              }
+            }
+        
+              }
+              else {
+                if (props.subState.funct === 'Create')
+                  setIsCreate(true);
+              }
+              if (props.subState.funct === 'Select') {
+                setIsSelect(true);
+              }
+              if (props.subState.funct === 'View')
+              {
+                setItemsState({
+                  ...itemsState,
+                  viewingItem: true,
+                  viewItemGuid: props.subState.guid,
+                  viewItemPath: props.subState.path});
+              }
+              if (props.subState.funct === 'Edit')
+                {
+                  setIsEdit({isEditing: true, 
+                    guid: props.subState.guid,
+                    path: props.subState.path
+                  });
+                }
+            }, [])
   
      const OpenSnack = async (e) => {
       await setSnackOpen(        {isOpen:true,
         text: e});
      }
-
-      const ToggleSwitch = async (e) => {
-            let toggled=itemsState[e];
-
-            if (e === 'selectedApproved' && itemsState.showApprovableOnly) {
-              await setItemsState({
-                ...itemsState,
-                [e]: !toggled,
-                showApprovableOnly:false
-            });
-            }
-            else {
-            await setItemsState({
-                ...itemsState,
-                [e]: !toggled
-            });
-          }
-        }   
-
         const DirectToItem = async (path, guid) => {
-            setItemsState({
-                ...itemsState,
-                viewingItem: true,
-                viewItemGuid: guid,
-                viewItemPath: path});
-        }
-
-        const GoBackToList = async () => {
-            setItemsState({
-                ...itemsState,
-                viewingItem: false,
-                viewItemGuid: '',
-                viewItemPath: ''});
+          props.toggleSubScreen(false, 'View', guid, path, filterState);
         }
 
         const GoToEditItem = async (path, guid) => {
-          await setIsEdit({isEditing: true, guid: guid, path: path});
+           props.toggleSubScreen(false, 'Edit', guid, path, filterState);
         }
 
         const NewItemLink = async () => {
@@ -96,9 +104,46 @@ export default function ItemsIndex() {
         }
 
         const GoBackFromCreateEdit = async () => {
-          await setIsCreate(false);
-          await setIsEdit({isEditing: false, guid: null});
+          props.toggleSubScreen(true, '', '' ,'', 'goback');
         }
+
+        const pushFilter = (filter) => {
+          if (isSelect) {
+          props.toggleSubScreen(true, 'Select', '','', filter);
+          return;
+        }
+        
+        props.toggleSubScreen(true, '', '','', filter);
+        }
+
+        const GoToSelect = () => {
+          props.toggleSubScreen(true, 'Select', '','', filterState);
+        }
+
+        const GoBackFromSelect = () => {
+          setIsSelect(false);
+          props.toggleSubScreen(true, '', '' ,'', 'goback');
+        }
+
+            const theme = createTheme({
+              palette: {
+                success: {
+                  main: '#1e9f32',
+                  light: lighten('#1e9f32', 0.1),
+                  lighter: lighten('#1e9f32', 0.2),
+                  lightest: lighten('#1e9f32', 0.3)
+                },
+                fail: {
+                  main: '#bb202e',
+                  light: lighten('#bb202e', 0.1),
+                  lighter: lighten('#bb202e', 0.2)
+                },
+                gradient: {
+                  primary:  'linear-gradient(to top,  #187f28, #1e9f32)',
+                  fail:  'linear-gradient(to top,  #961a25, #bb202e)',
+                }
+              },
+            });
 
       if (approvQuery.isLoading || unapprovQuery.isLoading || allTagsQuery.isLoading || userGuidQuery.isLoading) 
         return (<div>
@@ -115,45 +160,53 @@ return (
  !isEdit.isEditing ?
  !isSelect ?
 <>
-<ItemsListPage appdata={approvQuery.data} 
+
+<ItemsListPage 
+ isSearch={false}
+appdata={approvQuery.data} 
   undata={unapprovQuery.data} 
+  Filters={props.subState !== undefined && props.subState !== null &&
+    props.subState.filter !== undefined && props.subState.filter !== null ? 
+    props.subState.filter : null
+  }
   larpTags={allTagsQuery.data.find((tags) => tags.tagType === 'LARPRun')?.tagsList}
   tagslist={allTagsQuery.data.find((tags) => tags.tagType === 'Item')?.tagsList}
   authLevel={authLevel}
   userGuid={userGuidQuery.data}
-  selectedApproved={itemsState.selectedApproved} 
-  commentFilterOn={itemsState.commentFilter}
-  showApprovableOnly={itemsState.showApprovableOnly}
-  readyApproved={itemsState.readyApproved}
-  ToggleSwitch={() => ToggleSwitch('selectedApproved')}
-  ToggleCommentSwitch={() => ToggleSwitch('commentFilter')}
-  ToggleApprovableSwitch={() => ToggleSwitch('showApprovableOnly')}
-  ToggleApprovReadySwitch={() => ToggleSwitch('readyApproved')}
+  selectedApproved={props.subState.selectedApproved} 
+  commentFilterOn={props.subState.commentFilter}
+  showApprovableOnly={props.subState.showApprovableOnly}
+  readyApproved={props.subState.readyApproved}
+  ToggleSwitches={(e) => props.ToggleSwitches(e)}
   DirectToItem={(path, guid) => DirectToItem(path, guid)}
   NewItemLink={(e) => NewItemLink(e)}
-  NavToSelectItems={() => setIsSelect(true)}
+  NavToSelectItems={() => GoToSelect()}
   Edit={(path, guid) => GoToEditItem(path, guid)}
+  UpdateFilter={(filter) => pushFilter(filter)}
   />
 </>
 :
 <> 
 <ItemSelector appdata={approvQuery.data} 
+ isSearch={false}
   isCharSheet={false}
   undata={unapprovQuery.data} 
-  initialItems={{show:false, label:'Selection for Printing'}}
+  Filters={props.subState !== undefined && props.subState !== null &&
+    props.subState.filter !== undefined && props.subState.filter !== null ? 
+    props.subState.filter : null
+  }
+  initialItems={{show:false, label:'Selection for Printing', startingItems: props.subState.listItems}}
   larpTags={allTagsQuery.data.find((tags) => tags.tagType === 'LARPRun')?.tagsList}
   tagslist={allTagsQuery.data.find((tags) => tags.tagType === 'Item')?.tagsList}
   authLevel={authLevel}
   userGuid={userGuidQuery.data}
-  selectedApproved={itemsState.selectedApproved} 
-  commentFilterOn={itemsState.commentFilter}
-  showApprovableOnly={itemsState.showApprovableOnly}
-  ToggleSwitch={() => ToggleSwitch('selectedApproved')}
-  ToggleCommentSwitch={() => ToggleSwitch('commentFilter')}
-  ToggleApprovableSwitch={() => ToggleSwitch('showApprovableOnly')}
-  ToggleApprovReadySwitch={() => ToggleSwitch('readyApproved')}
-  GoBack={() => setIsSelect(false)}
-  UpdateItemList={() => void 0}
+  selectedApproved={props.subState.selectedApproved} 
+  commentFilterOn={props.subState.commentFilter}
+  showApprovableOnly={props.subState.showApprovableOnly}
+  GoBack={() => GoBackFromSelect()}
+  UpdateItemList={(itemList) => props.UpdateItemsList(itemList)}
+  UpdateFilter={(filter) => pushFilter(filter)}
+  ToggleSwitches={(e) => props.ToggleSwitches(e)}
   />
 </> 
 : 
@@ -169,54 +222,42 @@ GoBack ={() => GoBackFromCreateEdit()} />
  :
 <>
 <ItemDisplay path={itemsState.viewItemPath} guid={itemsState.viewItemGuid}
-GoBackToList={() => GoBackToList()} />
+GoBackToList={() => GoBackFromCreateEdit()} />
 </>
 }
-{snackOpen.isOpen ? (
-        <ClickAwayListener onClickAway={() => handleSnackClose()}>
-          <CustomSnackBar {...getRootProps()}>{snackOpen.text}</CustomSnackBar>
-        </ClickAwayListener>
-      ) : null}
+<ThemeProvider theme={theme}>
+<Slide in={snackOpen.isOpen} direction='up' >
+<Snackbar ContentProps={
+  snackOpen.text.includes('Success') ?
+  {sx:{background: (theme) => theme.palette.gradient.primary}} :
+  {sx:{background: (theme) => theme.palette.gradient.fail}}}
+        open={snackOpen.isOpen}
+        autoHideDuration={5000}
+        onClose={handleSnackClose}
+        message={snackOpen.text}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} 
+        action={
+        <>
+             <IconButton
+              sx={{ p: 0.5, position:'left' }}
+              onClick={handleSnackClose}>
+              <CloseSharpIcon />
+            </IconButton> 
+            </> }
+            />
+   </Slide>
+ </ThemeProvider>
 </>
  )
 }
 
 
-const snackbarInRight = keyframes`
-  from {
-    transform: translateX(100%);
-  }
-
-  to {
-    transform: translateX(0);
-  }
-`;
-
-const CustomSnackBar = styled('div')(
-  ({ theme }) => css`
-    position: fixed;
-    z-index: 5500;
-    display: flex;
-    right: 16px;
-    bottom: 16px;
-    left: auto;
-    justify-content: space-between;
-    max-width: 560px;
-    min-width: 300px;
-    background-color: ${'#fff'};
-    border-radius: 8px;
-    border: 1px solid ${'#DAE2ED'};
-    box-shadow: ${`0 2px 8px ${'#DAE2ED'}`};
-    padding: 0.75rem;
-    color: ${'#1C2025'};
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-weight: 600;
-    animation: ${snackbarInRight} 200ms;
-    transition: transform 0.2s ease-out;
-  `
-);
-
 ItemsIndex.propTypes = {
   NewItemLink: PropTypes.func,
-  NavToSelectItems: PropTypes.func
+  NavToSelectItems: PropTypes.func,
+  subState: PropTypes.object,
+  ToggleSwitches: PropTypes.func,
+  toggleSubScreen: PropTypes.func,
+  ismain: PropTypes.bool,
+  UpdateItemsList: PropTypes.func
 }
