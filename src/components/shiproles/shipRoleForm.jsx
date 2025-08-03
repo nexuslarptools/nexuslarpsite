@@ -21,7 +21,9 @@ const ShipRoleForm = props => {
         });
     
         const [crewState, setCrew] = useState({
-          crewList: JSON.parse(JSON.stringify([{ arraynum: 0, visible: true,
+          crewList: JSON.parse(JSON.stringify([{ 
+            arraynum: 0, 
+            visible: true,
         SelectedPosition:"",
         Position:"",
         DefaultCrew: "",
@@ -38,7 +40,7 @@ useEffect(() => {
    }, []);
 
    const initForm = (crew) => {
-    if (crew !== undefined && crew !== null )
+    if (crew !== undefined && crew !== null && Array.isArray(crewState.crewList))
     {
           setCrew({
         ...crewState,
@@ -71,7 +73,7 @@ useEffect(() => {
 
       const i = crewState.crewList.length;
       const newform = JSON.parse(JSON.stringify({
-        arraynum: i,
+        arraynum: i === undefined ? 0 : i,
         visible: true,
         SelectedPosition:"",
         Position:"",
@@ -233,12 +235,16 @@ if (!crewState.showResult || !crewFormsState.showResult) {
 return (
 <>
     <div className='ship-sheet-crew'>
-        {crewState.crewList.map((crew) => (
+        {Array.isArray(crewState.crewList) ? crewState.crewList.map((crew) => (
             <> <ShipRoles crewList={crewRolesQuery.data}  crew={crew} usedroles={crewState.usedroles}
                 updateCrew={(rank, fieldname, value) => updateCrewForms(rank, fieldname, value)}
                 HideCrew={(e) => HideCrew(e)} UpCrew={(e) => UpCrew(e)}
                 /> </>
-        ))}
+        )) : <> <ShipRoles crewList={crewRolesQuery.data}  crew={{  arraynum: 0, visible: true, SelectedPosition:"",  Position:"",  DefaultCrew: "", Details:""
+           }} usedroles={crewState.usedroles}
+                updateCrew={(rank, fieldname, value) => updateCrewForms(rank, fieldname, value)}
+                HideCrew={(e) => HideCrew(e)} UpCrew={(e) => UpCrew(e)}
+                /> </> }
         <button className="button-action add-another-ability" 
           onClick={(e) => addCrewForm(e)}>Add Another Crew</button>
     </div>

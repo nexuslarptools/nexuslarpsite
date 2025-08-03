@@ -17,6 +17,7 @@ const ShipRoles = props => {
   })
 
 const initForm = async (crewRole) => {
+  
   await setRoleState(crewRole);
   await setInitState(false);
 }
