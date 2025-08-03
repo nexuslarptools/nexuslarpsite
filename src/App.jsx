@@ -18,6 +18,7 @@ import { FaroRoutes } from '@grafana/faro-react';
 import SearchDrawer from './components/drawer/searchdrawer';
 import CharacterSearch from './views/Search/charactersearch';
 import ItemSearch from './views/Search/itemsearch';
+import ShipItem from './components/item/shipitem';
 
 
 
@@ -212,6 +213,11 @@ class App extends Component {
               UpdateItemsList={(e) => this.UpdateItemsList(e)}
               toggleSubScreen={(e, funct, guid, path, filters) => this.toggleSubScreen(e, funct, guid, path, 'items', filters)} 
               component={ItemSearch}/>}
+           />
+           <Route path="shiptest" 
+           element={<AuthenticationGuard 
+             component={ShipItem}
+           />}
            />
           <Route 
           path="*"  

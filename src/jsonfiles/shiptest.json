@@ -1,0 +1,78 @@
+{
+    "HS": "",
+    "Fly": "5",
+    "Run": "",
+    "Name": "Soyokaze",
+    "TYPE": "Vehicle",
+    "Tags": [
+        "6bd42f0a-d612-44b4-ac9b-8ca42c00235b",
+        "b97c4fd7-c822-4dba-b491-c0e8fdeeeb0d",
+        "bf3429c0-9726-11ea-8ae7-333fb0adac6d"
+    ],
+    "Grade": "3",
+    "Value": "",
+    "Energy": "20",
+    "INTEGRITY": "40",
+    "RESILIENCE": "8",
+    "Description": "This run down ship is the embarrassment of the fleet - - so why does it keep winning major battles?",
+    "Special_Skills": [
+        {
+            "Cost": "3 Energy",
+            "Name": "Cannons",
+            "Rank": null,
+            "Tags": [
+                "a69b35ae-9715-11ea-8acb-b30b96584a14"
+            ],
+            "name": "",
+            "Special": {
+                "Cost": null,
+                "Rank": null,
+                "Tags": [],
+                "name": "",
+                "Description": ""
+            },
+            "visible": true,
+            "FullTags": [
+                {
+                    "guid": "a69b35ae-9715-11ea-8acb-b30b96584a14",
+                    "name": "Attack",
+                    "isLocked": false,
+                    "isactive": true,
+                    "tagtypeguid": "26cdea2c-9401-11ea-899c-9778defdb439",
+                    "larpsTagLockedTo": null
+                }
+            ],
+            "arraynum": 0,
+            "Description": "Laser cannons which deal 16 Damage on a hit. "
+        },
+        {
+            "Cost": null,
+            "Name": "Hangar",
+            "Rank": null,
+            "Tags": [
+                "5c778df3-9719-11ea-8ad3-ef2bf0d67999"
+            ],
+            "name": "",
+            "Special": {
+                "Cost": null,
+                "Rank": null,
+                "Tags": [],
+                "name": "",
+                "Description": ""
+            },
+            "visible": true,
+            "FullTags": [
+                {
+                    "guid": "5c778df3-9719-11ea-8ad3-ef2bf0d67999",
+                    "name": "Hangar",
+                    "isLocked": false,
+                    "isactive": true,
+                    "tagtypeguid": "26cdea2c-9401-11ea-899c-9778defdb439",
+                    "larpsTagLockedTo": null
+                }
+            ],
+            "arraynum": 1,
+            "Description": "The Soyokaze can hold up to 30 grade 1 vehicles in it's hangar, or about 10 Grade 2 Vehicles. "
+        }
+    ]
+}
