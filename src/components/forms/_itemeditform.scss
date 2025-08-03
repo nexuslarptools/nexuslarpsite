@@ -118,6 +118,15 @@
             
         }
     }
+    
+.ship-sheet-crew  {
+        grid-column: 1 / 4;
+        @media (max-width: 768px) {
+            grid-column: 1 / 2;
+            grid-template-columns: repeat(1, 1fr);
+        }
+    }
+
     .character-sheet-powers {
         grid-column: 1 / 4;
         @media (max-width: 768px) {

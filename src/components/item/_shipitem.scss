@@ -1,0 +1,172 @@
+@import "/src/variables";
+@import "/src/mixins";
+
+.header-info {
+        width: 792px;
+        // name and series, top of sheets
+        .ship-name-series {
+            border-bottom: 5px solid $color-neutral-darkest;
+            border-top: 5px solid $color-neutral-darkest;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: space-between;
+            font-family: "Walter Turncoat", serif;
+            font-size: 25pt;
+            font-weight: bold;
+            padding: 0 10px;
+            width: 100%;
+            width: 792px;
+            .shipName {
+                font-family: "Walter Turncoat", serif;
+                font-size: 25pt;
+                font-weight: bold;
+                text-align: left;
+                display: inline-block;
+                margin-top: auto;
+            }
+            .shipNameSM {
+                font-family: "Walter Turncoat", serif;
+                font-size: 15pt;
+                vertical-align:text-bottom;
+                text-align: left;
+                display: inline-block;
+                margin-top: auto;
+            }
+            .shipNameXSM {
+                font-family: "Walter Turncoat", serif;
+                font-size: 10pt;
+                vertical-align:text-bottom;
+                text-align: left;
+                display: inline-block;
+                margin-top: auto;
+            }
+            .seriesName {
+                font-family: "Walter Turncoat", serif;
+                font-size: 25pt;
+                font-weight: bold;
+                text-align: right;
+                display: inline-block
+            }
+            .seriesNameSM {
+                font-family: "Walter Turncoat", serif;
+                font-size: 15pt;
+                font-weight: bold;
+                vertical-align:text-bottom;
+                text-align: right;
+                display: inline-block;
+                margin-top: auto;
+            }
+            .seriesNameXSM {
+                font-family: "Walter Turncoat", serif;
+                font-size: 10pt;
+                font-weight: bold;
+                vertical-align:text-bottom;
+                text-align: right;
+                display: inline-block;
+                margin-top: auto;
+            }
+        }
+        // statics, bio, headshot
+        .basic-info {
+            display: flex;
+            justify-content: space-between;
+            .table-statistics {
+                margin-top: 10px;
+            }
+            .bio {
+                display: -webkit-box;
+                font-size: $font-size-small;
+                height: 182px;
+                overflow: hidden;
+                padding: 10px 10px 0;
+                white-space: normal;
+            }
+            .imgContainer {
+                .charImg {
+                    border: 1px solid $color-neutral-darkest;
+                }
+            }
+        }
+        .basic-end {
+          margin-bottom: 2px;
+          margin-top: 2px;
+           height: 1.5px;
+        }
+        .stats-begin {
+          margin-top: 2px;
+          margin-bottom: 2px;
+          height: 1.5px;
+        }
+        .sheet-totals {
+          width: 100%;
+          display: flex;
+          .integrity-total {
+            font-family: "Opensans";
+            font-size: 15pt;
+            width: 45.5%;
+            padding-left: 3%;
+            padding-right: 3%;
+          }
+          .energy-total {
+            font-family: "Opensans";
+            font-size: 15pt;
+            width: 45.5%;
+            padding-right: 3%;
+          }
+         .symbols-row {
+                    position: relative;
+                    top: 3px;
+                    span {
+                        display: inline-block;
+                        margin-bottom: 3px;
+                        position: relative;
+                        print-color-adjust: exact; 
+                        &.integrity {
+                         mask: var(--svg) center no-repeat;
+                            -webkit-mask: var(--svg) center no-repeat; // prefix required still in 2024
+                            --svg: url("data:image/svg+xml;charset=utf-8,<svg viewBox='0 0 256 256' id='Flat' xmlns='http://www.w3.org/2000/svg'><g id='SVGRepo_bgCarrier' stroke-width='0'></g><g id='SVGRepo_tracerCarrier' stroke-linecap='round' stroke-linejoin='round'></g><g id='SVGRepo_iconCarrier'> <path d='M221.83984,63.25635l-83.999-47.478a20.10474,20.10474,0,0,0-19.68262,0l-84.001,47.47852A20.0314,20.0314,0,0,0,23.999,80.66748v94.665A20.03168,20.03168,0,0,0,34.1582,192.74365l83.999,47.478a20.10556,20.10556,0,0,0,19.68261,0l84.001-47.47852a20.03139,20.03139,0,0,0,10.1582-17.41064v-94.665A20.03166,20.03166,0,0,0,221.83984,63.25635ZM207.999,172.99854l-80,45.21728-80-45.21728V83.00146l80-45.21728,80,45.21728ZM79.999,128a48,48,0,1,0,48-48A48.05437,48.05437,0,0,0,79.999,128Zm72,0a24,24,0,1,1-24-24A24.02718,24.02718,0,0,1,151.999,128Z'></path> </g></svg>");
+                            background-color: rgb(120, 120, 120);
+                            height: 20px;
+                            width: 23px;
+                            &:nth-child(5n){
+                                background-color: rgb(80, 80, 80);
+                            }
+                        }
+                        &.energy {
+                            mask: var(--svg) center no-repeat;
+                            -webkit-mask: var(--svg) center no-repeat; // prefix required still in 2024
+                            --svg: url("data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 56 56'><path d='M 54.0844 31.2286 C 55.3764 30.6049 56.0000 29.7139 56.0000 28.8229 C 56.0000 27.9319 55.3764 27.1077 54.0844 26.6622 L 43.5481 23.0313 L 48.0699 13.7871 C 48.3149 13.3193 48.3820 12.8293 48.3820 12.4060 C 48.3820 11.1586 47.4463 10.2453 46.2210 10.2453 C 45.7981 10.2453 45.3077 10.3122 44.8401 10.5572 L 35.2840 15.2350 L 30.2943 4.5651 C 29.7597 3.3846 28.8910 2.7831 28.0000 2.7831 C 27.1312 2.7831 26.2625 3.3846 25.7279 4.5651 L 20.7382 15.2350 L 11.1822 10.5572 C 10.6921 10.3122 10.2243 10.2453 9.8011 10.2453 C 8.5760 10.2453 7.6181 11.1586 7.6181 12.4060 C 7.6181 12.8293 7.7072 13.3193 7.9523 13.7871 L 12.4741 23.0313 L 1.9157 26.6622 C .6683 27.0854 0 27.9542 0 28.8452 C 0 29.7139 .6460 30.6049 1.9157 31.2286 L 12.0286 36.0623 L 6.5712 47.6232 C 6.3039 48.1355 6.1925 48.6256 6.1925 49.0933 C 6.1925 50.2071 6.9499 51.0090 8.0191 51.0090 C 8.4646 51.0090 8.9546 50.8531 9.4670 50.5412 L 22.3866 42.9008 L 25.9284 53.8602 C 26.3516 55.0631 27.1535 55.6868 28.0000 55.6868 C 28.8910 55.6868 29.6706 55.0631 30.0716 53.8602 L 33.6356 42.9008 L 46.5554 50.5412 C 47.0677 50.8531 47.5576 50.9868 48.0033 50.9868 C 49.0279 50.9868 49.8295 50.2294 49.8295 49.1156 C 49.8295 48.6478 49.6958 48.1355 49.4508 47.6232 L 43.9715 36.0623 Z'/></svg>");
+                            background-color:  #308dd0;
+                            height: 20px;
+                            width: 23px;
+                            &:nth-child(5n){
+                                background-color: darkblue;
+                            }
+                        }
+                        &.shield {
+                            mask: var(--svg) center no-repeat;
+                            -webkit-mask: var(--svg) center no-repeat; // prefix required still in 2024
+                            --svg: url("data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 23'><path d='M12 22c-1.148 0-3.418-1.362-5.13-3.34C4.44 15.854 3 11.967 3 7a1 1 0 0 1 .629-.929c3.274-1.31 5.88-2.613 7.816-3.903a1 1 0 0 1 1.11 0c1.935 1.29 4.543 2.594 7.816 3.903A1 1 0 0 1 21 7c0 4.968-1.44 8.855-3.87 11.66C15.419 20.637 13.149 22 12 22z'/></svg>");
+                            background-color: darkgreen;
+                            height: 20px;
+                            width: 23px;
+                            &:nth-child(5n){
+                                background-color: green
+                            }
+                        }
+                    }
+                }
+        }
+        .shiprules{
+            font-family: "Opensans";
+            font-weight:bolder;
+            margin-left: 10px;
+            margin-right: 10px;
+            position: absolute; 
+            bottom: 15px;
+            p {
+                font-weight: 100;
+               margin-bottom: 5px;
+            }
+        }
+    }

@@ -1,0 +1,91 @@
+@import "/src/variables";
+@import "/src/mixins";
+
+.header-info {
+    height: 57px;
+        width: 792px;
+        // name and series, top of sheets
+        .ship-name-series {
+            border-bottom: 5px solid $color-neutral-darkest;
+            border-top: 5px solid $color-neutral-darkest;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: space-between;
+            font-family: "Walter Turncoat", serif;
+            font-size: 25pt;
+            font-weight: bold;
+            padding: 0 10px;
+            width: 100%;
+            width: 792px;
+            .shipName {
+                font-family: "Walter Turncoat", serif;
+                font-size: 25pt;
+                font-weight: bold;
+                text-align: left;
+                display: inline-block;
+                margin-top: auto;
+            }
+            .shipNameSM {
+                font-family: "Walter Turncoat", serif;
+                font-size: 15pt;
+                vertical-align:text-bottom;
+                text-align: left;
+                display: inline-block;
+                margin-top: auto;
+            }
+            .shipNameXSM {
+                font-family: "Walter Turncoat", serif;
+                font-size: 10pt;
+                vertical-align:text-bottom;
+                text-align: left;
+                display: inline-block;
+                margin-top: auto;
+            }
+            .seriesName {
+                font-family: "Walter Turncoat", serif;
+                font-size: 25pt;
+                font-weight: bold;
+                text-align: right;
+                display: inline-block
+            }
+            .seriesNameSM {
+                font-family: "Walter Turncoat", serif;
+                font-size: 15pt;
+                font-weight: bold;
+                vertical-align:text-bottom;
+                text-align: right;
+                display: inline-block;
+                margin-top: auto;
+            }
+            .seriesNameXSM {
+                font-family: "Walter Turncoat", serif;
+                font-size: 10pt;
+                font-weight: bold;
+                vertical-align:text-bottom;
+                text-align: right;
+                display: inline-block;
+                margin-top: auto;
+            }
+        }
+        // statics, bio, headshot
+        .basic-info {
+            display: flex;
+            justify-content: space-between;
+            .table-statistics {
+                margin-top: 10px;
+            }
+            .bio {
+                display: -webkit-box;
+                font-size: $font-size-small;
+                height: 252px;
+                overflow: hidden;
+                padding: 10px 10px 0;
+                white-space: normal;
+            }
+            .shipImgContainer {
+                .charImg {
+                    border: 1px solid $color-neutral-darkest;
+                }
+            }
+        }
+    }

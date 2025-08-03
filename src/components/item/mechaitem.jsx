@@ -82,6 +82,14 @@ const MechaItem = props => {
                       : <></>
                       //'\u00a0\u00a0'
                   }
+                   {
+                    props.item.fields.Value != null && props.item.fields.Value != ''
+                      ? <div className='cost'>
+                        Cost: {props.item.fields.Value}
+                      </div>
+                      : <></>
+                      //'\u00a0\u00a0'
+                  }
                 </span>
                 : <div></div>
               }

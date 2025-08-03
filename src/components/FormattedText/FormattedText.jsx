@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import "./_formattedText.scss";
 
-function FormattedText(props, children) {
+function FormattedText(props) {
     if (props.style !== undefined && props.style !== null) {
       return (<span className={props.style}>{props.children}</span>)
     }
@@ -10,7 +10,7 @@ function FormattedText(props, children) {
 
 export default FormattedText;
 
-FormattedText.PropTypes = {
+FormattedText.propTypes = {
   style: PropTypes.string,
   children: PropTypes.string
 }

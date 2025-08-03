@@ -7,6 +7,9 @@ import blankitemJSON from '../../jsonfiles/smallitemfill.json';
 import blanklargeitembackJSON from '../../jsonfiles/largeitembackfill.json';
 import ItemPalette2Back from "./itempalette2back";
 import ItemPalette2 from "./itempalette2";
+import ShipItem from "../item/shipitem";
+import Item from "../item/item";
+import ItemWrapper from "../item/itemWrapper";
 
 const ItemPaletteWrapper = props => {
 
@@ -37,6 +40,7 @@ const ItemPaletteWrapper = props => {
 
     let largeitemList = [];
     let smallitemList = [];
+    let shipitemList= [];
     let itemPages=[];
 
     function smallAllowed(largeTotal) {
@@ -129,6 +133,19 @@ const ItemPaletteWrapper = props => {
         return page;
     }
 
+    function addshippage(pagenumber) {
+        let page = {
+           page: pagenumber,
+           pageType: 5,
+           items: {
+            1: null
+           }
+        };
+        return page;
+    }
+
+
+
     function addItemSide(item, size, frontorback) {
         if (item != null) {
         return {
@@ -182,17 +199,23 @@ const ItemPaletteWrapper = props => {
         if (item !== null && item.islarge !== undefined && item.islarge) {
             largeitemList.push(item);
         }
-        else {
+        else if (item.fields.TYPE  !== 'Ship') {
           if (item !== null) {
               smallitemList.push(item);
+          }
+        }
+        else {
+           if (item !== null) {
+              shipitemList.push(item);
           }
         }  
     });
 
     let newpage = addpage(0, 'front');
     let newpageback = addpage(1, 'back');
+    
     let pageNum = 0;
-    if (props.printfrontback) {
+    if (props.printfrontback && largeitemList.length > 0) {
         itemPages.push(newpage);
         itemPages.push(newpageback);
     largeitemList.forEach(largeitem => {
@@ -227,7 +250,7 @@ const ItemPaletteWrapper = props => {
     });
   }
 
-else {
+else if (largeitemList.length > 0) {
     itemPages.push(newpage);
     largeitemList.forEach(largeitem => {
         let slotnum = findNextPageSlot(itemPages[pageNum], 'large', largeitem.isdoubleside);
@@ -257,7 +280,7 @@ else {
 
 
 
-  if (props.printfrontback) {
+  if (props.printfrontback && smallitemList.length > 0) {
 smallitemList.forEach(smallitem => {
     let slotnum = null
     for (pageNum = 0; pageNum < itemPages.length; pageNum = pageNum + 2) {
@@ -285,7 +308,7 @@ smallitemList.forEach(smallitem => {
     }
 });
 }
-else {
+else if (smallitemList.length > 0) {
   smallitemList.forEach(smallitem => {
     let slotnum = null
     for (pageNum = 0; pageNum < itemPages.length; pageNum++) {
@@ -312,6 +335,15 @@ else {
 });
 }
 
+if (shipitemList.length > 0) {
+    shipitemList.forEach(ship => {
+     let newpage = addshippage(pageNum);
+     newpage.items[0] = addItemSide(ship, 'ship', 'front');
+     itemPages.push(newpage);
+     pageNum++;
+    });
+}
+
 itemPages.forEach(page => {
     for (let i = 1; i <= 9; i++) {
         if (page.items[i] === null)
@@ -325,6 +357,12 @@ itemPages.forEach(page => {
     return(
         <>
        { itemPages.map((page, index) => 
+       page.pageType === 5 ?
+        <div key={index}>
+        <ItemWrapper path={page.items[0].item.secondapprovalbyuserGuid !== null ? 'Approved' : 'UnApproved'} 
+      guid={page.items[0].item.guid}  item={page.items[0].item} side={page.items[0].side} />
+        </div>
+       :
         page.pageType === 0 && page.side ==='back' ?
         <div key={index}>
         <ItemPalette0Back itemsList={page.items} />

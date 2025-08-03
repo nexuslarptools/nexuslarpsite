@@ -1,0 +1,51 @@
+{
+    "Roles":[
+    {
+        "Position":"Captain",
+        "Description":"The captain of the ship can apply their Authority skill to the rest of the crew, and has the ability to recruit or dismiss the other officers listed on this sheet."
+    },
+    {
+        "Position":"Helmsman",
+        "Description":"Without a helmsman, there is a generic NPC with Pilot Vehicle 2 flying the ship. The helmsman can use their own Pilot skill to move the ship and dodge attacks instead, and may use any vehicle-based powers on their sheet on behalf of the ship."
+    },
+    {
+        "Position":"Gunner",
+        "Description":"Without a gunner, there is a generic NPC with Mecha Weaponry 2 manning the ship's weapons. The gunner can use their own Mecha Weaponry (or BFG / Marksmanship at a -1) to fire these weapons instead, and may use any gun-related powers on their sheet with the ship's weapons. Bonuses conferred specifically by their own gun or ammo do not apply."
+    },
+    {
+        "Position":"Navigator",
+        "Description":"The navigator can plot a safe course through uncharted areas, allowing the ship to avoid up to 2 levels of penalties for difficult terrain or obstacles. They also allow the ship to reach destinations faster, cutting all travel times in half."
+    },
+    {
+        "Position":"Tactical",
+        "Description":"A tactical officer can apply their personal tactics powers to the entire ship’s crew regardless of any limitations on how many characters can be included in the power's benefits, although they do not receive temporary Authority over its crew if their ability indicates such."
+    },
+    {
+        "Position":"Communications",
+        "Description":"A communications officer can open ship-to-ship communications and test Computer Use or Science to avoid having the ship's communications jammed. If aboard the ship while other crew members are in the field, this also enables them to communicate remotely."
+    },
+    {
+        "Position":"Science Officer",
+        "Description":"The science officer can use the ship's computer to analyze unfamiliar objects or locations. Once per day, the officer may test Computer Use or Science vs. a GM-set difficulty to gain information about one of these things. If this character has their own computer, it can be connected to the ship, allowing them to use any of its abilities while on board."
+    },
+    {
+        "Position":"Doctor",
+        "Description":"With a doctor on board, all crew members recover full Body overnight. The doctor can also use the ship's supplies for medical treatment, eliminating the need to have item cards for generic medical supplies."
+    },
+    {
+        "Position":"Engineer",
+        "Description":"With an engineer on board, all crew member vehicles/mecha recover full Integrity overnight. The engineer can also use the ship's supplies for repairs, eliminating the need to have item cards for generic tools and parts."
+    },
+    {
+        "Position":"Pilot",
+        "Description":"Pilots can store their vehicles or mecha on board the ship while not in use, protecting them from damage, theft, etc. The ship can also be called to deploy the mech to an ongoing scene - it will arrive on the character's next round action."
+    },
+    {
+        "Position":"Cook",
+        "Description":"With a cook on board, crew members can recover half their total Energy once per weekend by returning to the ship and eating a meal. This takes 30 minutes out of play, 15 if actively roleplayed. The cook can also use the ship’s galley, eliminating the need to have item cards for generic cooking supplies and ingredients."
+    },
+    {
+        "Position":"Custom",
+        "Description":""
+    }]
+}
