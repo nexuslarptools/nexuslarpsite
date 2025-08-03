@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 import ReviewNotesDisplay from '../reviewnotes/reviewnotesdisplay';
 import ReviewNotesForm from '../reviewnotes/reviewnotesform';
-import ShipRoleForm from '../shiproles/shipRoleForm';
+import ShipRoleForm from '../shipRoles/shipRoleForm';
 import ShipItem from '../item/shipitem';
 
 const ItemEditForm = (props) => {
