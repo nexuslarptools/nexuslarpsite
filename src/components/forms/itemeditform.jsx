@@ -128,7 +128,7 @@ const ItemEditForm = (props) => {
 
       useEffect(() => {
         initForm();
-      }, [props.initForm])
+      }, [])
 
       const initForm = async () => {
 
@@ -176,10 +176,17 @@ const ItemEditForm = (props) => {
           await setIsdoubleSide(props.initForm.apiMessage.isdoubleside);
           await setItemData(props.initForm.apiMessage);
           await setSelectedOption(props.initForm.apiMessage.fields.TYPE);
+
+
+
+
+
           await setCrew({
             ...crewState,
             crewList:props.initForm.apiMessage.fields.CrewPositions
           });
+
+
 
           if (!imgUpdated) {
             await setImageLocation(props.img);
@@ -459,7 +466,7 @@ const ItemEditForm = (props) => {
         }
 
         if (itemData.fields.TYPE === 'Ship') {
-          outputbody.Fields.CrewPositions = crewState;
+          outputbody.Fields.CrewPositions = crewState.crewList;
         }
 
         outputbody.Seriesguid =selectedSeries;

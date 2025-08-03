@@ -13,7 +13,7 @@ const CrewPositionDisplayShip = props => {
         {
           props.position.DefaultCrew !== undefined && props.position.DefaultCrew !== null 
           && props.position.DefaultCrew.trim() !== ''
-            ? <div className='rank' key={"rank"+props.position.DefaultCrew + Math.random}>Default Crew Memeber: {props.position.DefaultCrew}</div>
+            ? <div className='rank' key={"rank"+props.position.DefaultCrew + Math.random}>Default: {props.position.DefaultCrew}</div>
             : <div className='rank' key={"rank"+props.position.DefaultCrew + Math.random}>___________________________________________________________________ </div>
         }
       </span>
