@@ -151,15 +151,15 @@ useEffect(() => {
       const usedRoles = [];
   
       for (let j = 0; j < i; j++) {
-           if (j !== rank) {
+           if (j < rank) {
            newData.push(crewState.crewList[j]);
-           newData[j].arraynum = j;
-             if (crewState.crewList[j].SelectedPosition !== "Custom") {
-              usedRoles.push(crewState.crewList[j].SelectedPosition)
-             }
-         }
-      }
-
+           }
+           if (j > rank) {
+           newData.push(crewState.crewList[j]);
+           newData[j-1].arraynum = j-1;
+           }
+        }
+      
       setCrew({
         ...crewState,
         crewList: newData,

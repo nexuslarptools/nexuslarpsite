@@ -405,7 +405,13 @@ const ItemEditForm = (props) => {
       }
 
       const UpdateCrew = async (crewList) => {
-        setCrew(crewList);
+        
+        await setCrew({
+          ...crewState,
+          crewList: crewList
+         });
+
+
         let fields = itemData.fields;
         fields.CrewPositions = crewList;
         await setItemData({
