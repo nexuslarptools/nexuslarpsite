@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react"
 import './_shipRoles.scss';
-import ShipRoles from "./ShipRoles";
+import ShipRoles from "./shipRoles";
 import PropTypes from "prop-types";
 import Loading from "../loading/loading";
 import useGetData from "../../utils/getdata";
