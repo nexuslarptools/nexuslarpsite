@@ -149,6 +149,18 @@
 					"Companion",
 					"Pokemon"
 				]
+			},			
+			"Move": {
+				"InDropDown":true,
+				"Type": "Input",
+				"Label": "Move",
+				"Display": true,
+				"ToolTip": "Move is a catch all for Run/Jump/Fly/Swim/Burrow. \nUse only on pokemon, companions, or ships where the move type is obvious.",
+				"Types": [
+					"Companion",
+					"Pokemon",
+					"Ship"
+				]
 			},
 			"Run": {
 				"InDropDown":true,
@@ -193,18 +205,6 @@
 					"Companion",
 					"Pokemon",
 					"Vehicle",
-					"Ship"
-				]
-			},
-			"Move": {
-				"InDropDown":true,
-				"Type": "Input",
-				"Label": "Move",
-				"Display": true,
-				"ToolTip": "Move is a catch all for Run/Jump/Fly/Swim/Burrow. \nUse only on pokemon, companions, or ships where the move type is obvious.",
-				"Types": [
-					"Companion",
-					"Pokemon",
 					"Ship"
 				]
 			},

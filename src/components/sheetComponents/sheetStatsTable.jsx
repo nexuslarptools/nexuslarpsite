@@ -32,7 +32,7 @@ const SheetsStatsTable = (props) => {
         Value: formJSON[key]
       }
       formData.push(jsonItem);
-      if (moveValues.indexOf(key) !== 1 && formJSON[key] !== null 
+      if (moveValues.indexOf(key) !== -1 && formJSON[key] !== null 
       && formJSON[key] !== '' && moveValues.indexOf(key) > moveindex) {
         moveindex = moveValues.indexOf(key);
       }
