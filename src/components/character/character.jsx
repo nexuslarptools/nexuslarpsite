@@ -108,7 +108,6 @@ const Character = props => {
       k++;
     }
 
-
       if (listItem === null) {
        listItem = { 
         itemName: itemName,

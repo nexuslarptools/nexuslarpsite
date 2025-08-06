@@ -196,7 +196,8 @@ const ItemPaletteWrapper = props => {
 
 
         fullItemList.forEach(item => {
-        if (item !== null && item.islarge !== undefined && item.islarge) {
+        if (item !== null && item.islarge !== undefined && item.islarge 
+            && item.fields.TYPE  !== 'Ship') {
             largeitemList.push(item);
         }
         else if (item.fields.TYPE  !== 'Ship') {

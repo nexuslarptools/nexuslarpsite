@@ -18,7 +18,7 @@ const ItemSearchDrawer = props => {
     );
 
 const types = [     '',
-                    "Accessory",
+          "Accessory",
 					"Ammo",
 					"Armor",
 					"Artifact",
@@ -36,6 +36,7 @@ const types = [     '',
 					"Medical",
 					"Pokemon",
 					"Power",
+          "Ship",
 					"Spell",
 					"Supplies",
 					"Tech",

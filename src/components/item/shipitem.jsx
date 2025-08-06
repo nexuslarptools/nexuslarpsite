@@ -37,7 +37,7 @@ who is doing what job. If the canonical holder of a position is in play, write t
 2) While aboard the ship, any crew member can always assist any other crew member with an action related
 to their crew station. is includes crew members without named positions.</p><p>
 3) Without substitute crew members, the ship is considered to have enough crew for absolute baseline operations
-necessary to keep the ship functional. ese are faceless NPCs who operate in the background
+necessary to keep the ship functional. These are faceless NPCs who operate in the background
 and do not make tests of their own unless specified in one of the crew descriptions above.</p><p>
 4) The captain can fill in any missing crew position until it is filled, but cannot do two things at once. If
 the captain is flying the ship, they cannot also operate the weaponry, and vice versa.</p>
