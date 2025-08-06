@@ -6,10 +6,10 @@ import Paper from '@mui/material/Paper';
 import './_sheetStatsTable.scss';
 import { capitalizeFirstLetter } from '../../utils/stringProcess';
 
-const values = ["Grade",
-"Power","Response","Flight","RESILIENCE"]
+const moveValues = ["Move", "Run", "Sail", "Fly"]
 
 const SheetsStatsTable = (props) => {
+  const [values, setValues] = useState([]);
   const [JSONData, setJSONData] = useState({
     formData: [],
     show: false
@@ -20,7 +20,11 @@ const SheetsStatsTable = (props) => {
   }, [])
 
   const initData = async (formJSON) => {
+    let valueList = ["Grade",
+    "Power","Response","RESILIENCE"]
+
     const formData = []
+    let moveindex = 0;
 
     for (const key of Object.keys(formJSON)) {
       const jsonItem = {
@@ -28,7 +32,15 @@ const SheetsStatsTable = (props) => {
         Value: formJSON[key]
       }
       formData.push(jsonItem);
+      if (moveValues.indexOf(key) !== 1 && formJSON[key] !== null 
+      && formJSON[key] !== '' && moveValues.indexOf(key) > moveindex) {
+        moveindex = moveValues.indexOf(key);
+      }
     }
+
+    valueList.splice(2, 0, moveValues[moveindex]);
+
+    setValues(valueList);
 
     await setJSONData({
       ...JSONData,
@@ -49,11 +61,11 @@ const SheetsStatsTable = (props) => {
         <TableContainer className={props.tableClasses} component={Paper}>
           <Table size="small">
             <TableBody>
-              {JSONData.formData.map((item) => (
-                values.includes(item.Name) ?
-                <TableRow key={item.Name}>
+              {values.map((item) => (
+                JSONData.formData.findIndex((dat) => dat.Name === item) !== -1 ?
+                <TableRow key={item}>
                   {
-                    item.Name === 'over:' || item.Name === 'vehicle:'
+                    item === 'over:' || item === 'vehicle:'
                       ? <>
                          {
                          (JSONData.formData.findIndex((entry) => entry.Name === 'Pilot Vehicle' && entry.Value !== '0' && entry.Value !== null && entry.Value !== undefined) !== -1 
@@ -70,8 +82,8 @@ const SheetsStatsTable = (props) => {
                          }
                         </>
                       : <>
-                          <TableCell className='sheet-table-attribute' align="left">{capitalizeFirstLetter(item.Name.toLowerCase())}</TableCell>
-                          <TableCell className='sheet-table-number' align="left">{item.Value}</TableCell>
+                          <TableCell className='sheet-table-attribute' align="left">{capitalizeFirstLetter(item.toLowerCase())}</TableCell>
+                          <TableCell className='sheet-table-number' align="left">{JSONData.formData[JSONData.formData.findIndex((dat) => dat.Name === item)].Value}</TableCell>
                         </>
                   }
                 </TableRow> :

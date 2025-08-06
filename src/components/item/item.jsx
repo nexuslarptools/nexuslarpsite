@@ -18,7 +18,8 @@ const Item = props => {
           || props.item.fields === null || props.item.fields === undefined ?
         <div className='loading-container'><Loading /></div> :
         <>
-          { props.item.islarge === true && props.type === "sheet" ?
+          { (props.item.islarge === true || props.item.fields.TYPE === "Ship")  
+            && props.type === "sheet" ?
           <>            
           <div className='itemdisplay'>
           <CompanionPlaceHolderItem item={props.item} img={props.img}/> 
