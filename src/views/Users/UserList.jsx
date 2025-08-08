@@ -7,9 +7,12 @@ import './UserList.scss'
 import AuthLevelInfo from '../../utils/authLevelInfo'
 import Loading from '../../components/loading/loading'
 import PropTypes from 'prop-types'
+import useAuthPermissionLevel from '../../hooks/useAuthPermissionLevel'
 
 
 export default function UsersPage(props) {
+
+const {token, permissions} = useAuthPermissionLevel();
 
 AuthRedirect(4);
 const authLevel = AuthLevelInfo();
