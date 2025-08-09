@@ -658,14 +658,14 @@ const ItemEditForm = (props) => {
       const newform = JSON.parse(JSON.stringify({
         arraynum: i,
         visible: true,
-        name: '',
+        Name: '',
         Cost: null,
         Rank: null,
         Description: '',
         Tags: [],
         FullTags: [],
         Special: {
-          name: '',
+          Name: '',
           Cost: null,
           Rank: null,
           Description: '',
@@ -694,14 +694,14 @@ const ItemEditForm = (props) => {
       const newform = JSON.parse(JSON.stringify({
         arraynum: i,
         visible: true,
-        name: '',
+        Name: '',
         Cost: null,
         Rank: null,
         Description: '',
         Tags: [],
         FullTags: [],
         Special: {
-          name: '',
+          Name: '',
           Cost: null,
           Rank: null,
           Description: '',
@@ -770,13 +770,13 @@ const ItemEditForm = (props) => {
   
       for (let k = 0; k < abilitesFormsState.abilitiesFormList.length; k++) {
         if (k !== e.arraynum) {
-            let tempd = abilitesFormsState.abilitiesListBack[k];
+            let tempd = abilitesFormsState.abilitiesFormList[k];
             tempd.arraynum = k;
             if (k > e.arraynum)
               {
                 tempd.arraynum = k-1;
               }
-            loopData.push(abilitesFormsState.abilitiesListBack[k]);
+            loopData.push(abilitesFormsState.abilitiesFormList[k]);
           }
         }
       setAbilitesForms({

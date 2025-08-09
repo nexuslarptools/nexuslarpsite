@@ -599,8 +599,7 @@ seriesList.forEach((series, index) => {
   const addAbilityForm = (e) => {
     e.preventDefault();
     const i = abilitiesState.abilitiesList.length;
-    const newform = JSON.parse(
-      JSON.stringify(
+    const newform = 
         { arraynum: i, 
           visible: true,
           Name: '',
@@ -608,20 +607,20 @@ seriesList.forEach((series, index) => {
           Rank: null,
           Description: '',
           FullTags: [],
-          Tags: [] }
-        ));
+          Tags: [] };
     const newData = [];
 
     for (let j = 0; j < i; j++) {
       newData.push(abilitiesState.abilitiesList[j]);
     }
-
     newData.push(newform);
 
     setAbilities({
       ...abilitiesState,
       abilitiesList: newData
     })
+
+
   }
 
   const handleDeleteClose =() => {
@@ -641,39 +640,28 @@ seriesList.forEach((series, index) => {
       if (abilitiesState.abilitiesList[j].arraynum !== e.arraynum) {
         loopData.push(abilitiesState.abilitiesList[j]);
       }
+      else {
+        let invis = abilitiesState.abilitiesList[j];
+        invis.visible = false;
+        loopData.push(invis);
+      }
     }
     setAbilities({
       ...abilitiesState,
       abilitiesList: loopData
     });
-
-    let newformdata = formdata;
-    formdata.fields.Special_Skills = loopData;
-
-    setFormdata({
-      ...formdata,
-      fields: newformdata.fields
-    });
   
    loopData = [];
 
     for (let k = 0; k < abilitesFormsState.abilitiesFormList.length; k++) {
-      if (!k === e.arraynum) {
-        const newdata = JSON.parse(
-          JSON.stringify({
-            visible: true,
-            arraynum: k,
-            Special: {
-              Name: abilitesFormsState.abilitiesFormList[k].Name,
-              Cost: abilitesFormsState.abilitiesFormList[k].Cost,
-              Rank: abilitesFormsState.abilitiesFormList[k].Rank,
-              Description: abilitesFormsState.abilitiesFormList[k].Description,
-              FullTags: abilitesFormsState.abilitiesFormList[k].FullTags,
-              Tags: abilitesFormsState.abilitiesFormList[k].Tags,
-            }
-          })
-        );
+      if (k !== e.arraynum) {
+        const newdata = abilitesFormsState.abilitiesFormList[k];
         loopData.push(newdata);
+      }
+      else {
+        let invis =  abilitesFormsState.abilitiesFormList[k]
+        invis.visible = false;
+        loopData.push(invis);
       }
     }
     setAbilitesForms({
@@ -957,7 +945,7 @@ seriesList.forEach((series, index) => {
                 ))}
                   <div className='character-sheet-powers'>
                     <header className="header">Character Powers</header>
-                    {abilitiesState.abilitiesList.map((ability) => (
+                    {abilitiesState.abilitiesList.map((ability, i) => (
                       <ItemAbilites
                         itemTags={props.tagslist.abilityTags}
                         key={ability.arraynum}
