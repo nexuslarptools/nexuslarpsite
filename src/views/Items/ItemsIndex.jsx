@@ -3,8 +3,7 @@ import useGetData from '../../utils/getdata';
 import Loading from '../../components/loading/loading';
 import ItemsListPage from './ItemsListPage';
 import ItemDisplay from './ItemDisplay';
-import AuthRedirect from '../../utils/authRedirect';
-import AuthLevelInfo from '../../utils/authLevelInfo';
+import {AuthRedirect2} from '../../utils/authRedirect';
 import PropTypes from 'prop-types';
 import ItemCreate from './ItemCreate';
 import formJSON from '../../jsonfiles/iteminput.json';
@@ -13,9 +12,10 @@ import ItemSelector from '../../components/itemselector/itemselector';
 import { createTheme,  IconButton, lighten, Slide, Snackbar, ThemeProvider } from '@mui/material';
 import './_ItemsIndex.scss'
 import CloseSharpIcon from '@mui/icons-material/CloseSharp';
+import useAuthPermissionLevel from '../../hooks/useAuthPermissionLevel';
 
 export default function ItemsIndex(props) {
-  AuthRedirect(1)
+  AuthRedirect2(1)
 
   const handleSnackClose = () => {
     setSnackOpen({isOpen:false,
@@ -26,7 +26,8 @@ export default function ItemsIndex(props) {
       const unapprovQuery = useGetData('listUnapprovedItems', '/api/v1/ItemSheets/FullListWithTagsNoImages');
       const allTagsQuery = useGetData('listTags', '/api/v1/Tags/groupbytyperead');
       const userGuidQuery = useGetData('userguid', '/api/v1/Users/CurrentGuid');
-      const authLevel = AuthLevelInfo();
+    // eslint-disable-next-line no-unused-vars
+    const [authState, permissionState] = useAuthPermissionLevel();
       const [itemsState, setItemsState] = useState({
             selectedApproved: true,
             commentFilter: false,
@@ -153,6 +154,12 @@ export default function ItemsIndex(props) {
                 Error!
                 </div>)
 
+      if (approvQuery.data.status !== undefined || approvQuery.data.status !== undefined 
+      || approvQuery.data.status !== undefined || approvQuery.data.status !== undefined
+      ) return (<div>
+            Error!
+      </div>)
+
 return (
 <>
 { itemsState.viewingItem === false ? 
@@ -171,7 +178,7 @@ appdata={approvQuery.data}
   }
   larpTags={allTagsQuery.data.find((tags) => tags.tagType === 'LARPRun')?.tagsList}
   tagslist={allTagsQuery.data.find((tags) => tags.tagType === 'Item')?.tagsList}
-  authLevel={authLevel}
+  authLevel={permissionState.authLevel}
   userGuid={userGuidQuery.data}
   selectedApproved={props.subState.selectedApproved} 
   commentFilterOn={props.subState.commentFilter}
@@ -198,7 +205,7 @@ appdata={approvQuery.data}
   initialItems={{show:false, label:'Selection for Printing', startingItems: props.subState.listItems}}
   larpTags={allTagsQuery.data.find((tags) => tags.tagType === 'LARPRun')?.tagsList}
   tagslist={allTagsQuery.data.find((tags) => tags.tagType === 'Item')?.tagsList}
-  authLevel={authLevel}
+  authLevel={permissionState.authLevel}
   userGuid={userGuidQuery.data}
   selectedApproved={props.subState.selectedApproved} 
   commentFilterOn={props.subState.commentFilter}

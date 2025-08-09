@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import interpAuthLevel from './authLevel'
 import configJson from '../auth_config.json'
 import { getConfig } from '../config'
+import ProcessAuthClaims from './processAuthClaims'
 
 const {
     apiOrigin =
@@ -22,6 +23,25 @@ export function AuthRedirect (lowestAllowed) {
 
       const authlevel = interpAuthLevel(response.AuthLevel)
        if (authlevel < lowestAllowed) {
+           navigate('/')
+      }
+      }
+      navigateAway()
+    }, [lowestAllowed, auth, navigate])
+
+}
+
+
+export function AuthRedirect2 (lowestAllowed) {
+    const {auth, getIdTokenClaims } = useAuth0();
+    const navigate = useNavigate()
+    useEffect(() => {
+        const navigateAway = async () => {
+
+          let claims = await getIdTokenClaims();
+          let auth = await ProcessAuthClaims(claims);
+
+       if (auth < lowestAllowed) {
            navigate('/')
       }
       }

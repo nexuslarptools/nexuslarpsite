@@ -1,7 +1,6 @@
-import AuthRedirect from '../../utils/authRedirect';
+import { AuthRedirect2 } from '../../utils/authRedirect';
 import Loading from '../../components/loading/loading';
 import useGetData from '../../utils/getdata';
-import AuthLevelInfo from '../../utils/authLevelInfo';
 import { useEffect, useState } from 'react';
 import CharactersListPage from './CharactersListPage';
 import CharacterDisplayPage from './CharacterDisplay';
@@ -11,10 +10,11 @@ import CharacterEdit from './CharacterEdit';
 import { createTheme, IconButton, lighten, Slide, Snackbar, ThemeProvider } from '@mui/material';
 import PropTypes from 'prop-types';
 import CloseSharpIcon from '@mui/icons-material/CloseSharp';
+import useAuthPermissionLevel from '../../hooks/useAuthPermissionLevel';
 
 export default function CharactersIndex(props) {
 
-    AuthRedirect(1)
+    AuthRedirect2(1)
 
     const handleSnackClose = () => {
       setSnackOpen({isOpen:false,
@@ -22,11 +22,20 @@ export default function CharactersIndex(props) {
       });
     }
 
-    const approvQuery = useGetData('listApprovedCharacters', '/api/v1/CharacterSheetApproveds');  
+
+   const approvQuery = useGetData('listApprovedCharacters', '/api/v1/CharacterSheetApproveds');
     const unapprovQuery = useGetData('listUnapprovedCharacters', '/api/v1/CharacterSheets');
     const allTagsQuery = useGetData('listTags', '/api/v1/Tags/groupbytyperead');
     const userGuidQuery = useGetData('userguid', '/api/v1/Users/CurrentGuid');
-    const authLevel = AuthLevelInfo();
+
+
+    // eslint-disable-next-line no-unused-vars
+    const [authState, permissionState] = useAuthPermissionLevel();
+    //const authLevel = AuthLevelInfo();
+
+
+
+
     const [charactersState, setCharactersState] = useState({
           selectedApproved: true,
           commentFilter: false,
@@ -175,7 +184,15 @@ export default function CharactersIndex(props) {
             Error!
             </div>)
 
-    return (
+  
+      if (approvQuery.data.status !== undefined || approvQuery.data.status !== undefined 
+      || approvQuery.data.status !== undefined || approvQuery.data.status !== undefined
+      ) return (<div>
+            Error!
+      </div>)
+
+    
+return (
         <>
 { charactersState.viewingItem === false ? 
  !isCreate ?
@@ -193,7 +210,7 @@ appdata={approvQuery.data}
   undata={unapprovQuery.data} 
   larpTags={allTagsQuery.data.find((tags) => tags.tagType === 'LARPRun')?.tagsList}
   tagslist={allTagsQuery.data.find((tags) => tags.tagType === 'Character')?.tagsList}
-  authLevel={authLevel}
+  authLevel={permissionState.authLevel}
   userGuid={userGuidQuery.data}
   selectedApproved={ props.subState !== undefined && props.subState !== null &&
     props.subState.selectedApproved !== undefined && props.subState.selectedApproved !== null ? 
@@ -224,7 +241,7 @@ appdata={approvQuery.data}
 </>
 : 
 <>
-<CharacterEdit authLevel={authLevel} formJSON={formJSON} tagslist={allTagsQuery.data} guid={isEdit.guid} path={isEdit.path}
+<CharacterEdit authLevel={permissionState.authLevel} formJSON={formJSON} tagslist={allTagsQuery.data} guid={isEdit.guid} path={isEdit.path}
 GoBack ={() => GoBackFromCreateEdit()} 
 OpenSnack ={(e) => OpenSnack(e)}/>
 </>

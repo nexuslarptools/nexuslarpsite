@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Button, FormLabel, DialogContent, Typography, DialogActions, Dialog, DialogTitle, IconButton, Input } from "@mui/material"
+import { Button, FormLabel, DialogContent, Typography, DialogActions, Dialog, DialogTitle, IconButton, Input, Select, MenuItem } from "@mui/material"
 import { Form, FormGroup } from 'reactstrap'
 import { useForm } from "react-hook-form"
 import usePutData from "../../utils/putdata"
@@ -7,8 +7,9 @@ import useGetData from "../../utils/getdata"
 import { useQueryClient } from "@tanstack/react-query"
 import LarpRoleAdder from "../larproleadder/larproleadder"
 import RolesTable from "../tables/rolestable"
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types' 
 import Loading from "../loading/loading"
+import './_userroleseditform.scss'
 
 export default function UserRolesEditForm(props) {
   const formRef = React.useRef();
@@ -201,31 +202,19 @@ return (
           </div>
           <div className="input-pair">
             <FormLabel htmlFor="pronouns">Pronouns:</FormLabel>
-            <select className={formData.data.pronouns == null || formData.data.pronouns == 'default' ? 'selector pronounselector defaulted' : 'selector pronounselector'}
-              {...register('pronouns')}
-              defaultValue={formData.data.pronouns !== null ? 
-                pronounsData.data.find((pronoun) => formData.data.pronouns === pronoun.pronouns).guid : 'default'}
-              onChange={(e) => UpdatePronouns(e)}
-              onFocus={(e) => focused(e, pronounsData.data.length)}
-              onBlur={(e) => blurred(e)}
-              onKeyUp={(e) => e.code === "Escape" ? blurred(e) : null}>
-              <option className="select-default" key='default' value='default'>select preferred pronouns</option>
-              {pronounsData.data !== undefined && pronounsData.data !== null ? 
-              pronounsData.data.map((obj) => {
-                return (
-                  <>
-                    { obj.guid !== null
-                      ? <option className={'pronoun'} key={obj.guid} value={obj.guid}>
-                        {obj.pronouns}
-                      </option>
-                      : undefined
-                    }
-                  </>
-                )
-              })
-            : <></> 
-            }
-            </select>
+               <Select  key={'Pronouns'} 
+                      label={'Select Pronouns'} 
+                      variant="standard" 
+                      type="input" 
+                      id={'Pronouns'} 
+                        {...register('pronouns')}
+                          defaultValue={ '' }
+                         onChange={(e) => UpdatePronouns(e)} > 
+                                    {pronounsData.data.map((obj) => (
+                                        <MenuItem key={obj.guid} value={obj.guid}>{obj.pronouns}</MenuItem>
+                                    ))}
+                                    </Select>
+
           </div>
           <div className="input-pair">
             <FormLabel htmlFor="email">Registered Email:</FormLabel>

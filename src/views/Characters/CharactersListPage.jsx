@@ -56,5 +56,7 @@ CharactersListPage.propTypes = {
     UpdateFilter: PropTypes.func,
     isLoading: PropTypes.bool,
     Filters: PropTypes.object,
-    isSearch: PropTypes.bool
+    isSearch: PropTypes.bool,
+    FilterInit: PropTypes.object,
+    UnInitFiler: PropTypes.func
 }

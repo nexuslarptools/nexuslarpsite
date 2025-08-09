@@ -1,21 +1,19 @@
 import { useEffect, useState } from 'react'
 import useGetData from '../../utils/getdata'
 import UserTable from '../../components/tables/userstable'
-import AuthRedirect from '../../utils/authRedirect'
+import { AuthRedirect2 } from '../../utils/authRedirect'
 import UserRolesEditForm from '../../components/forms/userroleseditform'
 import './UserList.scss'
-import AuthLevelInfo from '../../utils/authLevelInfo'
 import Loading from '../../components/loading/loading'
 import PropTypes from 'prop-types'
 import useAuthPermissionLevel from '../../hooks/useAuthPermissionLevel'
 
-
 export default function UsersPage(props) {
 
-const {token, permissions} = useAuthPermissionLevel();
+// eslint-disable-next-line no-unused-vars
+const [token, permissions] = useAuthPermissionLevel();
 
-AuthRedirect(4);
-const authLevel = AuthLevelInfo();
+AuthRedirect2(4);
 
 const [arrowsState, setArrowsState] = useState({
     arrowsList: []
@@ -91,17 +89,22 @@ if (userData.isLoading || currentUserGuid.isLoading) return (<div>
       Error!
       </div>)
 
+    if (userData.data.status !== undefined || currentUserGuid.data.status !== undefined) 
+    return (<div>
+            Error: auth issue.
+      </div>)
+
 return (
   <>
   { currUserState.viewingEdit === false ? 
   <>
-   <UserTable data={userData.data} authlevel={authLevel} GoToEdit={(e) => GoToEdit(e) }
+   <UserTable data={userData.data} authlevel={permissions.authLevel} GoToEdit={(e) => GoToEdit(e) }
    arrowsList={arrowsState.arrowsList} ArrowClick={(e) => ArrowClickHandler(e)}/>
   </> :
   <>
   <UserRolesEditForm GoBack ={() => GoBack()} 
   data={userData.data.find((user) => user.guid === currUserState.guid )}
-  authlevel={authLevel}
+  authlevel={permissions.authLevel}
   isSelfEdit={currUserState.guid === currentUserGuid.data }
   />
   </> 

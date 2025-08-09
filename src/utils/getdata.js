@@ -3,11 +3,17 @@ import { useQuery } from '@tanstack/react-query'
 import { apiGet, apiGetWithPage } from './apiGet'
 
 export const useGetData = (statename, path) => {
+  try {
   const auth = useAuth0();
-
   return useQuery({
     queryKey:[statename],
-    queryFn: () => apiGet(auth, path)});
+    queryFn: () => apiGet(auth, path)
+  })
+}
+catch(error) {
+  console.log(error);
+  throw error;
+}
 }
 
 export const useGetDataWitPage = (statename, path, page, numberPerPage) => {
@@ -30,6 +36,5 @@ export const useGetDataWithStale = (statename, path) => {
     queryFn: () => apiGet(auth, path),
     refetchInterval: 300000});
 }
-
 
 export default useGetData

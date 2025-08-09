@@ -4,27 +4,39 @@ import LogoutButton from '../loginbuttons/logoutbutton.jsx'
 import { useAuth0 } from '@auth0/auth0-react'
 import { Link } from 'react-router-dom'
 import './header.scss'
-import AuthLevelInfo from '../../utils/authLevelInfo.js'
 import MenuIcon from '@mui/icons-material/Menu';
 import { useEffect, useState } from 'react';
 import { Tooltip } from '@mui/material';
+import ProcessAuthClaims from '../../utils/processAuthClaims.js';
 
 const Header = props => {
 
+  const {user, isAuthLoading, isAuthenticated, getIdTokenClaims } = useAuth0();
+
   const [buttonactive, SetButtonActive] = useState(true);
+  const [permissions, SetPermissions] = useState({
+         permissions: null,
+         role: null,
+         authLevel:0
+     });
+
       useEffect(() => {
         SetButtonActive(props.mainmenu);
+        SetUpClaims();
       }, [props.mainmenu])
 
-  const { user, isAuthenticated, isAuthLoading } = useAuth0()
-  const authLevel = AuthLevelInfo();
+      const SetUpClaims = async () => {
+          let claims = await getIdTokenClaims();
+          let auth = await ProcessAuthClaims(claims);
+          await SetPermissions(auth);
+      };
 
       let navClasses = 'navbar-container';
       return (
         <header className={navClasses}>
         <nav className="navbar-navigation">
         <div className="navbar_logo" aria-label="Return Home">
-        { buttonactive ?
+        { buttonactive && permissions.authLevel > 0 ?
         <div className ='navbar_hamburger_button'>
           <Tooltip title="Search Menu">
         <button className='button-hambuger'   onClick={() => props.drawerOpenCLick(true)}>
@@ -47,17 +59,17 @@ const Header = props => {
   <ul>
 {/*   {authLevel > -2 ? <li><Link 
   to={{ pathname: '/' }}> Home </Link></li> : <></>} */}
-  {authLevel > 3 ? <li><Link 
+  {permissions.authLevel > 3 ? <li><Link 
   to={{ pathname: '/users' }}> Users </Link></li> : <></>}
-  {authLevel > 0 ? <li><Link 
+  {permissions.authLevel > 0 ? <li><Link 
   to={{ pathname: '/larps' }}> Larps </Link></li> : <></>}
-  {authLevel > 1 ? <li><Link
+  {permissions.authLevel > 1 ? <li><Link
   to={{ pathname: '/tags' }}> Tags </Link></li> : <></>}
-  {authLevel > 0 ? <li> <Link 
+  {permissions.authLevel > 0 ? <li> <Link 
   to={{ pathname: '/series' }}> Series </Link></li> : <></>}
-  {authLevel > 0 ? <li><Link 
+  {permissions.authLevel > 0 ? <li><Link 
   to={{ pathname: '/items' }}> Items </Link></li> : <></>}
-    {authLevel > 0 ? <li><Link 
+    {permissions.authLevel > 0 ? <li><Link 
   to={{ pathname: '/characters' }}> Characters </Link></li> : <></>}
   </ul>
   </div>
