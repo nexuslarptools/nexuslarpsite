@@ -9,6 +9,7 @@ import CompanionPlaceHolderItem from './companionplaceholderitem';
 import VehicleItem from './vehicleitem';
 import MechaItem from './mechaitem';
 import PlaceHolderItem from './placeholderitem';
+import ShipItem from './shipitem';
 
 const Item = props => {
     return (
@@ -17,7 +18,8 @@ const Item = props => {
           || props.item.fields === null || props.item.fields === undefined ?
         <div className='loading-container'><Loading /></div> :
         <>
-          { props.item.islarge === true && props.type === "sheet" ?
+          { (props.item.islarge === true || props.item.fields.TYPE === "Ship")  
+            && props.type === "sheet" ?
           <>            
           <div className='itemdisplay'>
           <CompanionPlaceHolderItem item={props.item} img={props.img}/> 
@@ -30,11 +32,15 @@ const Item = props => {
           <PlaceHolderItem item={props.item} img={props.img}/> 
           </div>
           </>
+          : props.item.fields.TYPE === "Ship" ?
+          <>
+          <ShipItem item={props.item} img={props.img}/>
+          </>
           :
             props.item.fields.TYPE !== "Mecha" &&
             props.item.fields.TYPE !=="Vehicle" &&
             props.item.fields.TYPE !== "Companion" &&
-            props.item.fields.TYPE !=="Pokemon" ?
+            props.item.fields.TYPE !=="Pokemon"  ?
             props.item.isdoubleside === true ?
             <>
             { props.side !== 'front' && props.side !== 'back' ?

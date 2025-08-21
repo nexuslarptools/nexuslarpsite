@@ -29,6 +29,7 @@
 					"Medical",
 					"Pokemon",
 					"Power",
+					"Ship",
 					"Spell",
 					"Supplies",
 					"Tech",
@@ -62,7 +63,8 @@
 			"Mecha",
 			"Companion",
 			"Pokemon",
-			"Vehicle"
+			"Vehicle",
+			"Ship"
 		],
 		"Heading": "Mecha/Companion Stats",
 		"Values": {
@@ -74,7 +76,8 @@
 				"Types": [
 					"Mecha",
 					"Companion",
-					"Pokemon"
+					"Pokemon",
+					"Ship"
 				]
 			},
 			"Athletics": {
@@ -86,6 +89,15 @@
 					"Mecha",
 					"Companion",
 					"Pokemon"
+				]
+			},
+			"Response": {
+				"InDropDown":true,
+				"Type": "Input",
+				"Label": "Response",
+				"Display": true,
+				"Types": [
+					"Ship"
 				]
 			},
 			"Brains": {
@@ -137,6 +149,18 @@
 					"Companion",
 					"Pokemon"
 				]
+			},			
+			"Move": {
+				"InDropDown":true,
+				"Type": "Input",
+				"Label": "Move",
+				"Display": true,
+				"ToolTip": "Move is a catch all for Run/Jump/Fly/Swim/Burrow. \nUse only on pokemon, companions, or ships where the move type is obvious.",
+				"Types": [
+					"Companion",
+					"Pokemon",
+					"Ship"
+				]
 			},
 			"Run": {
 				"InDropDown":true,
@@ -147,7 +171,8 @@
 					"Mecha",
 					"Companion",
 					"Pokemon",
-					"Vehicle"
+					"Vehicle",
+					"Ship"
 				]
 			},
 			"Jump": {
@@ -161,6 +186,15 @@
 					"Pokemon"
 				]
 			},
+			"Sail": {
+				"InDropDown":true,
+				"Type": "Input",
+				"Label": "Sail",
+				"Display": true,
+				"Types": [
+					"Ship"
+				]
+			},
 			"Fly": {
 				"InDropDown":true,
 				"Type": "Input",
@@ -170,18 +204,8 @@
 					"Mecha",
 					"Companion",
 					"Pokemon",
-					"Vehicle"
-				]
-			},
-			"Move": {
-				"InDropDown":true,
-				"Type": "Input",
-				"Label": "Move",
-				"Display": true,
-				"ToolTip": "Move is a catch all for Run/Jump/Fly/Swim/Burrow. \nUse only on pokemon or other companions where move type is obvious.",
-				"Types": [
-					"Companion",
-					"Pokemon"
+					"Vehicle",
+					"Ship"
 				]
 			},
 			"Grade": {
@@ -193,7 +217,8 @@
 					"Mecha",
 					"Companion",
 					"Pokemon",
-					"Vehicle"
+					"Vehicle",
+					"Ship"
 				]
 			},
 			"RESILIENCE": {
@@ -205,7 +230,8 @@
 					"Mecha",
 					"Companion",
 					"Pokemon",
-					"Vehicle"
+					"Vehicle",
+					"Ship"
 				]
 			},
 			"Body": {
@@ -227,7 +253,8 @@
 					"Mecha",
 					"Companion",
 					"Pokemon",
-					"Vehicle"
+					"Vehicle",
+					"Ship"
 				]
 			}
 		}
@@ -238,7 +265,8 @@
 			"Mecha",
 			"Vehicle",
 			"Companion",
-			"Pokemon"
+			"Pokemon",
+			"Ship"
 		],
 		"Heading": "Item Abilites",
 		"Values": {
@@ -251,12 +279,31 @@
 					"Mecha",
 					"Vehicle",
 					"Companion",
-					"Pokemon"
+					"Pokemon",
+					"Ship"
 				]
 			}
 		}
 	},
 	"4": {
+		"IsdoubleSide": null,
+		"Types": [
+			"Ship"
+		],
+		"Heading": "Ship Crew Positions",
+		"Values": {
+			"Special_Skills": {
+				"InDropDown":false,
+				"Type": "ShipCrewInput",
+				"Label": "Crew Role",
+				"Display": true,
+				"Types": [
+					"Ship"
+				]
+			}
+		}
+	},
+	"5": {
 		"IsdoubleSide": null,
 		"Types": ["All"],
 		"Heading": "Generic Stats",
@@ -292,7 +339,26 @@
 				"Label": "Hide Stuff Modifier",
 				"Display": true,
 				"ToolTip": "Can be positive or negative, this applied to the skill of the user, so positive is smaller and negative is bigger.",
-				"Types": ["All"]
+				"Types": [					"Accessory",
+					"Ammo",
+					"Armor",
+					"Artifact",
+					"Book",
+					"Clothing",
+					"Document",
+					"Food",
+					"Furniture",
+					"Generic",
+					"Instrument",
+					"Location",
+					"Material",
+					"Medical",
+					"Supplies",
+					"Tech",
+					"Unique",
+					"Valuable",
+					"Vehicle",
+					"Weapon"]
 			},
 			"Value": {
 				"InDropDown":true,
@@ -344,7 +410,7 @@
 			}
 		}
 	},
-	"5": {
+	"6": {
 		"IsdoubleSide": true,
 		"Types": ["All"],
 		"Heading": "Generic Stats Second Side",
@@ -354,11 +420,36 @@
 				"Type": "TextField",
 				"Label": "Description of second side",
 				"Display": true,
-				"Types": ["All"]
+				"Types": [					
+					"Accessory",
+					"Ammo",
+					"Armor",
+					"Artifact",
+					"Book",
+					"Clothing",
+					"Companion",
+					"Document",
+					"Food",
+					"Furniture",
+					"Generic",
+					"Instrument",
+					"Location",
+					"Material",
+					"Mecha",
+					"Medical",
+					"Pokemon",
+					"Power",
+					"Spell",
+					"Supplies",
+					"Tech",
+					"Unique",
+					"Valuable",
+					"Vehicle",
+					"Weapon"]
 			}
 		}
 	},
-	"6": {
+	"7": {
 		"IsdoubleSide": true,
 		"Types": [
 			"Mecha",

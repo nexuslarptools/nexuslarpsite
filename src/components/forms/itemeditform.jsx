@@ -11,17 +11,28 @@ import './_itemeditform.scss';
 import {
   Autocomplete, TextField,
   FormControlLabel, FormLabel, Input, Box, Checkbox, Select, MenuItem,
-  FormHelperText
+  FormHelperText,
+  Drawer
 } from '@mui/material';
 import ReviewNotesDisplay from '../reviewnotes/reviewnotesdisplay';
 import ReviewNotesForm from '../reviewnotes/reviewnotesform';
+import ShipRoleForm from '../shipRoles/shipRoleForm';
+import ShipItem from '../item/shipitem';
 
 const ItemEditForm = (props) => {
     const formRef = React.useRef();
+
+  const [open, setOpen] = useState(false);
+
+  const togglePreview = (e) => {
+    setOpen(e);
+  };
+
     const { register, handleSubmit, setValue } = useForm({
       mode: 'onSubmit',
       reValidateMode: 'onBlur'
     });
+
     const [imageLocation, setImageLocation] = useState(null);
     const [itemData, setItemData] = useState({
       "seriesguid": "",
@@ -85,6 +96,17 @@ const ItemEditForm = (props) => {
       showResult: true
     });
 
+    const [crewState, setCrew] = useState({
+      crewList: JSON.parse(JSON.stringify([{ arraynum: 0, visible: true,
+    SelectedPosition:"",
+    Position:"",
+    DefaultCrew: "",
+    Details:""
+       }])),
+      showResult: true,
+      usedroles: []
+    });
+
     const [itemsTableState, setItemsTableState] = useState({
       show: false,
       isMounted: false,
@@ -106,7 +128,7 @@ const ItemEditForm = (props) => {
 
       useEffect(() => {
         initForm();
-      }, [props.initForm])
+      }, [])
 
       const initForm = async () => {
 
@@ -154,6 +176,17 @@ const ItemEditForm = (props) => {
           await setIsdoubleSide(props.initForm.apiMessage.isdoubleside);
           await setItemData(props.initForm.apiMessage);
           await setSelectedOption(props.initForm.apiMessage.fields.TYPE);
+
+
+
+
+
+          await setCrew({
+            ...crewState,
+            crewList:props.initForm.apiMessage.fields.CrewPositions
+          });
+
+
 
           if (!imgUpdated) {
             await setImageLocation(props.img);
@@ -371,6 +404,22 @@ const ItemEditForm = (props) => {
         setReviewsState(newReviewList);
       }
 
+      const UpdateCrew = async (crewList) => {
+        
+        await setCrew({
+          ...crewState,
+          crewList: crewList
+         });
+
+
+        let fields = itemData.fields;
+        fields.CrewPositions = crewList;
+        await setItemData({
+          ...itemData,
+          fields: fields
+        });
+      }
+
       const ToggleDoubleSide = async () => {
         let currdeoubleside = !IsdoubleSide;
         setIsdoubleSide(currdeoubleside);
@@ -420,6 +469,10 @@ const ItemEditForm = (props) => {
 
         if (outputbody.Fields.Value != undefined && outputbody.Fields.Value === 'Remove Value') {
           outputbody.Fields.Value = null;
+        }
+
+        if (itemData.fields.TYPE === 'Ship') {
+          outputbody.Fields.CrewPositions = crewState.crewList;
         }
 
         outputbody.Seriesguid =selectedSeries;
@@ -506,47 +559,40 @@ const ItemEditForm = (props) => {
         if (e.target.name === 'TYPE') {
             await setSelectedOption(e.target.value)
 
+            let hasabil= false;
+            let currabiltform = abilitesFormsState;
+
             for (var index = 0; index < JSONData.length; ++index) {
                 for (var index2 = 0; index2 < JSONData[index].Values.length; ++index2) {
-
-
-               if (JSONData[index].Values[index2].Type !== 'SpecialSkillsInput' &&
-                    !JSONData[index].Values[index2].Types.some(type => type === 'All' || type === e.target.value)
-                    ) {
-                        let fieldname = JSONData[index].Values[index2].Name;
-                        setValue(fieldname, '');
+                  if (JSONData[index].Values[index2].Type  === 'SpecialSkillsInput' &&
+                         (JSONData[index].Types.indexOf(e.target.value) !== -1 || 
+                        JSONData[index].Types.indexOf("All") !== -1) && 
+                        JSONData[index].IsdoubleSide  === null) {
+                          hasabil =true
+                        }
                 }
+              }
 
-                if (JSONData[index].Values[index2].Type === 'SpecialSkillsInput' &&
-                !JSONData[index].Values[index2].Types.some(type => type === e.target.value)
-                ) {
-
+            if (!hasabil) {
             await setAbilitesForms({
                 ...abilitesFormsState,
                 abilitiesFormList: []
               });
+
               await setAbilities({
                 ...abilitiesState,
                 abilitiesList: []
               });
 
-            }
-        }
-        }
+          //let fields = itemData.fields;
+          //fields.Special_Skills=itemformData;
 
-            if (JSONData.Type === 'SpecialSkillsInput'
-                //item.Types.some(type => type === 'All' || type === e.target.value)
-                ) {
-
-            setAbilitesForms({
-                ...abilitesFormsState,
-                abilitiesFormList: []
-              });
-              setAbilities({
-                ...abilitiesState,
-                abilitiesList: []
-              });
-            }
+            //   setItemData({
+            //  ...itemData,
+            //    fields: fields
+            //       });
+            
+        }
         }
 
         setFormdata({
@@ -612,14 +658,14 @@ const ItemEditForm = (props) => {
       const newform = JSON.parse(JSON.stringify({
         arraynum: i,
         visible: true,
-        name: '',
+        Name: '',
         Cost: null,
         Rank: null,
         Description: '',
         Tags: [],
         FullTags: [],
         Special: {
-          name: '',
+          Name: '',
           Cost: null,
           Rank: null,
           Description: '',
@@ -648,14 +694,14 @@ const ItemEditForm = (props) => {
       const newform = JSON.parse(JSON.stringify({
         arraynum: i,
         visible: true,
-        name: '',
+        Name: '',
         Cost: null,
         Rank: null,
         Description: '',
         Tags: [],
         FullTags: [],
         Special: {
-          name: '',
+          Name: '',
           Cost: null,
           Rank: null,
           Description: '',
@@ -679,8 +725,9 @@ const ItemEditForm = (props) => {
         abilitiesFormList: newData
       });
     }
-      
     }
+
+
     const handleDeleteClose = () => {
       setDeleteDialogOpen({
         open:false,
@@ -723,13 +770,13 @@ const ItemEditForm = (props) => {
   
       for (let k = 0; k < abilitesFormsState.abilitiesFormList.length; k++) {
         if (k !== e.arraynum) {
-            let tempd = abilitesFormsState.abilitiesListBack[k];
+            let tempd = abilitesFormsState.abilitiesFormList[k];
             tempd.arraynum = k;
             if (k > e.arraynum)
               {
                 tempd.arraynum = k-1;
               }
-            loopData.push(abilitesFormsState.abilitiesListBack[k]);
+            loopData.push(abilitesFormsState.abilitiesFormList[k]);
           }
         }
       setAbilitesForms({
@@ -1127,8 +1174,13 @@ const ItemEditForm = (props) => {
                   You may need to add white space on all sides. </div>
                 </div>
               <div>
-                Current Item Preview 
+                { selectedOption !== "Ship" ? 
+                <>
+                Current Item Preview
                 <Item item={itemData} img={imageLocation}/>
+                </>
+                 : <> <img src={imageLocation}/></>
+                }
               </div>
                     <div className='input-pair'>
                       <FormLabel>Series</FormLabel>
@@ -1404,7 +1456,14 @@ const ItemEditForm = (props) => {
                       </div>
                       : <></>
                         }
-
+                        
+                        {item.Type === 'ShipCrewInput'  
+                      && item.Types.some(type => type === 'All' || type === selectedOption) ?
+                      <div className='ship-sheet-crew'>
+                        <ShipRoleForm initCrew={crewState} updateCrew={(crewList) => UpdateCrew(crewList)}/>
+                      </div>
+                    :<></>  
+                       }
                           </>
                       ))}
       </> 
@@ -1438,6 +1497,7 @@ const ItemEditForm = (props) => {
         </Form>
         </div>
         <div>
+          {selectedOption !== 'Ship' ? 
         <FormControlLabel control={<Checkbox 
                                 onChange={()  => ToggleDoubleSide()} 
                                   defaultChecked={  props.initForm !== undefined &&
@@ -1445,7 +1505,7 @@ const ItemEditForm = (props) => {
                                     props.initForm.showResult === true  && props.initForm.apiMessage.isdoubleside 
                                     ? props.initForm.apiMessage.isdoubleside : false } />}
                                     label='Is Double Sided'
-                                />
+                                /> : <></>}
        <FormControlLabel control={<Checkbox 
                                 onChange={()  => ToggleReadyForApprove()} 
                                   defaultChecked={ props.initForm !== undefined &&
@@ -1504,12 +1564,23 @@ const ItemEditForm = (props) => {
         <div className="edit-bottom">
                       <button className="button-cancel" onClick={() => props.GoBack(false)}>Go Back</button>
                       <button className="button-save" onClick={handleSubmit(handleFormSubmit)}>Submit Changes</button>
+                      {selectedOption === 'Ship' ?
+                      <button className="button-action" onClick={() => togglePreview(true)}>Preview</button> :
+                      <></>}
                       {props.initForm.showResult && props.initForm.apiMessage.secondapprovalbyuserGuid === null &&
                       props.currenUserGuid !== props.initForm.apiMessage.firstapprovalbyuserGuid &&
                         props.currenUserGuid !== props.initForm.apiMessage.editbyUserGuid  ?
                       <button className="button-action" onClick={() => props.Approve()}>Approve Item</button>
             :<></>}
         </div>
+
+          <Drawer PaperProps={{
+            sx: { width: "90%" }}} open={open} onClose={() => togglePreview(false)}>
+             <Box sx={{ width: "95%" }} role="presentation" onClick={() => togglePreview(false)}>
+                <ShipItem item={itemData} img={imageLocation}/>
+             </Box>
+          </Drawer>
+
         </div>
         </>
     )
