@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url'
 const FARO_APP_NAME = import.meta.env.VITE_FARO_APP_NAME || 'nexusfrontend';
 let FARO_APP_ID = "2466";
 
-if (FARO_APP_NAME == "nexusdb_dev") {
+if (FARO_APP_NAME === "nexusdb_dev") {
     FARO_APP_ID = "3565";
 }
 
