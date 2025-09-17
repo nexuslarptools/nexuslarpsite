@@ -18,7 +18,7 @@
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.4",
     "@grafana/faro-react": "^1.12.0",
-    "@grafana/faro-rollup-plugin": "^0.1.1",
+    "@grafana/faro-rollup-plugin": "^0.6.0",
     "@grafana/faro-web-tracing": "^1.12.0",
     "@mui/icons-material": "^5.15.0",
     "@mui/material": "^5.17.1",
@@ -63,6 +63,7 @@
     "wouter": "^2.12.1"
   },
   "devDependencies": {
+    "@grafana/faro-cli": "^0.6.0",
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
     "@vitejs/plugin-react": "^4.2.0",
