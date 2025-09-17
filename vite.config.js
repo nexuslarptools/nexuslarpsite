@@ -17,10 +17,10 @@ export default defineConfig({
   plugins: [
       react(),
     faroUploader({
-      appName: FARO_APP_NAME,
+      appName: "nexusdb_dev",
       endpoint: "https://faro-api-prod-us-east-0.grafana.net/faro/api/v1",
       apiKey: "glc_eyJvIjoiMTA4ODg4OCIsIm4iOiJzdGFjay04OTQyMjktaW50ZWdyYXRpb24tZmFyb3ZpdGUiLCJrIjoiTFR2dzA2MzNBNzNZQkg0VUZtaVcxNjBuIiwibSI6eyJyIjoicHJvZC11cy1lYXN0LTAifX0=",
-      appId: FARO_APP_ID,
+      appId: "3565",
       stackId: "894229",
       gzipContents: true,
       verbose: true,
@@ -28,7 +28,11 @@ export default defineConfig({
 
   ],
   build: {
-    minify: false
+    minify: false,
+    sourcemap: true,
+  },
+  css: {
+    devSourcemap: true,
   },
   ...(process.env.NODE_ENV === 'development'
     ? {
