@@ -26,7 +26,7 @@ const FARO_ENV = import.meta.env.VITE_FARO_ENV || (import.meta.env.MODE || 'prod
 // Initialize Faro only if a collector URL is provided
 if (FARO_URL) {
     const instrumentationOptions = {
-        propagateTraceHeaderCorsUrls: [new RegExp('/,+g/')], // This is a list of specific URIs or regular exprressions
+        propagateTraceHeaderCorsUrls: [/.+g/], // This is a list of specific URIs or regular exprressions
     };
   initializeFaro({
     url: FARO_URL,
