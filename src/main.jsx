@@ -14,36 +14,45 @@ const onRedirectCallback = (appState) => {
 }
 
 import { createRoutesFromChildren, matchRoutes, Routes, useLocation, useNavigationType } from 'react-router-dom';
-import { createReactRouterV6Options, getWebInstrumentations, initializeFaro, ReactIntegration, ReactRouterVersion } from '@grafana/faro-react';
+import { createReactRouterV6Options, getWebInstrumentations, initializeFaro, ReactIntegration } from '@grafana/faro-react';
 import { TracingInstrumentation } from '@grafana/faro-web-tracing';
 
-initializeFaro({
-    url: 'https://faro-collector-prod-us-east-0.grafana.net/collect/a191de8879d808dea3cbcdc718cb9c2c',
+// Read Faro configuration from environment variables
+const FARO_URL = import.meta.env.VITE_FARO_URL;
+const FARO_APP_NAME = import.meta.env.VITE_FARO_APP_NAME || 'nexusfrontend';
+const FARO_APP_VERSION = import.meta.env.VITE_FARO_APP_VERSION || '1.0.0';
+const FARO_ENV = import.meta.env.VITE_FARO_ENV || (import.meta.env.MODE || 'production');
+
+// Initialize Faro only if a collector URL is provided
+if (FARO_URL) {
+  initializeFaro({
+    url: FARO_URL,
     app: {
-        name: 'nexusfrontend',
-        version: '1.0.0',
-        environment: 'production'
+      name: FARO_APP_NAME,
+      version: FARO_APP_VERSION,
+      environment: FARO_ENV,
     },
-
     instrumentations: [
-        // Mandatory, omits default instrumentations otherwise.
-        ...getWebInstrumentations(),
-
-        // Tracing package to get end-to-end visibility for HTTP requests.
-        new TracingInstrumentation(),
-
-        // React integration for React applications.
-        new ReactIntegration({
-            router: createReactRouterV6Options({
-                createRoutesFromChildren,
-                matchRoutes,
-                Routes,
-                useLocation,
-                useNavigationType,
-            }),
+      // Mandatory, omits default instrumentations otherwise.
+      ...getWebInstrumentations(),
+      // Tracing package to get end-to-end visibility for HTTP requests.
+      new TracingInstrumentation(),
+      // React integration for React applications.
+      new ReactIntegration({
+        router: createReactRouterV6Options({
+          createRoutesFromChildren,
+          matchRoutes,
+          Routes,
+          useLocation,
+          useNavigationType,
         }),
+      }),
     ],
-});
+  });
+} else {
+  // eslint-disable-next-line no-console
+  console.warn('Faro is not initialized: VITE_FARO_URL is not set');
+}
 
 
 const queryClient = new QueryClient()

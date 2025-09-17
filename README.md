@@ -1,8 +1,18 @@
-# React + Vite
+# Nexus LARP Site
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Environment Configuration
 
-Currently, two official plugins are available:
+This app uses Vite environment variables. Create a .env (or .env.local) file with the following variables as needed:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Auth0:
+- VITE_AUTH0_DOMAIN=
+- VITE_AUTH0_CLIENT_ID=
+- VITE_AUTH0_AUDIENCE=
+
+Grafana Faro (optional):
+- VITE_FARO_URL= // e.g. https://faro-collector-.../collect/<token>
+- VITE_FARO_APP_NAME= // default: nexusfrontend
+- VITE_FARO_APP_VERSION= // default: 1.0.0
+- VITE_FARO_ENV= // default: Vite MODE or 'production'
+
+If VITE_FARO_URL is not set, Faro will not be initialized.
