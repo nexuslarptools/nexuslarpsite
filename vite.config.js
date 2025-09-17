@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 import faroUploader from '@grafana/faro-rollup-plugin';
 import { fileURLToPath } from 'url'
 
-const FARO_APP_NAME = import.meta.env.VITE_FARO_APP_NAME || 'nexusfrontend';
+const FARO_APP_NAME = process.env.VITE_FARO_APP_NAME || 'nexusfrontend';
 let FARO_APP_ID = "2466";
 
 if (FARO_APP_NAME === "nexusdb_dev") {
