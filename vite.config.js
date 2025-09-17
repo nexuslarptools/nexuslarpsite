@@ -3,6 +3,13 @@ import react from '@vitejs/plugin-react'
 import faroUploader from '@grafana/faro-rollup-plugin';
 import { fileURLToPath } from 'url'
 
+const FARO_APP_NAME = import.meta.env.VITE_FARO_APP_NAME || 'nexusfrontend';
+let FARO_APP_ID = "2466";
+
+if (FARO_APP_NAME == "nexusdb_dev") {
+    FARO_APP_ID = "3565";
+}
+
 // https://vitejs.dev/config/
 export default defineConfig({
   root: './',
@@ -10,11 +17,13 @@ export default defineConfig({
   plugins: [
       react(),
     faroUploader({
-      appName: "nexusfrontend",
-      endpoint: "https://faro-collector-prod-us-east-0.grafana.net/collect/a191de8879d808dea3cbcdc718cb9c2c",
+      appName: FARO_APP_NAME,
+      endpoint: "https://faro-api-prod-us-east-0.grafana.net/faro/api/v1",
       apiKey: "glc_eyJvIjoiMTA4ODg4OCIsIm4iOiJzdGFjay04OTQyMjktaW50ZWdyYXRpb24tZmFyb3ZpdGUiLCJrIjoiTFR2dzA2MzNBNzNZQkg0VUZtaVcxNjBuIiwibSI6eyJyIjoicHJvZC11cy1lYXN0LTAifX0=",
-      appId: "2466",
+      appId: FARO_APP_ID,
+      stackId: "894229",
       gzipContents: true,
+      verbose: true,
     }),
 
   ],
