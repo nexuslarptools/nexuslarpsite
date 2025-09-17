@@ -25,6 +25,9 @@ const FARO_ENV = import.meta.env.VITE_FARO_ENV || (import.meta.env.MODE || 'prod
 
 // Initialize Faro only if a collector URL is provided
 if (FARO_URL) {
+    const instrumentationOptions = {
+        propagateTraceHeaderCorsUrls: [new RegExp('/,+g/')], // This is a list of specific URIs or regular exprressions
+    };
   initializeFaro({
     url: FARO_URL,
     app: {
@@ -36,7 +39,7 @@ if (FARO_URL) {
       // Mandatory, omits default instrumentations otherwise.
       ...getWebInstrumentations(),
       // Tracing package to get end-to-end visibility for HTTP requests.
-      new TracingInstrumentation(),
+      new TracingInstrumentation({instrumentationOptions}),
       // React integration for React applications.
       new ReactIntegration({
         router: createReactRouterV6Options({
