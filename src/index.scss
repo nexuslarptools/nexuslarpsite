@@ -1,5 +1,5 @@
-@import "/src/variables";
-@import "/src/fonts";
+@use "@/variables" as *;
+@use "@/fonts" as *;
 
 :root {font-size: $font-size}
 html {height: 100%;}

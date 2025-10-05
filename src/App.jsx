@@ -139,22 +139,21 @@ class App extends Component {
 
 
   render() {
-    const Layout = () => (
-      <>
-        <SearchDrawer open={this.state.open} toggleClose={() => this.togglePreview(false)} />
-        <div className="app">
-          <Header drawerOpenCLick={(e) => this.togglePreview(e)} mainmenu={this.state.ismain} />
-          <div className={"app-body"}>
-            <Outlet />
-          </div>
-        </div>
-        <ContactFooter />
-      </>
-    );
 
     const router = createBrowserRouter(
       createRoutesFromElements(
-        <Route element={<Layout />}>
+        <Route element={(
+          <>
+            <SearchDrawer open={this.state.open} toggleClose={() => this.togglePreview(false)} />
+            <div className="app">
+              <Header drawerOpenCLick={(e) => this.togglePreview(e)} mainmenu={this.state.ismain} />
+              <div className={"app-body"}>
+                <Outlet />
+              </div>
+            </div>
+            <ContactFooter />
+          </>
+        )}>
           <Route
             index
             element={(<HomePage subState={this.state} toggleSubScreen={(e) => this.toggleSubScreen(e)} />)}

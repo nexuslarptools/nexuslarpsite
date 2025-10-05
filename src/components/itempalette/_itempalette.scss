@@ -1,4 +1,4 @@
-@import "/src/variables";
+@use "@/variables" as *;
 
 .print-items-box {
     width: 100%;
