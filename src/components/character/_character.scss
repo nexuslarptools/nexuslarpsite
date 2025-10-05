@@ -1,5 +1,5 @@
 @use "@/variables" as *;
-@import "/src/mixins";
+@use "@/mixins" as *;
 
 // floating option buttons
 .sheet-option-buttons {

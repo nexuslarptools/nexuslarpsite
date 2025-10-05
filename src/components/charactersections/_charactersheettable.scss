@@ -1,5 +1,5 @@
 @use "@/variables" as *;
-@import "/src/mixins";
+@use "@/mixins" as *;
 
 .sheet-table-attribute-typeSM{
     font-size: 7pt;

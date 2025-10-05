@@ -1,5 +1,5 @@
-@import "/src/variables";
-@import "/src/mixins";
+@use "@/variables" as *;
+@use "@/mixins" as *;
 
 .crewposition .MuiFormGroup-root {
             @include roundedCorners();
