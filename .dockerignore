@@ -1,11 +1,19 @@
-.git
-.vscode
-.dockerignore
-.gitignore
-.env
-config
-build
+﻿# Exclude dependencies and build outputs from the Docker build context
 node_modules
-docker-compose.yaml
-Dockerfile
-README.md
+.dist
+/dist
+
+# VCS and IDE files
+.git
+.gitignore
+.idea
+.vscode
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# Misc
+package-lock.json_OLD

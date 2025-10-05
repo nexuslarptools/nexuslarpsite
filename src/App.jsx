@@ -1,7 +1,7 @@
 import './App.scss'
 import './master.scss';
 import { Component } from "react"
-import { Route, BrowserRouter } from "react-router-dom"
+import { Route, createBrowserRouter, RouterProvider, createRoutesFromElements, Outlet } from "react-router-dom"
 import Header from "./components/header/header"
 import HomePage from "./views/HomePage"
 import CurrentUserPage from "./views/Users/CurrentUserPage"
@@ -14,11 +14,11 @@ import LarpsIndex from './views/Larps/LarpsIndex'
 import ContactFooter from './components/contactfooter/contactbar';
 import ContactUs from './views/EmailHelp/EmailHelp';
 import CharactersIndex from './views/Characters/CharactersIndex';
-import { FaroRoutes } from '@grafana/faro-react';
 import SearchDrawer from './components/drawer/searchdrawer';
 import CharacterSearch from './views/Search/charactersearch';
 import ItemSearch from './views/Search/itemsearch';
 import ShipItem from './components/item/shipitem';
+import {withFaroRouterInstrumentation} from "@grafana/faro-react";
 
 
 
@@ -139,95 +139,106 @@ class App extends Component {
 
 
   render() {
-    return (
-      <BrowserRouter>
-       <SearchDrawer open={this.state.open} toggleClose={() => this.togglePreview(false)} />
-      <div className="app">
-      <Header drawerOpenCLick={(e) => this.togglePreview(e)} mainmenu={this.state.ismain}/>
-      <div className={"app-body"}>
-          <FaroRoutes>
+    const Layout = () => (
+      <>
+        <SearchDrawer open={this.state.open} toggleClose={() => this.togglePreview(false)} />
+        <div className="app">
+          <Header drawerOpenCLick={(e) => this.togglePreview(e)} mainmenu={this.state.ismain} />
+          <div className={"app-body"}>
+            <Outlet />
+          </div>
+        </div>
+        <ContactFooter />
+      </>
+    );
 
-          <Route 
-          exact path="/" 
-          element={(<HomePage subState={this.state} toggleSubScreen={(e) => this.toggleSubScreen(e)} />)} 
+    const router = createBrowserRouter(
+      createRoutesFromElements(
+        <Route element={<Layout />}>
+          <Route
+            index
+            element={(<HomePage subState={this.state} toggleSubScreen={(e) => this.toggleSubScreen(e)} />)}
           />
-            <Route
+          <Route
             path="/profile"
             element={<AuthenticationGuard subState={this.state} toggleSubScreen={(e) => this.toggleSubScreen(e)} component={CurrentUserPage} />}
-           />
-            <Route
+          />
+          <Route
             path="/users"
             element={<AuthenticationGuard subState={this.state} toggleSubScreen={(e) => this.toggleSubScreen(e)} component={UsersPage} />}
-           />
-            <Route
+          />
+          <Route
             path="/items"
-            element={<AuthenticationGuard 
-              subState={this.state.items !== undefined && this.state.items !== null ?this.state.items : this.state}
+            element={<AuthenticationGuard
+              subState={this.state.items !== undefined && this.state.items !== null ? this.state.items : this.state}
               ismain={this.state.ismain}
               ToggleSwitches={(e) => this.ToggleSwitches(e, 'items')}
               UpdateItemsList={(e) => this.UpdateItemsList(e)}
-              toggleSubScreen={(e, funct, guid, path, filters) => this.toggleSubScreen(e, funct, guid, path, 'items', filters)} 
+              toggleSubScreen={(e, funct, guid, path, filters) => this.toggleSubScreen(e, funct, guid, path, 'items', filters)}
               component={ItemsIndex} />}
-           />
-            <Route
+          />
+          <Route
             path="/characters"
-            element={(<AuthenticationGuard 
+            element={(<AuthenticationGuard
               subState={this.state.characters !== undefined && this.state.characters !== null ? this.state.characters : this.state}
               ismain={this.state.ismain}
               ToggleSwitches={(e) => this.ToggleSwitches(e, 'characters')}
-              toggleSubScreen={(e, funct, guid, path, filters) => this.toggleSubScreen(e, funct, guid, path, 'characters', filters)} 
+              toggleSubScreen={(e, funct, guid, path, filters) => this.toggleSubScreen(e, funct, guid, path, 'characters', filters)}
               component={CharactersIndex} />)}
-           />
+          />
           <Route
             path="/series"
             element={<AuthenticationGuard subState={this.state} toggleSubScreen={(e) => this.toggleSubScreen(e)} component={SeriesIndex} />}
-           />
+          />
           <Route
             path="/tags"
             element={<AuthenticationGuard subState={this.state} toggleSubScreen={(e) => this.toggleSubScreen(e)} component={TagsIndex} />}
-           />
+          />
           <Route
             path="/larps"
             element={<AuthenticationGuard subState={this.state} toggleSubScreen={(e) => this.toggleSubScreen(e)} component={LarpsIndex} />}
-           />
+          />
           <Route
-
             path="/contactus"
             element={<AuthenticationGuard subState={this.state} toggleSubScreen={(e) => this.toggleSubScreen(e)} component={ContactUs} />}
-           />
+          />
           <Route
             path="/charactersearch/"
-            element={<AuthenticationGuard 
-              subState={this.state.characters !== undefined && this.state.characters !== null ?this.state.characters : this.state}
+            element={<AuthenticationGuard
+              subState={this.state.characters !== undefined && this.state.characters !== null ? this.state.characters : this.state}
               ismain={this.state.ismain}
               ToggleSwitches={(e) => this.ToggleSwitches(e, 'characters')}
-              toggleSubScreen={(e, funct, guid, path, filters) => this.toggleSubScreen(e, funct, guid, path, 'characters', filters)} 
+              toggleSubScreen={(e, funct, guid, path, filters) => this.toggleSubScreen(e, funct, guid, path, 'characters', filters)}
               component={CharacterSearch} />}
-           />
-                     <Route
+          />
+          <Route
             path="/itemsearch/"
-            element={<AuthenticationGuard 
-              subState={this.state.items !== undefined && this.state.items !== null ?this.state.items : this.state}
+            element={<AuthenticationGuard
+              subState={this.state.items !== undefined && this.state.items !== null ? this.state.items : this.state}
               ismain={this.state.ismain}
               ToggleSwitches={(e) => this.ToggleSwitches(e, 'items')}
               UpdateItemsList={(e) => this.UpdateItemsList(e)}
-              toggleSubScreen={(e, funct, guid, path, filters) => this.toggleSubScreen(e, funct, guid, path, 'items', filters)} 
-              component={ItemSearch}/>}
-           />
-           <Route path="shiptest" 
-           element={<AuthenticationGuard 
-             component={ShipItem}
-           />}
-           />
-          <Route 
-          path="*"  
-          element={(<HomePage subState={this.state} toggleSubScreen={(e) => this.toggleSubScreen(e)} />)} 
+              toggleSubScreen={(e, funct, guid, path, filters) => this.toggleSubScreen(e, funct, guid, path, 'items', filters)}
+              component={ItemSearch} />}
           />
-          </FaroRoutes>
-          </div>
-          </div>
-          <ContactFooter/>
-        </BrowserRouter>
+          <Route path="shiptest"
+            element={<AuthenticationGuard
+              component={ShipItem}
+            />}
+          />
+          <Route
+            path="*"
+            element={(<HomePage subState={this.state} toggleSubScreen={(e) => this.toggleSubScreen(e)} />)}
+          />
+        </Route>
+      )
+    );
+
+      const browserRouter = withFaroRouterInstrumentation(router);
+
+
+      return (
+      <RouterProvider router={browserRouter} />
     );
   }
 }

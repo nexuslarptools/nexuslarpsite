@@ -13,8 +13,11 @@ const onRedirectCallback = (appState) => {
   )
 }
 
-import { createRoutesFromChildren, matchRoutes, Routes, useLocation, useNavigationType } from 'react-router-dom';
-import { createReactRouterV6Options, getWebInstrumentations, initializeFaro, ReactIntegration } from '@grafana/faro-react';
+import { matchRoutes } from 'react-router-dom';
+import {
+    createReactRouterV6DataOptions,
+    getWebInstrumentations, initializeFaro, ReactIntegration
+} from '@grafana/faro-react';
 import { TracingInstrumentation } from '@grafana/faro-web-tracing';
 
 // Read Faro configuration from environment variables
@@ -42,12 +45,8 @@ if (FARO_URL) {
       new TracingInstrumentation({instrumentationOptions}),
       // React integration for React applications.
       new ReactIntegration({
-        router: createReactRouterV6Options({
-          createRoutesFromChildren,
+        router: createReactRouterV6DataOptions({
           matchRoutes,
-          Routes,
-          useLocation,
-          useNavigationType,
         }),
       }),
     ],
