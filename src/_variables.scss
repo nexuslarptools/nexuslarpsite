@@ -1,67 +1,69 @@
+@use "sass:color";
+
 // colors
 
 // blues
 $color-primary: #87CEEB;
-$color-primary-lightest: lighten($color-primary, 15%);
-$color-primary-lighter: lighten($color-primary, 10%);
-$color-primary-light: lighten($color-primary, 5%);
-$color-primary-dark: darken($color-primary, 15%);
-$color-primary-darker: darken($color-primary, 30%);
-$color-primary-darkest: darken($color-primary, 50%);
+$color-primary-lightest: color.adjust($color-primary, $lightness: 15%);
+$color-primary-lighter: color.adjust($color-primary, $lightness: 10%);
+$color-primary-light: color.adjust($color-primary, $lightness: 5%);
+$color-primary-dark: color.adjust($color-primary, $lightness: -15%);
+$color-primary-darker: color.adjust($color-primary, $lightness: -30%);
+$color-primary-darkest: color.adjust($color-primary, $lightness: -50%);
 
 // grays
 $color-neutral: #cccccc;
-$color-neutral-lightest: lighten($color-neutral, 15%);
-$color-neutral-lighter: lighten($color-neutral, 10%);
-$color-neutral-light: lighten($color-neutral, 5%);
-$color-neutral-dark: darken($color-neutral, 5%);
-$color-neutral-darker: darken($color-neutral, 15%);
-$color-neutral-darkest: darken($color-neutral, 50%);
+$color-neutral-lightest: color.adjust($color-neutral, $lightness: 15%);
+$color-neutral-lighter: color.adjust($color-neutral, $lightness: 10%);
+$color-neutral-light: color.adjust($color-neutral, $lightness: 5%);
+$color-neutral-dark: color.adjust($color-neutral, $lightness: -5%);
+$color-neutral-darker: color.adjust($color-neutral, $lightness: -15%);
+$color-neutral-darkest: color.adjust($color-neutral, $lightness: -50%);
 
 // Deeper Grays
 $color-utility: #5C5D67;
-$color-utility-lightest: lighten($color-neutral, 15%);
-$color-utility-lighter: lighten($color-neutral, 10%);
-$color-utility-light: lighten($color-neutral, 5%);
-$color-utility-dark: darken($color-neutral, 5%);
-$color-utility-darker: darken($color-neutral, 15%);
-$color-utility-darkest: darken($color-neutral, 50%);
+$color-utility-lightest: color.adjust($color-neutral, $lightness: 15%);
+$color-utility-lighter: color.adjust($color-neutral, $lightness: 10%);
+$color-utility-light: color.adjust($color-neutral, $lightness: 5%);
+$color-utility-dark: color.adjust($color-neutral, $lightness: -5%);
+$color-utility-darker: color.adjust($color-neutral, $lightness: -15%);
+$color-utility-darkest: color.adjust($color-neutral, $lightness: -50%);
 
 // reds
 $color-danger: #bb202e;
-$color-danger-lightest: lighten($color-danger, 45%);
-$color-danger-lighter: lighten($color-danger, 30%);
-$color-danger-light: lighten($color-danger, 5%);
-$color-danger-dark: darken($color-danger, 5%);
-$color-danger-darker: darken($color-danger, 15%);
-$color-danger-darkest: darken($color-danger, 50%);
+$color-danger-lightest: color.adjust($color-danger, $lightness: 45%);
+$color-danger-lighter: color.adjust($color-danger, $lightness: 30%);
+$color-danger-light: color.adjust($color-danger, $lightness: 5%);
+$color-danger-dark: color.adjust($color-danger, $lightness: -5%);
+$color-danger-darker: color.adjust($color-danger, $lightness: -15%);
+$color-danger-darkest: color.adjust($color-danger, $lightness: -50%);
 
 // purples
 $color-tertiary: #a094e8;
-$color-tertiary-lightest: lighten($color-tertiary, 15%);
-$color-tertiary-lighter: lighten($color-tertiary, 10%);
-$color-tertiary-light: lighten($color-tertiary, 5%);
-$color-tertiary-dark: darken($color-tertiary, 5%);
-$color-tertiary-darker: darken($color-tertiary, 15%);
-$color-tertiary-darkest: darken($color-tertiary, 50%);
+$color-tertiary-lightest: color.adjust($color-tertiary, $lightness: 15%);
+$color-tertiary-lighter: color.adjust($color-tertiary, $lightness: 10%);
+$color-tertiary-light: color.adjust($color-tertiary, $lightness: 5%);
+$color-tertiary-dark: color.adjust($color-tertiary, $lightness: -5%);
+$color-tertiary-darker: color.adjust($color-tertiary, $lightness: -15%);
+$color-tertiary-darkest: color.adjust($color-tertiary, $lightness: -50%);
 
 // oranges
 $color-secondary: #FCAF58;
-$color-secondary-lightest: lighten($color-secondary, 15%);
-$color-secondary-lighter: lighten($color-secondary, 10%);
-$color-secondary-light: lighten($color-secondary, 5%);
-$color-secondary-dark: darken($color-secondary, 5%);
-$color-secondary-darker: darken($color-secondary, 15%);
-$color-secondary-darkest: darken($color-secondary, 50%);
+$color-secondary-lightest: color.adjust($color-secondary, $lightness: 15%);
+$color-secondary-lighter: color.adjust($color-secondary, $lightness: 10%);
+$color-secondary-light: color.adjust($color-secondary, $lightness: 5%);
+$color-secondary-dark: color.adjust($color-secondary, $lightness: -5%);
+$color-secondary-darker: color.adjust($color-secondary, $lightness: -15%);
+$color-secondary-darkest: color.adjust($color-secondary, $lightness: -50%);
 
 // greens
 $color-success: #1e9f32;
-$color-success-lightest: lighten($color-success, 50%);
-$color-success-lighter: lighten($color-success, 20%);
-$color-success-light: lighten($color-success, 10%);
-$color-success-dark: darken($color-success, 10%);
-$color-success-darker: darken($color-success, 20%);
-$color-success-darkest: darken($color-success, 50%);
+$color-success-lightest: color.adjust($color-success, $lightness: 50%);
+$color-success-lighter: color.adjust($color-success, $lightness: 20%);
+$color-success-light: color.adjust($color-success, $lightness: 10%);
+$color-success-dark: color.adjust($color-success, $lightness: -10%);
+$color-success-darker: color.adjust($color-success, $lightness: -20%);
+$color-success-darkest: color.adjust($color-success, $lightness: -50%);
 
 $common-border: 3px solid #2C3D55;
 $common-border-radius: 5px;
