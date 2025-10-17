@@ -37,13 +37,13 @@ jobs:
           platforms: linux/amd64,linux/arm64,linux/arm64/v8
           build-args: |
             TAG=${{ github.ref_name }}
-            REACT_APP_AUTH0_DOMAIN=${{ secrets.REACT_APP_AUTH0_DOMAIN }}
-            REACT_APP_AUTH0_CLIENT_ID=${{ secrets.REACT_APP_AUTH0_CLIENT_ID }}
-            REACT_APP_AUTH0_AUDIENCE=${{ secrets.REACT_APP_AUTH0_AUDIENCE }}
-            REACT_APP_MINIO_CREDS_ACCESS_KEY=${{ secrets.REACT_APP_MINIO_CREDS_ACCESS_KEY }}
-            REACT_APP_MINIO_CREDS_SECRET_KEY=${{ secrets.REACT_APP_MINIO_CREDS_SECRET_KEY }}
-            REACT_APP_FARO_URL=${{ secrets.REACT_APP_DEV_FARO_URL }}
-            REACT_APP_FARO_NAME=${{ secrets.REACT_APP_DEV_FARO_NAME }}
-            REACT_APP_FARO_VERSION=${{ secrets.REACT_APP_DEV_FARO_VERSION }}
-            REACT_APP_FARO_ENV=${{ secrets.REACT_APP_DEV_FARO_ENV }}
-            
+          secrets: |
+            VITE_AUTH0_DOMAIN=${{ secrets.VITE_AUTH0_DOMAIN }}
+            VITE_AUTH0_CLIENT_ID=${{ secrets.VITE_AUTH0_CLIENT_ID }}
+            VITE_AUTH0_AUDIENCE=${{ secrets.VITE_AUTH0_AUDIENCE }}
+            VITE_FARO_URL=${{ secrets.VITE_FARO_URL }}
+            VITE_FARO_APP_NAME=${{ secrets.VITE_FARO_APP_NAME }}
+            VITE_FARO_APP_VERSION=${{ secrets.VITE_FARO_APP_VERSION }}
+            VITE_FARO_ENV=${{ secrets.VITE_FARO_ENV }}
+            VITE_MINIO_CREDS_ACCESS_KEY=${{ secrets.VITE_MINIO_CREDS_ACCESS_KEY }}
+            VITE_MINIO_CREDS_SECRET_KEY=${{ secrets.VITE_MINIO_CREDS_SECRET_KEY }}

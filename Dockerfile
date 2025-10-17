@@ -1,26 +1,6 @@
+# syntax=docker/dockerfile:1.7
+
 FROM node:20-alpine AS build
-
-# Build-time arguments (mapped to Vite env vars)
-ARG REACT_APP_AUTH0_DOMAIN
-ARG REACT_APP_AUTH0_CLIENT_ID
-ARG REACT_APP_AUTH0_AUDIENCE
-ARG REACT_APP_MINIO_CREDS_ACCESS_KEY
-ARG REACT_APP_MINIO_CREDS_SECRET_KEY
-ARG REACT_APP_FARO_URL
-ARG REACT_APP_FARO_NAME
-ARG REACT_APP_FARO_VERSION
-ARG REACT_APP_FARO_ENV
-
-# Scope env vars to the build stage only
-ENV VITE_AUTH0_DOMAIN=${REACT_APP_AUTH0_DOMAIN} \
-    VITE_AUTH0_CLIENT_ID=${REACT_APP_AUTH0_CLIENT_ID} \
-    VITE_AUTH0_AUDIENCE=${REACT_APP_AUTH0_AUDIENCE} \
-    VITE_MINIO_CREDS_ACCESS_KEY=${REACT_APP_MINIO_CREDS_ACCESS_KEY} \
-    VITE_MINIO_CREDS_SECRET_KEY=${REACT_APP_MINIO_CREDS_SECRET_KEY} \
-    VITE_FARO_URL=${REACT_APP_FARO_URL} \
-    VITE_FARO_APP_NAME=${REACT_APP_FARO_NAME} \
-    VITE_FARO_APP_VERSION=${REACT_APP_FARO_VERSION} \
-    VITE_FARO_ENV=${REACT_APP_FARO_ENV}
 
 WORKDIR /app
 
@@ -28,9 +8,41 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci --no-audit --no-fund
 
-# Copy the rest of the source and build
+# Copy the rest of the source
 COPY . .
-RUN npm run build
+
+# Build with Vite env vars provided via individual Docker BuildKit secrets
+# Each secret should contain only the value (no KEY= prefix). For example, the secret
+# with id VITE_AUTH0_DOMAIN should contain only your Auth0 domain value.
+# We load any provided secrets only for this RUN so they are not persisted in image layers.
+RUN \
+    --mount=type=secret,id=VITE_AUTH0_DOMAIN,target=/run/secrets/VITE_AUTH0_DOMAIN \
+    --mount=type=secret,id=VITE_AUTH0_CLIENT_ID,target=/run/secrets/VITE_AUTH0_CLIENT_ID \
+    --mount=type=secret,id=VITE_AUTH0_AUDIENCE,target=/run/secrets/VITE_AUTH0_AUDIENCE \
+    --mount=type=secret,id=VITE_FARO_URL,target=/run/secrets/VITE_FARO_URL \
+    --mount=type=secret,id=VITE_FARO_APP_NAME,target=/run/secrets/VITE_FARO_APP_NAME \
+    --mount=type=secret,id=VITE_FARO_APP_VERSION,target=/run/secrets/VITE_FARO_APP_VERSION \
+    --mount=type=secret,id=VITE_FARO_ENV,target=/run/secrets/VITE_FARO_ENV \
+    --mount=type=secret,id=VITE_MINIO_CREDS_ACCESS_KEY,target=/run/secrets/VITE_MINIO_CREDS_ACCESS_KEY \
+    --mount=type=secret,id=VITE_MINIO_CREDS_SECRET_KEY,target=/run/secrets/VITE_MINIO_CREDS_SECRET_KEY \
+    sh -lc 'set -e; \
+      for k in \
+        VITE_AUTH0_DOMAIN \
+        VITE_AUTH0_CLIENT_ID \
+        VITE_AUTH0_AUDIENCE \
+        VITE_FARO_URL \
+        VITE_FARO_APP_NAME \
+        VITE_FARO_APP_VERSION \
+        VITE_FARO_ENV \
+        VITE_MINIO_CREDS_ACCESS_KEY \
+        VITE_MINIO_CREDS_SECRET_KEY; do \
+        f="/run/secrets/$k"; \
+        if [ -f "$f" ]; then \
+          v=$(cat "$f"); \
+          export "$k=$v"; \
+        fi; \
+      done; \
+      npm run build'
 
 # Use a small, pinned NGINX image for serving static files
 FROM nginx:1.27-alpine
