@@ -94,3 +94,18 @@ secrets:
 Notes:
 - Provide only the secrets you need; optional ones may be omitted.
 - If you want to push the built image to a registry (e.g., GHCR), update the workflow to log in and set `push: true` with appropriate tags.
+
+
+## SonarCloud
+
+This repository is configured for SonarCloud analysis via GitHub Actions.
+
+Setup steps:
+- Create a project in SonarCloud and note your Organization key and Project key.
+- In this GitHub repository settings, add the following secrets:
+  - SONAR_TOKEN: A SonarCloud user token with Execute Analysis permission.
+  - SONAR_ORGANIZATION: Your SonarCloud organization key (optional if you fill the properties file).
+  - SONAR_PROJECT_KEY: Your SonarCloud project key (optional if you fill the properties file).
+- Optionally, replace the placeholders in sonar-project.properties with your actual organization and project key. If left as placeholders, the workflow passes them via arguments from secrets.
+
+The workflow .github/workflows/sonarcloud.yml runs on pushes and pull requests targeting main and development branches. For richer analysis (framework-aware rules), uncomment the Node setup, install, and build steps in the workflow to build the project before scanning.

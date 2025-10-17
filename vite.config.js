@@ -1,31 +1,38 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import faroUploader from '@grafana/faro-rollup-plugin';
+import faroUploader from '@grafana/faro-rollup-plugin'
 import { fileURLToPath } from 'url'
 
-const FARO_APP_NAME = process.env.VITE_FARO_APP_NAME || 'nexusfrontend';
-let FARO_APP_ID = "2466";
+// Read Faro configuration from environment variables
+const FARO_APP_NAME = process.env.VITE_FARO_APP_NAME || 'nexusfrontend'
+const FARO_ENDPOINT = process.env.VITE_FARO_ENDPOINT || process.env.VITE_FARO_URL
+const FARO_API_KEY = process.env.VITE_FARO_API_KEY
+const FARO_APP_ID = process.env.VITE_FARO_APP_ID
+const FARO_STACK_ID = process.env.VITE_FARO_STACK_ID
 
-if (FARO_APP_NAME === "nexusdb_dev") {
-    FARO_APP_ID = "3565";
-}
+// Only enable source map upload when running a production build and all required vars are present
+const enableFaroUploader = process.env.NODE_ENV === 'production'
+  && !!FARO_ENDPOINT && !!FARO_API_KEY && !!FARO_APP_ID && !!FARO_STACK_ID
 
 // https://vitejs.dev/config/
 export default defineConfig({
   root: './',
   publicDir: 'public',
   plugins: [
-      react(),
-    faroUploader({
-      appName: "nexusdb_dev",
-      endpoint: "https://faro-api-prod-us-east-0.grafana.net/faro/api/v1",
-      apiKey: "glc_eyJvIjoiMTA4ODg4OCIsIm4iOiJzdGFjay04OTQyMjktaW50ZWdyYXRpb24tZmFyb3ZpdGUiLCJrIjoiTFR2dzA2MzNBNzNZQkg0VUZtaVcxNjBuIiwibSI6eyJyIjoicHJvZC11cy1lYXN0LTAifX0=",
-      appId: "3565",
-      stackId: "894229",
-      gzipContents: true,
-      verbose: true,
-    }),
-
+    react(),
+    ...(enableFaroUploader
+      ? [
+          faroUploader({
+            appName: FARO_APP_NAME,
+            endpoint: FARO_ENDPOINT,
+            apiKey: FARO_API_KEY,
+            appId: FARO_APP_ID,
+            stackId: FARO_STACK_ID,
+            gzipContents: true,
+            verbose: true,
+          }),
+        ]
+      : []),
   ],
   build: {
     minify: false,
@@ -36,18 +43,18 @@ export default defineConfig({
   },
   ...(process.env.NODE_ENV === 'development'
     ? {
-      define: {
-        global: {},
-      },
-    }
+        define: {
+          global: {},
+        },
+      }
     : {}),
-resolve: {
+  resolve: {
     alias: {
-      "@": fileURLToPath(new URL("./src", import.meta.url)),
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
       ...(process.env.NODE_ENV !== 'development'
         ? {
-          './runtimeConfig': './runtimeConfig.browser', //fix production build
-        }
+            './runtimeConfig': './runtimeConfig.browser', //fix production build
+          }
         : {}),
     },
   },
