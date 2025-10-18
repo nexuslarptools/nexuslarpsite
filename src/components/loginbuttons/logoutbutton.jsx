@@ -1,11 +1,17 @@
-import { useAuth0 } from '@auth0/auth0-react'
+import { useNavigate } from 'react-router-dom'
 import './button.scss'
 
 const LogoutButton = () => {
-  const { logout } = useAuth0()
+  const navigate = useNavigate()
+
+  const handleClick = () => {
+    // Route to our SPA logout handler which will call the backend and clear client tokens
+    const defaultRedirect = '/'
+    navigate(`/oauth2/logout?redirect=${encodeURIComponent(defaultRedirect)}`)
+  }
 
   return (
-    <button className="button-basic" onClick={() => logout({logoutParams: { returnTo: window.location.origin }})}>
+    <button className="button-basic" onClick={handleClick}>
       Log Out
     </button>
   )
