@@ -4,6 +4,7 @@
   "APILocation": "https://databasebackenddev.kylebrighton.com",
   "appOrigin": "https://databasebackenddev.kylebrighton.com",
   "OAUTH_EXCHANGE_PATH": "/api/v1/Auth/ExchangeCode",
+  "OAUTH_LOGOUT_PATH": "/api/v1/Auth/Logout",
   "bucketName":"nexusdevdata",
   "nobucketName":"nexusdata",
   "s3Info": {
