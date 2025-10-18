@@ -18,6 +18,7 @@ import SearchDrawer from './components/drawer/searchdrawer';
 import CharacterSearch from './views/Search/charactersearch';
 import ItemSearch from './views/Search/itemsearch';
 import ShipItem from './components/item/shipitem';
+import OAuthCallback from './views/Auth/OAuthCallback';
 import {withFaroRouterInstrumentation} from "@grafana/faro-react";
 
 
@@ -224,6 +225,10 @@ class App extends Component {
             element={<AuthenticationGuard
               component={ShipItem}
             />}
+          />
+          <Route
+            path="/oauth2/callback"
+            element={<OAuthCallback />}
           />
           <Route
             path="*"
