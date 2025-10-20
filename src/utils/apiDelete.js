@@ -6,16 +6,21 @@ const {
     configJson.APILocation
   } = getConfig()
 
-
-export const apiDelete = async (auth, path) => {
-  const token = await auth.getAccessTokenSilently();
-  const response = await fetch(apiOrigin + path, {
+export const apiDelete = async (path) => {
+  const res = await fetch(apiOrigin + path, {
     method: 'delete',
-    headers: {Authorization: `Bearer ${token}`, 
-    Accept: 'application/json, text/plain, */*',
-    'Content-Type': 'application/json'}
-  }).then(response => response.json())
-  return response;
+    credentials: 'include',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json'
+    }
+  });
+  const contentType = res.headers.get('content-type') || '';
+  if (!res.ok) {
+    const errText = contentType.includes('application/json') ? await res.json().catch(() => ({})) : await res.text().catch(() => '');
+    throw new Error(`[apiDelete] ${res.status} ${res.statusText}: ${typeof errText === 'string' ? errText : JSON.stringify(errText)}`);
+  }
+  return contentType.includes('application/json') ? res.json() : res.text();
 }
 
 export default apiDelete

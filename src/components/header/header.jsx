@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import LoginButton from '../loginbuttons/loginbutton.jsx'
 import LogoutButton from '../loginbuttons/logoutbutton.jsx'
-import { useAuth0 } from '@auth0/auth0-react'
 import { Link } from 'react-router-dom'
 import './header.scss'
 import AuthLevelInfo from '../../utils/authLevelInfo.js'
@@ -16,8 +15,9 @@ const Header = props => {
         SetButtonActive(props.mainmenu);
       }, [props.mainmenu])
 
-  const { user, isAuthenticated, isAuthLoading } = useAuth0()
   const authLevel = AuthLevelInfo();
+  const isAuthenticated = authLevel > 0;
+  const isAuthLoading = authLevel === 0;
 
       let navClasses = 'navbar-container';
       return (
@@ -64,10 +64,7 @@ const Header = props => {
         <div className="nav-user-info">   
         {isAuthenticated && (
         <div className="profile">
-           <Link 
-  to={{ pathname: '/profile' }}> 
-          {user.email}
-          </Link>
+           <Link to={{ pathname: '/profile' }}>Profile</Link>
         </div>
           )}
           {!isAuthenticated && !isAuthLoading && (

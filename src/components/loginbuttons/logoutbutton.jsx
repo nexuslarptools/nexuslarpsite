@@ -1,11 +1,14 @@
-import { useAuth0 } from '@auth0/auth0-react'
 import './button.scss'
 
 const LogoutButton = () => {
-  const { logout } = useAuth0()
+  const onClick = () => {
+    const redirect = encodeURIComponent(window.location.origin);
+    // Navigate to our app's logout route which will call the backend and then redirect back
+    window.location.assign(`/oauth2/logout?redirect=${redirect}`);
+  };
 
   return (
-    <button className="button-basic" onClick={() => logout({logoutParams: { returnTo: window.location.origin }})}>
+    <button className="button-basic" onClick={onClick}>
       Log Out
     </button>
   )

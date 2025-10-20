@@ -6,17 +6,22 @@ const {
     configJson.APILocation
   } = getConfig()
 
-
-export const apiPost = async (auth, path, bodystring) => {
-  const token = await auth.getAccessTokenSilently();
-  const response = await fetch(apiOrigin + path, {
+export const apiPost = async (path, body) => {
+  const res = await fetch(apiOrigin + path, {
     method: 'post',
-    headers: {Authorization: `Bearer ${token}`, 
-    Accept: 'application/json, text/plain, */*',
-    'Content-Type': 'application/json'},
-    body: JSON.stringify(bodystring)
-  }).then(response => response.json())
-  return response;
+    credentials: 'include',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  });
+  const contentType = res.headers.get('content-type') || '';
+  if (!res.ok) {
+    const errText = contentType.includes('application/json') ? await res.json().catch(() => ({})) : await res.text().catch(() => '');
+    throw new Error(`[apiPost] ${res.status} ${res.statusText}: ${typeof errText === 'string' ? errText : JSON.stringify(errText)}`);
+  }
+  return contentType.includes('application/json') ? res.json() : res.text();
 }
 
 export default apiPost

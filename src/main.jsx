@@ -1,17 +1,8 @@
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.scss'
-import history from './utils/history'
-import { Auth0Provider } from '@auth0/auth0-react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-
-
-const onRedirectCallback = (appState) => {
-  history.push(
-    appState && appState.returnTo ? appState.returnTo : window.location.pathname
-  )
-}
 
 import { matchRoutes } from 'react-router-dom';
 import {
@@ -56,26 +47,11 @@ if (FARO_URL) {
   console.warn('Faro is not initialized: VITE_FARO_URL is not set');
 }
 
-
 const queryClient = new QueryClient()
 
-const providerConfig = {
-  domain: import.meta.env.VITE_AUTH0_DOMAIN,
-  clientId: import.meta.env.VITE_AUTH0_CLIENT_ID,
-  authorizationParams: {
-    redirect_uri: window.location.origin,
-    audience: import.meta.env.VITE_AUTH0_AUDIENCE,
-  },
-  onRedirectCallback,
-  useRefreshTokens: true,
-  cacheLocation: 'localstorage'
-}
-
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <Auth0Provider {...providerConfig}>
-    <QueryClientProvider client={queryClient}>
-        <App />
-        <ReactQueryDevtools />
-    </QueryClientProvider>
-  </Auth0Provider>,
+  <QueryClientProvider client={queryClient}>
+      <App />
+      <ReactQueryDevtools />
+  </QueryClientProvider>,
 )
