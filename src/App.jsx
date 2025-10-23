@@ -14,7 +14,7 @@ import LarpsIndex from './views/Larps/LarpsIndex'
 import ContactFooter from './components/contactfooter/contactbar';
 import ContactUs from './views/EmailHelp/EmailHelp';
 import CharactersIndex from './views/Characters/CharactersIndex';
-import SearchDrawer from './components/drawer/searchdrawer';
+import SearchDrawerGate from './components/drawer/SearchDrawerGate';
 import CharacterSearch from './views/Search/charactersearch';
 import ItemSearch from './views/Search/itemsearch';
 import ShipItem from './components/item/shipitem';
@@ -144,9 +144,9 @@ class App extends Component {
 
     const router = createBrowserRouter(
       createRoutesFromElements(
-        <Route element={(
+        <Route element={
           <>
-            <SearchDrawer open={this.state.open} toggleClose={() => this.togglePreview(false)} />
+            <SearchDrawerGate open={this.state.open} toggleClose={() => this.togglePreview(false)} />
             <div className="app">
               <Header drawerOpenCLick={(e) => this.togglePreview(e)} mainmenu={this.state.ismain} />
               <div className={"app-body"}>
@@ -155,7 +155,7 @@ class App extends Component {
             </div>
             <ContactFooter />
           </>
-        )}>
+        }>
           <Route
             index
             element={(<HomePage subState={this.state} toggleSubScreen={(e) => this.toggleSubScreen(e)} />)}
