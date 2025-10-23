@@ -44,42 +44,28 @@ export default function OAuthCallback() {
   }, []);
 
   useEffect(() => {
-    // OIDC callbacks are disabled. Do not perform any network operations.
     const cfg = getConfig();
+
+    // After backend token exchange, the middleware/back-end redirects here with session info
     const redirect = current.queryParams.redirect || current.queryParams.returnTo || '/';
 
-    // If any backend expects a ping, send empty-string payloads (best-effort, optional).
-    try {
-      const endpoint = `${cfg.apiOrigin}${cfg.OAUTH_EXCHANGE_PATH}`;
-      // eslint-disable-next-line no-console
-      console.log('[OIDC] Callbacks disabled. Sending empty payload to exchange endpoint (best-effort).', { endpoint });
-      fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ code: '', state: '', redirect: '', url: '' }),
-      }).catch(() => {});
-    } catch {}
+    const sessionPayload = { ...current.queryParams, ...current.hashParams, url: current.url };
+    // eslint-disable-next-line no-console
+    console.log('[OAuthCallback] Post-exchange session received (masked):', maskSensitive(sessionPayload));
 
     try {
-      const setupEndpoint = `${cfg.apiOrigin}${cfg.OAUTH_SESSION_SETUP_PATH || '/api/v1/Auth/SetupSession'}`;
-      // eslint-disable-next-line no-console
-      console.log('[OIDC] Callbacks disabled. Sending empty payload to setup session (best-effort).', { endpoint: setupEndpoint });
-      fetch(setupEndpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ url: '', redirect: '' }),
-      }).catch(() => {});
+      const sanitized = maskSensitive(sessionPayload);
+      window.sessionStorage.setItem('sessionInfo', JSON.stringify(sanitized));
     } catch {}
 
-    setStatus('disabled');
-    setMessage('OIDC callback handling is disabled.');
+    // Mark session active for client-side gating; actual auth is established via HttpOnly cookie
+    try { window.localStorage.setItem('sessionActive', 'true'); } catch {}
 
+    setStatus('done');
     setTimeout(() => {
       const finalRedirect = redirect || '/';
       window.location.replace(finalRedirect);
-    }, 100);
+    }, 150);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

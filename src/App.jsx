@@ -20,6 +20,7 @@ import ItemSearch from './views/Search/itemsearch';
 import ShipItem from './components/item/shipitem';
 import {withFaroRouterInstrumentation} from "@grafana/faro-react";
 import OAuthLogout from './views/Auth/OAuthLogout';
+import OAuthCallback from './views/Auth/OAuthCallback';
 
 
 
@@ -160,6 +161,7 @@ class App extends Component {
             element={(<HomePage subState={this.state} toggleSubScreen={(e) => this.toggleSubScreen(e)} />)}
           />
           <Route path="/oauth2/logout" element={<OAuthLogout />} />
+          <Route path="/oauth2/callback" element={<OAuthCallback />} />
           <Route path="/oauth2/*" element={<></>} />
           <Route
             path="/profile"
