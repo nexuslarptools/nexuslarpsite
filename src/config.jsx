@@ -21,8 +21,15 @@ export function getConfig() {
     apiOrigin,
     appOrigin,
     audience,
+    // OIDC direct settings are explicitly disabled; expose as empty strings
+    OIDC_AUTHORIZATION_ENDPOINT: '',
+    OIDC_CLIENT_ID: '',
+    OIDC_REDIRECT_URI: '',
+    OIDC_SCOPE: '',
+    // Keep paths but callback/exchange usage is disabled in the app
     OAUTH_EXCHANGE_PATH: configJson.OAUTH_EXCHANGE_PATH || '/api/v1/Auth/ExchangeCode',
     OAUTH_LOGOUT_PATH: configJson.OAUTH_LOGOUT_PATH || '/api/v1/Auth/Logout',
+    OAUTH_SESSION_SETUP_PATH: configJson.OAUTH_SESSION_SETUP_PATH || '/api/v1/Auth/SetupSession',
     OAUTH_LOGIN_PATH: oauthLoginPath,
     OAUTH_MIDDLEWARE_LOGOUT_PATH: oauthMiddlewareLogoutPath,
     OAUTH_MIDDLEWARE_REDIRECT_PARAM: oauthMiddlewareRedirectParam,

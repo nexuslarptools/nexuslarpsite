@@ -44,58 +44,42 @@ export default function OAuthCallback() {
   }, []);
 
   useEffect(() => {
+    // OIDC callbacks are disabled. Do not perform any network operations.
     const cfg = getConfig();
-
-    const code = current.queryParams.code || current.hashParams.code;
-    const state = current.queryParams.state || current.hashParams.state;
     const redirect = current.queryParams.redirect || current.queryParams.returnTo || '/';
 
-    // Always perform a backend code exchange from the callback when a code is present
-    if (!code) {
-      setStatus('no-code');
-      setMessage('No authorization code found in callback URL.');
-      return;
-    }
+    // If any backend expects a ping, send empty-string payloads (best-effort, optional).
+    try {
+      const endpoint = `${cfg.apiOrigin}${cfg.OAUTH_EXCHANGE_PATH}`;
+      // eslint-disable-next-line no-console
+      console.log('[OIDC] Callbacks disabled. Sending empty payload to exchange endpoint (best-effort).', { endpoint });
+      fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ code: '', state: '', redirect: '', url: '' }),
+      }).catch(() => {});
+    } catch {}
 
-    const endpoint = `${cfg.apiOrigin}${cfg.OAUTH_EXCHANGE_PATH}`;
-    const payload = { code, state, redirect, url: current.url };
-    // eslint-disable-next-line no-console
-    console.log('[OIDC] Calling backend exchange from callback', { endpoint, params: { ...payload, code: '***', state: state ? '***' : undefined } });
+    try {
+      const setupEndpoint = `${cfg.apiOrigin}${cfg.OAUTH_SESSION_SETUP_PATH || '/api/v1/Auth/SetupSession'}`;
+      // eslint-disable-next-line no-console
+      console.log('[OIDC] Callbacks disabled. Sending empty payload to setup session (best-effort).', { endpoint: setupEndpoint });
+      fetch(setupEndpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ url: '', redirect: '' }),
+      }).catch(() => {});
+    } catch {}
 
-    setStatus('exchanging');
+    setStatus('disabled');
+    setMessage('OIDC callback handling is disabled.');
 
-    fetch(endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify(payload),
-    })
-      .then(async (res) => {
-        const text = await res.text();
-        let json = null;
-        try { json = JSON.parse(text); } catch { /* ignore */ }
-        if (!res.ok) {
-          throw new Error(`Exchange failed: ${res.status} ${res.statusText} ${text?.slice(0, 200)}`);
-        }
-        // eslint-disable-next-line no-console
-        console.log('[OIDC] Exchange success. Response (masked):', maskSensitive(json || { text }));
-        return { res, json };
-      })
-      .then(() => {
-        // Do not verify via Permission; set session flag client-side and redirect
-        try { window.localStorage.setItem('sessionActive', 'true'); } catch {}
-        setStatus('done');
-        setTimeout(() => {
-          const finalRedirect = redirect || '/';
-          window.location.replace(finalRedirect);
-        }, 250);
-      })
-      .catch((err) => {
-        // eslint-disable-next-line no-console
-        console.error('[OIDC] Exchange error:', err);
-        setStatus('error');
-        setMessage(err?.message || 'Unknown error during token exchange');
-      });
+    setTimeout(() => {
+      const finalRedirect = redirect || '/';
+      window.location.replace(finalRedirect);
+    }, 100);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
