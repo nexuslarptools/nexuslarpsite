@@ -50,19 +50,7 @@ export default function OAuthCallback() {
     const state = current.queryParams.state || current.hashParams.state;
     const redirect = current.queryParams.redirect || current.queryParams.returnTo || '/';
 
-    const usingMiddleware = !cfg.OIDC_AUTHORIZATION_ENDPOINT; // If no direct OIDC settings, assume Traefik/BFF
-
-    if (usingMiddleware) {
-      // In middleware mode, do not probe Permission; set session flag and redirect
-      try { window.localStorage.setItem('sessionActive', 'true'); } catch {}
-      setStatus('done');
-      setTimeout(() => {
-        const finalRedirect = redirect || '/';
-        window.location.replace(finalRedirect);
-      }, 250);
-      return;
-    }
-
+    // Always perform a backend code exchange from the callback when a code is present
     if (!code) {
       setStatus('no-code');
       setMessage('No authorization code found in callback URL.');
@@ -72,7 +60,7 @@ export default function OAuthCallback() {
     const endpoint = `${cfg.apiOrigin}${cfg.OAUTH_EXCHANGE_PATH}`;
     const payload = { code, state, redirect, url: current.url };
     // eslint-disable-next-line no-console
-    console.log('[OIDC] Redirecting browser to backend exchange', { endpoint, params: payload });
+    console.log('[OIDC] Calling backend exchange from callback', { endpoint, params: { ...payload, code: '***', state: state ? '***' : undefined } });
 
     setStatus('exchanging');
 

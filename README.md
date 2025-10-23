@@ -134,3 +134,15 @@ Setup steps:
 - Optionally, replace the placeholders in sonar-project.properties with your actual organization and project key. If left as placeholders, the workflow passes them via arguments from secrets.
 
 The workflow .github/workflows/sonarcloud.yml runs on pushes and pull requests targeting main and development branches. For richer analysis (framework-aware rules), uncomment the Node setup, install, and build steps in the workflow to build the project before scanning.
+
+
+## Backend-provided session (post-exchange)
+
+In the current flow, after the OAuth provider redirects the browser to `/oauth2/callback` with a `code` and `state`, the SPA posts these to the backend exchange endpoint (`/api/v1/Auth/ExchangeCode`). The backend performs the token exchange and establishes the authenticated session by setting an HttpOnly cookie for the API origin. The SPA does not store tokens.
+
+Details:
+- The callback component sets a lightweight `localStorage.sessionActive = 'true'` flag on successful exchange and then redirects the user back to the desired route. This flag simply gates client-side queries; the real source of truth is the HttpOnly session cookie set by the backend.
+- During the callback, the SPA does not probe `/api/v1/Users/Permission`. That endpoint will be used later by authenticated screens and is configured with React Query settings to avoid excessive refetching.
+- All subsequent API requests are made with `credentials: 'include'` so the session cookie is sent automatically.
+
+If your backend responds with `204 No Content` or a body that is not JSON, the callback still treats the exchange as successful as long as the HTTP status is OK (2xx). If you need to redirect somewhere specific after login, pass a `redirect` (or `returnTo`) parameter through the login flow or middleware; the callback honors it when present.
