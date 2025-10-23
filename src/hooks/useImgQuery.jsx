@@ -14,7 +14,7 @@ s3Info.credentials = {
     secretAccessKey: import.meta.env.VITE_MINIO_CREDS_SECRET_KEY
 };
 
-const useImgQuery = (bucketname, key) => {
+const useImgQuery = (bucketname, key, options) => {
 
     const [state, setState] = useState({
         data: null,
@@ -22,26 +22,29 @@ const useImgQuery = (bucketname, key) => {
         error: ''
     });
 
+    const enabled = options?.enabled ?? true;
 
     useEffect(() => {
-   const fetch = async () => {
-   
-    const s3 = new S3(s3Info);
-    var params = {
-      Bucket: bucketname,
-      Key: key
-    };
-    await s3.getObject(params, function(err, data) {
-        setState(
-            {
-                data: data,
-                isLoading: false,
-                error: err
-            })
-      });
-};
-     fetch();
-    },[bucketname, key]);
+      if (!enabled) {
+        setState({ data: null, isLoading: false, error: '' });
+        return;
+      }
+      const fetch = async () => {
+        const s3 = new S3(s3Info);
+        var params = {
+          Bucket: bucketname,
+          Key: key
+        };
+        await s3.getObject(params, function(err, data) {
+          setState({
+              data: data,
+              isLoading: false,
+              error: err
+          })
+        });
+      };
+      fetch();
+    },[bucketname, key, enabled]);
 
     return state;
 };

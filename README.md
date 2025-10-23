@@ -20,6 +20,11 @@ Key config fields (src/auth_config.json):
 
 The SPA verifies auth state via GET /api/v1/Users/Permission with credentials: 'include'.
 
+Pre-auth network gating:
+- No backend API calls are made before the user completes login in middleware/BFF mode. The app gates queries using an `enabled` flag and AuthLevelInfo.
+- If you author a new data hook or component, pass `{ enabled: isAuthenticated }` to the shared hooks (useGetData, useGetDataWithStale, useGetDataWitPage) or accept an `options.enabled` parameter in custom hooks and skip side effects when false.
+- Utilities like `getUserData` now accept `options.enabled` and image hooks (`useImgQuery`, `useImgBucketQuery`, `usePresignedImgQuery`) also accept `options.enabled` to avoid pre-auth network calls.
+
 ## Environment Configuration
 
 This app uses Vite environment variables. Create a .env (or .env.local) file with the following variables as needed:

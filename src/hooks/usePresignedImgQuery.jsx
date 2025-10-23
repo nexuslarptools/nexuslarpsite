@@ -19,7 +19,7 @@ s3Info.credentials = {
     secretAccessKey: import.meta.env.VITE_MINIO_CREDS_SECRET_KEY
 };
 
-const usePresignedImgQuery = (key, version) => {
+const usePresignedImgQuery = (key, version, options) => {
 
     const [state, setState] = useState({
         url: null,
@@ -27,8 +27,13 @@ const usePresignedImgQuery = (key, version) => {
         error: null
     });
 
+    const enabled = options?.enabled ?? true;
 
     useEffect(() => {
+        if (!enabled) {
+            setState({ url: null, isLoading: false, error: null });
+            return;
+        }
         const fetch = async () => {
 
             const s3 = new S3(s3Info);
@@ -58,7 +63,7 @@ const usePresignedImgQuery = (key, version) => {
                 });
         };
         fetch();
-    }, [key, version]);
+    }, [key, version, enabled]);
 
 
     return state;

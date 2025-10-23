@@ -1,33 +1,17 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import interpAuthLevel from './authLevel'
-import configJson from '../auth_config.json'
-import { getConfig } from '../config'
-
-const {
-    apiOrigin =
-    configJson.APILocation
-  } = getConfig()
+import AuthLevelInfo from './authLevelInfo'
 
 export function AuthRedirect (lowestAllowed) {
     const navigate = useNavigate()
+    const authLevel = AuthLevelInfo();
     useEffect(() => {
-        const navigateAway = async () => {
-        try {
-          const response = await fetch(apiOrigin + '/api/v1/Users/Permission', {
-            credentials: 'include'
-          }).then(r => r.json());
-          const authlevel = interpAuthLevel(response.AuthLevel)
-          if (authlevel < lowestAllowed) {
-              navigate('/')
-          }
-        } catch (e) {
-          // On error, assume not authorized and navigate away
-          navigate('/')
-        }
+      // Wait until auth has resolved (0 = loading)
+      if (authLevel === 0) return;
+      if (authLevel < lowestAllowed) {
+        navigate('/');
       }
-      navigateAway()
-    }, [lowestAllowed, navigate])
+    }, [authLevel, lowestAllowed, navigate])
 }
 
 export default AuthRedirect
