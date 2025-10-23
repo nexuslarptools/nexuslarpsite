@@ -53,31 +53,13 @@ export default function OAuthCallback() {
     const usingMiddleware = !cfg.OIDC_AUTHORIZATION_ENDPOINT; // If no direct OIDC settings, assume Traefik/BFF
 
     if (usingMiddleware) {
-      // In middleware mode, no client-side exchange; just verify session and redirect
-      setStatus('verifying');
-      (async () => {
-        try {
-          const verifyUrl = `${cfg.apiOrigin}/api/v1/Users/Permission`;
-          const verifyRes = await fetch(verifyUrl, { credentials: 'include' });
-          if (verifyRes.ok) {
-            try { window.localStorage.setItem('sessionActive', 'true'); } catch {}
-            // eslint-disable-next-line no-console
-            console.log('[OIDC] Middleware mode: session verified.');
-          } else {
-            // eslint-disable-next-line no-console
-            console.warn('[OIDC] Middleware mode: session verification failed:', verifyRes.status, verifyRes.statusText);
-          }
-        } catch (e) {
-          // eslint-disable-next-line no-console
-          console.warn('[OIDC] Middleware mode: session verification error:', e);
-        } finally {
-          setStatus('done');
-          setTimeout(() => {
-            const finalRedirect = redirect || '/';
-            window.location.replace(finalRedirect);
-          }, 250);
-        }
-      })();
+      // In middleware mode, do not probe Permission; set session flag and redirect
+      try { window.localStorage.setItem('sessionActive', 'true'); } catch {}
+      setStatus('done');
+      setTimeout(() => {
+        const finalRedirect = redirect || '/';
+        window.location.replace(finalRedirect);
+      }, 250);
       return;
     }
 
@@ -111,25 +93,9 @@ export default function OAuthCallback() {
         console.log('[OIDC] Exchange success. Response (masked):', maskSensitive(json || { text }));
         return { res, json };
       })
-      .then(async () => {
-        // Best-effort session verification
-        try {
-          const verifyUrl = `${cfg.apiOrigin}/api/v1/Users/Permission`;
-          const verifyRes = await fetch(verifyUrl, { credentials: 'include' });
-          if (verifyRes.ok) {
-            try { window.localStorage.setItem('sessionActive', 'true'); } catch {}
-            // eslint-disable-next-line no-console
-            console.log('[OIDC] Session verification succeeded via Permission endpoint.');
-          } else {
-            // eslint-disable-next-line no-console
-            console.warn('[OIDC] Session verification failed:', verifyRes.status, verifyRes.statusText);
-          }
-        } catch (e) {
-          // eslint-disable-next-line no-console
-          console.warn('[OIDC] Session verification error:', e);
-        }
-      })
       .then(() => {
+        // Do not verify via Permission; set session flag client-side and redirect
+        try { window.localStorage.setItem('sessionActive', 'true'); } catch {}
         setStatus('done');
         setTimeout(() => {
           const finalRedirect = redirect || '/';
