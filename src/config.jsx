@@ -15,6 +15,12 @@ export function getConfig() {
   const oidcRedirectUri = configJson.OIDC_REDIRECT_URI || `${window.location.origin}/oauth2/callback`;
   const oidcScope = configJson.OIDC_SCOPE || 'openid profile email';
 
+  // Middleware (Traefik forward-auth) endpoints; used when no direct OIDC endpoint is configured
+  const oauthLoginPath = configJson.OAUTH_LOGIN_PATH || '/oauth/login';
+  const oauthMiddlewareLogoutPath = configJson.OAUTH_MIDDLEWARE_LOGOUT_PATH || '/oauth/logout';
+  // Redirect parameter name used by middleware (traefikoidc uses 'rd')
+  const oauthMiddlewareRedirectParam = configJson.OAUTH_MIDDLEWARE_REDIRECT_PARAM || 'rd';
+
   return {
     apiOrigin,
     appOrigin,
@@ -25,5 +31,8 @@ export function getConfig() {
     OIDC_CLIENT_ID: oidcClientId,
     OIDC_REDIRECT_URI: oidcRedirectUri,
     OIDC_SCOPE: oidcScope,
+    OAUTH_LOGIN_PATH: oauthLoginPath,
+    OAUTH_MIDDLEWARE_LOGOUT_PATH: oauthMiddlewareLogoutPath,
+    OAUTH_MIDDLEWARE_REDIRECT_PARAM: oauthMiddlewareRedirectParam,
   };
 }

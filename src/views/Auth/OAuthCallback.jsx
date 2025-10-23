@@ -50,6 +50,36 @@ export default function OAuthCallback() {
     const state = current.queryParams.state || current.hashParams.state;
     const redirect = current.queryParams.redirect || current.queryParams.returnTo || '/';
 
+    const usingMiddleware = !cfg.OIDC_AUTHORIZATION_ENDPOINT; // If no direct OIDC settings, assume Traefik/BFF
+
+    if (usingMiddleware) {
+      // In middleware mode, no client-side exchange; just verify session and redirect
+      setStatus('verifying');
+      (async () => {
+        try {
+          const verifyUrl = `${cfg.apiOrigin}/api/v1/Users/Permission`;
+          const verifyRes = await fetch(verifyUrl, { credentials: 'include' });
+          if (verifyRes.ok) {
+            // eslint-disable-next-line no-console
+            console.log('[OIDC] Middleware mode: session verified.');
+          } else {
+            // eslint-disable-next-line no-console
+            console.warn('[OIDC] Middleware mode: session verification failed:', verifyRes.status, verifyRes.statusText);
+          }
+        } catch (e) {
+          // eslint-disable-next-line no-console
+          console.warn('[OIDC] Middleware mode: session verification error:', e);
+        } finally {
+          setStatus('done');
+          setTimeout(() => {
+            const finalRedirect = redirect || '/';
+            window.location.replace(finalRedirect);
+          }, 250);
+        }
+      })();
+      return;
+    }
+
     if (!code) {
       setStatus('no-code');
       setMessage('No authorization code found in callback URL.');

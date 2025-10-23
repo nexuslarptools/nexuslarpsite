@@ -45,6 +45,21 @@ export default function OAuthLogout() {
 
     const redirect = current.queryParams.redirect || current.queryParams.post_logout_redirect_uri || '/';
 
+    const usingMiddleware = !cfg.OIDC_AUTHORIZATION_ENDPOINT; // If no direct OIDC settings, assume Traefik/BFF
+
+    if (usingMiddleware) {
+      // Redirect to Traefik forward-auth logout endpoint with return URL
+      const retUrl = encodeURIComponent(redirect.startsWith('http') ? redirect : `${window.location.origin}${redirect}`);
+      const mwLogout = cfg.OAUTH_MIDDLEWARE_LOGOUT_PATH || '/oauth/logout';
+      // traefikoidc expects `rd` param; we also include `redirect` for broader compatibility
+      const rdParam = cfg.OAUTH_MIDDLEWARE_REDIRECT_PARAM || 'rd';
+      const url = `${mwLogout}?${rdParam}=${retUrl}&redirect=${retUrl}`;
+      // eslint-disable-next-line no-console
+      console.log('[OIDC] Middleware mode: redirecting to logout endpoint', { url });
+      window.location.replace(url);
+      return;
+    }
+
     const endpoint = `${cfg.apiOrigin}${cfg.OAUTH_LOGOUT_PATH}`;
     const payload = { redirect, url: current.url };
     // eslint-disable-next-line no-console

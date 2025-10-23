@@ -43,10 +43,10 @@ const LoginButton = () => {
       window.location.assign(directUrl);
       return;
     }
-    // Fallback: hit backend exchange path to let BFF/middleware drive auth
-    const fallback = `${cfg.apiOrigin}${cfg.OAUTH_EXCHANGE_PATH}`;
+    // Middleware/BFF mode: redirect to Traefik forward-auth login endpoint
+    const fallback = cfg.OAUTH_LOGIN_PATH || '/oauth/login';
     // eslint-disable-next-line no-console
-    console.log('[Auth] Using fallback login path via backend exchange path:', { endpoint: fallback });
+    console.log('[Auth] Using middleware login path:', { endpoint: fallback });
     window.location.assign(fallback);
   };
 

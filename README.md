@@ -1,10 +1,30 @@
 # Nexus LARP Site
 
+## Authentication Overview
+
+This frontend can operate in two modes:
+- Traefik OAuth middleware (recommended): The SPA delegates authentication to a generic OAuth/OIDC provider via Traefik forward-auth. Tokens are exchanged by the middleware, and the API is accessed using an HttpOnly session cookie. The SPA never stores tokens.
+- Direct OIDC (legacy): The app can still build an authorization URL for a specific provider (e.g., Auth0) and rely on a backend exchange endpoint.
+
+The mode is determined dynamically:
+- If OIDC_AUTHORIZATION_ENDPOINT (and client ID) are provided in src/auth_config.json or env, the app uses Direct OIDC.
+- Otherwise, it assumes Traefik middleware/BFF mode and uses the middleware login/logout endpoints.
+
+Key config fields (src/auth_config.json):
+- OAUTH_LOGIN_PATH (default: /oauth/login) — Traefik forward-auth login endpoint.
+- OAUTH_MIDDLEWARE_LOGOUT_PATH (default: /oauth/logout) — Traefik forward-auth logout endpoint.
+- OAUTH_MIDDLEWARE_REDIRECT_PARAM (default: rd) — Name of the return URL parameter used by the middleware (traefikoidc uses rd).
+- OAUTH_EXCHANGE_PATH (default: /api/v1/Auth/ExchangeCode) — backend code exchange (legacy mode).
+- OAUTH_LOGOUT_PATH (default: /api/v1/Auth/Logout) — backend logout (legacy mode).
+- OIDC_AUTHORIZATION_ENDPOINT, OIDC_CLIENT_ID, OIDC_REDIRECT_URI, OIDC_SCOPE — when set, enables Direct OIDC mode.
+
+The SPA verifies auth state via GET /api/v1/Users/Permission with credentials: 'include'.
+
 ## Environment Configuration
 
 This app uses Vite environment variables. Create a .env (or .env.local) file with the following variables as needed:
 
-Auth0:
+Auth0 (legacy optional):
 - VITE_AUTH0_DOMAIN=
 - VITE_AUTH0_CLIENT_ID=
 - VITE_AUTH0_AUDIENCE=
