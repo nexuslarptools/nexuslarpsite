@@ -60,6 +60,7 @@ export default function OAuthCallback() {
           const verifyUrl = `${cfg.apiOrigin}/api/v1/Users/Permission`;
           const verifyRes = await fetch(verifyUrl, { credentials: 'include' });
           if (verifyRes.ok) {
+            try { window.localStorage.setItem('sessionActive', 'true'); } catch {}
             // eslint-disable-next-line no-console
             console.log('[OIDC] Middleware mode: session verified.');
           } else {
@@ -116,6 +117,7 @@ export default function OAuthCallback() {
           const verifyUrl = `${cfg.apiOrigin}/api/v1/Users/Permission`;
           const verifyRes = await fetch(verifyUrl, { credentials: 'include' });
           if (verifyRes.ok) {
+            try { window.localStorage.setItem('sessionActive', 'true'); } catch {}
             // eslint-disable-next-line no-console
             console.log('[OIDC] Session verification succeeded via Permission endpoint.');
           } else {

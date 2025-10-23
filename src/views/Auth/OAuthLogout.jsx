@@ -54,6 +54,8 @@ export default function OAuthLogout() {
       // traefikoidc expects `rd` param; we also include `redirect` for broader compatibility
       const rdParam = cfg.OAUTH_MIDDLEWARE_REDIRECT_PARAM || 'rd';
       const url = `${mwLogout}?${rdParam}=${retUrl}&redirect=${retUrl}`;
+      // Clear session flag client-side
+      try { window.localStorage.removeItem('sessionActive'); } catch {}
       // eslint-disable-next-line no-console
       console.log('[OIDC] Middleware mode: redirecting to logout endpoint', { url });
       window.location.replace(url);
@@ -84,6 +86,8 @@ export default function OAuthLogout() {
         console.log('[OIDC] Logout success. Response (masked):', maskSensitive(json || { text }));
       })
       .then(() => {
+        // Clear session flag client-side
+        try { window.localStorage.removeItem('sessionActive'); } catch {}
         setStatus('done');
         setTimeout(() => {
           const finalRedirect = redirect || '/';

@@ -19,11 +19,13 @@ export const useGetDataWitNextPage = (statename, path, page, numberPerPage, quer
      queryFn: () => apiGetWithPage(path, page, numberPerPage)});
 }
 
-export const useGetDataWithStale = (statename, path) => {
+export const useGetDataWithStale = (statename, path, options) => {
   return useQuery({
     queryKey:[statename],
     queryFn: () => apiGet(path),
-    refetchInterval: 300000});
+    refetchInterval: 300000,
+    enabled: options?.enabled ?? true,
+  });
 }
 
 
