@@ -4,7 +4,7 @@
 
 This frontend now delegates authentication entirely to the backend.
 
-- Login: the Log In button redirects the browser to /api/login.
+- Login: the Log In button redirects the browser to /api/v1/login.
 - After a successful login, the backend establishes an HttpOnly session cookie that the SPA uses for API calls.
 - The SPA verifies auth state via GET /api/v1/Users/Permission with credentials: 'include'.
 
