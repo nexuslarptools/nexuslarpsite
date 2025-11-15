@@ -1,14 +1,9 @@
 import useGetDataWithStale from './getdata'
 import interpAuthLevel from './authLevel'
-import { getConfig } from '../config'
 
 export function AuthLevelInfo () {
-    const cfg = getConfig();
-    const usingMiddleware = !cfg.OIDC_AUTHORIZATION_ENDPOINT; // If no direct OIDC settings, assume middleware/BFF
-
-    // Gate backend call until we know we have an authenticated session in middleware mode
-    const sessionActive = typeof window !== 'undefined' && window.localStorage?.getItem('sessionActive') === 'true';
-    const enabled = !usingMiddleware || sessionActive;
+    // OIDC removed: always allow permission check; backend session cookie is the source of truth
+    const enabled = true;
 
     // Always call the hook with a stable signature, but disable it when not enabled
     const userAuth = useGetDataWithStale('permission', '/api/v1/Users/Permission', { enabled })

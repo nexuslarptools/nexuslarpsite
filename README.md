@@ -2,23 +2,11 @@
 
 ## Authentication Overview
 
-This frontend can operate in two modes:
-- Traefik OAuth middleware (recommended): The SPA delegates authentication to a generic OAuth/OIDC provider via Traefik forward-auth. Tokens are exchanged by the middleware, and the API is accessed using an HttpOnly session cookie. The SPA never stores tokens.
-- Direct OIDC (legacy): The app can still build an authorization URL for a specific provider (e.g., Auth0) and rely on a backend exchange endpoint.
+This frontend now delegates authentication entirely to the backend.
 
-The mode is determined dynamically:
-- If OIDC_AUTHORIZATION_ENDPOINT (and client ID) are provided in src/auth_config.json or env, the app uses Direct OIDC.
-- Otherwise, it assumes Traefik middleware/BFF mode and uses the middleware login/logout endpoints.
-
-Key config fields (src/auth_config.json):
-- OAUTH_LOGIN_PATH (default: /oauth/login) — Traefik forward-auth login endpoint.
-- OAUTH_MIDDLEWARE_LOGOUT_PATH (default: /oauth/logout) — Traefik forward-auth logout endpoint.
-- OAUTH_MIDDLEWARE_REDIRECT_PARAM (default: rd) — Name of the return URL parameter used by the middleware (traefikoidc uses rd).
-- OAUTH_EXCHANGE_PATH (default: /api/v1/Auth/ExchangeCode) — backend code exchange (legacy mode).
-- OAUTH_LOGOUT_PATH (default: /api/v1/Auth/Logout) — backend logout (legacy mode).
-- OIDC_AUTHORIZATION_ENDPOINT, OIDC_CLIENT_ID, OIDC_REDIRECT_URI, OIDC_SCOPE — when set, enables Direct OIDC mode.
-
-The SPA verifies auth state via GET /api/v1/Users/Permission with credentials: 'include'.
+- Login: the Log In button redirects the browser to /api/login.
+- After a successful login, the backend establishes an HttpOnly session cookie that the SPA uses for API calls.
+- The SPA verifies auth state via GET /api/v1/Users/Permission with credentials: 'include'.
 
 Pre-auth network gating:
 - No backend API calls are made before the user completes login in middleware/BFF mode. The app gates queries using an `enabled` flag and AuthLevelInfo.
@@ -27,12 +15,7 @@ Pre-auth network gating:
 
 ## Environment Configuration
 
-This app uses Vite environment variables. Create a .env (or .env.local) file with the following variables as needed:
-
-Auth0 (legacy optional):
-- VITE_AUTH0_DOMAIN=
-- VITE_AUTH0_CLIENT_ID=
-- VITE_AUTH0_AUDIENCE=
+This app uses Vite environment variables. Create a .env (or .env.local) file with variables as needed:
 
 Grafana Faro (optional):
 - VITE_FARO_URL= // e.g. https://faro-collector-.../collect/<token>
@@ -136,13 +119,6 @@ Setup steps:
 The workflow .github/workflows/sonarcloud.yml runs on pushes and pull requests targeting main and development branches. For richer analysis (framework-aware rules), uncomment the Node setup, install, and build steps in the workflow to build the project before scanning.
 
 
-## Backend-provided session (post-exchange)
+## Backend-provided session
 
-In the current flow, after the OAuth provider redirects the browser to `/oauth2/callback` with a `code` and `state`, the SPA posts these to the backend exchange endpoint (`/api/v1/Auth/ExchangeCode`). The backend performs the token exchange and establishes the authenticated session by setting an HttpOnly cookie for the API origin. The SPA does not store tokens.
-
-Details:
-- The callback component sets a lightweight `localStorage.sessionActive = 'true'` flag on successful exchange and then redirects the user back to the desired route. This flag simply gates client-side queries; the real source of truth is the HttpOnly session cookie set by the backend.
-- During the callback, the SPA does not probe `/api/v1/Users/Permission`. That endpoint will be used later by authenticated screens and is configured with React Query settings to avoid excessive refetching.
-- All subsequent API requests are made with `credentials: 'include'` so the session cookie is sent automatically.
-
-If your backend responds with `204 No Content` or a body that is not JSON, the callback still treats the exchange as successful as long as the HTTP status is OK (2xx). If you need to redirect somewhere specific after login, pass a `redirect` (or `returnTo`) parameter through the login flow or middleware; the callback honors it when present.
+The backend handles the full authentication flow and sets an HttpOnly session cookie. The SPA does not store tokens and simply sends API requests with `credentials: 'include'`.
