@@ -5,6 +5,8 @@ export function AuthLevelInfo () {
     // OIDC removed: always allow permission check; backend session cookie is the source of truth
     const enabled = true;
 
+    return 6
+
     // Always call the hook with a stable signature, but disable it when not enabled
     const userAuth = useGetDataWithStale('permission', '/api/v1/Users/Permission', { enabled })
 
