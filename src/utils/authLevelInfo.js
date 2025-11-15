@@ -2,11 +2,13 @@ import useGetDataWithStale from './getdata'
 import interpAuthLevel from './authLevel'
 
 export function AuthLevelInfo () {
-    // OIDC removed: always allow permission check; backend session cookie is the source of truth
-    const enabled = true;
-
-    return 6
-
+    // Only call backend when we believe a session is active. This prevents calls before login.
+    // We use a lightweight client hint set after successful auth redirects.
+    let enabled = false;
+    try {
+        enabled = window.localStorage.getItem('sessionActive') === 'true';
+    } catch {}
+    
     // Always call the hook with a stable signature, but disable it when not enabled
     const userAuth = useGetDataWithStale('permission', '/api/v1/Users/Permission', { enabled })
 
