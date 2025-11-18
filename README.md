@@ -5,12 +5,12 @@
 This frontend now delegates authentication entirely to the backend.
 
 - Login: the Log In button redirects the browser to /api/v1/login.
-- After a successful login, the backend establishes an HttpOnly session cookie that the SPA uses for API calls.
+- After a successful login, the backend establishes an HttpOnly, Secure session cookie that the SPA uses for API calls.
 - The SPA verifies auth state via GET /api/v1/Users/Permission with credentials: 'include'.
 
 Cookie-based session details:
-- The backend issues HttpOnly cookies with the prefix `_oidc_raczylo` that represent the authenticated session and authorization context.
-- The frontend does not read token contents. It only checks for the presence of a cookie name starting with `_oidc_raczylo` to decide whether it should enable auth-protected queries.
+- The backend issues HttpOnly, Secure cookies with the prefix `_oidc_raczylo` that represent the authenticated session and authorization context.
+- Because the cookies are HttpOnly and Secure, JavaScript cannot read them via document.cookie. The SPA never inspects cookies; it simply calls the permission endpoint and interprets the result.
 - All API requests include `credentials: 'include'` so the browser will send these cookies automatically.
 
 Pre-auth network gating:
@@ -19,8 +19,10 @@ Pre-auth network gating:
 - Utilities like `getUserData` now accept `options.enabled` and image hooks (`useImgQuery`, `useImgBucketQuery`, `usePresignedImgQuery`) also accept `options.enabled` to avoid pre-auth network calls.
 
 How is `isAuthenticated` derived?
-- Primary signal: presence of a cookie whose name starts with `_oidc_raczylo` (set by the backend after login).
-- There is no OAuth callback page in BFF mode. The frontend does not process tokens or redirects; the backend handles the full flow and sets cookies. A legacy `localStorage.sessionActive` hint may exist from older builds, but it is not required and can be ignored.
+- The SPA does not try to read cookies. It calls `/api/v1/Users/Permission` with `credentials: 'include'`:
+  - 200 OK with an AuthLevel -> authenticated
+  - 401/403 or network error -> treated as unauthenticated
+- There is no OAuth callback page in BFF mode. The frontend does not process tokens or redirects; the backend handles the full flow and sets cookies.
 
 ## Environment Configuration
 
@@ -130,8 +132,10 @@ The workflow .github/workflows/sonarcloud.yml runs on pushes and pull requests t
 
 ## Backend-provided session
 
-The backend handles the full authentication flow and sets an HttpOnly session cookie. The SPA does not store tokens and simply sends API requests with `credentials: 'include'`.
+The backend handles the full authentication flow and sets an HttpOnly, Secure session cookie. The SPA does not store tokens and simply sends API requests with `credentials: 'include'`.
 
 Cookie prefix used by the backend: `_oidc_raczylo`
 
-Note: In BFF mode there is no OAuth callback route/component in the SPA. All redirects are handled by the backend/middleware.
+Notes:
+- In BFF mode there is no OAuth callback route/component in the SPA. All redirects are handled by the backend/middleware.
+- Secure cookies are only sent over HTTPS. Ensure TLS is terminated in front of this app in production.

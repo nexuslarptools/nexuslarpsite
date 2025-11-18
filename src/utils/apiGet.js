@@ -7,17 +7,25 @@ const {
   } = getConfig()
 
 export const apiGet = async (path) => {
-  const response = await fetch(apiOrigin + path, {
+  const res = await fetch(apiOrigin + path, {
     credentials: 'include',
-  }).then(response => response.json())
-  return response;
+  });
+  if (!res.ok) {
+    const text = await res.text().catch(() => '');
+    throw new Error(`Request failed: ${res.status} ${res.statusText} ${text?.slice(0, 200)}`);
+  }
+  return res.json();
 }
 
 export const apiGetWithPage = async (path, page, numberPerPage) => {
-  const response = await fetch(apiOrigin + path + '?pageNumber=' + page + '&_pageSize=' + numberPerPage, {
+  const res = await fetch(apiOrigin + path + '?pageNumber=' + page + '&_pageSize=' + numberPerPage, {
     credentials: 'include',
-  }).then(response => response.json())
-  return response;
+  });
+  if (!res.ok) {
+    const text = await res.text().catch(() => '');
+    throw new Error(`Request failed: ${res.status} ${res.statusText} ${text?.slice(0, 200)}`);
+  }
+  return res.json();
 }
 
 export default apiGet
