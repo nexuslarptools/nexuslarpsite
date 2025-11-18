@@ -3,11 +3,26 @@ import interpAuthLevel from './authLevel'
 
 export function AuthLevelInfo () {
     // Only call backend when we believe a session is active. This prevents calls before login.
-    // We use a lightweight client hint set after successful auth redirects.
+    // Prefer cookie-based detection: backend sets HttpOnly cookies with prefix `_oidc_raczylo`.
     let enabled = false;
-    try {
-        enabled = window.localStorage.getItem('sessionActive') === 'true';
-    } catch {}
+
+    const hasOidcCookie = () => {
+        try {
+            const all = document.cookie || '';
+            // Split cookies and check any name that starts with our prefix
+            return all.split(';').some(kv => kv.trim().startsWith('_oidc_raczylo'));
+        } catch {
+            return false;
+        }
+    };
+
+    // Primary: cookie presence; Fallback: legacy localStorage hint set by OAuth callback
+    enabled = hasOidcCookie();
+    if (!enabled) {
+        try {
+            enabled = window.localStorage.getItem('sessionActive') === 'true';
+        } catch {}
+    }
     
     // Always call the hook with a stable signature, but disable it when not enabled
     const userAuth = useGetDataWithStale('permission', '/api/v1/Users/Permission', { enabled })

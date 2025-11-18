@@ -8,10 +8,19 @@ This frontend now delegates authentication entirely to the backend.
 - After a successful login, the backend establishes an HttpOnly session cookie that the SPA uses for API calls.
 - The SPA verifies auth state via GET /api/v1/Users/Permission with credentials: 'include'.
 
+Cookie-based session details:
+- The backend issues HttpOnly cookies with the prefix `_oidc_raczylo` that represent the authenticated session and authorization context.
+- The frontend does not read token contents. It only checks for the presence of a cookie name starting with `_oidc_raczylo` to decide whether it should enable auth-protected queries.
+- All API requests include `credentials: 'include'` so the browser will send these cookies automatically.
+
 Pre-auth network gating:
 - No backend API calls are made before the user completes login in middleware/BFF mode. The app gates queries using an `enabled` flag and AuthLevelInfo.
 - If you author a new data hook or component, pass `{ enabled: isAuthenticated }` to the shared hooks (useGetData, useGetDataWithStale, useGetDataWitPage) or accept an `options.enabled` parameter in custom hooks and skip side effects when false.
 - Utilities like `getUserData` now accept `options.enabled` and image hooks (`useImgQuery`, `useImgBucketQuery`, `usePresignedImgQuery`) also accept `options.enabled` to avoid pre-auth network calls.
+
+How is `isAuthenticated` derived?
+- Primary signal: presence of a cookie whose name starts with `_oidc_raczylo` (set by the backend after login).
+- There is no OAuth callback page in BFF mode. The frontend does not process tokens or redirects; the backend handles the full flow and sets cookies. A legacy `localStorage.sessionActive` hint may exist from older builds, but it is not required and can be ignored.
 
 ## Environment Configuration
 
@@ -122,3 +131,7 @@ The workflow .github/workflows/sonarcloud.yml runs on pushes and pull requests t
 ## Backend-provided session
 
 The backend handles the full authentication flow and sets an HttpOnly session cookie. The SPA does not store tokens and simply sends API requests with `credentials: 'include'`.
+
+Cookie prefix used by the backend: `_oidc_raczylo`
+
+Note: In BFF mode there is no OAuth callback route/component in the SPA. All redirects are handled by the backend/middleware.
