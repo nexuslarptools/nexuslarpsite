@@ -1,11 +1,12 @@
 import { Loading } from '../loading/loading'
 import PropTypes from 'prop-types'
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import AuthLevelInfo from '../../utils/authLevelInfo'
-import LoginButton from '../loginbuttons/loginbutton'
+import { Navigate, useLocation } from 'react-router-dom'
 
 export const AuthenticationGuard = (props) => {
   const Component = props.component;
+  const location = useLocation();
 
   const [currentState, SetCurrentState] = useState(null)
   const authLevel = AuthLevelInfo();
@@ -27,12 +28,8 @@ export const AuthenticationGuard = (props) => {
   }
 
   if (!isAuthenticated) {
-    return (
-      <div className="page-layout" style={{ padding: 24 }}>
-        <p>You need to log in to view this page.</p>
-        <LoginButton />
-      </div>
-    );
+    // Not authenticated: redirect to /login, preserving where the user came from
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
   return <Component subState={props.subState} ismain={props.ismain}  

@@ -20,6 +20,7 @@ import ItemSearch from './views/Search/itemsearch';
 import ShipItem from './components/item/shipitem';
 import {withFaroRouterInstrumentation} from "@grafana/faro-react";
 // OIDC flows removed: no OAuthLogout or OAuthCallback
+import Login from './views/Auth/Login.jsx';
 
 
 
@@ -157,9 +158,18 @@ class App extends Component {
         }>
           <Route
             index
-            element={(<HomePage subState={this.state} toggleSubScreen={(e) => this.toggleSubScreen(e)} />)}
+            element={(
+              <AuthenticationGuard
+                subState={this.state}
+                toggleSubScreen={(e) => this.toggleSubScreen(e)}
+                component={HomePage}
+              />)}
           />
           {/* OIDC routes removed */}
+          <Route
+            path="/login"
+            element={<Login />}
+          />
           <Route
             path="/profile"
             element={<AuthenticationGuard subState={this.state} toggleSubScreen={(e) => this.toggleSubScreen(e)} component={CurrentUserPage} />}
@@ -229,7 +239,12 @@ class App extends Component {
           />
           <Route
             path="*"
-            element={(<HomePage subState={this.state} toggleSubScreen={(e) => this.toggleSubScreen(e)} />)}
+            element={(
+              <AuthenticationGuard
+                subState={this.state}
+                toggleSubScreen={(e) => this.toggleSubScreen(e)}
+                component={HomePage}
+              />)}
           />
         </Route>
       )
