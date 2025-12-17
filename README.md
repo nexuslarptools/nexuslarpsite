@@ -2,11 +2,12 @@
 
 ## Authentication Overview
 
-This frontend now delegates authentication entirely to the backend.
+This frontend delegates authentication to the backend and now supports forwardauth claims as the primary source of auth state.
 
 - Login: the Log In button redirects the browser to /api/v1/login.
 - After a successful login, the backend establishes an HttpOnly, Secure session cookie that the SPA uses for API calls.
-- The SPA verifies auth state via GET /api/v1/Users/Permission with credentials: 'include'.
+- Primary auth check: the SPA calls GET `/api/v1/auth/claims` (must be implemented on the backend) which exposes decoded forwardauth JWT claims from `X-Auth-Request-Token`.
+- Fallback: if claims are unavailable, the SPA uses GET `/api/v1/Users/Permission` to infer the auth level.
 
 Cookie-based session details:
 - The backend issues HttpOnly, Secure cookies with the prefix `_oidc_raczylo` that represent the authenticated session and authorization context.
@@ -19,10 +20,21 @@ Pre-auth network gating:
 - Utilities like `getUserData` now accept `options.enabled` and image hooks (`useImgQuery`, `useImgBucketQuery`, `usePresignedImgQuery`) also accept `options.enabled` to avoid pre-auth network calls.
 
 How is `isAuthenticated` derived?
-- The SPA does not try to read cookies. It calls `/api/v1/Users/Permission` with `credentials: 'include'`:
-  - 200 OK with an AuthLevel -> authenticated
-  - 401/403 or network error -> treated as unauthenticated
-- There is no OAuth callback page in BFF mode. The frontend does not process tokens or redirects; the backend handles the full flow and sets cookies.
+- The SPA does not read cookies or request headers. It calls `/api/v1/auth/claims` with `credentials: 'include'` and maps roles/groups in the claims to a numeric auth level:
+  - Groups/Roles are the same as the auth levels (case-insensitive). Mapping: wizard → Wizard (6), headgm → HeadGM (5), secondgm → SecondGM (4), approver → Approver (3), writer → Writer (2), reader → Reader (1).
+  - Optionally, a direct numeric `authLevel` claim (or `x-auth-level`) may be used if present (> 0).
+- If claims are missing or the endpoint is not available yet, the SPA falls back to `/api/v1/Users/Permission`:
+  - 200 OK with an `AuthLevel` → authenticated
+  - 401/403 or network error → treated as unauthenticated
+- There is no OAuth callback page in BFF mode. The frontend does not process tokens; the backend handles the full flow and sets cookies.
+
+### Redirect behavior and `/login`
+
+- All routes except `/login` are protected by `AuthenticationGuard`.
+- While the app is determining auth state (`authLevel === 0`), guarded routes render a spinner and do not navigate.
+- Once loading completes, unauthenticated users are redirected to `/login`. The guard preserves the original destination in `location.state.from` so the app can return there after login.
+- The `/login` route stores the intended destination in `sessionStorage` (`returnTo`). If the user is already authenticated and lands on `/login`, they are immediately returned to that stored destination (or `/`).
+- After a successful backend login, the first guarded render will consume `sessionStorage.returnTo` and navigate once to the intended path, then clear it.
 
 ## Environment Configuration
 
@@ -139,3 +151,9 @@ Cookie prefix used by the backend: `_oidc_raczylo`
 Notes:
 - In BFF mode there is no OAuth callback route/component in the SPA. All redirects are handled by the backend/middleware.
 - Secure cookies are only sent over HTTPS. Ensure TLS is terminated in front of this app in production.
+
+### Forwardauth requirements (backend/proxy)
+
+- The reverse proxy/middleware must inject the JWT into the upstream request header `X-Auth-Request-Token`.
+- The backend should expose a JSON endpoint at `GET /api/v1/auth/claims` that validates/decodes that JWT and returns standard JWT claims (e.g., `sub`, `email`, `preferred_username`, `groups` or `roles`, `exp`, etc.).
+- The SPA will map `groups`/`roles` to its internal auth levels as described above.
