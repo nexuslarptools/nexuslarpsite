@@ -31,32 +31,23 @@ function deriveAuthLevelFromClaims (claims) {
 }
 
 export function AuthLevelInfo () {
-    // Primary: use forwardauth claims exposed by the backend at /api/v1/auth/claims
-    // Fallback: legacy permission endpoint /api/v1/Users/Permission
-    // Both are called with credentials and errors are treated as unauthenticated.
+    // Use a single Permissions endpoint which is expected to include claims.
+    // The response may either be the claims object itself or include a `claims` property.
+    const userAuth = useGetDataWithStale('permission', '/api/v1/Users/Permission', { enabled: true })
 
-    // Claims are our preferred source
-    const claims = useGetDataWithStale('auth_claims', '/api/v1/auth/claims', { enabled: true })
+    // Loading while the request is in flight
+    if (userAuth.isLoading) return 0
 
-    // Only enable fallback if claims are missing or failed
-    const shouldFallback = !!claims.isError || (!!claims.data && deriveAuthLevelFromClaims(claims.data) === 0) || (!claims.isLoading && !claims.data)
+    // Derive level from provided claims (prefer claims if present; otherwise treat whole body as claims)
+    const claimsCandidate = userAuth?.data?.claims ?? userAuth?.data
+    const lvlFromClaims = deriveAuthLevelFromClaims(claimsCandidate)
+    if (lvlFromClaims > 0) return lvlFromClaims
 
-    const userAuth = useGetDataWithStale('permission', '/api/v1/Users/Permission', { enabled: shouldFallback })
+    // Backward compatibility: if legacy `AuthLevel` exists, interpret it
+    if (userAuth?.data?.AuthLevel) return interpAuthLevel(userAuth.data.AuthLevel)
 
-    // Loading state if either the primary is loading or the fallback we need is loading
-    if (claims.isLoading || (shouldFallback && userAuth.isLoading)) return 0
-
-    // Try claims first
-    if (claims.data) {
-      const lvl = deriveAuthLevelFromClaims(claims.data)
-      if (lvl > 0) return lvl
-    }
-
-    // Then fallback
-    if (userAuth.data?.AuthLevel) return interpAuthLevel(userAuth.data.AuthLevel)
-
-    // If both failed, consider unauthenticated
-    if (claims.isError && (!shouldFallback || userAuth.isError)) return -1
+    // If request errored or response carries no recognizable claims, treat as unauthenticated
+    if (userAuth.isError) return -1
 
     return -1
 }

@@ -2,12 +2,11 @@
 
 ## Authentication Overview
 
-This frontend delegates authentication to the backend and now supports forwardauth claims as the primary source of auth state.
+This frontend delegates authentication to the backend and supports forwardauth claims as the source of auth state.
 
 - Login: the Log In button redirects the browser to /api/v1/login.
 - After a successful login, the backend establishes an HttpOnly, Secure session cookie that the SPA uses for API calls.
-- Primary auth check: the SPA calls GET `/api/v1/auth/claims` (must be implemented on the backend) which exposes decoded forwardauth JWT claims from `X-Auth-Request-Token`.
-- Fallback: if claims are unavailable, the SPA uses GET `/api/v1/Users/Permission` to infer the auth level.
+- Primary auth check: the SPA calls GET `/api/v1/Users/Permission` (must be implemented on the backend) and expects the response to include forwardauth/JWT claims (either as the response body or under a `claims` property).
 
 Cookie-based session details:
 - The backend issues HttpOnly, Secure cookies with the prefix `_oidc_raczylo` that represent the authenticated session and authorization context.
@@ -20,12 +19,10 @@ Pre-auth network gating:
 - Utilities like `getUserData` now accept `options.enabled` and image hooks (`useImgQuery`, `useImgBucketQuery`, `usePresignedImgQuery`) also accept `options.enabled` to avoid pre-auth network calls.
 
 How is `isAuthenticated` derived?
-- The SPA does not read cookies or request headers. It calls `/api/v1/auth/claims` with `credentials: 'include'` and maps roles/groups in the claims to a numeric auth level:
+- The SPA does not read cookies or request headers. It calls `/api/v1/Users/Permission` with `credentials: 'include'` and maps roles/groups in the returned claims to a numeric auth level:
   - Groups/Roles are the same as the auth levels (case-insensitive). Mapping: wizard → Wizard (6), headgm → HeadGM (5), secondgm → SecondGM (4), approver → Approver (3), writer → Writer (2), reader → Reader (1).
   - Optionally, a direct numeric `authLevel` claim (or `x-auth-level`) may be used if present (> 0).
-- If claims are missing or the endpoint is not available yet, the SPA falls back to `/api/v1/Users/Permission`:
-  - 200 OK with an `AuthLevel` → authenticated
-  - 401/403 or network error → treated as unauthenticated
+  - For backwards compatibility, if the endpoint returns a legacy `AuthLevel` string instead of claims, it will still be mapped to the numeric level.
 - There is no OAuth callback page in BFF mode. The frontend does not process tokens; the backend handles the full flow and sets cookies.
 
 ### Redirect behavior and `/login`
@@ -155,5 +152,4 @@ Notes:
 ### Forwardauth requirements (backend/proxy)
 
 - The reverse proxy/middleware must inject the JWT into the upstream request header `X-Auth-Request-Token`.
-- The backend should expose a JSON endpoint at `GET /api/v1/auth/claims` that validates/decodes that JWT and returns standard JWT claims (e.g., `sub`, `email`, `preferred_username`, `groups` or `roles`, `exp`, etc.).
-- The SPA will map `groups`/`roles` to its internal auth levels as described above.
+- The backend should expose claims via `GET /api/v1/Users/Permission` — either return the claims object directly or include it under a `claims` property. The SPA will map `groups`/`roles` to its internal auth levels as described above.
