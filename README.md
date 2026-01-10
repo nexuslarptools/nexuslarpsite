@@ -147,8 +147,3 @@ Setup steps:
 - Optionally, replace the placeholders in sonar-project.properties with your actual organization and project key. If left as placeholders, the workflow passes them via arguments from secrets.
 
 The workflow .github/workflows/sonarcloud.yml runs on pushes and pull requests targeting main and development branches. For richer analysis (framework-aware rules), uncomment the Node setup, install, and build steps in the workflow to build the project before scanning.
-
-### Forwardauth requirements (backend/proxy)
-
-- The reverse proxy/middleware must inject the JWT into the upstream request header `X-Auth-Request-Token`.
-- The backend should expose claims via `GET /api/v1/Users/Permission` — either return the claims object directly or include it under a `claims` property. The SPA will map `groups`/`roles` to its internal auth levels as described above.
