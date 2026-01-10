@@ -1,9 +1,13 @@
 ﻿#!/bin/sh
 
+# Ensure Tailscale is up to date before starting
+echo "Checking for Tailscale updates..."
+apk add --no-cache --upgrade tailscale || echo "Warning: Failed to update Tailscale. Proceeding with the currently installed version."
+
 # Start tailscaled in the background
-# --userspace-networking is used to avoid needing /dev/net/tun or special capabilities
+# --tun=userspace-networking is used to avoid needing /dev/net/tun or special capabilities
 echo "Starting tailscaled..."
-tailscaled --state=/var/lib/tailscale/tailscaled.state --userspace-networking &
+tailscaled --state=/var/lib/tailscale/tailscaled.state --tun=userspace-networking &
 
 # Wait for tailscaled to be ready
 echo "Waiting for tailscaled to be ready..."

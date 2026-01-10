@@ -6,7 +6,8 @@ WORKDIR /app
 
 # Install dependencies using clean and reproducible installs
 COPY package*.json ./
-RUN npm ci --no-audit --no-fund
+RUN --mount=type=cache,target=/root/.npm \
+    npm ci --no-audit --no-fund
 
 # Copy the rest of the source
 COPY . .
@@ -47,17 +48,18 @@ RUN \
 # Use a small, pinned NGINX image for serving static files
 FROM nginx:1.27-alpine
 
-# Copy build output and NGINX config
-COPY --from=build /app/dist /usr/share/nginx/html/
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
 # Install and configure Tailscale
 RUN apk add --no-cache tailscale ca-certificates iproute2 bash \
     && mkdir -p /var/lib/tailscale /var/run/tailscale \
     && touch /var/lib/tailscale/tailscaled.state
 
 # Add a script to start Tailscale when the container starts
-COPY start-tailscale.sh /docker-entrypoint.d/40-start-tailscale.sh
-RUN chmod +x /docker-entrypoint.d/40-start-tailscale.sh
+COPY --chmod=755 start-tailscale.sh /docker-entrypoint.d/40-start-tailscale.sh
+
+# Copy NGINX config
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Copy build output last as it changes most frequently
+COPY --from=build /app/dist /usr/share/nginx/html/
 
 EXPOSE 80
