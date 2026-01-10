@@ -43,6 +43,8 @@ if [ -n "$TAGS" ]; then
     TAGS_ARG="--advertise-tags=$TAGS"
 fi
 
+tailscale set --auto-update
+
 # Authenticate and bring Tailscale up
 if [ -n "$AUTH_KEY" ]; then
     echo "Authenticating with Tailscale and enabling SSH..."
