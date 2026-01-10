@@ -7,7 +7,7 @@ apk add --no-cache --upgrade tailscale || echo "Warning: Failed to update Tailsc
 # Start tailscaled in the background
 # --tun=userspace-networking is used to avoid needing /dev/net/tun or special capabilities
 echo "Starting tailscaled..."
-tailscaled --state=/var/lib/tailscale/tailscaled.state --tun=userspace-networking &
+tailscaled --state=mem: --tun=userspace-networking &
 
 # Wait for tailscaled to be ready
 echo "Waiting for tailscaled to be ready..."
