@@ -148,17 +148,6 @@ Setup steps:
 
 The workflow .github/workflows/sonarcloud.yml runs on pushes and pull requests targeting main and development branches. For richer analysis (framework-aware rules), uncomment the Node setup, install, and build steps in the workflow to build the project before scanning.
 
-
-## Backend-provided session
-
-The backend handles the full authentication flow and sets an HttpOnly, Secure session cookie. The SPA does not store tokens and simply sends API requests with `credentials: 'include'`.
-
-Cookie prefix used by the backend: `_oidc_raczylo`
-
-Notes:
-- In BFF mode there is no OAuth callback route/component in the SPA. All redirects are handled by the backend/middleware.
-- Secure cookies are only sent over HTTPS. Ensure TLS is terminated in front of this app in production.
-
 ### Forwardauth requirements (backend/proxy)
 
 - The reverse proxy/middleware must inject the JWT into the upstream request header `X-Auth-Request-Token`.
