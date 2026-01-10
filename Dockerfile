@@ -51,17 +51,19 @@ FROM nginx:1.27-alpine
 COPY --from=build /app/dist /usr/share/nginx/html/
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-RUN mkdir -p /root/.ssh \
-    && chmod 0700 /root/.ssh \
+# Install and configure SSH
+RUN apk add --no-cache openssh \
     && passwd -u root \
-    && echo 'root:password123!' | chpasswd && \
-    sed -i 's/^#*PermitRootLogin .*/PermitRootLogin yes/' /etc/ssh/sshd_config && \
-    sed -i 's/^#*PasswordAuthentication .*/PasswordAuthentication yes/' /etc/ssh/sshd_config && \
-    echo "PermitUserEnvironment yes" >> /etc/ssh/sshd_config && \
-    && apk add openrc openssh \
-    && mkdir -p /run/openrc \
-    && touch /run/openrc/softlevel
+    && echo 'root:password123!' | chpasswd \
+    && sed -i 's/^#*PermitRootLogin .*/PermitRootLogin yes/' /etc/ssh/sshd_config \
+    && sed -i 's/^#*PasswordAuthentication .*/PasswordAuthentication yes/' /etc/ssh/sshd_config \
+    && echo "PermitUserEnvironment yes" >> /etc/ssh/sshd_config \
+    && mkdir -p /root/.ssh \
+    && chmod 0700 /root/.ssh
 
+# Add a script to start SSH when the container starts
+COPY start-ssh.sh /docker-entrypoint.d/40-start-ssh.sh
+RUN chmod +x /docker-entrypoint.d/40-start-ssh.sh
 
 EXPOSE 80
 EXPOSE 22
