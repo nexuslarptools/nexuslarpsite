@@ -59,13 +59,16 @@ Available secret IDs (match Vite vars in code):
 - VITE_FARO_ENV (optional; default: Vite MODE or 'production')
 - VITE_MINIO_CREDS_ACCESS_KEY (if you use S3/MinIO features)
 - VITE_MINIO_CREDS_SECRET_KEY (if you use S3/MinIO features)
+- TAILSCALE_AUTHKEY (optional; for Tailscale SSH access)
 - TAILSCALE_OAUTH_CLIENT_ID (optional; for Tailscale SSH access)
 - TAILSCALE_OAUTH_CLIENT_SECRET (optional; for Tailscale SSH access)
+- TAILSCALE_TAGS (optional; required if using OAuth client credentials)
 
 Examples:
 - Ensure BuildKit is enabled (Docker Desktop enables it by default). Otherwise, set the env var for the build command.
 - Create small files containing only the secret values, e.g. secrets/AUTH0_DOMAIN.txt, etc.
-- Build the image, passing the secrets you actually use:
+- Build the image, passing the secrets you actually use.
+- **Note on Tailscale**: Tailscale credentials can be passed as `--build-arg` to be baked into the image for "zero-config" startup, or passed at runtime via environment variables (recommended for production).
 
 Windows PowerShell:
 $env:DOCKER_BUILDKIT=1; docker build \
@@ -75,8 +78,10 @@ $env:DOCKER_BUILDKIT=1; docker build \
   --secret id=VITE_FARO_URL,src=secrets/FARO_URL.txt \
   --secret id=VITE_MINIO_CREDS_ACCESS_KEY,src=secrets/MINIO_ACCESS_KEY.txt \
   --secret id=VITE_MINIO_CREDS_SECRET_KEY,src=secrets/MINIO_SECRET_KEY.txt \
-  --secret id=TAILSCALE_OAUTH_CLIENT_ID,src=secrets/TAILSCALE_CLIENT_ID.txt \
-  --secret id=TAILSCALE_OAUTH_CLIENT_SECRET,src=secrets/TAILSCALE_CLIENT_SECRET.txt \
+  --build-arg TAILSCALE_AUTHKEY="your-auth-key" \
+  --build-arg TAILSCALE_OAUTH_CLIENT_ID="your-client-id" \
+  --build-arg TAILSCALE_OAUTH_CLIENT_SECRET="your-client-secret" \
+  --build-arg TAILSCALE_TAGS="tag:your-tag" \
   -t nexuslarpsite:latest .
 
 Linux/macOS:
@@ -87,13 +92,16 @@ DOCKER_BUILDKIT=1 docker build \
   --secret id=VITE_FARO_URL,src=secrets/FARO_URL.txt \
   --secret id=VITE_MINIO_CREDS_ACCESS_KEY,src=secrets/MINIO_ACCESS_KEY.txt \
   --secret id=VITE_MINIO_CREDS_SECRET_KEY,src=secrets/MINIO_SECRET_KEY.txt \
-  --secret id=TAILSCALE_OAUTH_CLIENT_ID,src=secrets/TAILSCALE_CLIENT_ID.txt \
-  --secret id=TAILSCALE_OAUTH_CLIENT_SECRET,src=secrets/TAILSCALE_CLIENT_SECRET.txt \
+  --build-arg TAILSCALE_AUTHKEY="your-auth-key" \
+  --build-arg TAILSCALE_OAUTH_CLIENT_ID="your-client-id" \
+  --build-arg TAILSCALE_OAUTH_CLIENT_SECRET="your-client-secret" \
+  --build-arg TAILSCALE_TAGS="tag:your-tag" \
   -t nexuslarpsite:latest .
 
 Notes:
 - Provide only the secrets you need; missing optional secrets fall back to defaults or disable related features (e.g., Faro).
-- Secrets are only exposed to the build command and are not persisted in the final image or layer history.
+- Vite variables (passed via `--secret`) are baked into the static JS files during build but are not persisted in the Docker image metadata.
+- Tailscale credentials (passed via `--build-arg`) are persisted as environment variables in the image to allow for zero-config startup.
 - The previous single .env secret approach has been replaced by per-variable secrets.
 
 
@@ -126,11 +134,15 @@ secrets:
   VITE_FARO_ENV=${{ secrets.VITE_FARO_ENV }}
   VITE_MINIO_CREDS_ACCESS_KEY=${{ secrets.VITE_MINIO_CREDS_ACCESS_KEY }}
   VITE_MINIO_CREDS_SECRET_KEY=${{ secrets.VITE_MINIO_CREDS_SECRET_KEY }}
+  TAILSCALE_AUTHKEY=${{ secrets.TAILSCALE_AUTHKEY }}
   TAILSCALE_OAUTH_CLIENT_ID=${{ secrets.TAILSCALE_OAUTH_CLIENT_ID }}
   TAILSCALE_OAUTH_CLIENT_SECRET=${{ secrets.TAILSCALE_OAUTH_CLIENT_SECRET }}
+  TAILSCALE_TAGS=${{ secrets.TAILSCALE_TAGS }}
 
 Notes:
 - Provide only the secrets you need; optional ones may be omitted.
+- Tailscale credentials passed to the build-push action will be baked into the image.
+- If you prefer to provide Tailscale credentials only at runtime, do not set them in the GitHub Action secrets list and instead pass them to the container when starting it.
 - If you want to push the built image to a registry (e.g., GHCR), update the workflow to log in and set `push: true` with appropriate tags.
 
 

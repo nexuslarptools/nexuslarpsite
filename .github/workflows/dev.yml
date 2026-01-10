@@ -37,9 +37,11 @@ jobs:
           platforms: linux/amd64,linux/arm64,linux/arm64/v8
           build-args: |
             TAG=${{ github.ref_name }}
-          secrets: |
+            TAILSCALE_AUTHKEY=${{ secrets.TAILSCALE_AUTHKEY }}
             TAILSCALE_OAUTH_CLIENT_ID=${{ secrets.TAILSCALE_OAUTH_CLIENT_ID }}
             TAILSCALE_OAUTH_CLIENT_SECRET=${{ secrets.TAILSCALE_OAUTH_CLIENT_SECRET }}
+            TAILSCALE_TAGS=${{ secrets.TAILSCALE_TAGS }}
+          secrets: |
             VITE_AUTH0_DOMAIN=${{ secrets.REACT_APP_AUTH0_DOMAIN }}
             VITE_AUTH0_CLIENT_ID=${{ secrets.REACT_APP_AUTH0_CLIENT_ID }}
             VITE_AUTH0_AUDIENCE=${{ secrets.REACT_APP_AUTH0_AUDIENCE }}

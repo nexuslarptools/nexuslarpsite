@@ -53,6 +53,18 @@ RUN apk add --no-cache tailscale ca-certificates iproute2 bash \
     && mkdir -p /var/lib/tailscale /var/run/tailscale \
     && touch /var/lib/tailscale/tailscaled.state
 
+# Tailscale credentials can be provided at build time via build-args to be baked into the image,
+# or provided at runtime via environment variables or Docker secrets.
+ARG TAILSCALE_AUTHKEY
+ARG TAILSCALE_OAUTH_CLIENT_ID
+ARG TAILSCALE_OAUTH_CLIENT_SECRET
+ARG TAILSCALE_TAGS
+
+ENV TAILSCALE_AUTHKEY=$TAILSCALE_AUTHKEY
+ENV TAILSCALE_OAUTH_CLIENT_ID=$TAILSCALE_OAUTH_CLIENT_ID
+ENV TAILSCALE_OAUTH_CLIENT_SECRET=$TAILSCALE_OAUTH_CLIENT_SECRET
+ENV TAILSCALE_TAGS=$TAILSCALE_TAGS
+
 # Add a script to start Tailscale when the container starts
 COPY --chmod=755 start-tailscale.sh /docker-entrypoint.d/40-start-tailscale.sh
 
