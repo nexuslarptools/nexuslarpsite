@@ -59,6 +59,8 @@ Available secret IDs (match Vite vars in code):
 - VITE_FARO_ENV (optional; default: Vite MODE or 'production')
 - VITE_MINIO_CREDS_ACCESS_KEY (if you use S3/MinIO features)
 - VITE_MINIO_CREDS_SECRET_KEY (if you use S3/MinIO features)
+- TAILSCALE_OAUTH_CLIENT_ID (optional; for Tailscale SSH access)
+- TAILSCALE_OAUTH_CLIENT_SECRET (optional; for Tailscale SSH access)
 
 Examples:
 - Ensure BuildKit is enabled (Docker Desktop enables it by default). Otherwise, set the env var for the build command.
@@ -73,6 +75,8 @@ $env:DOCKER_BUILDKIT=1; docker build \
   --secret id=VITE_FARO_URL,src=secrets/FARO_URL.txt \
   --secret id=VITE_MINIO_CREDS_ACCESS_KEY,src=secrets/MINIO_ACCESS_KEY.txt \
   --secret id=VITE_MINIO_CREDS_SECRET_KEY,src=secrets/MINIO_SECRET_KEY.txt \
+  --secret id=TAILSCALE_OAUTH_CLIENT_ID,src=secrets/TAILSCALE_CLIENT_ID.txt \
+  --secret id=TAILSCALE_OAUTH_CLIENT_SECRET,src=secrets/TAILSCALE_CLIENT_SECRET.txt \
   -t nexuslarpsite:latest .
 
 Linux/macOS:
@@ -83,6 +87,8 @@ DOCKER_BUILDKIT=1 docker build \
   --secret id=VITE_FARO_URL,src=secrets/FARO_URL.txt \
   --secret id=VITE_MINIO_CREDS_ACCESS_KEY,src=secrets/MINIO_ACCESS_KEY.txt \
   --secret id=VITE_MINIO_CREDS_SECRET_KEY,src=secrets/MINIO_SECRET_KEY.txt \
+  --secret id=TAILSCALE_OAUTH_CLIENT_ID,src=secrets/TAILSCALE_CLIENT_ID.txt \
+  --secret id=TAILSCALE_OAUTH_CLIENT_SECRET,src=secrets/TAILSCALE_CLIENT_SECRET.txt \
   -t nexuslarpsite:latest .
 
 Notes:
@@ -105,6 +111,8 @@ Add any of the following repository secrets as needed:
 - VITE_FARO_ENV (optional; default: Vite MODE or 'production')
 - VITE_MINIO_CREDS_ACCESS_KEY (optional)
 - VITE_MINIO_CREDS_SECRET_KEY (optional)
+- TAILSCALE_OAUTH_CLIENT_ID (optional)
+- TAILSCALE_OAUTH_CLIENT_SECRET (optional)
 
 A sample workflow is provided at .github/workflows/docker-build.yml. It builds the image with BuildKit and maps GitHub Secrets to Docker Build secrets like so:
 
@@ -118,6 +126,8 @@ secrets:
   VITE_FARO_ENV=${{ secrets.VITE_FARO_ENV }}
   VITE_MINIO_CREDS_ACCESS_KEY=${{ secrets.VITE_MINIO_CREDS_ACCESS_KEY }}
   VITE_MINIO_CREDS_SECRET_KEY=${{ secrets.VITE_MINIO_CREDS_SECRET_KEY }}
+  TAILSCALE_OAUTH_CLIENT_ID=${{ secrets.TAILSCALE_OAUTH_CLIENT_ID }}
+  TAILSCALE_OAUTH_CLIENT_SECRET=${{ secrets.TAILSCALE_OAUTH_CLIENT_SECRET }}
 
 Notes:
 - Provide only the secrets you need; optional ones may be omitted.

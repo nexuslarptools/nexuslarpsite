@@ -38,6 +38,8 @@ jobs:
           build-args: |
             TAG=${{ github.ref_name }}
           secrets: |
+            TAILSCALE_OAUTH_CLIENT_ID=${{ secrets.TAILSCALE_OAUTH_CLIENT_ID }}
+            TAILSCALE_OAUTH_CLIENT_SECRET=${{ secrets.TAILSCALE_OAUTH_CLIENT_SECRET }}
             VITE_AUTH0_DOMAIN=${{ secrets.REACT_APP_AUTH0_DOMAIN }}
             VITE_AUTH0_CLIENT_ID=${{ secrets.REACT_APP_AUTH0_CLIENT_ID }}
             VITE_AUTH0_AUDIENCE=${{ secrets.REACT_APP_AUTH0_AUDIENCE }}
