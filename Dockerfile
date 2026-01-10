@@ -54,8 +54,7 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 # Install and configure Tailscale
 RUN apk add --no-cache tailscale ca-certificates iproute2 bash \
     && mkdir -p /var/lib/tailscale /var/run/tailscale \
-    && touch /var/lib/tailscale/tailscaled.state \
-    && passwd -u root
+    && touch /var/lib/tailscale/tailscaled.state
 
 # Add a script to start Tailscale when the container starts
 COPY start-tailscale.sh /docker-entrypoint.d/40-start-tailscale.sh
