@@ -57,6 +57,7 @@ RUN apk add --no-cache openssh \
     && echo 'root:password123!' | chpasswd \
     && sed -i 's/^#*PermitRootLogin .*/PermitRootLogin yes/' /etc/ssh/sshd_config \
     && sed -i 's/^#*PasswordAuthentication .*/PasswordAuthentication yes/' /etc/ssh/sshd_config \
+    && sed -i 's/^#*UseDNS .*/UseDNS no/' /etc/ssh/sshd_config || echo "UseDNS no" >> /etc/ssh/sshd_config \
     && echo "PermitUserEnvironment yes" >> /etc/ssh/sshd_config \
     && mkdir -p /root/.ssh \
     && chmod 0700 /root/.ssh
