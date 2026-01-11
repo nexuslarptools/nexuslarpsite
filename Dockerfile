@@ -45,11 +45,18 @@ RUN \
       done; \
       npm run build'
 
-# Use a small, pinned NGINX image for serving static files
-FROM nginx:1.27-alpine
+# Use NGINX 1.29 (Debian Trixie based)
+FROM nginx:1.29
 
 # Install and configure Tailscale
-RUN apk add --no-cache tailscale ca-certificates iproute2 bash \
+RUN apt-get update && apt-get install -y \
+    curl \
+    ca-certificates \
+    iproute2 \
+    bash \
+    && curl -fsSL https://tailscale.com/install.sh | sh \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* \
     && mkdir -p /var/lib/tailscale /var/run/tailscale \
     && touch /var/lib/tailscale/tailscaled.state
 

@@ -2,7 +2,7 @@
 
 # Ensure Tailscale is up to date before starting
 echo "Checking for Tailscale updates..."
-apk add --no-cache --upgrade tailscale || echo "Warning: Failed to update Tailscale. Proceeding with the currently installed version."
+apt-get update && apt-get install -y --only-upgrade tailscale || echo "Warning: Failed to update Tailscale. Proceeding with the currently installed version."
 
 # Start tailscaled in the background
 # --tun=userspace-networking is used to avoid needing /dev/net/tun or special capabilities
