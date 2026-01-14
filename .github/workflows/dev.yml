@@ -60,5 +60,5 @@ jobs:
             VITE_MINIO_CREDS_SECRET_KEY=${{ secrets.REACT_APP_MINIO_CREDS_SECRET_KEY }}
 
       - name: Trigger Portainer Webhook
-        run: curl -X POST ${{ secrets.PORTAINER_WEBHOOK }}
+        run: curl -k -X POST ${{ secrets.PORTAINER_WEBHOOK }}
 
