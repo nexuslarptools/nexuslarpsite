@@ -11,6 +11,13 @@ jobs:
   publish-nexus-backend:
     runs-on: ubuntu-latest
     steps:
+      - name: Tailscale
+        uses: tailscale/github-action@v4
+        with:
+          oauth-client-id: ${{ secrets.TAILSCALE_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TAILSCALE_OAUTH_CLIENT_SECRET }}
+          tags: tag:ci
+
       - name: Checkout code
         uses: actions/checkout@v5
 
@@ -51,3 +58,7 @@ jobs:
             VITE_FARO_ENV=${{ secrets.REACT_APP_DEV_FARO_ENV }}
             VITE_MINIO_CREDS_ACCESS_KEY=${{ secrets.REACT_APP_MINIO_CREDS_ACCESS_KEY }}
             VITE_MINIO_CREDS_SECRET_KEY=${{ secrets.REACT_APP_MINIO_CREDS_SECRET_KEY }}
+
+      - name: Trigger Portainer Webhook
+        run: curl -X POST ${{ secrets.PORTAINER_WEBHOOK }}
+
