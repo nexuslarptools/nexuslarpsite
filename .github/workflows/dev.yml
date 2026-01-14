@@ -15,7 +15,7 @@ jobs:
         uses: tailscale/github-action@v4
         with:
           oauth-client-id: ${{ secrets.TS_GH_CID }}
-          oauth-secret: ${{ secrets.TS_GH_CSEC }}
+          oauth-secret: tskey-client-${{ secrets.TS_GH_CID }}-${{ secrets.TS_GH_CSEC }}
           tags: tag:ci
 
       - name: Checkout code
