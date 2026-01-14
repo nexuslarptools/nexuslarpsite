@@ -15,7 +15,7 @@ jobs:
         uses: tailscale/github-action@v4
         with:
           authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
-          tags: tag:ci
+          tags: tag:server
 
       - name: Checkout code
         uses: actions/checkout@v5
