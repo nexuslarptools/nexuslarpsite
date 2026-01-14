@@ -14,9 +14,9 @@ jobs:
       - name: Tailscale
         uses: tailscale/github-action@v4
         with:
-          authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
-          statedir: /tmp/tailscale-state/
-          tags: tag:server
+          oauth-client-id: ${{ secrets.TS_GH_CID }}
+          oauth-secret: ${{ secrets.TS_GH_CSEC }}
+          tags: tag:ci
 
       - name: Checkout code
         uses: actions/checkout@v5
