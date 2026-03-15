@@ -92,7 +92,7 @@ export default function ItemsIndex(props) {
         text: e});
      }
         const DirectToItem = async (path, guid) => {
-          props.toggleSubScreen(false, 'View', guid, path, filterState);
+          props.toggleSubScreen(true, 'View', guid, path, filterState);
         }
 
         const GoToEditItem = async (path, guid) => {
