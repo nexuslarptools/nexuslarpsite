@@ -43,7 +43,7 @@ const ItemTable = props => {
     ? props.Filters.SelectedLarpTag : null);
   const [tagSelectValues, setTagSelectValues] = useState(props.Filters !== null && 
     props.Filters !== undefined && props.Filters.TagSelectValues !== undefined
-    ? props.Filters.TagSelectValues : null
+    ? props.Filters.TagSelectValues : []
   );
   const [selectedApprovalState] = useState(props.Filters !== null && 
     props.Filters !== undefined && props.Filters.SelectedApproval !== undefined
