@@ -37,7 +37,16 @@ export default function CharactersIndex(props) {
           viewItemPath: ''
       });
 
-      const [filterState, setFilterState] = useState(null);
+      const [filterState, setFilterState] = useState({
+        SeriesFilter: '',
+        CharacterFilter: '',
+        CreatorFilter: '',
+        EditorFilter: '',
+        SelectedApproval : '',
+        LarpAutoCompValue: '',
+        SelectedLarpTag: '',
+        TagSelectValues: []
+      });
       const [isCreate, setIsCreate] = useState(false);
       const [snackOpen, setSnackOpen] = useState(
         {isOpen:false,

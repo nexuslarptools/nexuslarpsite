@@ -35,7 +35,15 @@ export default function ItemsIndex(props) {
             viewItemGuid: '',
             viewItemPath: ''
         });
-      const [filterState, setFilterState] = useState(null);
+      const [filterState, setFilterState] = useState({
+        SeriesFilter: '',
+        ItemsFilter: '',
+        CreatorFilter: '',
+        EditorFilter: '',
+        SelectedApproval : '',
+        LarpAutoCompValue: '',
+        SelectedLarpTag: '',
+        TagSelectValues: []});
       const [isCreate, setIsCreate] = useState(false);
       const [isSelect, setIsSelect] = useState(false);
       const [isEdit, setIsEdit] = useState({isEditing: false, guid: null});
