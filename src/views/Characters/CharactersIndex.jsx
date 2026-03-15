@@ -101,7 +101,7 @@ export default function CharactersIndex(props) {
       //      viewingItem: true,
       //      viewItemGuid: guid,
       //      viewItemPath: path});
-     props.toggleSubScreen(true, 'View', guid, path, filterState);
+     props.toggleSubScreen(false, 'View', guid, path, filterState);
     }
 
     const GoBackToList = async () => {
