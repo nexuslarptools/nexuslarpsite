@@ -96,12 +96,22 @@ const ItemTable = props => {
     setCurrentTagList(tagDrowdownList);
 
     let filteredRows = props.appdata?.iteList;
-    filteredRows = filteredRows.filter(item => removeDiacritics(item.name.toLocaleLowerCase()).includes(removeDiacritics(props.Filters.ItemsFilter.toLocaleLowerCase())));
-    filteredRows = filteredRows.filter(item => (item.series === null && props.Filters.SeriesFilter === '') || 
-       (item.series !== null && removeDiacritics(item.series.toLocaleLowerCase()).includes(removeDiacritics(props.Filters.SeriesFilter.toLocaleLowerCase()))));
-    filteredRows = filteredRows.filter(item => removeDiacritics(item.createdby.toLocaleLowerCase()).includes(removeDiacritics(props.Filters.CreatorFilter.toLocaleLowerCase())));
-    filteredRows = filteredRows.filter(item => removeDiacritics(item.editbyUser.toLocaleLowerCase()).includes(removeDiacritics(props.Filters.EditorFilter.toLocaleLowerCase())));
-   
+
+    if ( props.Filters !== undefined && props.Filters !== null) {
+      if (props.Filters.ItemsFilter != undefined) {
+        filteredRows = filteredRows.filter(item => removeDiacritics(item.name.toLocaleLowerCase()).includes(removeDiacritics(props.Filters.ItemsFilter.toLocaleLowerCase())));
+      }
+      if (props.Filters.SeriesFilter !== undefined) {
+        filteredRows = filteredRows.filter(item => (item.series === null && props.Filters.SeriesFilter === '') || 
+        (item.series !== null && removeDiacritics(item.series.toLocaleLowerCase()).includes(removeDiacritics(props.Filters.SeriesFilter.toLocaleLowerCase())))); 
+      }
+      if (props.Filters.CreatorFilter !== undefined) {
+        filteredRows = filteredRows.filter(item => removeDiacritics(item.createdby.toLocaleLowerCase()).includes(removeDiacritics(props.Filters.CreatorFilter.toLocaleLowerCase())));
+      }
+      if (props.Filters.EditorFilter !== undefined) {
+        filteredRows = filteredRows.filter(item => removeDiacritics(item.editbyUser.toLocaleLowerCase()).includes(removeDiacritics(props.Filters.EditorFilter.toLocaleLowerCase())));
+      }
+    }
     if (props.showApprovableOnly) {
       filteredRows = filteredRows.filter(item => (item.editbyUserGuid !== props.userGuid && item.firstapprovalbyuserGuid !== props.userGuid));
     }
