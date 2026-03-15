@@ -33,7 +33,16 @@ export default function ItemsIndex(props) {
             showApprovableOnly: false,
             viewingItem: false,
             viewItemGuid: '',
-            viewItemPath: ''
+            viewItemPath: '',
+            filter: {
+        SeriesFilter: '',
+        ItemsFilter: '',
+        CreatorFilter: '',
+        EditorFilter: '',
+        SelectedApproval : '',
+        LarpAutoCompValue: '',
+        SelectedLarpTag: '',
+        TagSelectValues: []}
         });
       const [filterState, setFilterState] = useState({
         SeriesFilter: '',
