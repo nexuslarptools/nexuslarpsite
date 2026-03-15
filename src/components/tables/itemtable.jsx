@@ -37,17 +37,22 @@ const ItemTable = props => {
         Editor: false
       });
   const [clearfilterState] = useState(false);
-  const [selectedLarpTag, setSelectedLarpTag] = useState(props.Filters.SelectedLarpTag !== undefined 
+  const [selectedLarpTag, setSelectedLarpTag] = useState( props.Filters !== null && 
+    props.Filters !== undefined &&
+    props.Filters.SelectedLarpTag !== undefined 
     ? props.Filters.SelectedLarpTag : null);
-  const [tagSelectValues, setTagSelectValues] = useState(props.Filters.TagSelectValues !== undefined
+  const [tagSelectValues, setTagSelectValues] = useState(props.Filters !== null && 
+    props.Filters !== undefined && props.Filters.TagSelectValues !== undefined
     ? props.Filters.TagSelectValues : null
   );
-  const [selectedApprovalState] = useState(props.Filters.SelectedApproval !== undefined
+  const [selectedApprovalState] = useState(props.Filters !== null && 
+    props.Filters !== undefined && props.Filters.SelectedApproval !== undefined
     ? props.Filters.SelectedApproval : null 
   );
   const [autocompSelectedValue, setAutocompSelectedValue] = useState(null);
   const [resetInputField, setResetInputField] = useState(false);
-  const [larpAutoCompValue, setLarpAutoCompValue] = useState(props.Filters.LarpAutoCompValue !== undefined
+  const [larpAutoCompValue, setLarpAutoCompValue] = useState(props.Filters !== null && 
+    props.Filters !== undefined && props.Filters.LarpAutoCompValue !== undefined
     ? props.Filters.LarpAutoCompValue : null
   );
   const [page, setPage] = useState(0);
