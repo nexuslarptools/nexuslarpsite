@@ -93,10 +93,22 @@ export default function ItemsIndex(props) {
      }
         const DirectToItem = async (path, guid) => {
           props.toggleSubScreen(false, 'View', guid, path, filterState);
+          var isapprove = false;
+          if (path === 'ItemSheetApproveds') {
+            isapprove = true;
+          }
+          await setItemsState({
+            ...itemsState,
+            selectedApproved: isapprove,
+            viewingItem: true,
+            viewItemGuid: guid,
+            viewItemPath: path
+          });
         }
 
         const GoToEditItem = async (path, guid) => {
-           props.toggleSubScreen(false, 'Edit', guid, path, filterState);
+          props.toggleSubScreen(false, 'Edit', guid, path, filterState);
+          await setIsEdit({isEditing: true, guid: guid});
         }
 
         const NewItemLink = async () => {
@@ -105,24 +117,35 @@ export default function ItemsIndex(props) {
 
         const GoBackFromCreateEdit = async () => {
           props.toggleSubScreen(true, '', '' ,'', 'goback');
+          await setIsEdit({isEditing: false, guid: null});
+          await setIsCreate(false);
         }
 
         const pushFilter = (filter) => {
           if (isSelect) {
-          props.toggleSubScreen(true, 'Select', '','', filter);
-          return;
-        }
+            props.toggleSubScreen(true, 'Select', '','', filter);
+            setFilterState(filter);
+            return;
+          }
         
-        props.toggleSubScreen(true, '', '','', filter);
+          props.toggleSubScreen(true, '', '','', filter);
+          setFilterState(filter);
         }
 
         const GoToSelect = () => {
           props.toggleSubScreen(true, 'Select', '','', filterState);
+          setIsSelect(true);
         }
 
-        const GoBackFromSelect = () => {
+        const GoBackFromSelect = async () => {
           setIsSelect(false);
           props.toggleSubScreen(true, '', '' ,'', 'goback');
+          await setItemsState({
+            ...itemsState,
+            viewingItem: false,
+            viewItemGuid: null,
+            viewItemPath: null
+          });
         }
 
             const theme = createTheme({
