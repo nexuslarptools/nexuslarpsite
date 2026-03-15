@@ -34,10 +34,8 @@ export default function CharactersIndex(props) {
           readyApproved: false,
           viewingItem: false,
           viewItemGuid: '',
-          viewItemPath: ''
-      });
-
-      const [filterState, setFilterState] = useState({
+          viewItemPath: '',
+          filter: {
         SeriesFilter: '',
         CharacterFilter: '',
         CreatorFilter: '',
@@ -46,7 +44,10 @@ export default function CharactersIndex(props) {
         LarpAutoCompValue: '',
         SelectedLarpTag: '',
         TagSelectValues: []
+      }
       });
+
+      const [filterState, setFilterState] = useState(null);
       const [isCreate, setIsCreate] = useState(false);
       const [snackOpen, setSnackOpen] = useState(
         {isOpen:false,
