@@ -119,6 +119,12 @@ export default function ItemsIndex(props) {
           props.toggleSubScreen(true, '', '' ,'', 'goback');
           await setIsEdit({isEditing: false, guid: null});
           await setIsCreate(false);
+          await setItemsState({
+            ...itemsState,
+            viewingItem: false,
+            viewItemGuid: null,
+            viewItemPath: null
+          });
         }
 
         const pushFilter = (filter) => {

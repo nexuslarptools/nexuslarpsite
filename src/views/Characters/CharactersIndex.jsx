@@ -96,12 +96,12 @@ export default function CharactersIndex(props) {
      
 
     const DirectToCharacter = async (path, guid) => {
-      //  setCharactersState({
-      //      ...charactersState,
-      //      viewingItem: true,
-      //      viewItemGuid: guid,
-      //      viewItemPath: path});
-     props.toggleSubScreen(false, 'View', guid, path, filterState);
+      props.toggleSubScreen(false, 'View', guid, path, filterState);
+      await setCharactersState({
+        ...charactersState,
+        viewingItem: true,
+        viewItemGuid: guid,
+        viewItemPath: path});
     }
 
     const GoBackToList = async () => {
@@ -110,11 +110,26 @@ export default function CharactersIndex(props) {
         viewingItem: false
     });
     props.toggleSubScreen(true, '', '' ,'', 'goback');
+    await setCharactersState({
+          ...charactersState,
+          viewingItem: false,
+          viewItemGuid: '',
+          viewItemPath: ''});
+    await setIsEdit({isEditing: false, 
+            guid: '',
+            path: ''
+          });  
+    await setIsCreate(false);
     await setfilterInit(true);
+
     }
 
     const GoToEditCharacter = async (path, guid) => {
       props.toggleSubScreen(false, 'Edit', guid, path, filterState);
+      await setIsEdit({isEditing: true, 
+            guid: guid,
+            path: path
+      }); 
     }
 
     const UnInitFiler = () => {
@@ -122,8 +137,8 @@ export default function CharactersIndex(props) {
     }
 
     const NewCharacterLink = async () => {
-      //await setIsCreate(true);
       props.toggleSubScreen(false, 'Create', '', '', filterState);
+      await setIsCreate(true);
     }
 
     const GoBackFromCreateEdit = async () => {
@@ -141,8 +156,8 @@ export default function CharactersIndex(props) {
       props.toggleSubScreen(true, '', '','', 'goback');
     }
 
-    const pushFilter = (filter) => {
-      setFilterState({...filterState,  filter});
+    const pushFilter = async (filter) => {
+      await setFilterState({...filterState,  filter});
       props.toggleSubScreen(true, '', '','', filter);
     }
 
