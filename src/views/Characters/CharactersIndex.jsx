@@ -142,18 +142,18 @@ export default function CharactersIndex(props) {
     }
 
     const GoBackFromCreateEdit = async () => {
-       await setCharactersState({
-        selectedApproved: true,
-        commentFilter: false,
-        showApprovableOnly: false,
+      await setCharactersState({
+        ...charactersState,
         viewingItem: false,
         viewItemGuid: '',
-        viewItemPath: ''
-    }); 
-      //await setIsCreate(false);
-      // await setIsEdit({isEditing: false, guid: null});
-     // await setfilterInit(true);
-      props.toggleSubScreen(true, '', '','', 'goback');
+        viewItemPath: ''});
+      await setIsEdit({
+        isEditing: false, 
+        guid: '',
+        path: ''
+      });  
+      await setIsCreate(false);
+        props.toggleSubScreen(true, '', '','', 'goback');
     }
 
     const pushFilter = async (filter) => {
@@ -200,9 +200,9 @@ export default function CharactersIndex(props) {
 isSearch={false}
 FilterInit={filterInit}
 UnInitFiler={() => UnInitFiler()}
-Filters={props.subState !== undefined && props.subState !== null &&
-  props.subState.filter !== undefined && props.subState.filter !== null ? 
-  props.subState.filter : null
+Filters={
+  filterState !== undefined && filterState !== null ? 
+  filterState : null
 }
 appdata={approvQuery.data} 
   undata={unapprovQuery.data} 
@@ -210,24 +210,24 @@ appdata={approvQuery.data}
   tagslist={allTagsQuery.data.find((tags) => tags.tagType === 'Character')?.tagsList}
   authLevel={authLevel}
   userGuid={userGuidQuery.data}
-  selectedApproved={ props.subState !== undefined && props.subState !== null &&
-    props.subState.selectedApproved !== undefined && props.subState.selectedApproved !== null ? 
-    props.subState.selectedApproved : null
+  selectedApproved={ charactersState !== undefined && charactersState !== null &&
+    charactersState.selectedApproved !== undefined && charactersState.selectedApproved !== null ? 
+    charactersState.selectedApproved : null
     //charactersState.selectedApproved
     } 
-  commentFilterOn={ props.subState !== undefined && props.subState !== null &&
-    props.subState.commentFilter !== undefined && props.subState.commentFilter !== null ? 
-    props.subState.commentFilter : false
+  commentFilterOn={ charactersState.commentFilter !== undefined && charactersState.commentFilter !== null ? 
+    charactersState.commentFilter : false
     //charactersState.commentFilter
     }
-  showApprovableOnly={ props.subState !== undefined && props.subState !== null &&
-    props.subState.showApprovableOnly !== undefined && props.subState.showApprovableOnly !== null ? 
-    props.subState.showApprovableOnly : false
+  showApprovableOnly={ charactersState !== undefined && charactersState !== null &&
+    charactersState.showApprovableOnly !== undefined && 
+    charactersState.showApprovableOnly !== null ? 
+    charactersState.showApprovableOnly : false
     //charactersState.showApprovableOnly
     }
-  readyApproved={ props.subState !== undefined && props.subState !== null &&
-    props.subState.readyApproved !== undefined && props.subState.readyApproved !== null ? 
-    props.subState.readyApproved : false
+  readyApproved={ charactersState !== undefined && charactersState !== null &&
+    charactersState.readyApproved !== undefined && charactersState.readyApproved !== null ? 
+    charactersState.readyApproved : false
     //charactersState.readyApproved
     }
   ToggleSwitches={(e) => props.ToggleSwitches(e)}

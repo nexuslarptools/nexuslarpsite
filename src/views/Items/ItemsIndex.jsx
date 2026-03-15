@@ -194,18 +194,18 @@ return (
  isSearch={false}
 appdata={approvQuery.data} 
   undata={unapprovQuery.data} 
-  Filters={props.subState !== undefined && props.subState !== null &&
-    props.subState.filter !== undefined && props.subState.filter !== null ? 
-    props.subState.filter : null
+  Filters={itemsState !== undefined && itemsState !== null &&
+    itemsState.filter !== undefined && itemsState.filter !== null ? 
+    itemsState.filter : null
   }
   larpTags={allTagsQuery.data.find((tags) => tags.tagType === 'LARPRun')?.tagsList}
   tagslist={allTagsQuery.data.find((tags) => tags.tagType === 'Item')?.tagsList}
   authLevel={authLevel}
   userGuid={userGuidQuery.data}
-  selectedApproved={props.subState.selectedApproved} 
-  commentFilterOn={props.subState.commentFilter}
-  showApprovableOnly={props.subState.showApprovableOnly}
-  readyApproved={props.subState.readyApproved}
+  selectedApproved={itemsState.selectedApproved} 
+  commentFilterOn={itemsState.commentFilter}
+  showApprovableOnly={itemsState.showApprovableOnly}
+  readyApproved={itemsState.readyApproved}
   ToggleSwitches={(e) => props.ToggleSwitches(e)}
   DirectToItem={(path, guid) => DirectToItem(path, guid)}
   NewItemLink={(e) => NewItemLink(e)}
@@ -220,18 +220,19 @@ appdata={approvQuery.data}
  isSearch={false}
   isCharSheet={false}
   undata={unapprovQuery.data} 
-  Filters={props.subState !== undefined && props.subState !== null &&
-    props.subState.filter !== undefined && props.subState.filter !== null ? 
-    props.subState.filter : null
+  Filters={itemsState !== undefined && itemsState !== null &&
+    itemsState.filter !== undefined && itemsState.filter !== null ? 
+    itemsState.filter : null
   }
-  initialItems={{show:false, label:'Selection for Printing', startingItems: props.subState.listItems}}
+  initialItems={{show:false, label:'Selection for Printing', startingItems: 
+    itemsState.listItems}}
   larpTags={allTagsQuery.data.find((tags) => tags.tagType === 'LARPRun')?.tagsList}
   tagslist={allTagsQuery.data.find((tags) => tags.tagType === 'Item')?.tagsList}
   authLevel={authLevel}
   userGuid={userGuidQuery.data}
-  selectedApproved={props.subState.selectedApproved} 
-  commentFilterOn={props.subState.commentFilter}
-  showApprovableOnly={props.subState.showApprovableOnly}
+  selectedApproved={itemsState.selectedApproved} 
+  commentFilterOn={itemsState.commentFilter}
+  showApprovableOnly={itemsState.showApprovableOnly}
   GoBack={() => GoBackFromSelect()}
   UpdateItemList={(itemList) => props.UpdateItemsList(itemList)}
   UpdateFilter={(filter) => pushFilter(filter)}
