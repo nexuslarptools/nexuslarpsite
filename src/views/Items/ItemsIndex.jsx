@@ -125,7 +125,7 @@ export default function ItemsIndex(props) {
 
         const GoToEditItem = async (path, guid) => {
           props.toggleSubScreen(false, 'Edit', guid, path, filterState);
-          await setIsEdit({isEditing: true, guid: guid});
+          await setIsEdit({isEditing: true, guid: guid, path: path});
         }
 
         const NewItemLink = async () => {
@@ -258,7 +258,10 @@ appdata={approvQuery.data}
 </> 
 : 
 <>
-<ItemEdit formJSON={formJSON} tagslist={allTagsQuery.data} guid={isEdit.guid} path={isEdit.path}
+<ItemEdit formJSON={formJSON} 
+tagslist={allTagsQuery.data} 
+guid={isEdit.guid} 
+path={isEdit.path}
 OpenSnack ={(e) => OpenSnack(e)} GoBack ={() => GoBackFromCreateEdit()} />
 </>
  :
