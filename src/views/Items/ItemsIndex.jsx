@@ -233,7 +233,7 @@ appdata={approvQuery.data}
   commentFilterOn={itemsState.commentFilter}
   showApprovableOnly={itemsState.showApprovableOnly}
   readyApproved={itemsState.readyApproved}
-  ToggleSwitches={(e) => props.ToggleSwitch(e)}
+  ToggleSwitches={(e) => ToggleSwitch(e)}
   DirectToItem={(path, guid) => DirectToItem(path, guid)}
   NewItemLink={(e) => NewItemLink(e)}
   NavToSelectItems={() => GoToSelect()}
@@ -263,9 +263,8 @@ appdata={approvQuery.data}
   GoBack={() => GoBackFromSelect()}
   UpdateItemList={(itemList) => props.UpdateItemsList(itemList)}
   UpdateFilter={(filter) => pushFilter(filter)}
-  ToggleSwitches={(e) => props.ToggleSwitch(e)}
-  />
-</> 
+  ToggleSwitches={(e) => ToggleSwitch(e)}
+  /></> 
 : 
 <>
 <ItemEdit formJSON={formJSON} 
