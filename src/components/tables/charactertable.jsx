@@ -517,7 +517,8 @@ const CharacterTable = props => {
                           {...params}
                           inputProps={{
                             ...params.inputProps,
-                            value:larpAutoCompValue
+                            value:props.Filters.LarpAutoCompValue !== undefined && props.Filters.LarpAutoCompValue !== null ? 
+                            props.Filters.LarpAutoCompValue : ''
                           }}
                           onChange={(e) => UpdateLarpAutoComp(e.target.value)}
                           placeholder="Select LARP"
