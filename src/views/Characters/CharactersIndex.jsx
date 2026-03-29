@@ -143,10 +143,15 @@ export default function CharactersIndex(props) {
     }
 
     const ToggleSwitch = async (e) => {
-      await setCharactersState({
+
+    for (const key of Object.keys(e)) {
+        await setCharactersState({
         ...charactersState,
-        e
-      })
+        [key]: e[key]
+      });
+    }
+
+
       props.ToggleSwitches(e);
     }
 
