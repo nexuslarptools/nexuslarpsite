@@ -83,6 +83,13 @@ const CharacterTable = props => {
          })
        }
 
+       if(props.Filters.LarpAutoCompValue !== undefined && props.Filters.LarpAutoCompValue !== null) {
+         setLarpAutoCompValue(props.Filters.LarpAutoCompValue);
+       }
+       else {
+         setLarpAutoCompValue('');
+       }
+
 
         setCurrentTagList(tagDrowdownList);
 
