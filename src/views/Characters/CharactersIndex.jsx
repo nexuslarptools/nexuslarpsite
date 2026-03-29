@@ -142,6 +142,14 @@ export default function CharactersIndex(props) {
       }); 
     }
 
+    const ToggleSwitch = async (e) => {
+      await setCharactersState({
+        ...charactersState,
+        e
+      })
+      props.ToggleSwitches(e);
+    }
+
     const UnInitFiler = () => {
       setfilterInit(false);
     }
@@ -240,7 +248,7 @@ appdata={approvQuery.data}
     charactersState.readyApproved : false
     //charactersState.readyApproved
     }
-  ToggleSwitches={(e) => props.ToggleSwitches(e)}
+  ToggleSwitches={(e) => ToggleSwitch(e)}
   DirectToCharacter={(path, guid) => DirectToCharacter(path, guid)}
   NewCharacterLink={(e) => NewCharacterLink(e)}
   Edit={(path, guid) => GoToEditCharacter(path, guid)}
