@@ -151,7 +151,6 @@ export default function CharactersIndex(props) {
       });
     }
 
-
       props.ToggleSwitches(e);
     }
 

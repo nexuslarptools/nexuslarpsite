@@ -171,6 +171,16 @@ export default function ItemsIndex(props) {
           });
         }
 
+      const ToggleSwitch = async (e) => {
+        for (const key of Object.keys(e)) {
+          await itemsState({
+          ...charactersState,
+          [key]: e[key]
+        });
+          props.ToggleSwitches(e);
+        }
+      }
+
             const theme = createTheme({
               palette: {
                 success: {
@@ -223,7 +233,7 @@ appdata={approvQuery.data}
   commentFilterOn={itemsState.commentFilter}
   showApprovableOnly={itemsState.showApprovableOnly}
   readyApproved={itemsState.readyApproved}
-  ToggleSwitches={(e) => props.ToggleSwitches(e)}
+  ToggleSwitches={(e) => props.ToggleSwitch(e)}
   DirectToItem={(path, guid) => DirectToItem(path, guid)}
   NewItemLink={(e) => NewItemLink(e)}
   NavToSelectItems={() => GoToSelect()}
@@ -253,7 +263,7 @@ appdata={approvQuery.data}
   GoBack={() => GoBackFromSelect()}
   UpdateItemList={(itemList) => props.UpdateItemsList(itemList)}
   UpdateFilter={(filter) => pushFilter(filter)}
-  ToggleSwitches={(e) => props.ToggleSwitches(e)}
+  ToggleSwitches={(e) => props.ToggleSwitch(e)}
   />
 </> 
 : 
