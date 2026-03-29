@@ -174,7 +174,7 @@ export default function ItemsIndex(props) {
       const ToggleSwitch = async (e) => {
         for (const key of Object.keys(e)) {
           await itemsState({
-          ...charactersState,
+          ...itemsState,
           [key]: e[key]
         });
           props.ToggleSwitches(e);
