@@ -12,6 +12,7 @@ export default function CharactersListPage(props) {
     FilterInit={props.FilterInit}
     UnInitFiler={() => props.UnInitFiler()}
     Filters={props.Filters}
+    currentState={props.currentState}
     appdata={props.selectedApproved ? props.appdata : props.undata} 
       selectedApproved={props.selectedApproved} 
       showApprovableOnly={props.showApprovableOnly}

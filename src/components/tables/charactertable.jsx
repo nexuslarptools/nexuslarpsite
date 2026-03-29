@@ -39,9 +39,7 @@ const CharacterTable = props => {
       const [tagState, setTagState] = useState({
         listTags: []
       });
-    const [selectedLarpTag, setSelectedLarpTag] = useState(props.Filters.SelectedLarpTag !== undefined && 
-      props.Filters.SelectedLarpTag !== null ?
-       props.Filters.SelectedLarpTag : '');
+
     const [autocompSelectedValue, setAutocompSelectedValue] = useState(null);
     const [resetInputField, setResetInputField] = useState(false);
     const [larpAutoCompValue, setLarpAutoCompValue] = useState(props.Filters.LarpAutoCompValue);
@@ -66,7 +64,6 @@ const CharacterTable = props => {
         return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
       }
     
-
       useEffect(() => {
         let tagDrowdownList = [];
         props.tagslist.forEach(tag => {
@@ -75,13 +72,14 @@ const CharacterTable = props => {
           }
         });
     
-        if (selectedLarpTag !== null && selectedLarpTag !== '') {
-          const fullSelectLARPTag = props.larpTags.find((tag) => tag.guid === selectedLarpTag);
+        if (props.currentState.selectedLarpTag != undefined && 
+          props.currentState.selectedLarpTag !== null && props.currentState.selectedLarpTag !== '') {
+          const fullSelectLARPTag = props.larpTags.find((tag) => tag.guid === props.currentState.selectedLarpTag);
           tagDrowdownList.push(fullSelectLARPTag);
         }
             if (props.isSearch) {
-      props.larpTags.forEach(tag => {
-        tagDrowdownList.push(tag);
+            props.larpTags.forEach(tag => {
+            tagDrowdownList.push(tag);
          })
        }
 
@@ -135,7 +133,7 @@ const CharacterTable = props => {
                   listguids.push(tag.guid);
                 })
                 if (listguids.length === 0 || props.larpTags.every(elem => !listguids.includes(elem.guid)) ||
-                listguids.includes(selectedLarpTag)) {
+                (props.currentState.selectedLarpTag !== undefined && listguids.includes(props.currentState.selectedLarpTag))) {
                   if (tagSelectValues.every(elem => listguids.includes(elem.guid))) {
                     newfilter.push(row);
                   }
@@ -167,7 +165,7 @@ const CharacterTable = props => {
         }
 
       }, [props.appdata, props.showallLARPLinked, props.showApprovableOnly,  props.readyApproved, props.commentFilterOn,
-        props.Filters, page, rowsPerPage]);
+        props.Filters, props.currentState, page, rowsPerPage]);
 
       const handleChangePage = (
         event,
@@ -199,7 +197,7 @@ const CharacterTable = props => {
     
           let newlisttags = [];
           tagState.listTags.forEach(tag => {
-            if (tag !== selectedLarpTag) {
+            if (props.currentState.selectedLarpTag !== undefined && tag !== selectedLarpTag) {
               newlisttags.push(tag);
             }
           })
@@ -209,7 +207,6 @@ const CharacterTable = props => {
             listTags:newlisttags
           })
           await setTagSelectValues(newTagFilter);
-          await setSelectedLarpTag(null);
         }
         else {
           setAutocompSelectedValue(e.name);
@@ -218,14 +215,14 @@ const CharacterTable = props => {
           let newTagFilter = [];
     
           tagSelectValues.forEach(tag => {
-            if (tag.guid !== selectedLarpTag) {
+            if (props.currentState.selectedLarpTag !== undefined && tag.guid !== selectedLarpTag) {
               newTagFilter.push(tag);
             }
           });
     
           let newlisttags = [];
           tagState.listTags.forEach(tag => {
-            if (tag !== selectedLarpTag) {
+            if (props.currentState.selectedLarpTag !== undefined && tag !== selectedLarpTag) {
               newlisttags.push(tag);
             }
           })
@@ -236,7 +233,6 @@ const CharacterTable = props => {
           })
 
           await setTagSelectValues(newTagFilter);
-          await setSelectedLarpTag(e.guid);
           setFilters.SelectedLarpTag = e.guid;
         }
         

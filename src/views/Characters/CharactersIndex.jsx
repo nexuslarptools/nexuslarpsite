@@ -232,6 +232,7 @@ appdata={approvQuery.data}
   tagslist={allTagsQuery.data.find((tags) => tags.tagType === 'Character')?.tagsList}
   authLevel={authLevel}
   userGuid={userGuidQuery.data}
+  currentState={charactersState}
   selectedApproved={ charactersState !== undefined && charactersState !== null &&
     charactersState.selectedApproved !== undefined && charactersState.selectedApproved !== null ? 
     charactersState.selectedApproved : null
