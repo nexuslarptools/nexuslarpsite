@@ -42,7 +42,7 @@ const CharacterTable = props => {
 
     const [autocompSelectedValue, setAutocompSelectedValue] = useState(null);
     const [resetInputField, setResetInputField] = useState(false);
-    const [larpAutoCompValue, setLarpAutoCompValue] = useState(props.Filters.LarpAutoCompValue);
+    const [larpAutoCompValue, setLarpAutoCompValue] = useState(props.currentState.filter.LarpAutoCompValue);
     const [btnDisabledState, setBtnDisabledState] = useState(true);
     const [tagSelectValues, setTagSelectValues] = useState(props.Filters.TagSelectValues);
     const [currentTagList, setCurrentTagList] = useState([]);
@@ -83,8 +83,8 @@ const CharacterTable = props => {
          })
        }
 
-       if(props.Filters.LarpAutoCompValue !== undefined && props.Filters.LarpAutoCompValue !== null) {
-         setLarpAutoCompValue(props.Filters.LarpAutoCompValue);
+       if(props.currentState.filter.LarpAutoCompValue !== undefined && props.currentState.filter.LarpAutoCompValue !== null) {
+         setLarpAutoCompValue(props.currentState.filter.LarpAutoCompValue);
        }
        else {
          setLarpAutoCompValue('');
@@ -517,8 +517,8 @@ const CharacterTable = props => {
                           {...params}
                           inputProps={{
                             ...params.inputProps,
-                            value:props.Filters.LarpAutoCompValue !== undefined && props.Filters.LarpAutoCompValue !== null ? 
-                            props.Filters.LarpAutoCompValue : ''
+                            value:props.currentState.filter.LarpAutoCompValue !== undefined && props.currentState.filter.LarpAutoCompValue !== null ? 
+                            props.currentState.filter.LarpAutoCompValue : ''
                           }}
                           onChange={(e) => UpdateLarpAutoComp(e.target.value)}
                           placeholder="Select LARP"
@@ -526,8 +526,9 @@ const CharacterTable = props => {
                           InputProps={{
                             ...params.InputProps,
                             endAdornment: <IconButton 
-                              sx={{visibility: props.Filters.LarpAutoCompValue !== undefined && props.Filters.LarpAutoCompValue !== null 
-                                && props.Filters.LarpAutoCompValue !== ''
+                              sx={{visibility: props.currentState.filter.LarpAutoCompValue !== undefined 
+                                && props.currentState.filter.LarpAutoCompValue !== null 
+                                && props.currentState.filter.LarpAutoCompValue !== ''
                                  ? "visible": "hidden"}} 
                               onClick={() => UpdateLarpAutoComp('')}><Clear /></IconButton>}} 
                         />
