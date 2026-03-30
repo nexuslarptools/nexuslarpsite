@@ -526,7 +526,9 @@ const CharacterTable = props => {
                           InputProps={{
                             ...params.InputProps,
                             endAdornment: <IconButton 
-                              sx={{visibility: larpAutoCompValue !== '' && larpAutoCompValue !== null ? "visible": "hidden"}} 
+                              sx={{visibility: props.Filters.LarpAutoCompValue !== undefined && props.Filters.LarpAutoCompValue !== null 
+                                && props.Filters.LarpAutoCompValue !== ''
+                                 ? "visible": "hidden"}} 
                               onClick={() => UpdateLarpAutoComp('')}><Clear /></IconButton>}} 
                         />
                         )}
