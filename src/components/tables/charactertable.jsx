@@ -122,12 +122,12 @@ const CharacterTable = props => {
           filteredRows = filteredRows.filter(item => (item.editbyUserGuid !== props.userGuid && item.firstapprovalbyuserGuid !== props.userGuid));
         }
     
-        if (props.Filters.SelectedApproval === 'U')
+        if (props.currentState.filter.SelectedApproval === 'U')
         {
           filteredRows = filteredRows.filter(character => (character.firstapprovalbyuserGuid === null ));
         }
     
-        if (props.Filters.SelectedApproval === '1')
+        if (props.currentState.filter.SelectedApproval === '1')
         {
           filteredRows = filteredRows.filter(character => (character.firstapprovalbyuserGuid !== null ));
         }
@@ -500,7 +500,7 @@ const CharacterTable = props => {
                       <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={props.Filters.SelectedApproval}
+                        value={props.currentState.filter.SelectedApproval}
                         label="Sheet Status"
                         onChange={e => UpdateApprovalFilter(e)}>
                             <MenuItem value={''}>All Approval States</MenuItem>
