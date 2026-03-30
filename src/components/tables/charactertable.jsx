@@ -587,12 +587,14 @@ const CharacterTable = props => {
                   <FilterAltSharpIcon sx={{fontSize: 23}} />
                    </button>
                    </Tooltip>
-                   <TextBox title={'Sheet Creator Name'} onClose={(e) => updateFilter(e, 'Creator')} value={props.Filters.CreatorFilter !== undefined 
-                        && props.Filters.CreatorFilter !== null ?
-                        props.Filters.CreatorFilter : ''} open={dialogStates.Creator}/>
-                        {props.Filters.CreatorFilter !== undefined 
-                        && props.Filters.CreatorFilter !== null && props.Filters.CreatorFilter !== '' ?
-                        props.Filters.CreatorFilter : <div className='inactive-text'>Created By</div>}
+                   <TextBox title={'Sheet Creator Name'} onClose={(e) => updateFilter(e, 'Creator')} value={
+                    props.currentState.filter.CreatorFilter !== undefined 
+                        && props.currentState.filter.CreatorFilter !== null ?
+                        props.currentState.filter.CreatorFilter : ''} open={dialogStates.Creator}/>
+                        {props.currentState.filter.CreatorFilter !== undefined 
+                        && props.currentState.filter.CreatorFilter !== null 
+                        && props.currentState.filter.CreatorFilter !== '' ?
+                        props.currentState.filter.CreatorFilter : <div className='inactive-text'>Created By</div>}
                   </div>
                   <hr/> 
                   </div>
