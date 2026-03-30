@@ -44,7 +44,7 @@ const CharacterTable = props => {
     const [resetInputField, setResetInputField] = useState(false);
     const [larpAutoCompValue, setLarpAutoCompValue] = useState(props.currentState.filter.LarpAutoCompValue);
     const [btnDisabledState, setBtnDisabledState] = useState(true);
-    const [tagSelectValues, setTagSelectValues] = useState(props.Filters.TagSelectValues);
+    const [tagSelectValues, setTagSelectValues] = useState(props.currentState.filter.TagSelectValues);
     const [currentTagList, setCurrentTagList] = useState([]);
     const [clearfilterState] = useState(null);
     const [displayState, setDisplayState] = useState({
@@ -131,7 +131,9 @@ const CharacterTable = props => {
           filteredRows = filteredRows.filter(character => (character.readyforapproval  === true ));
         }
     
-        if (tagSelectValues.length > 0 || props.larpTags.length > 0) {
+        if (props.currentState.filter.TagSelectValues !== undefined && 
+          props.currentState.filter.TagSelectValues !== null && 
+          (props.currentState.filter.TagSelectValues.length > 0 || props.larpTags.length > 0)) {
           const newfilter = [];
           filteredRows.forEach((row) => {
             if (row.tags !== null) {
@@ -141,7 +143,7 @@ const CharacterTable = props => {
                 })
                 if (listguids.length === 0 || props.larpTags.every(elem => !listguids.includes(elem.guid)) ||
                 (props.currentState.selectedLarpTag !== undefined && listguids.includes(props.currentState.selectedLarpTag))) {
-                  if (tagSelectValues.every(elem => listguids.includes(elem.guid))) {
+                  if (props.currentState.filter.TagSelectValues.every(elem => listguids.includes(elem.guid))) {
                     newfilter.push(row);
                   }
                 }
@@ -355,8 +357,10 @@ const CharacterTable = props => {
     
         const newtag = currentTagList.find((element) => element.guid === e )
         if (newtag !== undefined 
-          && (tagSelectValues.length === 0 || tagSelectValues.findIndex((element) => element.guid === e) === -1)) {
-          const setNewTagslist = tagSelectValues;
+          && (props.currentState.filter.TagSelectValues !== undefined && 
+            props.currentState.filter.TagSelectValues !== null && 
+            (props.currentState.filter.TagSelectValues.length === 0 || props.currentState.filter.TagSelectValues.findIndex((element) => element.guid === e) === -1))) {
+          const setNewTagslist = props.currentState.filter.TagSelectValues;
           setNewTagslist.push(newtag);
           setTagSelectValues(setNewTagslist);
           setfilter.TagSelectValues = setNewTagslist;
@@ -630,7 +634,10 @@ const CharacterTable = props => {
                     <Autocomplete
                       multiple
                       key={clearfilterState}
-                      value={tagSelectValues}
+                      value={props.currentState.filter.TagSelectValues !== undefined && 
+                        props.currentState.filter.TagSelectValues !== null ?
+                        props.currentState.filter.TagSelectValues : []
+                      }
                       id="multiple-limit-tags"
                       options={currentTagList}
                       getOptionLabel={(option) => option !== undefined && option.name !== undefined ?
