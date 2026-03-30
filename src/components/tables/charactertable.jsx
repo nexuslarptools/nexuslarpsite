@@ -101,12 +101,12 @@ const CharacterTable = props => {
              && props.currentState.filter.CharacterFilter !== null ?
              props.currentState.filter.CharacterFilter.toLocaleLowerCase() : ''))));
         
-        filteredRows = filteredRows.filter(item => (item.series === null && (props.Filters.SeriesFilter === undefined 
-           || props.Filters.SeriesFilter === null || props.Filters.SeriesFilter === '')) 
+        filteredRows = filteredRows.filter(item => (item.series === null && (props.currentState.filter.SeriesFilter === undefined 
+           || props.currentState.filter.SeriesFilter === null || props.currentState.filter.SeriesFilter === '')) 
           || (item.title !== null && removeDiacritics(item.title.toLocaleLowerCase()).includes(removeDiacritics(
-            props.Filters.SeriesFilter !== undefined 
-              && props.Filters.SeriesFilter !== null ?
-              props.Filters.SeriesFilter.toLocaleLowerCase() : ''))));
+            props.currentState.filter.SeriesFilter !== undefined 
+              && props.currentState.filter.SeriesFilter !== null ?
+              props.currentState.filter.SeriesFilter.toLocaleLowerCase() : ''))));
           filteredRows = filteredRows.filter(item => removeDiacritics(item.createdByUser.toLocaleLowerCase()).includes(removeDiacritics(filterState.CreatorFilter.toLocaleLowerCase())));
           filteredRows = filteredRows.filter(item => removeDiacritics(item.editbyUser.toLocaleLowerCase()).includes(removeDiacritics(filterState.EditorFilter.toLocaleLowerCase())));
    
@@ -620,12 +620,14 @@ const CharacterTable = props => {
                   <FilterAltSharpIcon sx={{fontSize: 23}} />
                    </button>
                    </Tooltip>
-                   <TextBox title={'Series'} onClose={(e) => updateFilter(e, 'Series')} value={props.Filters.SeriesFilter !== undefined 
-                        && props.Filters.SeriesFilter !== null ?
-                        props.Filters.SeriesFilter : ''} open={dialogStates.Series}/>
-                        {props.Filters.SeriesFilter !== undefined 
-                        && props.Filters.SeriesFilter !== null  && props.Filters.SeriesFilter !== '' ?
-                        props.Filters.SeriesFilter : <div className='inactive-text'>Series</div>}
+                   <TextBox title={'Series'} onClose={(e) => updateFilter(e, 'Series')} value={
+                    props.currentState.filter.SeriesFilter !== undefined 
+                        && props.currentState.filter.SeriesFilter !== null ?
+                        props.currentState.filter.SeriesFilter : ''} open={dialogStates.Series}/>
+                        {props.currentState.filter.SeriesFilter !== undefined 
+                        && props.currentState.filter.SeriesFilter !== null  
+                        && props.currentState.filter.SeriesFilter !== '' ?
+                        props.currentState.filter.SeriesFilter : <div className='inactive-text'>Series</div>}
                   </div>
                   <hr/>
                   </div>
