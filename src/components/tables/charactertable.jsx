@@ -94,12 +94,12 @@ const CharacterTable = props => {
         setCurrentTagList(tagDrowdownList);
 
         let filteredRows = props.appdata;
-        filteredRows = filteredRows.filter(item => (item.name === null && (props.Filters.CharacterFilter === undefined 
-          || props.Filters.CharacterFilter === null || props.Filters.CharacterFilter === '')) 
+        filteredRows = filteredRows.filter(item => (item.name === null && (props.currentState.filter.CharacterFilter === undefined 
+          || props.currentState.filter.CharacterFilter === null || props.Filters.CharacterFilter === '')) 
          || (item.title !== null && removeDiacritics(item.name.toLocaleLowerCase()).includes(removeDiacritics(
-           props.Filters.CharacterFilter !== undefined 
-             && props.Filters.CharacterFilter !== null ?
-             props.Filters.CharacterFilter.toLocaleLowerCase() : ''))));
+           props.currentState.filter.CharacterFilter !== undefined 
+             && props.currentState.filter.CharacterFilter !== null ?
+             props.currentState.filter.CharacterFilter.toLocaleLowerCase() : ''))));
         
         filteredRows = filteredRows.filter(item => (item.series === null && (props.Filters.SeriesFilter === undefined 
            || props.Filters.SeriesFilter === null || props.Filters.SeriesFilter === '')) 
@@ -603,12 +603,13 @@ const CharacterTable = props => {
                   <FilterAltSharpIcon sx={{fontSize: 23}} />
                    </button>
                    </Tooltip>
-                   <TextBox title={'Character Name'} onClose={(e) => updateFilter(e, 'Name')} value={props.Filters.CharacterFilter !== undefined 
-                        && props.Filters.CharacterFilter !== null ?
-                        props.Filters.CharacterFilter : ''} open={dialogStates.Name}/>
-                        {props.Filters.CharacterFilter !== undefined 
-                        && props.Filters.CharacterFilter !== null  && props.Filters.CharacterFilter !== '' ?
-                        props.Filters.CharacterFilter : <div className='inactive-text'>Character Name</div>}
+                   <TextBox title={'Character Name'} onClose={(e) => updateFilter(e, 'Name')} value={
+                    props.currentState.filter.CharacterFilter !== undefined 
+                        && props.currentState.filter.CharacterFilter !== null ?
+                        props.currentState.filter.CharacterFilter : ''} open={dialogStates.Name}/>
+                        {props.currentState.filter.CharacterFilter !== undefined 
+                        && props.currentState.filter.CharacterFilter !== null  && props.currentState.filter.CharacterFilter !== '' ?
+                        props.currentState.filter.CharacterFilter : <div className='inactive-text'>Character Name</div>}
                   </div>
                   <hr/>
                   </div>
