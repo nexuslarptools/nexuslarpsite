@@ -107,8 +107,14 @@ const CharacterTable = props => {
             props.currentState.filter.SeriesFilter !== undefined 
               && props.currentState.filter.SeriesFilter !== null ?
               props.currentState.filter.SeriesFilter.toLocaleLowerCase() : ''))));
-          filteredRows = filteredRows.filter(item => removeDiacritics(item.createdByUser.toLocaleLowerCase()).includes(removeDiacritics(filterState.CreatorFilter.toLocaleLowerCase())));
-          filteredRows = filteredRows.filter(item => removeDiacritics(item.editbyUser.toLocaleLowerCase()).includes(removeDiacritics(filterState.EditorFilter.toLocaleLowerCase())));
+          
+          if(props.currentState.filter.CreatorFilter !== undefined && props.currentState.filter.CreatorFilter !== undefined !== null) {
+              filteredRows = filteredRows.filter(item => removeDiacritics(item.createdByUser.toLocaleLowerCase()).includes(removeDiacritics(props.currentState.filter.CreatorFilter.toLocaleLowerCase())));
+          }
+             
+          if(props.currentState.filter.EditorFilter !== undefined && props.currentState.filter.EditorFilter !== undefined !== null) {
+          filteredRows = filteredRows.filter(item => removeDiacritics(item.editbyUser.toLocaleLowerCase()).includes(removeDiacritics(props.currentState.filter.EditorFilter.toLocaleLowerCase()))); 
+          }
    
           
 
@@ -570,12 +576,15 @@ const CharacterTable = props => {
                        <FilterAltSharpIcon sx={{fontSize: 23}} />
                    </button>
                    </Tooltip>
-                   <TextBox title={'Sheet Editor Name'} onClose={(e) => updateFilter(e, 'Editor')} value={props.Filters.EditorFilter !== undefined 
-                        && props.Filters.EditorFilter !== null ?
-                        props.Filters.EditorFilter : ''} open={dialogStates.Editor}/>
-                        {props.Filters.EditorFilter !== undefined 
-                        && props.Filters.EditorFilter !== null && props.Filters.EditorFilter !== ''?
-                        props.Filters.EditorFilter : <div className='inactive-text'>Last Edited By</div>}
+                   <TextBox title={'Sheet Editor Name'} onClose={(e) => updateFilter(e, 'Editor')} value={
+                    props.currentState.filter.EditorFilter !== undefined 
+                        && props.currentState.filter.EditorFilter !== null ?
+                        props.currentState.filter.EditorFilter : ''} open={dialogStates.Editor}/>
+                        {props.currentState.filter.EditorFilter !== undefined 
+                        && props.currentState.filter.EditorFilter !== null 
+                        && props.currentState.filter.EditorFilter !== ''?
+                        props.currentState.filter.EditorFilter : 
+                        <div className='inactive-text'>Last Edited By</div>}
 
                   </div>
                   <hr/>
