@@ -29,7 +29,7 @@ const CharacterTable = props => {
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(25);
-    const [filterState, setFilterState] = useState(props.Filters);
+    const [filterState, setFilterState] = useState(props.currentState.filter);
     const [dialogStates, setDialogState] = useState({
       Series: false,
       Character: false,
@@ -95,7 +95,7 @@ const CharacterTable = props => {
 
         let filteredRows = props.appdata;
         filteredRows = filteredRows.filter(item => (item.name === null && (props.currentState.filter.CharacterFilter === undefined 
-          || props.currentState.filter.CharacterFilter === null || props.Filters.CharacterFilter === '')) 
+          || props.currentState.filter.CharacterFilter === null || props.currentState.filter.CharacterFilter === '')) 
          || (item.title !== null && removeDiacritics(item.name.toLocaleLowerCase()).includes(removeDiacritics(
            props.currentState.filter.CharacterFilter !== undefined 
              && props.currentState.filter.CharacterFilter !== null ?
@@ -172,9 +172,9 @@ const CharacterTable = props => {
           display: true
         })
 
-        for (const key of Object.keys(props.Filters)) {
-          if ((key === 'TagSelectValues' && props.Filters[key].length > 0) || 
-              (key !== 'TagSelectValues'  && props.Filters[key] !== '')) {
+        for (const key of Object.keys(props.currentState.filter)) {
+          if ((key === 'TagSelectValues' && props.currentState.filter[key].length > 0) || 
+              (key !== 'TagSelectValues'  && props.currentState.filter[key] !== '')) {
              setBtnDisabledState(false)
           }
         }
