@@ -7,7 +7,7 @@ import AuthLevelInfo from '../../utils/authLevelInfo.js'
 import MenuIcon from '@mui/icons-material/Menu';
 import { useEffect, useState } from 'react';
 import { Tooltip } from '@mui/material';
-import { SiteContext } from './App';
+import { SiteContext } from '../../App'
 
 
 const Header = props => {

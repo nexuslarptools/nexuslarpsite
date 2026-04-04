@@ -1,7 +1,7 @@
 ﻿import PropTypes from 'prop-types'
 import AuthLevelInfo from '../../utils/authLevelInfo'
 import SearchDrawer from './searchdrawer'
-import { SiteContext } from './app';
+import { SiteContext } from '../../App'
 
 
 // Renders the SearchDrawer only when the user is authenticated
@@ -25,7 +25,7 @@ const { site, setSite } = useContext(SiteContext);
 
 
   return (
-    <SearchDrawer open={site.open} toggleClose={toggleClose()} />
+    <SearchDrawer open={site.open} toggleClose={() => toggleClose()} />
   );
 }
 
