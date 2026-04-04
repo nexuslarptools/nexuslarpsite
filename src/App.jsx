@@ -146,7 +146,7 @@ class App extends Component {
       createRoutesFromElements(
         <Route element={
           <>
-           <SiteContext.Provider value={{ site: state, setSite: this.setState }}>
+           <SiteContext.Provider value={{ site: this.state, setSite: this.setState }}>
             <SearchDrawerGate  open={this.state.open} toggleClose={() => this.togglePreview(false)} />
             <div className="app">
               <Header drawerOpenCLick={(e) => this.togglePreview(e)} mainmenu={this.state.ismain} />
