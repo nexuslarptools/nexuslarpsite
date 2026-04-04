@@ -4,7 +4,6 @@ import SearchDrawer from './searchdrawer'
 import { useContext } from 'react';
 import { SiteContext } from '../../contexts.jsx'
 
-
 // Renders the SearchDrawer only when the user is authenticated
 const SearchDrawerGate = (props) => {
 
@@ -17,7 +16,7 @@ const { site, setSite } = useContext(SiteContext);
   const toggleClose = async () => {
     let openclose = !site.open;
       setSite({
-        ...this.site,
+        ...site,
         open :openclose
        });
     } 

@@ -16,7 +16,7 @@ const { site, setSite } = useContext(SiteContext);
 
 const drawerOpenCLick = async () => {
       setSite({
-        ...this.site,
+        ...site,
         open :true
        });
 }
