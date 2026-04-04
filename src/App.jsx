@@ -76,8 +76,6 @@ class App extends Component {
     currentURL: window.location.href 
   }
 
-  const [site, setSite] = useState(state);
-
   ismain = true;
 
   ToggleSwitch = async (e, type) => {
@@ -148,7 +146,7 @@ class App extends Component {
       createRoutesFromElements(
         <Route element={
           <>
-           <SiteContext.Provider value={{ site: site, setSite: setSite }}>
+           <SiteContext.Provider value={{ site: state, setSite: this.setState }}>
             <SearchDrawerGate  open={this.state.open} toggleClose={() => this.togglePreview(false)} />
             <div className="app">
               <Header drawerOpenCLick={(e) => this.togglePreview(e)} mainmenu={this.state.ismain} />
