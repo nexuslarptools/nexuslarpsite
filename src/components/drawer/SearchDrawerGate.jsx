@@ -1,6 +1,7 @@
 ﻿import PropTypes from 'prop-types'
 import AuthLevelInfo from '../../utils/authLevelInfo'
 import SearchDrawer from './searchdrawer'
+import { useContext } from 'react';
 import { SiteContext } from '../../contexts.jsx'
 
 

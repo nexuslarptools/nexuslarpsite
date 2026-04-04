@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import './header.scss'
 import AuthLevelInfo from '../../utils/authLevelInfo.js'
 import MenuIcon from '@mui/icons-material/Menu';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { Tooltip } from '@mui/material';
 import { SiteContext } from '../../contexts.jsx'
 
