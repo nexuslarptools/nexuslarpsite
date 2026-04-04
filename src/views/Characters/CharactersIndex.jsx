@@ -2,7 +2,7 @@ import AuthRedirect from '../../utils/authRedirect';
 import Loading from '../../components/loading/loading';
 import useGetData from '../../utils/getdata';
 import AuthLevelInfo from '../../utils/authLevelInfo';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import CharactersListPage from './CharactersListPage';
 import CharacterDisplayPage from './CharacterDisplay';
 import CharacterCreate from './CharacterCreate';
@@ -11,6 +11,7 @@ import CharacterEdit from './CharacterEdit';
 import { createTheme, IconButton, lighten, Slide, Snackbar, ThemeProvider } from '@mui/material';
 import PropTypes from 'prop-types';
 import CloseSharpIcon from '@mui/icons-material/CloseSharp';
+import { SiteContext } from '../../contexts';
 
 export default function CharactersIndex(props) {
 
@@ -21,6 +22,8 @@ export default function CharactersIndex(props) {
         text: ''
       });
     }
+
+    const { site, setSite } = useContext(SiteContext);
 
     const approvQuery = useGetData('listApprovedCharacters', '/api/v1/CharacterSheetApproveds');  
     const unapprovQuery = useGetData('listUnapprovedCharacters', '/api/v1/CharacterSheets');
@@ -65,18 +68,18 @@ export default function CharactersIndex(props) {
     const [filterInit, setfilterInit] = useState(false);
 
     useEffect(() => {
-      if (props.ismain === true) {
+      if (site.ismain === undefined || site.ismain === null || site.ismain === true) {
         setIsCreate(false);
         setIsEdit({isEditing: false, guid: null});
         setfilterInit(true);
-        setFilterState(props.subState.filter);
+        setFilterState(site.characters.filter);
       
-        if (props.subState.filter !== undefined && props.subState.filter !== null ) {
-        for (const key in props.subState.filter) {
-          if (props.subState.filter[key] !== undefined && props.subState.filter[key] !== null && key !== 'filters') {
+        if (site.characters.filter !== undefined && site.characters.filter !== null ) {
+        for (const key in site.characters.filter) {
+          if (site.characters.filter[key] !== undefined && site.characters.filter[key] !== null && key !== 'filters') {
                setCharactersState({
               ...charactersState,
-              [key]: props.subState.filter[key]
+              [key]: site.characters.filter[key]
             });
           }
       }
@@ -84,22 +87,22 @@ export default function CharactersIndex(props) {
 
       }
       else {
-        if (props.subState.funct === 'Create')
+        if (site.characters.create)
           setIsCreate(true);
       }
-      if (props.subState.funct === 'View')
+      if (site.characters.viewing)
       {
         setCharactersState({
           ...charactersState,
           viewingItem: true,
-          viewItemGuid: props.subState.guid,
-          viewItemPath: props.subState.path});
+          viewItemGuid: site.characters.viewGuid,
+          viewItemPath: site.characters.viewPath});
       }
-      if (props.subState.funct === 'Edit')
+      if (site.characters.editing)
         {
           setIsEdit({isEditing: true, 
-            guid: props.subState.guid,
-            path: props.subState.path
+            guid: site.characters.viewGuid,
+            path: site.characters.viewPath
           });
         }
     }, [])
@@ -107,24 +110,24 @@ export default function CharactersIndex(props) {
 
     const DirectToCharacter = async (path, guid) => {
       props.toggleSubScreen(false, 'View', guid, path, filterState);
-      await setCharactersState({
-        ...charactersState,
-        viewingItem: true,
-        viewItemGuid: guid,
-        viewItemPath: path});
+      await setSite({
+        ...site.characters,
+        viewing: true,
+        viewGuid: guid,
+        viewPath: path});
     }
 
     const GoBackToList = async () => {
-      await setCharactersState({
-        ...charactersState,
-        viewingItem: false
+      await setSite({
+        ...site.characters,
+        viewing: false
     });
     props.toggleSubScreen(true, '', '' ,'', 'goback');
-    await setCharactersState({
-          ...charactersState,
-          viewingItem: false,
-          viewItemGuid: '',
-          viewItemPath: ''});
+    await setSite({
+          ...site.characters,
+          viewing: false,
+          viewGuid: '',
+          viewPath: ''});
     await setIsEdit({isEditing: false, 
             guid: '',
             path: ''
@@ -140,18 +143,24 @@ export default function CharactersIndex(props) {
             guid: guid,
             path: path
       }); 
+
+          await setSite({
+          ...site.characters,
+          editing: true,
+          viewGuid: guid,
+          viewPath: path});
     }
 
     const ToggleSwitch = async (e) => {
 
     for (const key of Object.keys(e)) {
         await setCharactersState({
-        ...charactersState,
+        ...site.characters,
         [key]: e[key]
       });
     }
 
-      props.ToggleSwitches(e);
+      //props.ToggleSwitches(e);
     }
 
     const UnInitFiler = () => {
@@ -159,28 +168,37 @@ export default function CharactersIndex(props) {
     }
 
     const NewCharacterLink = async () => {
-      props.toggleSubScreen(false, 'Create', '', '', filterState);
+      //props.toggleSubScreen(false, 'Create', '', '', filterState);
+          await setSite({
+          ...site.characters,
+          create: true,
+          viewGuid: '',
+          viewPath: ''});
       await setIsCreate(true);
     }
 
     const GoBackFromCreateEdit = async () => {
-      await setCharactersState({
-        ...charactersState,
-        viewingItem: false,
-        viewItemGuid: '',
-        viewItemPath: ''});
+      await setSite({
+         ...site.characters,
+        viewing: false,
+        create: false,
+        viewGuid: '',
+        viewPath: ''});
       await setIsEdit({
         isEditing: false, 
         guid: '',
         path: ''
       });  
       await setIsCreate(false);
-        props.toggleSubScreen(true, '', '','', 'goback');
+       // props.toggleSubScreen(true, '', '','', 'goback');
     }
 
     const pushFilter = async (filter) => {
       await setFilterState({...filterState,  filter});
-      props.toggleSubScreen(true, '', '','', filter);
+      await setSite({
+         ...site.characters,
+        filter: filter});
+     // props.toggleSubScreen(true, '', '','', filter);
     }
 
     const theme = createTheme({
@@ -214,17 +232,17 @@ export default function CharactersIndex(props) {
 
     return (
         <>
-{ charactersState.viewingItem === false ? 
- !isCreate ?
- !isEdit.isEditing ?
+{ site.characters.viewing === false ? 
+ !site.characters.create ?
+ !site.characters.editing ?
 <>
 <CharactersListPage 
 isSearch={false}
 FilterInit={filterInit}
 UnInitFiler={() => UnInitFiler()}
 Filters={
-  filterState !== undefined && filterState !== null ? 
-  filterState : null
+  site.characters.filter !== undefined && site.characters.filter !== null ? 
+  site.characters.filter : null
 }
 appdata={approvQuery.data} 
   undata={unapprovQuery.data} 
@@ -232,25 +250,25 @@ appdata={approvQuery.data}
   tagslist={allTagsQuery.data.find((tags) => tags.tagType === 'Character')?.tagsList}
   authLevel={authLevel}
   userGuid={userGuidQuery.data}
-  currentState={charactersState}
-  selectedApproved={ charactersState !== undefined && charactersState !== null &&
-    charactersState.selectedApproved !== undefined && charactersState.selectedApproved !== null ? 
-    charactersState.selectedApproved : null
+  currentState={site.characters}
+  selectedApproved={ site.characters !== undefined && site.characters !== null &&
+    site.characters.selectedApproved !== undefined && site.characters.selectedApproved !== null ? 
+    site.characters.selectedApproved : null
     //charactersState.selectedApproved
     } 
-  commentFilterOn={ charactersState.commentFilter !== undefined && charactersState.commentFilter !== null ? 
-    charactersState.commentFilter : false
+  commentFilterOn={ site.characters.commentFilter !== undefined && site.characters.commentFilter !== null ? 
+    site.characters.commentFilter : false
     //charactersState.commentFilter
     }
-  showApprovableOnly={ charactersState !== undefined && charactersState !== null &&
-    charactersState.showApprovableOnly !== undefined && 
-    charactersState.showApprovableOnly !== null ? 
-    charactersState.showApprovableOnly : false
+  showApprovableOnly={ site.characters !== undefined && site.characters !== null &&
+    site.characters.showApprovableOnly !== undefined && 
+    site.characters.showApprovableOnly !== null ? 
+    site.characters.showApprovableOnly : false
     //charactersState.showApprovableOnly
     }
-  readyApproved={ charactersState !== undefined && charactersState !== null &&
-    charactersState.readyApproved !== undefined && charactersState.readyApproved !== null ? 
-    charactersState.readyApproved : false
+  readyApproved={ site.characters !== undefined && site.characters !== null &&
+    site.characters.readyApproved !== undefined && site.characters.readyApproved !== null ? 
+    site.characters.readyApproved : false
     //charactersState.readyApproved
     }
   ToggleSwitches={(e) => ToggleSwitch(e)}
