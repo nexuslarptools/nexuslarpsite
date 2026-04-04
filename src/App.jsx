@@ -22,55 +22,7 @@ import {withFaroRouterInstrumentation} from "@grafana/faro-react";
 // OIDC flows removed: no OAuthLogout or OAuthCallback
 import Login from './views/Auth/Login.jsx';
 
-export const SiteContext = createContext({
-    open: false,
-    ismain: true,
-    funct: '',
-    guid: '',
-    path: '',
-    characters: {
-      filter:       {
-        SeriesFilter: '',
-        CharacterFilter: '',
-        CreatorFilter: '',
-        EditorFilter: '',
-        SelectedApproval : '',
-        LarpAutoCompValue: '',
-        SelectedLarpTag: '',
-        TagSelectValues: []
-      },
-      selectedApproved: true,
-      commentFilter: false,
-      showApprovableOnly: false,
-      readyApproved: false,
-      viewingItem: false,
-      editingItem: false,
-      viewItemGuid: '',
-      viewItemPath: '',
-    },
-    items: {
-      filter:       {
-        SeriesFilter: '',
-        ItemsFilter: '',
-        CreatorFilter: '',
-        EditorFilter: '',
-        SelectedApproval : '',
-        LarpAutoCompValue: '',
-        SelectedLarpTag: '',
-        TagSelectValues: []
-      },
-      selectedApproved: true,
-      commentFilter: false,
-      showApprovableOnly: false,
-      readyApproved: false,
-      viewingItem: false,
-      editingItem: false,
-      viewItemGuid: '',
-      viewItemPath: '',
-      listItems:[]
-    },
-    currentURL: window.location.href 
-  });
+export const SiteContext = createContext(null);
 
 class App extends Component {
 
@@ -123,6 +75,8 @@ class App extends Component {
     },
     currentURL: window.location.href 
   }
+
+  const [site, setSite] = useState(state);
 
   ismain = true;
 
