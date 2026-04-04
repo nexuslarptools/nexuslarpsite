@@ -1,6 +1,6 @@
 import './App.scss'
 import './master.scss';
-import { Component, createContext } from "react"
+import { Component, createContext, useState } from "react"
 import { Route, createBrowserRouter, RouterProvider, createRoutesFromElements, Outlet } from "react-router-dom"
 import Header from "./components/header/header"
 import HomePage from "./views/HomePage"
