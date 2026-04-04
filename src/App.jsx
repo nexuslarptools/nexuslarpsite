@@ -1,6 +1,6 @@
 import './App.scss'
 import './master.scss';
-import { Component } from "react"
+import { Component, createContext } from "react"
 import { Route, createBrowserRouter, RouterProvider, createRoutesFromElements, Outlet } from "react-router-dom"
 import Header from "./components/header/header"
 import HomePage from "./views/HomePage"
@@ -22,7 +22,7 @@ import {withFaroRouterInstrumentation} from "@grafana/faro-react";
 // OIDC flows removed: no OAuthLogout or OAuthCallback
 import Login from './views/Auth/Login.jsx';
 
-export const SiteContext = React.createContext({
+export const SiteContext = createContext({
     open: false,
     ismain: true,
     funct: '',
