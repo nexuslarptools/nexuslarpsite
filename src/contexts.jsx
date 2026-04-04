@@ -1,6 +1,9 @@
-import { createContext } from "react"
 
-export const SiteContext = createContext([theme, setTheme] = useState({
+import { createContext, useState } from "react"
+
+export const SiteContext = createContext();
+export const SiteProvider = ({ children }) => {
+  const [site, setSite] = useState({
     open: false,
     ismain: true,
     funct: '',
@@ -48,4 +51,12 @@ export const SiteContext = createContext([theme, setTheme] = useState({
       listItems:[]
     },
     currentURL: window.location.href 
-  }));
+  });
+
+  return (
+    <SiteContext.Provider value={{ site, setSite }}>
+      {children}
+    </SiteContext.Provider>
+  );
+  
+};

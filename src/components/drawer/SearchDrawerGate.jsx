@@ -1,7 +1,7 @@
 ﻿import PropTypes from 'prop-types'
 import AuthLevelInfo from '../../utils/authLevelInfo'
 import SearchDrawer from './searchdrawer'
-import { SiteContext } from '../../App'
+import { SiteContext } from '../../contexts.jsx'
 
 
 // Renders the SearchDrawer only when the user is authenticated
