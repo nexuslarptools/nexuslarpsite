@@ -22,7 +22,55 @@ import {withFaroRouterInstrumentation} from "@grafana/faro-react";
 // OIDC flows removed: no OAuthLogout or OAuthCallback
 import Login from './views/Auth/Login.jsx';
 
-
+export const SiteContext = React.createContext({
+    open: false,
+    ismain: true,
+    funct: '',
+    guid: '',
+    path: '',
+    characters: {
+      filter:       {
+        SeriesFilter: '',
+        CharacterFilter: '',
+        CreatorFilter: '',
+        EditorFilter: '',
+        SelectedApproval : '',
+        LarpAutoCompValue: '',
+        SelectedLarpTag: '',
+        TagSelectValues: []
+      },
+      selectedApproved: true,
+      commentFilter: false,
+      showApprovableOnly: false,
+      readyApproved: false,
+      viewingItem: false,
+      editingItem: false,
+      viewItemGuid: '',
+      viewItemPath: '',
+    },
+    items: {
+      filter:       {
+        SeriesFilter: '',
+        ItemsFilter: '',
+        CreatorFilter: '',
+        EditorFilter: '',
+        SelectedApproval : '',
+        LarpAutoCompValue: '',
+        SelectedLarpTag: '',
+        TagSelectValues: []
+      },
+      selectedApproved: true,
+      commentFilter: false,
+      showApprovableOnly: false,
+      readyApproved: false,
+      viewingItem: false,
+      editingItem: false,
+      viewItemGuid: '',
+      viewItemPath: '',
+      listItems:[]
+    },
+    currentURL: window.location.href 
+  });
 
 class App extends Component {
 
@@ -146,7 +194,8 @@ class App extends Component {
       createRoutesFromElements(
         <Route element={
           <>
-            <SearchDrawerGate open={this.state.open} toggleClose={() => this.togglePreview(false)} />
+           <SiteContext.Provider value={{ site: site, setSite: setSite }}>
+            <SearchDrawerGate  open={this.state.open} toggleClose={() => this.togglePreview(false)} />
             <div className="app">
               <Header drawerOpenCLick={(e) => this.togglePreview(e)} mainmenu={this.state.ismain} />
               <div className={"app-body"}>
@@ -154,6 +203,7 @@ class App extends Component {
               </div>
             </div>
             <ContactFooter />
+            </SiteContext.Provider>
           </>
         }>
           <Route

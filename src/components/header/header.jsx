@@ -7,8 +7,19 @@ import AuthLevelInfo from '../../utils/authLevelInfo.js'
 import MenuIcon from '@mui/icons-material/Menu';
 import { useEffect, useState } from 'react';
 import { Tooltip } from '@mui/material';
+import { SiteContext } from './app';
+
 
 const Header = props => {
+
+const { site, setSite } = useContext(SiteContext);
+
+const drawerOpenCLick = async () => {
+      setSite({
+        ...this.site,
+        open :true
+       });
+}
 
   const [buttonactive, SetButtonActive] = useState(true);
       useEffect(() => {
@@ -27,7 +38,7 @@ const Header = props => {
         { buttonactive ?
         <div className ='navbar_hamburger_button'>
           <Tooltip title="Search Menu">
-        <button className='button-hambuger'   onClick={() => props.drawerOpenCLick(true)}>
+        <button className='button-hambuger'   onClick={() => drawerOpenCLick(true)}>
           <MenuIcon sx={{fontSize: 35}} />
         </button>
         </Tooltip>
