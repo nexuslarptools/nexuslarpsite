@@ -244,7 +244,7 @@ Filters={
   character.filter !== undefined && character.filter !== null ? 
   character.filter : null
 }
-appdata={approvQuery.data} 
+  appdata={approvQuery.data} 
   undata={unapprovQuery.data} 
   larpTags={allTagsQuery.data.find((tags) => tags.tagType === 'LARPRun')?.tagsList}
   tagslist={allTagsQuery.data.find((tags) => tags.tagType === 'Character')?.tagsList}
