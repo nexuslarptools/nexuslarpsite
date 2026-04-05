@@ -154,7 +154,7 @@ export default function CharactersIndex(props) {
     const ToggleSwitch = async (e) => {
 
     for (const key of Object.keys(e)) {
-        await setCharactersState({
+        await setSite({
         ...site.characters,
         [key]: e[key]
       });
