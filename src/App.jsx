@@ -1,6 +1,6 @@
 import "./App.scss";
 import "./master.scss";
-import { Component, createContext, useState } from "react";
+import { Component } from "react";
 import {
   Route,
   createBrowserRouter,
@@ -27,7 +27,7 @@ import ShipItem from "./components/item/shipitem";
 import { withFaroRouterInstrumentation } from "@grafana/faro-react";
 // OIDC flows removed: no OAuthLogout or OAuthCallback
 import Login from "./views/Auth/Login.jsx";
-import { CharacterProvider, SiteProvider } from "./contexts.jsx";
+import { SiteProvider } from "./contexts.jsx";
 
 class App extends Component {
   state = {

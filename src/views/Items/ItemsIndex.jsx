@@ -20,6 +20,7 @@ import {
 } from "@mui/material";
 import "./_ItemsIndex.scss";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
+import { SiteContext } from "../../contexts";
 
 export default function ItemsIndex(props) {
   AuthRedirect(1);

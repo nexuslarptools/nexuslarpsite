@@ -18,7 +18,7 @@ import {
 } from "@mui/material";
 import PropTypes from "prop-types";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
-import { CharacterContext } from "../../contexts";
+import { SiteContext } from "../../contexts";
 
 export default function CharactersIndex(props) {
   AuthRedirect(1);
