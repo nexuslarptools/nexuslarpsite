@@ -190,21 +190,20 @@ class App extends Component {
               component={ItemsIndex} />}
           />
 
-          <CharacterProvider>
+
             <Route
               path="/characters"
               element={(
-
+              <CharacterProvider>
               <AuthenticationGuard
                 subState={this.state.characters !== undefined && this.state.characters !== null ? this.state.characters : this.state}
                 ismain={this.state.ismain}
                 ToggleSwitches={(e) => this.ToggleSwitches(e, 'characters')}
                 toggleSubScreen={(e, funct, guid, path, filters) => this.toggleSubScreen(e, funct, guid, path, 'characters', filters)}
                 component={CharactersIndex} />
-                
+                </CharacterProvider>
               )}
             />
-           </CharacterProvider>
 
           <Route
             path="/series"
