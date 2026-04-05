@@ -11,27 +11,21 @@ const DisplayScreenItemsOnly = (props) => {
   props.itemList.forEach((item) => {
     if (item.path === "ItemSheetApproveds") {
       for (let i = 0; i < item.count; i++) {
-        appstring = appstring + '"' + item.guid + '"';
-        if (i < item.count - 1) {
-          appstring = appstring + ",";
-        }
+        appstring = appstring + '"' + item.guid + '",';
       }
     } else {
       for (let i = 0; i < item.count; i++) {
-        unappstring = unappstring + '"' + item.guid + '"';
-        if (i < item.count - 1) {
-          unappstring = unappstring + ",";
-        }
+        unappstring = unappstring + '"' + item.guid + '",';
       }
     }
   });
 
   if (appstring !== "") {
-    appstring = "A=[" + appstring + "]";
+    appstring = "A=[" + appstring.slice(0, -1) + "]";
   }
 
   if (unappstring !== "") {
-    unappstring = "U=[" + unappstring + "]";
+    unappstring = "U=[" + unappstring.slice(0, -1) + "]";
     if (appstring !== "") {
       unappstring = "&" + unappstring;
     }
