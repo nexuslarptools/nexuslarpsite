@@ -463,7 +463,7 @@ const CharacterTable = props => {
                     <button className='button-action' onClick={(e) => props.NewCharacterLink(e)}>Add New Character</button>
                     </div> 
                      { props.authLevel > 1
-                      ? <FormControlLabel control={ <Switch defaultChecked={true} 
+                      ? <FormControlLabel control={ <Switch defaultChecked={props.selectedApproved} 
                         onChange={() => 
                         props.ToggleSwitches({selectedApproved: !props.selectedApproved})}
                             //onChange={() => SelectApproveToggle() } 
@@ -471,11 +471,11 @@ const CharacterTable = props => {
                             label={props.selectedApproved ? 'Approved Characters' : 'Unapproved Characters'} />
                       : <div></div>
                     }
-                  <FormControlLabel control={ <Switch defaultChecked={false}  onChange={() => 
+                  <FormControlLabel control={ <Switch defaultChecked={props.commentFilterOn}  onChange={() => 
                             props.ToggleSwitches({commentFilter: !props.commentFilterOn})} /> }
                             label={props.commentFilterOn ? 'Only Commented Sheets' : 'All Sheets'}/> 
                     {props.authLevel > 2 && !props.selectedApproved? (
-                      <FormControlLabel control={ <Switch defaultChecked={false} onChange={() => 
+                      <FormControlLabel control={ <Switch defaultChecked={props.showApprovableOnly} onChange={() => 
                         props.ToggleSwitches({showApprovableOnly: !props.showApprovableOnly})} /> }
                         label={props.showApprovableOnly ? 'Characters You Can Approve' : 'All Unapproved Characters'}  /> )
                     : (<div></div>)}
@@ -483,7 +483,7 @@ const CharacterTable = props => {
                       <FormControlLabel
                        control={<Switch onChange={() => 
                             props.ToggleSwitches({readyApproved: !props.readyApproved})} 
-                            defaultChecked={false}/>}
+                            defaultChecked={props.readyApproved}/>}
                             label={props.readyApproved ? 'Ready for Approval' : 'All Characters'}
                        /> : <></>}
                         <></>
