@@ -464,7 +464,10 @@ const CharacterTable = props => {
                     </div> 
                      { props.authLevel > 1
                       ? <FormControlLabel control={ <Switch defaultChecked={true} 
-                            onChange={() => SelectApproveToggle() } /> }
+                        onChange={() => 
+                        props.ToggleSwitches({selectedApproved: !props.selectedApproved})}
+                            //onChange={() => SelectApproveToggle() } 
+                            /> }
                             label={props.selectedApproved ? 'Approved Characters' : 'Unapproved Characters'} />
                       : <div></div>
                     }
