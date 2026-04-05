@@ -1,256 +1,278 @@
 import { useEffect, useState } from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 import ItemTable from "../tables/itemtable";
 import ItemSelectonList from "./itemslectionlist";
 import { Stack } from "@mui/material";
 import DisplayScreenItemsOnly from "../displayscreen/displayscreenitemsonly";
 
 const ItemSelector = (props) => {
+  const [itemListState, setItemListState] = useState([]);
+  const [printView, setPrintView] = useState(false);
 
-    const [itemListState, setItemListState] = useState([]);
-    const [printView, setPrintView] = useState(false);
-
-    useEffect(() => {
-        let newItemList=[]
-        if (props.initialItems.label !== 'Selection for Printing') {
-        if (props.initialItems !== undefined && props.initialItems !== null)
-        if (props.initialItems.label === 'Sheet Item' && props.initialItems.sheetItemGuid !== '') {
-          const founditem = props.appdata.iteList.find((item) => item.guid === props.initialItems.sheetItemGuid);
+  useEffect(() => {
+    let newItemList = [];
+    if (props.initialItems.label !== "Selection for Printing") {
+      if (props.initialItems !== undefined && props.initialItems !== null)
+        if (
+          props.initialItems.label === "Sheet Item" &&
+          props.initialItems.sheetItemGuid !== ""
+        ) {
+          const founditem = props.appdata.iteList.find(
+            (item) => item.guid === props.initialItems.sheetItemGuid,
+          );
           const newitem = {
             name: props.initialItems.sheetItem,
             count: 1,
             guid: props.initialItems.sheetItemGuid,
-            path: founditem !== undefined && founditem !== null ? 'ItemSheetApproveds' : 'ItemSheets'
-        };
-        newItemList.push(newitem);
-        } 
-        else if (props.initialItems.label === 'Upgrade Items') {
+            path:
+              founditem !== undefined && founditem !== null
+                ? "ItemSheetApproveds"
+                : "ItemSheets",
+          };
+          newItemList.push(newitem);
+        } else if (props.initialItems.label === "Upgrade Items") {
           for (let i = 0; i < props.initialItems.upgradeItemGuids.length; i++) {
-              const founditem = props.appdata.iteList.find((item) => item.guid === props.initialItems.upgradeItemGuids[i]);
-              const existitem = newItemList.find((item) => item.guid === props.initialItems.upgradeItemGuids[i]);
-  
-              if (existitem !== undefined && existitem !== null) {
-                  existitem.count++;
-              }
-              else {
-              const newitem = {
-                  name: props.initialItems.upgradeItems[i],
-                  count: 1,
-                  guid: props.initialItems.upgradeItemGuids[i],
-                  path: founditem !== undefined && founditem !== null ? 'ItemSheetApproveds' : 'ItemSheets'
-              };
-              newItemList.push(newitem);
-          }
-          }
-        }
-        else {
-        for (let i = 0; i < props.initialItems.startingItemGuids.length; i++) {
-            const founditem = props.appdata.iteList.find((item) => item.guid === props.initialItems.startingItemGuids[i]);
-            const existitem = newItemList.find((item) => item.guid === props.initialItems.startingItemGuids[i]);
+            const founditem = props.appdata.iteList.find(
+              (item) => item.guid === props.initialItems.upgradeItemGuids[i],
+            );
+            const existitem = newItemList.find(
+              (item) => item.guid === props.initialItems.upgradeItemGuids[i],
+            );
 
             if (existitem !== undefined && existitem !== null) {
-                existitem.count++;
+              existitem.count++;
+            } else {
+              const newitem = {
+                name: props.initialItems.upgradeItems[i],
+                count: 1,
+                guid: props.initialItems.upgradeItemGuids[i],
+                path:
+                  founditem !== undefined && founditem !== null
+                    ? "ItemSheetApproveds"
+                    : "ItemSheets",
+              };
+              newItemList.push(newitem);
             }
-            else {
-            const newitem = {
+          }
+        } else {
+          for (
+            let i = 0;
+            i < props.initialItems.startingItemGuids.length;
+            i++
+          ) {
+            const founditem = props.appdata.iteList.find(
+              (item) => item.guid === props.initialItems.startingItemGuids[i],
+            );
+            const existitem = newItemList.find(
+              (item) => item.guid === props.initialItems.startingItemGuids[i],
+            );
+
+            if (existitem !== undefined && existitem !== null) {
+              existitem.count++;
+            } else {
+              const newitem = {
                 name: props.initialItems.startingItems[i],
                 count: 1,
                 guid: props.initialItems.startingItemGuids[i],
-                path: founditem !== undefined && founditem !== null ? 'ItemSheetApproveds' : 'ItemSheets'
-            };
-            newItemList.push(newitem);
+                path:
+                  founditem !== undefined && founditem !== null
+                    ? "ItemSheetApproveds"
+                    : "ItemSheets",
+              };
+              newItemList.push(newitem);
+            }
+          }
         }
-        }
-      }
-      }
-      else {
-        newItemList = props.initialItems.startingItems;
-      }
-        setItemListState(newItemList);
-      }, [props.initialItems.show])
+    } else {
+      newItemList = props.initialItems.startingItems;
+    }
+    setItemListState(newItemList);
+  }, [props.initialItems.show]);
 
-    const AddItemToList = async (path, guid) => {
-        let founditem = null;
-        if (props.selectedApproved) {
-            founditem = props.appdata.iteList.find((item) => item.guid === guid);
-        }
-        else {
-            founditem = props.undata.iteList.find((item) => item.guid === guid);
-        }
-        const newItemList = [];
-        if (founditem !== null) {
-          if (props.initialItems.label === 'Sheet Item') {
-            const newitem =             {
-              name: founditem.name,
-              count: 1,
-              guid: founditem.guid,
-              path: props.selectedApproved ? 'ItemSheetApproveds' : 'ItemSheets'
+  const AddItemToList = async (path, guid) => {
+    let founditem = null;
+    if (props.selectedApproved) {
+      founditem = props.appdata.iteList.find((item) => item.guid === guid);
+    } else {
+      founditem = props.undata.iteList.find((item) => item.guid === guid);
+    }
+    const newItemList = [];
+    if (founditem !== null) {
+      if (props.initialItems.label === "Sheet Item") {
+        const newitem = {
+          name: founditem.name,
+          count: 1,
+          guid: founditem.guid,
+          path: props.selectedApproved ? "ItemSheetApproveds" : "ItemSheets",
+        };
+        newItemList.push(newitem);
+      } else {
+        let wasfound = false;
+
+        itemListState.forEach((item) => {
+          if (
+            item.guid === founditem.guid &&
+            ((props.selectedApproved && item.path === "ItemSheetApproveds") ||
+              (!props.selectedApproved && item.path === "ItemSheets"))
+          ) {
+            item.count++;
+            wasfound = true;
+          }
+          newItemList.push(item);
+        });
+        if (!wasfound) {
+          const newitem = {
+            name: founditem.name,
+            count: 1,
+            guid: founditem.guid,
+            path: props.selectedApproved ? "ItemSheetApproveds" : "ItemSheets",
           };
           newItemList.push(newitem);
-          }
-          else {
-          let wasfound =false;
-          
-          itemListState.forEach(item => {
-            if (item.guid === founditem.guid && ((props.selectedApproved && item.path === 'ItemSheetApproveds') || 
-                !props.selectedApproved && item.path === 'ItemSheets')) {
-                item.count++;
-                wasfound=true;
-            }
-            newItemList.push(item);
-          })
-          if(!wasfound) {
-            const newitem =             {
-                name: founditem.name,
-                count: 1,
-                guid: founditem.guid,
-                path: props.selectedApproved ? 'ItemSheetApproveds' : 'ItemSheets'
-            };
-            newItemList.push(newitem);
-          }
         }
-          setItemListState(newItemList);
-          props.UpdateItemList(newItemList);
-        }
-    }
-
-    const RemItemFromList = async (guid) => {
-        const newItemList = [];
-        itemListState.forEach(item => {
-          if (item.guid !== guid) {
-          newItemList.push(item);
-          }
-        })
-        setItemListState(newItemList);
-        props.UpdateItemList(newItemList);
-    }
-
-    const IncreaseCount = async (guid) => {
-        const newItemList = [];
-        itemListState.forEach(item => {
-          if (item.guid === guid) {
-            item.count++;
-          }
-          newItemList.push(item);
-        })
-        setItemListState(newItemList);
-        props.UpdateItemList(newItemList);
-    }
-
-    const LowerCount = async (guid) => {
-        const newItemList = [];
-        itemListState.forEach(item => {
-          if (item.guid === guid) {
-            item.count--;
-          }
-          newItemList.push(item);
-        })
-        setItemListState(newItemList);
-        props.UpdateItemList(newItemList);
-    }
-
-    const TogglePrint = () => {
-      let view = !printView;
-      setPrintView(view);
-    }
-    
-    return (
-      !printView ?
-    <>
-    <div className="splitScreen">
-    <Stack direction='row'>
-      {/* <Box> */}
-      <div className="topPane">
-      <ItemTable 
-      isSearch={props.isSearch}
-      isSelector={true}
-      isCharSheet={props.isCharSheet}
-      appdata={props.selectedApproved ? props.appdata : props.undata} 
-      selectedItemsApproved={props.selectedApproved} 
-      showApprovableOnly={props.showApprovableOnly}
-      commentFilterOn={props.commentFilterOn}
-      larpTags={props.larpTags}
-      tagslist={props.tagslist}
-      userGuid={props.userGuid}
-      authLevel={props.authLevel}
-      DirectToItem={(path, guid) => AddItemToList(path, guid)}
-      NewItemLink={(e)=> props.NewItemLink(e)}
-      NavToSelectItems={() => props.NavToSelectItems()}
-      ToggleSwitches={(e) => props.ToggleSwitches(e)}
-      GoBack={() => props.GoBack()}
-      GoToPrint={() => TogglePrint()}
-      UpdateFilter={(filter) => props.UpdateFilter(filter)}
-      isLoading={props.isLoading}
-      Filters={{
-        SeriesFilter: props.Filters.SeriesFilter,
-        ItemsFilter: props.Filters.ItemsFilter,
-        CreatorFilter: props.Filters.CreatorFilter,
-        EditorFilter: props.Filters.EditorFilter,
-        SelectedApproval : props.Filters.SelectedApproval,
-        LarpAutoCompValue: props.Filters.LarpAutoCompValue,
-        SelectedLarpTag: props.Filters.SelectedLarpTag,
-        TagSelectValues: props.Filters.TagSelectValues
       }
+      setItemListState(newItemList);
+      props.UpdateItemList(newItemList);
+    }
+  };
 
+  const RemItemFromList = async (guid) => {
+    const newItemList = [];
+    itemListState.forEach((item) => {
+      if (item.guid !== guid) {
+        newItemList.push(item);
       }
-      />
-      </div>
-{/*       </Box>*/}
-{/*   <Box > */}
-      <div className="bottomPane">
-        <div className="selectionlist-label">
-          {props.initialItems.label}
-        </div>
-        <div className="selectionlist-list">
-        <ItemSelectonList List={itemListState} 
-        allowMultiples={props.initialItems.label !== 'Sheet Item'}
-        RemoveItem={(guid) => RemItemFromList(guid)}
-        IncreaseCount={(guid) => IncreaseCount(guid)} 
-        LowerCount={(guid) => LowerCount(guid)}
-        />
-        </div>
-   </div>
-   {/* </Box> */}
-   </Stack>
-</div>
-    </> : 
+    });
+    setItemListState(newItemList);
+    props.UpdateItemList(newItemList);
+  };
+
+  const IncreaseCount = async (guid) => {
+    const newItemList = [];
+    itemListState.forEach((item) => {
+      if (item.guid === guid) {
+        item.count++;
+      }
+      newItemList.push(item);
+    });
+    setItemListState(newItemList);
+    props.UpdateItemList(newItemList);
+  };
+
+  const LowerCount = async (guid) => {
+    const newItemList = [];
+    itemListState.forEach((item) => {
+      if (item.guid === guid) {
+        item.count--;
+      }
+      newItemList.push(item);
+    });
+    setItemListState(newItemList);
+    props.UpdateItemList(newItemList);
+  };
+
+  const TogglePrint = () => {
+    let view = !printView;
+    setPrintView(view);
+  };
+
+  return !printView ? (
     <>
-    <div>
-      <DisplayScreenItemsOnly itemList={itemListState}/>
-      <div className="edit-bottom">
-        <button className="button-cancel" onClick={() => TogglePrint()}>Go Back!</button>
+      <div className="splitScreen">
+        <Stack direction="row">
+          {/* <Box> */}
+          <div className="topPane">
+            <ItemTable
+              isSearch={props.isSearch}
+              isSelector={true}
+              isCharSheet={props.isCharSheet}
+              appdata={props.selectedApproved ? props.appdata : props.undata}
+              selectedApproved={props.selectedApproved}
+              showApprovableOnly={props.showApprovableOnly}
+              commentFilterOn={props.commentFilterOn}
+              larpTags={props.larpTags}
+              tagslist={props.tagslist}
+              userGuid={props.userGuid}
+              authLevel={props.authLevel}
+              DirectToItem={(path, guid) => AddItemToList(path, guid)}
+              NewItemLink={(e) => props.NewItemLink(e)}
+              NavToSelectItems={() => props.NavToSelectItems()}
+              ToggleSwitches={(e) => props.ToggleSwitches(e)}
+              GoBack={() => props.GoBack()}
+              GoToPrint={() => TogglePrint()}
+              UpdateFilter={(filter) => props.UpdateFilter(filter)}
+              isLoading={props.isLoading}
+              Filters={{
+                SeriesFilter: props.Filters.SeriesFilter,
+                ItemsFilter: props.Filters.ItemsFilter,
+                CreatorFilter: props.Filters.CreatorFilter,
+                EditorFilter: props.Filters.EditorFilter,
+                SelectedApproval: props.Filters.SelectedApproval,
+                LarpAutoCompValue: props.Filters.LarpAutoCompValue,
+                SelectedLarpTag: props.Filters.SelectedLarpTag,
+                TagSelectValues: props.Filters.TagSelectValues,
+              }}
+            />
+          </div>
+          {/*       </Box>*/}
+          {/*   <Box > */}
+          <div className="bottomPane">
+            <div className="selectionlist-label">
+              {props.initialItems.label}
+            </div>
+            <div className="selectionlist-list">
+              <ItemSelectonList
+                List={itemListState}
+                allowMultiples={props.initialItems.label !== "Sheet Item"}
+                RemoveItem={(guid) => RemItemFromList(guid)}
+                IncreaseCount={(guid) => IncreaseCount(guid)}
+                LowerCount={(guid) => LowerCount(guid)}
+              />
+            </div>
+          </div>
+          {/* </Box> */}
+        </Stack>
       </div>
-    </div>
     </>
-    )
-}
+  ) : (
+    <>
+      <div>
+        <DisplayScreenItemsOnly itemList={itemListState} />
+        <div className="edit-bottom">
+          <button className="button-cancel" onClick={() => TogglePrint()}>
+            Go Back!
+          </button>
+        </div>
+      </div>
+    </>
+  );
+};
 
 export default ItemSelector;
 
 ItemSelector.propTypes = {
-    DirectToItem: PropTypes.func,
-    ToggleSwitch: PropTypes.func,
-    ToggleCommentSwitch: PropTypes.func,
-    ToggleApprovableSwitch: PropTypes.func,
-    showApprovableOnly: PropTypes.bool,
-    selectedApproved: PropTypes.bool,
-    commentFilterOn: PropTypes.bool,
-    isCharSheet: PropTypes.bool,
-    appdata: PropTypes.object,
-    undata: PropTypes.object,
-    authLevel: PropTypes.number,
-    larpTags: PropTypes.array,
-    tagslist: PropTypes.array,
-    initialItems: PropTypes.object,
-    userGuid: PropTypes.string,
-    NewItemLink: PropTypes.func,
-    NavToSelectItems: PropTypes.func,
-    Edit: PropTypes.func,
-    GoBack: PropTypes.func,
-    UpdateItemList: PropTypes.func,
-    UpdateFilter: PropTypes.func,
-    isLoading: PropTypes.bool,
-    ToggleSwitches: PropTypes.func,
-    Filters: PropTypes.object,
-    isSearch: PropTypes.bool
-}
+  DirectToItem: PropTypes.func,
+  ToggleSwitch: PropTypes.func,
+  ToggleCommentSwitch: PropTypes.func,
+  ToggleApprovableSwitch: PropTypes.func,
+  showApprovableOnly: PropTypes.bool,
+  selectedApproved: PropTypes.bool,
+  commentFilterOn: PropTypes.bool,
+  isCharSheet: PropTypes.bool,
+  appdata: PropTypes.object,
+  undata: PropTypes.object,
+  authLevel: PropTypes.number,
+  larpTags: PropTypes.array,
+  tagslist: PropTypes.array,
+  initialItems: PropTypes.object,
+  userGuid: PropTypes.string,
+  NewItemLink: PropTypes.func,
+  NavToSelectItems: PropTypes.func,
+  Edit: PropTypes.func,
+  GoBack: PropTypes.func,
+  UpdateItemList: PropTypes.func,
+  UpdateFilter: PropTypes.func,
+  isLoading: PropTypes.bool,
+  ToggleSwitches: PropTypes.func,
+  Filters: PropTypes.object,
+  isSearch: PropTypes.bool,
+};
