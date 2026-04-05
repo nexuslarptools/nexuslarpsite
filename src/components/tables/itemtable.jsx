@@ -467,20 +467,6 @@ const ItemTable = (props) => {
     });
   };
 
-  const SelectApproveToggle = async () => {
-    let switchinfo = {
-      selectedApproved: !props.selectedItemsApproved,
-    };
-    if (!props.selectedItemsApproved) {
-      if (props.showApprovableOnly) {
-        switchinfo.showApprovableOnly = false;
-      }
-      if (props.readyApproved) {
-        switchinfo.readyApproved = false;
-      }
-    }
-    props.ToggleSwitches(switchinfo);
-  };
   return !displayState.display ? (
     <></>
   ) : (
@@ -497,7 +483,7 @@ const ItemTable = (props) => {
           >
             <TableRow>
               <TableCell
-                colSpan={props.selectedItemsApproved ? 8 : 9}
+                colSpan={props.selectedApproved ? 8 : 9}
                 className="table-topper"
               >
                 <div className="table-controls">
@@ -552,18 +538,17 @@ const ItemTable = (props) => {
                     <FormControlLabel
                       control={
                         <Switch
-                          defaultChecked={props.selectedItemsApproved}
+                          defaultChecked={props.selectedApproved}
                           onChange={() =>
                             props.ToggleSwitches({
-                              selectedItemsApproved:
-                                !props.selectedItemsApproved,
+                              selectedApproved: !props.selectedApproved,
                             })
                           }
-                          checked={props.selectedItemsApproved}
+                          checked={props.selectedApproved}
                         />
                       }
                       label={
-                        props.selectedItemsApproved
+                        props.selectedApproved
                           ? "Approved Items"
                           : "Unapproved Items"
                       }
@@ -598,7 +583,7 @@ const ItemTable = (props) => {
                     <></>
                   )}
                   {props.authLevel > 2 &&
-                  !props.selectedItemsApproved &&
+                  !props.selectedApproved &&
                   !props.isSelector ? (
                     <FormControlLabel
                       control={
@@ -620,7 +605,7 @@ const ItemTable = (props) => {
                     <></>
                   )}
                   {props.authLevel > 2 &&
-                  !props.selectedItemsApproved &&
+                  !props.selectedApproved &&
                   !props.isSelector ? (
                     <FormControlLabel
                       control={
@@ -648,13 +633,13 @@ const ItemTable = (props) => {
             </TableRow>
             <TableRow>
               <TableCell
-                colSpan={props.selectedItemsApproved ? 8 : 9}
+                colSpan={props.selectedApproved ? 8 : 9}
                 className="table-topper"
               >
                 <div className="table-controls-pagination">
                   <div className="selectors">
                     {props.authLevel > 2 &&
-                    !props.selectedItemsApproved &&
+                    !props.selectedApproved &&
                     !props.isSelector ? (
                       <div className="selector">
                         <FormControl fullWidth>
@@ -753,7 +738,7 @@ const ItemTable = (props) => {
             </TableRow>
 
             <TableRow className="table-filter-row">
-              <TableCell colSpan={props.selectedItemsApproved ? 8 : 9}>
+              <TableCell colSpan={props.selectedApproved ? 8 : 9}>
                 <div className="fullspan-cell">
                   <div className="search-row">
                     {!props.isSelector ? (
@@ -791,7 +776,7 @@ const ItemTable = (props) => {
                     ) : (
                       <></>
                     )}
-                    {props.selectedItemsApproved ? (
+                    {props.selectedApproved ? (
                       props.isSelector ? (
                         <></>
                       ) : (
@@ -831,7 +816,7 @@ const ItemTable = (props) => {
                       </div>
                     )}
                     {props.commentFilterOn !== undefined ? (
-                      !props.selectedItemsApproved ? (
+                      !props.selectedApproved ? (
                         <></>
                       ) : (
                         <div className="search-container">
@@ -949,7 +934,7 @@ const ItemTable = (props) => {
                     </div>
                   </div>
                   {props.authLevel > 1 ? <></> : <></>}
-                  {!props.selectedItemsApproved || props.authLevel <= 5 ? (
+                  {!props.selectedApproved || props.authLevel <= 5 ? (
                     <></>
                   ) : (
                     <></>
@@ -973,7 +958,7 @@ const ItemTable = (props) => {
               )}
               {props.isSelector ? (
                 <TableCell></TableCell>
-              ) : props.selectedItemsApproved ? (
+              ) : props.selectedApproved ? (
                 <></>
               ) : (
                 <TableCell className="short-column table-cell-center">
@@ -1014,7 +999,7 @@ const ItemTable = (props) => {
               ) : (
                 <TableCell></TableCell>
               )}
-              {props.selectedItemsApproved &&
+              {props.selectedApproved &&
               props.authLevel >= 5 &&
               !props.isSelector ? (
                 <>
@@ -1030,7 +1015,7 @@ const ItemTable = (props) => {
               )}
               {props.authLevel >= 6 &&
               !props.isSelector &&
-              !props.selectedItemsApproved ? (
+              !props.selectedApproved ? (
                 <>
                   <TableCell
                     key={Math.random()}
@@ -1101,7 +1086,7 @@ const ItemTable = (props) => {
                   )}
                   {props.isSelector ? (
                     <TableCell></TableCell>
-                  ) : props.selectedItemsApproved ? (
+                  ) : props.selectedApproved ? (
                     <></>
                   ) : (
                     <TableCell className="table-default-cursor table-cell-center">
@@ -1135,7 +1120,7 @@ const ItemTable = (props) => {
                     <IconButton
                       onClick={() =>
                         props.DirectToItem(
-                          props.selectedItemsApproved
+                          props.selectedApproved
                             ? "ItemSheetApproveds"
                             : "ItemSheets",
                           item.guid,
@@ -1153,7 +1138,7 @@ const ItemTable = (props) => {
                             <IconButton
                               onClick={() =>
                                 props.Edit(
-                                  props.selectedItemsApproved
+                                  props.selectedApproved
                                     ? "ItemSheetApproveds"
                                     : "ItemSheets",
                                   item.guid,
@@ -1171,7 +1156,7 @@ const ItemTable = (props) => {
                   ) : (
                     <TableCell></TableCell>
                   )}
-                  {props.selectedItemsApproved &&
+                  {props.selectedApproved &&
                   props.authLevel >= 5 &&
                   !props.isSelector ? (
                     <>
@@ -1186,7 +1171,7 @@ const ItemTable = (props) => {
                   )}
                   {props.authLevel >= 5 && !props.isSelector ? (
                     <>
-                      {props.authLevel > 5 && !props.selectedItemsApproved ? (
+                      {props.authLevel > 5 && !props.selectedApproved ? (
                         <TableCell className="icon-column table-cell-center">
                           <IconButton
                             aria-label="delete"
@@ -1252,7 +1237,7 @@ const ItemTable = (props) => {
 export default ItemTable;
 
 ItemTable.propTypes = {
-  selectedItemsApproved: PropTypes.bool,
+  selectedApproved: PropTypes.bool,
   commentFilterOn: PropTypes.bool,
   showApprovableOnly: PropTypes.bool,
   readyApproved: PropTypes.bool,
