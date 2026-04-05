@@ -72,7 +72,7 @@ export default function CharactersIndex(props) {
         setIsCreate(false);
         setIsEdit({isEditing: false, guid: null});
         setfilterInit(true);
-        setFilterState(site.characters.filter);
+        setFilterState(character.filter);
       
         if (character.filter !== undefined && character.filter !== null ) {
         for (const key in character.filter) {
@@ -154,7 +154,7 @@ export default function CharactersIndex(props) {
     const ToggleSwitch = async (e) => {
 
     for (const key of Object.keys(e)) {
-        await setSite({
+        await setCharacter({
         ...character,
         [key]: e[key]
       });
@@ -169,8 +169,8 @@ export default function CharactersIndex(props) {
 
     const NewCharacterLink = async () => {
       //props.toggleSubScreen(false, 'Create', '', '', filterState);
-          await setSite({
-          ...site.characters,
+          await setCharacter({
+          ...character,
           create: true,
           viewGuid: '',
           viewPath: ''});
