@@ -24,10 +24,11 @@ export const SiteProvider = ({ children }) => {
       commentFilter: false,
       showApprovableOnly: false,
       readyApproved: false,
-      viewingItem: false,
-      editingItem: false,
-      viewItemGuid: '',
-      viewItemPath: '',
+      viewing: false,
+      create: false,
+      editing: false,
+      viewGuid: '',
+      viewPath: '',
     },
     items: {
       filter:       {
