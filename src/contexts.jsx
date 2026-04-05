@@ -43,7 +43,7 @@ export const SiteProvider = ({ children }) => {
     funct: '',
     guid: '',
     path: '',
-    characters: {
+    character: {
       filter:       {
         SeriesFilter: '',
         CharacterFilter: '',

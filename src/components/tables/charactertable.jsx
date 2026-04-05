@@ -463,16 +463,16 @@ const CharacterTable = props => {
                     <button className='button-action' onClick={(e) => props.NewCharacterLink(e)}>Add New Character</button>
                     </div> 
                      { props.authLevel > 1
-                      ? <FormControlLabel control={ <Switch defaultChecked={props.selectedApproved} 
+                      ? <FormControlLabel control={ <Switch defaultChecked={true} 
                             onChange={() => SelectApproveToggle() } /> }
                             label={props.selectedApproved ? 'Approved Characters' : 'Unapproved Characters'} />
                       : <div></div>
                     }
-                  <FormControlLabel control={ <Switch defaultChecked={!props.commentFilterOn}  onChange={() => 
+                  <FormControlLabel control={ <Switch defaultChecked={false}  onChange={() => 
                             props.ToggleSwitches({commentFilter: !props.commentFilterOn})} /> }
                             label={props.commentFilterOn ? 'Only Commented Sheets' : 'All Sheets'}/> 
                     {props.authLevel > 2 && !props.selectedApproved? (
-                      <FormControlLabel control={ <Switch defaultChecked={!props.showApprovableOnly} onChange={() => 
+                      <FormControlLabel control={ <Switch defaultChecked={false} onChange={() => 
                         props.ToggleSwitches({showApprovableOnly: !props.showApprovableOnly})} /> }
                         label={props.showApprovableOnly ? 'Characters You Can Approve' : 'All Unapproved Characters'}  /> )
                     : (<div></div>)}
@@ -480,7 +480,7 @@ const CharacterTable = props => {
                       <FormControlLabel
                        control={<Switch onChange={() => 
                             props.ToggleSwitches({readyApproved: !props.readyApproved})} 
-                            defaultChecked={!props.readyApproved}/>}
+                            defaultChecked={false}/>}
                             label={props.readyApproved ? 'Ready for Approval' : 'All Characters'}
                        /> : <></>}
                         <></>
