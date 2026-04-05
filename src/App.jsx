@@ -1,46 +1,51 @@
-import './App.scss'
-import './master.scss';
-import { Component, createContext, useState } from "react"
-import { Route, createBrowserRouter, RouterProvider, createRoutesFromElements, Outlet } from "react-router-dom"
-import Header from "./components/header/header"
-import HomePage from "./views/HomePage"
-import CurrentUserPage from "./views/Users/CurrentUserPage"
-import ItemsIndex from "./views/Items/ItemsIndex"
-import UsersPage from "./views/Users/UserList"
-import SeriesIndex from "./views/Series/SeriesIndex"
-import AuthenticationGuard from './components/authenticationguard/authenticationguard'
-import TagsIndex from './views/Tags/TagsIndex'
-import LarpsIndex from './views/Larps/LarpsIndex'
-import ContactFooter from './components/contactfooter/contactbar';
-import ContactUs from './views/EmailHelp/EmailHelp';
-import CharactersIndex from './views/Characters/CharactersIndex';
-import SearchDrawerGate from './components/drawer/SearchDrawerGate';
-import CharacterSearch from './views/Search/charactersearch';
-import ItemSearch from './views/Search/itemsearch';
-import ShipItem from './components/item/shipitem';
-import {withFaroRouterInstrumentation} from "@grafana/faro-react";
+import "./App.scss";
+import "./master.scss";
+import { Component, createContext, useState } from "react";
+import {
+  Route,
+  createBrowserRouter,
+  RouterProvider,
+  createRoutesFromElements,
+  Outlet,
+} from "react-router-dom";
+import Header from "./components/header/header";
+import HomePage from "./views/HomePage";
+import CurrentUserPage from "./views/Users/CurrentUserPage";
+import ItemsIndex from "./views/Items/ItemsIndex";
+import UsersPage from "./views/Users/UserList";
+import SeriesIndex from "./views/Series/SeriesIndex";
+import AuthenticationGuard from "./components/authenticationguard/authenticationguard";
+import TagsIndex from "./views/Tags/TagsIndex";
+import LarpsIndex from "./views/Larps/LarpsIndex";
+import ContactFooter from "./components/contactfooter/contactbar";
+import ContactUs from "./views/EmailHelp/EmailHelp";
+import CharactersIndex from "./views/Characters/CharactersIndex";
+import SearchDrawerGate from "./components/drawer/SearchDrawerGate";
+import CharacterSearch from "./views/Search/charactersearch";
+import ItemSearch from "./views/Search/itemsearch";
+import ShipItem from "./components/item/shipitem";
+import { withFaroRouterInstrumentation } from "@grafana/faro-react";
 // OIDC flows removed: no OAuthLogout or OAuthCallback
-import Login from './views/Auth/Login.jsx';
-import { CharacterProvider, SiteProvider } from './contexts.jsx'
+import Login from "./views/Auth/Login.jsx";
+import { CharacterProvider, SiteProvider } from "./contexts.jsx";
 
 class App extends Component {
-
   state = {
     open: false,
     ismain: true,
-    funct: '',
-    guid: '',
-    path: '',
+    funct: "",
+    guid: "",
+    path: "",
     characters: {
-      filter:       {
-        SeriesFilter: '',
-        CharacterFilter: '',
-        CreatorFilter: '',
-        EditorFilter: '',
-        SelectedApproval : '',
-        LarpAutoCompValue: '',
-        SelectedLarpTag: '',
-        TagSelectValues: []
+      filter: {
+        SeriesFilter: "",
+        CharacterFilter: "",
+        CreatorFilter: "",
+        EditorFilter: "",
+        SelectedApproval: "",
+        LarpAutoCompValue: "",
+        SelectedLarpTag: "",
+        TagSelectValues: [],
       },
       selectedApproved: true,
       commentFilter: false,
@@ -48,19 +53,19 @@ class App extends Component {
       readyApproved: false,
       viewingItem: false,
       editingItem: false,
-      viewItemGuid: '',
-      viewItemPath: '',
+      viewItemGuid: "",
+      viewItemPath: "",
     },
     items: {
-      filter:       {
-        SeriesFilter: '',
-        ItemsFilter: '',
-        CreatorFilter: '',
-        EditorFilter: '',
-        SelectedApproval : '',
-        LarpAutoCompValue: '',
-        SelectedLarpTag: '',
-        TagSelectValues: []
+      filter: {
+        SeriesFilter: "",
+        ItemsFilter: "",
+        CreatorFilter: "",
+        EditorFilter: "",
+        SelectedApproval: "",
+        LarpAutoCompValue: "",
+        SelectedLarpTag: "",
+        TagSelectValues: [],
       },
       selectedApproved: true,
       commentFilter: false,
@@ -68,61 +73,57 @@ class App extends Component {
       readyApproved: false,
       viewingItem: false,
       editingItem: false,
-      viewItemGuid: '',
-      viewItemPath: '',
-      listItems:[]
+      viewItemGuid: "",
+      viewItemPath: "",
+      listItems: [],
     },
-    currentURL: window.location.href 
-  }
+    currentURL: window.location.href,
+  };
 
   ismain = true;
 
   ToggleSwitch = async (e, type) => {
-    let newstate =this.state[type]
-    if (newstate === undefined)
-      {
-        newstate = { e: true };
-      }
-      else {
-        newstate[e] = !newstate[e]
-      }
+    let newstate = this.state[type];
+    if (newstate === undefined) {
+      newstate = { e: true };
+    } else {
+      newstate[e] = !newstate[e];
+    }
     this.setState({
-    ...this.state,
-    [type] :newstate
+      ...this.state,
+      [type]: newstate,
     });
-  }
+  };
 
   ToggleSwitches = async (e, type) => {
     for (const key of Object.keys(e)) {
       await this.ToggleSwitch(key, type);
     }
-  }
+  };
 
   togglePreview = (e) => {
-    this.setState({open: e});
-    return {open: e};
+    this.setState({ open: e });
+    return { open: e };
   };
 
   toggleSubScreen = async (e, funct, guid, path, type, filters) => {
-    let newstate =this.state
+    let newstate = this.state;
 
-    newstate.ismain=e;
-    newstate.funct=funct;
-    newstate.guid=guid;
-    newstate.path=path;
-    if (newstate[type] === undefined)
-    {
+    newstate.ismain = e;
+    newstate.funct = funct;
+    newstate.guid = guid;
+    newstate.path = path;
+    if (newstate[type] === undefined) {
       newstate[type] = {};
     }
 
-    newstate[type].funct=funct;
-    newstate[type].guid=guid;
-    newstate[type].path=path;
+    newstate[type].funct = funct;
+    newstate[type].guid = guid;
+    newstate[type].path = path;
 
-    if (filters !== 'goback') {
+    if (filters !== "goback") {
       newstate[type].filter = filters;
-    } 
-    else {
+    } else {
       newstate[type].filter = this.state[type].filter;
     }
 
@@ -132,135 +133,223 @@ class App extends Component {
   UpdateItemsList = async (e) => {
     this.setState({
       ...this.state,
-      items:{
-      ...this.state.items, 
-      listItems:e}
-      });
-  }
-
+      items: {
+        ...this.state.items,
+        listItems: e,
+      },
+    });
+  };
 
   render() {
-
     const router = createBrowserRouter(
       createRoutesFromElements(
-        <Route element={
-          <>
-           <SiteProvider>
-            <SearchDrawerGate  open={this.state.open} toggleClose={() => this.togglePreview(false)} />
-            <div className="app">
-              <Header drawerOpenCLick={(e) => this.togglePreview(e)} mainmenu={this.state.ismain} />
-              <div className={"app-body"}>
-                <Outlet />
+        <Route
+          element={
+            <>
+              <SearchDrawerGate
+                open={this.state.open}
+                toggleClose={() => this.togglePreview(false)}
+              />
+              <div className="app">
+                <Header
+                  drawerOpenCLick={(e) => this.togglePreview(e)}
+                  mainmenu={this.state.ismain}
+                />
+                <div className={"app-body"}>
+                  <Outlet />
+                </div>
               </div>
-            </div>
-            <ContactFooter />
-            </SiteProvider>
-          </>
-        }>
+              <ContactFooter />
+            </>
+          }
+        >
           <Route
             index
-            element={(
+            element={
               <AuthenticationGuard
                 subState={this.state}
                 toggleSubScreen={(e) => this.toggleSubScreen(e)}
                 component={HomePage}
-              />)}
+              />
+            }
           />
           {/* OIDC routes removed */}
-          <Route
-            path="/login"
-            element={<Login />}
-          />
+          <Route path="/login" element={<Login />} />
           <Route
             path="/profile"
-            element={<AuthenticationGuard subState={this.state} toggleSubScreen={(e) => this.toggleSubScreen(e)} component={CurrentUserPage} />}
+            element={
+              <AuthenticationGuard
+                subState={this.state}
+                toggleSubScreen={(e) => this.toggleSubScreen(e)}
+                component={CurrentUserPage}
+              />
+            }
           />
           <Route
             path="/users"
-            element={<AuthenticationGuard subState={this.state} toggleSubScreen={(e) => this.toggleSubScreen(e)} component={UsersPage} />}
+            element={
+              <AuthenticationGuard
+                subState={this.state}
+                toggleSubScreen={(e) => this.toggleSubScreen(e)}
+                component={UsersPage}
+              />
+            }
           />
           <Route
             path="/items"
-            element={<AuthenticationGuard
-              subState={this.state.items !== undefined && this.state.items !== null ? this.state.items : this.state}
-              ismain={this.state.ismain}
-              ToggleSwitches={(e) => this.ToggleSwitches(e, 'items')}
-              UpdateItemsList={(e) => this.UpdateItemsList(e)}
-              toggleSubScreen={(e, funct, guid, path, filters) => this.toggleSubScreen(e, funct, guid, path, 'items', filters)}
-              component={ItemsIndex} />}
-          />
-            <Route
-              path="/characters"
-              element={(
+            element={
               <AuthenticationGuard
-                subState={this.state.characters !== undefined && this.state.characters !== null ? this.state.characters : this.state}
+                subState={
+                  this.state.items !== undefined && this.state.items !== null
+                    ? this.state.items
+                    : this.state
+                }
                 ismain={this.state.ismain}
-                ToggleSwitches={(e) => this.ToggleSwitches(e, 'characters')}
-                toggleSubScreen={(e, funct, guid, path, filters) => this.toggleSubScreen(e, funct, guid, path, 'characters', filters)}
-                component={CharactersIndex} />
-              )}
-            />
+                ToggleSwitches={(e) => this.ToggleSwitches(e, "items")}
+                UpdateItemsList={(e) => this.UpdateItemsList(e)}
+                toggleSubScreen={(e, funct, guid, path, filters) =>
+                  this.toggleSubScreen(e, funct, guid, path, "items", filters)
+                }
+                component={ItemsIndex}
+              />
+            }
+          />
+          <Route
+            path="/characters"
+            element={
+              <AuthenticationGuard
+                subState={
+                  this.state.characters !== undefined &&
+                  this.state.characters !== null
+                    ? this.state.characters
+                    : this.state
+                }
+                ismain={this.state.ismain}
+                ToggleSwitches={(e) => this.ToggleSwitches(e, "characters")}
+                toggleSubScreen={(e, funct, guid, path, filters) =>
+                  this.toggleSubScreen(
+                    e,
+                    funct,
+                    guid,
+                    path,
+                    "characters",
+                    filters,
+                  )
+                }
+                component={CharactersIndex}
+              />
+            }
+          />
 
           <Route
             path="/series"
-            element={<AuthenticationGuard subState={this.state} toggleSubScreen={(e) => this.toggleSubScreen(e)} component={SeriesIndex} />}
+            element={
+              <AuthenticationGuard
+                subState={this.state}
+                toggleSubScreen={(e) => this.toggleSubScreen(e)}
+                component={SeriesIndex}
+              />
+            }
           />
           <Route
             path="/tags"
-            element={<AuthenticationGuard subState={this.state} toggleSubScreen={(e) => this.toggleSubScreen(e)} component={TagsIndex} />}
+            element={
+              <AuthenticationGuard
+                subState={this.state}
+                toggleSubScreen={(e) => this.toggleSubScreen(e)}
+                component={TagsIndex}
+              />
+            }
           />
           <Route
             path="/larps"
-            element={<AuthenticationGuard subState={this.state} toggleSubScreen={(e) => this.toggleSubScreen(e)} component={LarpsIndex} />}
+            element={
+              <AuthenticationGuard
+                subState={this.state}
+                toggleSubScreen={(e) => this.toggleSubScreen(e)}
+                component={LarpsIndex}
+              />
+            }
           />
           <Route
             path="/contactus"
-            element={<AuthenticationGuard subState={this.state} toggleSubScreen={(e) => this.toggleSubScreen(e)} component={ContactUs} />}
+            element={
+              <AuthenticationGuard
+                subState={this.state}
+                toggleSubScreen={(e) => this.toggleSubScreen(e)}
+                component={ContactUs}
+              />
+            }
           />
           <Route
             path="/charactersearch/"
-            element={<AuthenticationGuard
-              subState={this.state.characters !== undefined && this.state.characters !== null ? this.state.characters : this.state}
-              ismain={this.state.ismain}
-              ToggleSwitches={(e) => this.ToggleSwitches(e, 'characters')}
-              toggleSubScreen={(e, funct, guid, path, filters) => this.toggleSubScreen(e, funct, guid, path, 'characters', filters)}
-              component={CharacterSearch} />}
+            element={
+              <AuthenticationGuard
+                subState={
+                  this.state.characters !== undefined &&
+                  this.state.characters !== null
+                    ? this.state.characters
+                    : this.state
+                }
+                ismain={this.state.ismain}
+                ToggleSwitches={(e) => this.ToggleSwitches(e, "characters")}
+                toggleSubScreen={(e, funct, guid, path, filters) =>
+                  this.toggleSubScreen(
+                    e,
+                    funct,
+                    guid,
+                    path,
+                    "characters",
+                    filters,
+                  )
+                }
+                component={CharacterSearch}
+              />
+            }
           />
           <Route
             path="/itemsearch/"
-            element={<AuthenticationGuard
-              subState={this.state.items !== undefined && this.state.items !== null ? this.state.items : this.state}
-              ismain={this.state.ismain}
-              ToggleSwitches={(e) => this.ToggleSwitches(e, 'items')}
-              UpdateItemsList={(e) => this.UpdateItemsList(e)}
-              toggleSubScreen={(e, funct, guid, path, filters) => this.toggleSubScreen(e, funct, guid, path, 'items', filters)}
-              component={ItemSearch} />}
+            element={
+              <AuthenticationGuard
+                subState={
+                  this.state.items !== undefined && this.state.items !== null
+                    ? this.state.items
+                    : this.state
+                }
+                ismain={this.state.ismain}
+                ToggleSwitches={(e) => this.ToggleSwitches(e, "items")}
+                UpdateItemsList={(e) => this.UpdateItemsList(e)}
+                toggleSubScreen={(e, funct, guid, path, filters) =>
+                  this.toggleSubScreen(e, funct, guid, path, "items", filters)
+                }
+                component={ItemSearch}
+              />
+            }
           />
-          <Route path="shiptest"
-            element={<AuthenticationGuard
-              component={ShipItem}
-            />}
+          <Route
+            path="shiptest"
+            element={<AuthenticationGuard component={ShipItem} />}
           />
           <Route
             path="*"
-            element={(
+            element={
               <AuthenticationGuard
                 subState={this.state}
                 toggleSubScreen={(e) => this.toggleSubScreen(e)}
                 component={HomePage}
-              />)}
+              />
+            }
           />
-        </Route>
-      )
+        </Route>,
+      ),
     );
 
-      const browserRouter = withFaroRouterInstrumentation(router);
+    const browserRouter = withFaroRouterInstrumentation(router);
 
-
-      return (
-        <CharacterProvider>
-          <RouterProvider router={browserRouter} />
-        </CharacterProvider>
+    return (
+      <SiteProvider>
+        <RouterProvider router={browserRouter} />
+      </SiteProvider>
     );
   }
 }

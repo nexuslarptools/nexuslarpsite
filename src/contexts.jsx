@@ -1,21 +1,20 @@
-
-import { createContext, useState } from "react"
+import { createContext, useState } from "react";
 
 export const CharacterContext = createContext();
 
 export const CharacterProvider = ({ children }) => {
   const [character, setCharacter] = useState({
     ismain: true,
-    filter:       {
-      SeriesFilter: '',
-      CharacterFilter: '',
-      CreatorFilter: '',
-      EditorFilter: '',
-      SelectedApproval : '',
-      LarpAutoCompValue: '',
-      SelectedLarpTag: '',
-      TagSelectValues: []
-      },
+    filter: {
+      SeriesFilter: "",
+      CharacterFilter: "",
+      CreatorFilter: "",
+      EditorFilter: "",
+      SelectedApproval: "",
+      LarpAutoCompValue: "",
+      SelectedLarpTag: "",
+      TagSelectValues: [],
+    },
     selectedApproved: true,
     commentFilter: false,
     showApprovableOnly: false,
@@ -23,11 +22,11 @@ export const CharacterProvider = ({ children }) => {
     viewing: false,
     create: false,
     editing: false,
-    viewGuid: '',
-    viewPath: ''
-  })
+    viewGuid: "",
+    viewPath: "",
+  });
 
-    return (
+  return (
     <CharacterContext.Provider value={{ character, setCharacter }}>
       {children}
     </CharacterContext.Provider>
@@ -37,61 +36,61 @@ export const CharacterProvider = ({ children }) => {
 export const SiteContext = createContext();
 
 export const SiteProvider = ({ children }) => {
-  const [site, setSite] = useState({
+  const [site, setsite] = useState({
     open: false,
+  });
+
+  const [itemView, setItemView] = useState({
     ismain: true,
-    funct: '',
-    guid: '',
-    path: '',
-    character: {
-      filter:       {
-        SeriesFilter: '',
-        CharacterFilter: '',
-        CreatorFilter: '',
-        EditorFilter: '',
-        SelectedApproval : '',
-        LarpAutoCompValue: '',
-        SelectedLarpTag: '',
-        TagSelectValues: []
-      },
-      selectedApproved: true,
-      commentFilter: false,
-      showApprovableOnly: false,
-      readyApproved: false,
-      viewing: false,
-      create: false,
-      editing: false,
-      viewGuid: '',
-      viewPath: '',
+    filter: {
+      SeriesFilter: "",
+      CharacterFilter: "",
+      CreatorFilter: "",
+      EditorFilter: "",
+      SelectedApproval: "",
+      LarpAutoCompValue: "",
+      SelectedLarpTag: "",
+      TagSelectValues: [],
     },
-    items: {
-      filter:       {
-        SeriesFilter: '',
-        ItemsFilter: '',
-        CreatorFilter: '',
-        EditorFilter: '',
-        SelectedApproval : '',
-        LarpAutoCompValue: '',
-        SelectedLarpTag: '',
-        TagSelectValues: []
-      },
-      selectedApproved: true,
-      commentFilter: false,
-      showApprovableOnly: false,
-      readyApproved: false,
-      viewingItem: false,
-      editingItem: false,
-      viewItemGuid: '',
-      viewItemPath: '',
-      listItems:[]
+    selectedApproved: true,
+    commentFilter: false,
+    showApprovableOnly: false,
+    readyApproved: false,
+    viewingItem: false,
+    editingItem: false,
+    viewItemGuid: "",
+    viewItemPath: "",
+    listItems: [],
+  });
+
+  const [character, setCharacter] = useState({
+    ismain: true,
+    filter: {
+      SeriesFilter: "",
+      CharacterFilter: "",
+      CreatorFilter: "",
+      EditorFilter: "",
+      SelectedApproval: "",
+      LarpAutoCompValue: "",
+      SelectedLarpTag: "",
+      TagSelectValues: [],
     },
-    currentURL: window.location.href 
+    selectedApproved: true,
+    commentFilter: false,
+    showApprovableOnly: false,
+    readyApproved: false,
+    viewing: false,
+    create: false,
+    editing: false,
+    viewGuid: "",
+    viewPath: "",
   });
 
   return (
-    <SiteContext.Provider value={{ site, setSite }}>
+    <SiteContext.Provider
+      value={{ site, setsite, itemView, setItemView, character, setCharacter }}
+    >
       {children}
     </SiteContext.Provider>
   );
-  
 };
