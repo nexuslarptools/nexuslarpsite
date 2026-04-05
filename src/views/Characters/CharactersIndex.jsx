@@ -11,7 +11,7 @@ import CharacterEdit from './CharacterEdit';
 import { createTheme, IconButton, lighten, Slide, Snackbar, ThemeProvider } from '@mui/material';
 import PropTypes from 'prop-types';
 import CloseSharpIcon from '@mui/icons-material/CloseSharp';
-import { SiteContext } from '../../contexts';
+import { CharacterContext } from '../../contexts';
 
 export default function CharactersIndex(props) {
 
@@ -23,7 +23,7 @@ export default function CharactersIndex(props) {
       });
     }
 
-    const { site, setSite } = useContext(SiteContext);
+    const { character, setCharacter } = useContext(CharacterContext);
 
     const approvQuery = useGetData('listApprovedCharacters', '/api/v1/CharacterSheetApproveds');  
     const unapprovQuery = useGetData('listUnapprovedCharacters', '/api/v1/CharacterSheets');
@@ -68,18 +68,18 @@ export default function CharactersIndex(props) {
     const [filterInit, setfilterInit] = useState(false);
 
     useEffect(() => {
-      if (site.ismain === undefined || site.ismain === null || site.ismain === true) {
+      if (character.ismain === undefined || character.ismain === null || character.ismain === true) {
         setIsCreate(false);
         setIsEdit({isEditing: false, guid: null});
         setfilterInit(true);
         setFilterState(site.characters.filter);
       
-        if (site.characters.filter !== undefined && site.characters.filter !== null ) {
-        for (const key in site.characters.filter) {
-          if (site.characters.filter[key] !== undefined && site.characters.filter[key] !== null && key !== 'filters') {
+        if (character.filter !== undefined && character.filter !== null ) {
+        for (const key in character.filter) {
+          if (character.filter[key] !== undefined && character.filter[key] !== null && key !== 'filters') {
                setCharactersState({
               ...charactersState,
-              [key]: site.characters.filter[key]
+              [key]: character.filter[key]
             });
           }
       }
@@ -87,22 +87,22 @@ export default function CharactersIndex(props) {
 
       }
       else {
-        if (site.characters.create)
+        if (character.create)
           setIsCreate(true);
       }
-      if (site.characters.viewing)
+      if (character.viewing)
       {
         setCharactersState({
           ...charactersState,
           viewingItem: true,
-          viewItemGuid: site.characters.viewGuid,
-          viewItemPath: site.characters.viewPath});
+          viewItemGuid: character.viewGuid,
+          viewItemPath: character.viewPath});
       }
-      if (site.characters.editing)
+      if (character.editing)
         {
           setIsEdit({isEditing: true, 
-            guid: site.characters.viewGuid,
-            path: site.characters.viewPath
+            guid: character.viewGuid,
+            path: character.viewPath
           });
         }
     }, [])
@@ -110,21 +110,21 @@ export default function CharactersIndex(props) {
 
     const DirectToCharacter = async (path, guid) => {
       props.toggleSubScreen(false, 'View', guid, path, filterState);
-      await setSite({
-        ...site.characters,
+      await setCharacter({
+        ...character,
         viewing: true,
         viewGuid: guid,
         viewPath: path});
     }
 
     const GoBackToList = async () => {
-      await setSite({
-        ...site.characters,
+      await setCharacter({
+        ...character,
         viewing: false
     });
     props.toggleSubScreen(true, '', '' ,'', 'goback');
-    await setSite({
-          ...site.characters,
+    await setCharacter({
+          ...character,
           viewing: false,
           viewGuid: '',
           viewPath: ''});
@@ -144,8 +144,8 @@ export default function CharactersIndex(props) {
             path: path
       }); 
 
-          await setSite({
-          ...site.characters,
+          await setCharacter({
+          ...character,
           editing: true,
           viewGuid: guid,
           viewPath: path});
@@ -155,7 +155,7 @@ export default function CharactersIndex(props) {
 
     for (const key of Object.keys(e)) {
         await setSite({
-        ...site.characters,
+        ...character,
         [key]: e[key]
       });
     }
@@ -178,8 +178,8 @@ export default function CharactersIndex(props) {
     }
 
     const GoBackFromCreateEdit = async () => {
-      await setSite({
-         ...site.characters,
+      await setCharacter({
+         ...character,
         viewing: false,
         create: false,
         viewGuid: '',
@@ -195,8 +195,8 @@ export default function CharactersIndex(props) {
 
     const pushFilter = async (filter) => {
       await setFilterState({...filterState,  filter});
-      await setSite({
-         ...site.characters,
+      await setCharacter({
+         ...character,
         filter: filter});
      // props.toggleSubScreen(true, '', '','', filter);
     }
@@ -232,17 +232,17 @@ export default function CharactersIndex(props) {
 
     return (
         <>
-{ site.characters.viewing === false ? 
- !site.characters.create ?
- !site.characters.editing ?
+{ character.viewing === false ? 
+ !character.create ?
+ !character.editing ?
 <>
 <CharactersListPage 
 isSearch={false}
 FilterInit={filterInit}
 UnInitFiler={() => UnInitFiler()}
 Filters={
-  site.characters.filter !== undefined && site.characters.filter !== null ? 
-  site.characters.filter : null
+  character.filter !== undefined && character.filter !== null ? 
+  character.filter : null
 }
 appdata={approvQuery.data} 
   undata={unapprovQuery.data} 
@@ -250,25 +250,25 @@ appdata={approvQuery.data}
   tagslist={allTagsQuery.data.find((tags) => tags.tagType === 'Character')?.tagsList}
   authLevel={authLevel}
   userGuid={userGuidQuery.data}
-  currentState={site.characters}
-  selectedApproved={ site.characters !== undefined && site.characters !== null &&
-    site.characters.selectedApproved !== undefined && site.characters.selectedApproved !== null ? 
-    site.characters.selectedApproved : null
+  currentState={character}
+  selectedApproved={ character !== undefined && character !== null &&
+    character.selectedApproved !== undefined && character.selectedApproved !== null ? 
+    character.selectedApproved : null
     //charactersState.selectedApproved
     } 
-  commentFilterOn={ site.characters.commentFilter !== undefined && site.characters.commentFilter !== null ? 
-    site.characters.commentFilter : false
+  commentFilterOn={ character.commentFilter !== undefined && character.commentFilter !== null ? 
+    character.commentFilter : false
     //charactersState.commentFilter
     }
-  showApprovableOnly={ site.characters !== undefined && site.characters !== null &&
-    site.characters.showApprovableOnly !== undefined && 
-    site.characters.showApprovableOnly !== null ? 
-    site.characters.showApprovableOnly : false
+  showApprovableOnly={ character !== undefined && character !== null &&
+    character.showApprovableOnly !== undefined && 
+    character.showApprovableOnly !== null ? 
+    character.showApprovableOnly : false
     //charactersState.showApprovableOnly
     }
-  readyApproved={ site.characters !== undefined && site.characters !== null &&
-    site.characters.readyApproved !== undefined && site.characters.readyApproved !== null ? 
-    site.characters.readyApproved : false
+  readyApproved={ character !== undefined && character !== null &&
+    character.readyApproved !== undefined && character.readyApproved !== null ? 
+    character.readyApproved : false
     //charactersState.readyApproved
     }
   ToggleSwitches={(e) => ToggleSwitch(e)}

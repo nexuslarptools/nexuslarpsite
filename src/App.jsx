@@ -21,7 +21,7 @@ import ShipItem from './components/item/shipitem';
 import {withFaroRouterInstrumentation} from "@grafana/faro-react";
 // OIDC flows removed: no OAuthLogout or OAuthCallback
 import Login from './views/Auth/Login.jsx';
-import { SiteProvider } from './contexts.jsx'
+import { CharacterProvider, SiteProvider } from './contexts.jsx'
 
 class App extends Component {
 
@@ -189,15 +189,23 @@ class App extends Component {
               toggleSubScreen={(e, funct, guid, path, filters) => this.toggleSubScreen(e, funct, guid, path, 'items', filters)}
               component={ItemsIndex} />}
           />
-          <Route
-            path="/characters"
-            element={(<AuthenticationGuard
-              subState={this.state.characters !== undefined && this.state.characters !== null ? this.state.characters : this.state}
-              ismain={this.state.ismain}
-              ToggleSwitches={(e) => this.ToggleSwitches(e, 'characters')}
-              toggleSubScreen={(e, funct, guid, path, filters) => this.toggleSubScreen(e, funct, guid, path, 'characters', filters)}
-              component={CharactersIndex} />)}
-          />
+
+          <CharacterProvider>
+            <Route
+              path="/characters"
+              element={(
+
+              <AuthenticationGuard
+                subState={this.state.characters !== undefined && this.state.characters !== null ? this.state.characters : this.state}
+                ismain={this.state.ismain}
+                ToggleSwitches={(e) => this.ToggleSwitches(e, 'characters')}
+                toggleSubScreen={(e, funct, guid, path, filters) => this.toggleSubScreen(e, funct, guid, path, 'characters', filters)}
+                component={CharactersIndex} />
+                
+              )}
+            />
+           </CharacterProvider>
+
           <Route
             path="/series"
             element={<AuthenticationGuard subState={this.state} toggleSubScreen={(e) => this.toggleSubScreen(e)} component={SeriesIndex} />}
