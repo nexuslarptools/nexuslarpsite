@@ -35,7 +35,7 @@ const DisplayScreenItemsOnly = (props) => {
 
   const itemsPrintListQuery = useGetData(
     props.guid,
-    "/api/v1/ItemSheets/MultiPick/?" + pathstring,
+    "/api/v1/ItemSheets/MultiPick/" + pathstring,
   );
 
   if (itemsPrintListQuery.isLoading)
