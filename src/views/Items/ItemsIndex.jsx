@@ -181,15 +181,24 @@ export default function ItemsIndex(props) {
     });
   };
 
-  const pushFilter = (filter) => {
+  const pushFilter = async (filter) => {
     if (isSelect) {
-      props.toggleSubScreen(true, "Select", "", "", filter);
-      setFilterState(filter);
+      //props.toggleSubScreen(true, "Select", "", "", filter);
+      await setFilterState(filter);
+
+      await setItemView({
+        ...itemView,
+        filter: filter,
+      });
       return;
     }
+    //props.toggleSubScreen(true, "", "", "", filter);
 
-    props.toggleSubScreen(true, "", "", "", filter);
-    setFilterState(filter);
+    await setFilterState(filter);
+    await setItemView({
+      ...itemView,
+      filter: filter,
+    });
   };
 
   const GoToSelect = () => {
