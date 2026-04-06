@@ -11,31 +11,21 @@ const DisplayScreenItemsOnly = (props) => {
   props.itemList.forEach((item) => {
     if (item.path === "ItemSheetApproveds") {
       for (let i = 0; i < item.count; i++) {
-        appstring = appstring + '"' + item.guid + '",';
+        appstring = appstring + "A=" + item.guid + "&";
       }
     } else {
       for (let i = 0; i < item.count; i++) {
-        unappstring = unappstring + '"' + item.guid + '",';
+        unappstring = unappstring + "U=" + item.guid + "&";
       }
     }
   });
 
-  if (appstring !== "") {
-    appstring = "A=[" + appstring.slice(0, -1) + "]";
-  }
-
-  if (unappstring !== "") {
-    unappstring = "U=[" + unappstring.slice(0, -1) + "]";
-    if (appstring !== "") {
-      unappstring = "&" + unappstring;
-    }
-  }
-
   pathstring = appstring + unappstring;
+  pathstring = pathstring.substring(0, pathstring.length - 1);
 
   const itemsPrintListQuery = useGetData(
     props.guid,
-    "/api/v1/ItemSheets/MultiPick/" + pathstring,
+    "/api/v1/ItemSheets/MultiPick?" + pathstring,
   );
 
   if (itemsPrintListQuery.isLoading)
