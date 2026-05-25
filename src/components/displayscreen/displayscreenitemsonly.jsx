@@ -7,8 +7,6 @@ const DisplayScreenItemsOnly = (props) => {
   let unappstring = "";
   let appstring = "";
   let pathstring = "";
-  let hasapp = false;
-  let hasunapp = false;
 
   props.itemList.forEach((item) => {
     if (item.path === "ItemSheetApproveds") {
@@ -23,14 +21,6 @@ const DisplayScreenItemsOnly = (props) => {
       }
     }
   });
-
-  if (!hasapp) {
-    appstring = "A=" + null;
-  }
-
-  if (!unappstring) {
-    unappstring = "U=" + null + "&";
-  }
 
   pathstring = appstring + unappstring;
   pathstring = pathstring.substring(0, pathstring.length - 1);
