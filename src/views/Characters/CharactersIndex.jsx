@@ -40,8 +40,9 @@ export default function CharactersIndex(props) {
   const allTagsQuery = useGetData("listTags", "/api/v1/Tags/groupbytyperead");
   const userGuidQuery = useGetData("userguid", "/api/v1/Users/CurrentGuid");
   const authLevel = AuthLevelInfo();
-  const [charactersState, setCharactersState] = useState({
-    selectedApproved: true,
+
+  /*const [charactersState, setCharactersState] = useState({
+  /  selectedApproved: true,
     commentFilter: false,
     showApprovableOnly: false,
     readyApproved: false,
@@ -59,6 +60,7 @@ export default function CharactersIndex(props) {
       TagSelectValues: [],
     },
   });
+  */
 
   const [filterState, setFilterState] = useState(null);
   const [isCreate, setIsCreate] = useState(false);
@@ -89,8 +91,8 @@ export default function CharactersIndex(props) {
             character.filter[key] !== null &&
             key !== "filters"
           ) {
-            setCharactersState({
-              ...charactersState,
+            setCharacter({
+              ...character,
               [key]: character.filter[key],
             });
           }
@@ -100,8 +102,8 @@ export default function CharactersIndex(props) {
       if (character.create) setIsCreate(true);
     }
     if (character.viewing) {
-      setCharactersState({
-        ...charactersState,
+      setCharacter({
+        ...character,
         viewingItem: true,
         viewItemGuid: character.viewGuid,
         viewItemPath: character.viewPath,
@@ -347,8 +349,8 @@ export default function CharactersIndex(props) {
       ) : (
         <>
           <CharacterDisplayPage
-            path={charactersState.viewItemPath}
-            guid={charactersState.viewItemGuid}
+            path={character.viewItemPath}
+            guid={character.viewItemGuid}
             userGuid={userGuidQuery.data}
             GoBackToList={() => GoBackToList()}
           />
