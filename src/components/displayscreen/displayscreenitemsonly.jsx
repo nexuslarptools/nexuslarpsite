@@ -1,10 +1,13 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import DisplayScreen from "./displayscreen";
 import useGetData from "../../utils/getdata";
 import Loading from "../loading/loading";
 
 const DisplayScreenItemsOnly = (props) => {
+
+const [pathStringState, setPathStringState] = useState("");
+
   let unappstring = "";
   let appstring = "";
   let pathstring = "";
@@ -24,11 +27,12 @@ const DisplayScreenItemsOnly = (props) => {
 
     pathstring = appstring + unappstring;
     pathstring = pathstring.substring(0, pathstring.length - 1);
+    await setPathStringState(pathstring);
   }, [props.itemList]);
 
   const itemsPrintListQuery = useGetData(
     props.guid,
-    "/api/v1/ItemSheets/MultiPick?" + pathstring,
+    "/api/v1/ItemSheets/MultiPick?" + pathStringState,
   );
 
   if (itemsPrintListQuery.isLoading)
