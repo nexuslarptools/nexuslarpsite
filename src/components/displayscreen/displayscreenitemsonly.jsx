@@ -6,7 +6,9 @@ import Loading from "../loading/loading";
 
 const DisplayScreenItemsOnly = (props) => {
 
+
 const [pathStringState, setPathStringState] = useState("");
+
 
   let unappstring = "";
   let appstring = "";
