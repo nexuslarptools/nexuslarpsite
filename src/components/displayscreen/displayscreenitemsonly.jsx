@@ -3,8 +3,11 @@ import PropTypes from "prop-types";
 import DisplayScreen from "./displayscreen";
 import useGetData from "../../utils/getdata";
 import Loading from "../loading/loading";
+import { useQueryClient } from "@tanstack/react-query";
 
 const DisplayScreenItemsOnly = (props) => {
+  queryClient.invalidateQueries(props.guid);
+
   const itemsPrintListQuery = useGetData(
     props.guid,
     "/api/v1/ItemSheets/MultiPick?" + props.itemQPath,
