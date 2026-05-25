@@ -117,7 +117,7 @@ export default function CharactersIndex(props) {
   }, []);
 
   const DirectToCharacter = async (path, guid) => {
-    props.toggleSubScreen(false, "View", guid, path, filterState);
+    // props.toggleSubScreen(false, "View", guid, path, filterState);
     await setCharacter({
       ...character,
       viewing: true,
@@ -127,11 +127,7 @@ export default function CharactersIndex(props) {
   };
 
   const GoBackToList = async () => {
-    await setCharacter({
-      ...character,
-      viewing: false,
-    });
-    props.toggleSubScreen(true, "", "", "", "goback");
+    //props.toggleSubScreen(true, "", "", "", "goback");
     await setCharacter({
       ...character,
       viewing: false,
@@ -144,7 +140,7 @@ export default function CharactersIndex(props) {
   };
 
   const GoToEditCharacter = async (path, guid) => {
-    props.toggleSubScreen(false, "Edit", guid, path, filterState);
+    // props.toggleSubScreen(false, "Edit", guid, path, filterState);
     await setIsEdit({ isEditing: true, guid: guid, path: path });
 
     await setCharacter({
