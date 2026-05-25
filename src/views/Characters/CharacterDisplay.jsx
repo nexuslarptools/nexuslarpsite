@@ -1,35 +1,51 @@
-import PropTypes from 'prop-types'
-import useGetData from '../../utils/getdata';
-import Loading from '../../components/loading/loading';
-import formJSON from '../../jsonfiles/characterinput.json';
-import DisplayScreen from '../../components/displayscreen/displayscreen';
+import PropTypes from "prop-types";
+import useGetData from "../../utils/getdata";
+import Loading from "../../components/loading/loading";
+import formJSON from "../../jsonfiles/characterinput.json";
+import DisplayScreen from "../../components/displayscreen/displayscreen";
 
-const CharacterDisplayPage = props => {
+const CharacterDisplayPage = (props) => {
+  const characterQuery = useGetData(
+    props.guid,
+    "/api/v1/" + props.path + "/" + props.guid,
+  );
 
-    const characterQuery = useGetData(props.guid, '/api/v1/'+props.path+'/'+props.guid);  
-
-    if (characterQuery.isLoading) 
-    return (<div>
+  if (characterQuery.isLoading)
+    return (
+      <div>
         <Loading />
-    </div>)
-    if (characterQuery.isError ) return (<div>
-        Error!
-        </div>)
+      </div>
+    );
+  if (characterQuery.isError)
+    return (
+      <div>
+        Error! - characterQuery
+        {characterQuery}
+      </div>
+    );
 
   return (
     <>
-      <DisplayScreen id="character" formJSON={formJSON} character={characterQuery.data} path={props.path} guid={props.guid}/>
+      <DisplayScreen
+        id="character"
+        formJSON={formJSON}
+        character={characterQuery.data}
+        path={props.path}
+        guid={props.guid}
+      />
       <div className="edit-bottom">
-            <button className="button-cancel" onClick={() => props.GoBackToList()}>Go Back!</button>
+        <button className="button-cancel" onClick={() => props.GoBackToList()}>
+          Go Back!
+        </button>
       </div>
     </>
-  )
-}
+  );
+};
 
 export default CharacterDisplayPage;
 
 CharacterDisplayPage.propTypes = {
   GoBackToList: PropTypes.func,
   guid: PropTypes.string,
-  path: PropTypes.string
-}
+  path: PropTypes.string,
+};

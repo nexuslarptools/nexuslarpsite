@@ -240,7 +240,15 @@ export default function CharactersIndex(props) {
     allTagsQuery.isError ||
     userGuidQuery.isError
   )
-    return <div>Error!</div>;
+    return (
+      <div>
+        Error! - CharactersIndex
+        {approvQuery}
+        {unapprovQuery}
+        {allTagsQuery}
+        {userGuidQuery}
+      </div>
+    );
 
   return (
     <>
