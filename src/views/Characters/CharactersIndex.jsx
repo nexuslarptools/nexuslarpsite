@@ -133,6 +133,8 @@ export default function CharactersIndex(props) {
     await setCharacter({
       ...character,
       viewing: false,
+      create: false,
+      edit: false,
       viewGuid: "",
       viewPath: "",
     });
@@ -184,6 +186,7 @@ export default function CharactersIndex(props) {
       ...character,
       viewing: false,
       create: false,
+      edit: false,
       viewGuid: "",
       viewPath: "",
     });
