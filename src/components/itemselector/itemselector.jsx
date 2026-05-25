@@ -172,6 +172,10 @@ const ItemSelector = (props) => {
   };
 
   const TogglePrint = () => {
+    let unappstring = "";
+    let appstring = "";
+    let pathstring = "";
+
     itemListState.forEach((item) => {
       if (item.path === "ItemSheetApproveds") {
         for (let i = 0; i < item.count; i++) {

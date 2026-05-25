@@ -5,10 +5,6 @@ import useGetData from "../../utils/getdata";
 import Loading from "../loading/loading";
 
 const DisplayScreenItemsOnly = (props) => {
-  let unappstring = "";
-  let appstring = "";
-  let pathstring = "";
-
   const itemsPrintListQuery = useGetData(
     props.guid,
     "/api/v1/ItemSheets/MultiPick?" + props.itemQPath,
