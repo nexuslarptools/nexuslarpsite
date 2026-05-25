@@ -1,9 +1,7 @@
-import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import DisplayScreen from "./displayscreen";
 import useGetData from "../../utils/getdata";
 import Loading from "../loading/loading";
-import { useQueryClient } from "@tanstack/react-query";
 
 const DisplayScreenItemsOnly = (props) => {
   const itemsPrintListQuery = useGetData(
