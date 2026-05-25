@@ -8,25 +8,27 @@ const DisplayScreenItemsOnly = (props) => {
   let appstring = "";
   let pathstring = "";
 
-  props.itemList.forEach((item) => {
-    if (item.path === "ItemSheetApproveds") {
-      for (let i = 0; i < item.count; i++) {
-        appstring = appstring + "A=" + item.guid + "&";
+  useEffect(() => {
+    props.itemList.forEach((item) => {
+      if (item.path === "ItemSheetApproveds") {
+        for (let i = 0; i < item.count; i++) {
+          appstring = appstring + "A=" + item.guid + "&";
+        }
+      } else {
+        for (let i = 0; i < item.count; i++) {
+          unappstring = unappstring + "U=" + item.guid + "&";
+        }
       }
-    } else {
-      for (let i = 0; i < item.count; i++) {
-        unappstring = unappstring + "U=" + item.guid + "&";
-      }
-    }
-  });
+    });
 
-  pathstring = appstring + unappstring;
-  pathstring = pathstring.substring(0, pathstring.length - 1);
+    pathstring = appstring + unappstring;
+    pathstring = pathstring.substring(0, pathstring.length - 1);
 
-  const itemsPrintListQuery = useGetData(
-    props.guid,
-    "/api/v1/ItemSheets/MultiPick?" + pathstring,
-  );
+    const itemsPrintListQuery = useGetData(
+      props.guid,
+      "/api/v1/ItemSheets/MultiPick?" + pathstring,
+    );
+  }, [props.itemList]);
 
   if (itemsPrintListQuery.isLoading)
     return (
