@@ -259,7 +259,7 @@ const ItemSelector = (props) => {
       <div>
         "
         <DisplayScreenItemsOnly
-          guid={"itemlist"}
+          guid={crypto.randomUUID()}
           itemList={itemListState}
           itemQPath={pathStringState}
         />
