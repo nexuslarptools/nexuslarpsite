@@ -6,6 +6,7 @@ import Loading from "../loading/loading";
 import { useQueryClient } from "@tanstack/react-query";
 
 const DisplayScreenItemsOnly = (props) => {
+  const queryClient = useQueryClient();
   queryClient.invalidateQueries(props.guid);
 
   const itemsPrintListQuery = useGetData(
