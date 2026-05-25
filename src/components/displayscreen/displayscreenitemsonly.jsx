@@ -24,12 +24,12 @@ const DisplayScreenItemsOnly = (props) => {
 
     pathstring = appstring + unappstring;
     pathstring = pathstring.substring(0, pathstring.length - 1);
-
-    const itemsPrintListQuery = useGetData(
-      props.guid,
-      "/api/v1/ItemSheets/MultiPick?" + pathstring,
-    );
   }, [props.itemList]);
+
+  const itemsPrintListQuery = useGetData(
+    props.guid,
+    "/api/v1/ItemSheets/MultiPick?" + pathstring,
+  );
 
   if (itemsPrintListQuery.isLoading)
     return (
