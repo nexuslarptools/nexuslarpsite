@@ -8,6 +8,7 @@ import DisplayScreenItemsOnly from "../displayscreen/displayscreenitemsonly";
 const ItemSelector = (props) => {
   const [itemListState, setItemListState] = useState([]);
   const [printView, setPrintView] = useState(false);
+  const [pathStringState, setPathStringState] = useState("");
 
   useEffect(() => {
     let newItemList = [];
@@ -171,6 +172,22 @@ const ItemSelector = (props) => {
   };
 
   const TogglePrint = () => {
+    itemListState.forEach((item) => {
+      if (item.path === "ItemSheetApproveds") {
+        for (let i = 0; i < item.count; i++) {
+          appstring = appstring + "A=" + item.guid + "&";
+        }
+      } else {
+        for (let i = 0; i < item.count; i++) {
+          unappstring = unappstring + "U=" + item.guid + "&";
+        }
+      }
+    });
+
+    pathstring = appstring + unappstring;
+    pathstring = pathstring.substring(0, pathstring.length - 1);
+    setPathStringState(pathstring);
+
     let view = !printView;
     setPrintView(view);
   };
@@ -236,7 +253,10 @@ const ItemSelector = (props) => {
   ) : (
     <>
       <div>
-        <DisplayScreenItemsOnly itemList={itemListState} />
+        <DisplayScreenItemsOnly
+          itemList={itemListState}
+          itemQPath={pathStringState}
+        />
         <div className="edit-bottom">
           <button className="button-cancel" onClick={() => TogglePrint()}>
             Go Back!

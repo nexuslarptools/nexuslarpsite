@@ -5,33 +5,13 @@ import useGetData from "../../utils/getdata";
 import Loading from "../loading/loading";
 
 const DisplayScreenItemsOnly = (props) => {
-  const [pathStringState, setPathStringState] = useState("");
-
   let unappstring = "";
   let appstring = "";
   let pathstring = "";
 
-  useEffect(() => {
-    props.itemList.forEach((item) => {
-      if (item.path === "ItemSheetApproveds") {
-        for (let i = 0; i < item.count; i++) {
-          appstring = appstring + "A=" + item.guid + "&";
-        }
-      } else {
-        for (let i = 0; i < item.count; i++) {
-          unappstring = unappstring + "U=" + item.guid + "&";
-        }
-      }
-    });
-
-    pathstring = appstring + unappstring;
-    pathstring = pathstring.substring(0, pathstring.length - 1);
-    setPathStringState(pathstring);
-  }, [props.itemList]);
-
   const itemsPrintListQuery = useGetData(
     props.guid,
-    "/api/v1/ItemSheets/MultiPick?" + pathStringState,
+    "/api/v1/ItemSheets/MultiPick?" + props.itemQPath,
   );
 
   if (itemsPrintListQuery.isLoading)
