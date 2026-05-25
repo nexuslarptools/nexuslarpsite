@@ -134,7 +134,7 @@ export default function CharactersIndex(props) {
       ...character,
       viewing: false,
       create: false,
-      edit: false,
+      editing: false,
       viewGuid: "",
       viewPath: "",
     });
@@ -186,7 +186,7 @@ export default function CharactersIndex(props) {
       ...character,
       viewing: false,
       create: false,
-      edit: false,
+      editing: false,
       viewGuid: "",
       viewPath: "",
     });
