@@ -257,7 +257,9 @@ const ItemSelector = (props) => {
   ) : (
     <>
       <div>
+        "
         <DisplayScreenItemsOnly
+          guid={"itemlist"}
           itemList={itemListState}
           itemQPath={pathStringState}
         />
