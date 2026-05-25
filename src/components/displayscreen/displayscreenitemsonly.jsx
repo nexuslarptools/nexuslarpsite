@@ -25,11 +25,11 @@ const DisplayScreenItemsOnly = (props) => {
   });
 
   if (!hasapp) {
-    appstring = "A=";
+    appstring = "A=" + null;
   }
 
   if (!unappstring) {
-    unappstring = "U=&";
+    unappstring = "U=" + null + "&";
   }
 
   pathstring = appstring + unappstring;
