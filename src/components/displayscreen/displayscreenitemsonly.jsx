@@ -12,12 +12,10 @@ const DisplayScreenItemsOnly = (props) => {
     if (item.path === "ItemSheetApproveds") {
       for (let i = 0; i < item.count; i++) {
         appstring = appstring + "A=" + item.guid + "&";
-        hasapp = true;
       }
     } else {
       for (let i = 0; i < item.count; i++) {
         unappstring = unappstring + "U=" + item.guid + "&";
-        hasunapp = true;
       }
     }
   });
