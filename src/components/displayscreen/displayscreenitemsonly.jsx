@@ -5,10 +5,7 @@ import useGetData from "../../utils/getdata";
 import Loading from "../loading/loading";
 
 const DisplayScreenItemsOnly = (props) => {
-
-
-const [pathStringState, setPathStringState] = useState("");
-
+  const [pathStringState, setPathStringState] = useState("");
 
   let unappstring = "";
   let appstring = "";
@@ -29,7 +26,7 @@ const [pathStringState, setPathStringState] = useState("");
 
     pathstring = appstring + unappstring;
     pathstring = pathstring.substring(0, pathstring.length - 1);
-    await setPathStringState(pathstring);
+    setPathStringState(pathstring);
   }, [props.itemList]);
 
   const itemsPrintListQuery = useGetData(
