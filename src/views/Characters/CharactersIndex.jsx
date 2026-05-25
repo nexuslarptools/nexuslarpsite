@@ -349,8 +349,8 @@ export default function CharactersIndex(props) {
       ) : (
         <>
           <CharacterDisplayPage
-            path={character.viewItemPath}
-            guid={character.viewItemGuid}
+            path={character.viewPath}
+            guid={character.viewGuid}
             userGuid={userGuidQuery.data}
             GoBackToList={() => GoBackToList()}
           />
